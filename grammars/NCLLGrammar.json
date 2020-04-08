@@ -1,0 +1,56 @@
+{
+    "<start>":
+        ["<logical_expr>"],
+
+    "<logical_expr>":
+        ["<integer_comparison>","<quantified_expr>","<reference_comparison>"],
+
+    "<integer_comparison>":
+        ["<integer_var> <numeric_logical_op> <integer>","<integer_var> <numeric_logical_op> <integer_operation>"],
+
+    "<quantified_expr>":
+        ["<quantifier> n : <integer_set_expr> : n <numeric_logical_op> <integer>"],
+
+    "<reference_comparison>":
+        ["<reference_var> <reference_op> <reference_var>"],
+
+    "<quantifier>":
+        ["all","some"],
+
+    "<reference_op>":
+        ["==","!="],
+
+    "<boolean_op>":
+        ["and", "or", "implies"],
+
+    "<integer_operation>":
+        ["<integer_var> <numeric_op> <integer_operation>","<integer>"],
+
+    "<numeric_op>":
+        ["+","-"],
+
+    "<numeric_logical_op>":
+        ["<",">","<=",">=","!=","=="],
+
+    "<integer>":
+        ["<integer_number>","<integer_var>"],
+
+    "<reference_var>":
+        ["this.header", "this.firstCachedNode", "this.header.next", "this.header.previous", "null"],
+
+    "<integer_var>":
+        ["this.header.value","this.firstCachedNode.value","this.size","this.cacheSize","this.maximumCacheSize","this.modCount","#(this.header.*next.value)","#(this.firstCachedNode.*next.value)"],
+
+    "<integer_set_expr>":
+        ["this.header.*next.value","this.header.*(next+previous).value","this.firstCachedNode.*(next).value","this.firstCachedNode.*(next+previous).value"],
+
+    "<boolean_var>":
+        ["this.isCacheFull()"],
+
+    "<integer_number>":
+        ["<digit><integer_number>", "<digit>"],
+
+    "<digit>":
+        ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+}
+
