@@ -51,6 +51,6 @@ if __name__ == "__main__":
     total = sys.argv[2]
 
     for i in range(int(total)):
-        print(simple_grammar_fuzzer(grammar=dict_grammar, max_nonterminals=5))
+        print(simple_grammar_fuzzer(grammar=dict_grammar, max_nonterminals=15))
 
     grammar_file.close()
