@@ -1,0 +1,39 @@
+{
+    "<start>":
+        ["<logical_expr>"],
+
+    "<logical_expr>":
+        ["<quantified_expr>","<reference_comparison>"],
+
+    "<quantified_expr>":
+        ["<quantifier> n : <Node_Set_Expr> : <Node_Obj_Qt_Cmp>"],
+
+    "<reference_comparison>":
+        ["<reference_var> <Reference_Op> <reference_var>"],
+
+    "<quantifier>":
+        ["all","some"],
+
+    "<Reference_Op>":
+        ["==","!="],
+
+    "<reference_var>":
+        ["List.header", "List.header.next"],
+
+    "<Node_Set_Expr>":
+        ["List.header.*next","List.header.^next","Node.*next"],
+    
+    "<Node_Obj_Qt_Cmp>":
+        ["<Node_Qt_Obj> <Reference_Op> <Node_Qt_Obj>", "<Node_Qt_Obj> <Var_Set_Cmp_Op> <Node_Set_Qt_Expr>"],
+   
+    "<Node_Qt_Obj>":
+        ["n", "n.next", "n.next.next"],
+
+    "<Node_Set_Qt_Expr>":
+        ["n.*next", "n.^next"],
+
+    "<Var_Set_Cmp_Op>":
+        ["in", "not in"]
+    
+}
+

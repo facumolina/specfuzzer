@@ -35,6 +35,12 @@
     "<integer>":
         ["<integer_number>","<integer_var>"],
 
+    "<integer_number>":
+        ["<digit><integer_number>", "<digit>"],
+
+    "<digit>":
+        ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+
     "<reference_var>":
         ["this.header", "this.header.next", "thisPre", "thisPre.header", "thisPre.header.next","null"],
 
@@ -45,12 +51,6 @@
         ["this.header.*next.value"],
 
     "<boolean_var>":
-        ["this.isEmtpy()"],
-
-    "<integer_number>":
-        ["<digit><integer_number>", "<digit>"],
-
-    "<digit>":
-        ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        ["this.isEmtpy()"]
 }
 
