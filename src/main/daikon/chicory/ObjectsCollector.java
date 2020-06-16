@@ -26,9 +26,7 @@ public class ObjectsCollector {
 	 */
 	public static void addObject(int hashCode, Object object) {
 		assert object != null : "The object to be saved should not be null";
-		System.out.println("Collecting object: "+hashCode);
 		objects.put(hashCode,object);
-		System.out.println("Total: "+objects.size());
 	}
 
 	/**
@@ -36,8 +34,8 @@ public class ObjectsCollector {
 	 */
 	public static void serializeObjects() {
 		System.out.println("Saving Objects - Total: "+objects.size());
-		/*XStream xstream = new XStream();
-		ObjectOutputStream oos;
+		ObjectOutputStream oos = null;
+		XStream xstream = new XStream();
 		try {
 			// Open the stream
 			oos = xstream.createObjectOutputStream(new FileOutputStream(serialiazed_file_name));
@@ -57,7 +55,7 @@ public class ObjectsCollector {
 			oos.close();
 		} catch (IOException e) {
 			throw new Error("Cannot close serial file: " + serialiazed_file_name);
-		}*/
+		}
 
 	}
 
