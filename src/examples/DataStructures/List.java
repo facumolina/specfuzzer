@@ -1,9 +1,13 @@
 package DataStructures;
 
+import java.io.Serializable; 
+
 /**
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public class List {
+public class List implements Serializable {
+
+  static final long serialVersionUID = 20200617L;
 
   private int x;
   private List next;
@@ -28,4 +32,12 @@ public class List {
     }
   }
 
+  @Override
+  public String toString(){
+    if (x == SENTINEL) {
+      return "null";
+    } else {
+      return x + ", " + next.toString();
+    }
+  }
 }
