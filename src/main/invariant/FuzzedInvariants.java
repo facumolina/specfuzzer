@@ -19,13 +19,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import hamcrest.utils.ExpressionEvaluator;
 import com.thoughtworks.xstream.XStream;
+import DataStructures.List;
 
 /**
  * Represents a set of invariants generating by fuzzing a grammar
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-//public class FuzzedInvariants extends SingleScalar {
 public class FuzzedInvariants extends PointerInvariant {
   
   // We are Serializable, so we specify a version to allow changes to
@@ -51,13 +52,11 @@ public class FuzzedInvariants extends PointerInvariant {
 
   private FuzzedInvariants(PptSlice ppt) {
     super(ppt);
-    System.out.println("FuzzedInvs builder from PptSlice");
     load_objects();
   }
 
   private @Prototype FuzzedInvariants() {
     super();
-    System.out.println("FuzzedInvs default builder");
     load_objects();
   }
 
@@ -77,11 +76,10 @@ public class FuzzedInvariants extends PointerInvariant {
       try {
         while (true) {
           map_obj = ois.readObject();
-          System.out.println("Reading object input stream, this should be made only once");
         }
       } catch (EOFException e) {
-        /* The loop ends here */ }
       ois.close();
+      }
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
       throw new RuntimeException("Cannot deserialize file: " + serialiazed_file_name);
@@ -110,20 +108,25 @@ public class FuzzedInvariants extends PointerInvariant {
   }
 
   @Override
-  //public InvariantStatus check_modified(long v, int count) {
-  public InvariantStatus check_modified(Object v, int count) {  
-    //System.out.println(v == null? "is null":v.getClass().getSimpleName());
-    //System.out.println(v == null? "":v.toString());
-    //System.out.println("Hey! This is the FuzzedInvariants being evaluated");
-    //if (v <= 0) {
-    //  return InvariantStatus.FALSIFIED;
-    //}
+  public InvariantStatus check_modified(long v, int count) {
+    // Recover the object
+    int i=(int)v;
+    Object o = objects.get(i);
+    if (o==null) {
+      return InvariantStatus.FALSIFIED;
+    }
+    if (o instanceof List) {
+      List l = (List)o;
+      boolean b = ExpressionEvaluator.evaluateQuantifiedExpression("all","this . * next","n !in n . ^ next",l);
+      if (!b) {
+        return InvariantStatus.FALSIFIED;
+      }
+    }
     return InvariantStatus.NO_CHANGE;
   }
 
   @Override
-  //public InvariantStatus add_modified(long v, int count) {
-  public InvariantStatus add_modified(Object v, int count) {  
+  public InvariantStatus add_modified(long v, int count) {
     return check_modified(v, count);
   }
 

@@ -14,6 +14,7 @@ import typequals.prototype.qual.Prototype;
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
 public abstract class PointerInvariant extends UnaryInvariant {
+  
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -53,24 +54,32 @@ public abstract class PointerInvariant extends UnaryInvariant {
   public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
-    //long value = ((Long) val).longValue();
-    if (mod_index == 0) {
-      return add_unmodified(val, count);
-    } else {
-      return add_modified(val, count);
+    if (val instanceof Long) {
+      // Long values represents object hashcodes
+      long value = ((Long) val).longValue();
+      if (mod_index == 0) {
+        return add_unmodified(value, count);
+      } else {
+        return add_modified(value, count);
+      }
     }
+    return InvariantStatus.FALSIFIED;
   }
 
   @Override
   public InvariantStatus check(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
-    //long value = ((Long) val).longValue();
-    if (mod_index == 0) {
-      return check_unmodified(val, count);
-    } else {
-      return check_modified(val, count);
+    if (val instanceof Long) {
+      // Long values represents object hashcodes
+      long value = ((Long) val).longValue();
+      if (mod_index == 0) {
+        return check_unmodified(value, count);
+      } else {
+        return check_modified(value, count);
+      }
     }
+    return InvariantStatus.FALSIFIED;
   }
 
   /**
@@ -79,11 +88,10 @@ public abstract class PointerInvariant extends UnaryInvariant {
    * {@link #check_modified}. This method need not check for falsification; that is done by the
    * caller.
    */
-  public abstract InvariantStatus add_modified(Object value, int count);
+  public abstract InvariantStatus add_modified(long value, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
-  public InvariantStatus add_unmodified(Object value, int count) {
-    // System.out.println("SingleScalar.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
+  public InvariantStatus add_unmodified(long value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -96,13 +104,11 @@ public abstract class PointerInvariant extends UnaryInvariant {
    *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
-  public abstract InvariantStatus check_modified(Object value, int count);
+  public abstract InvariantStatus check_modified(long value, int count);
 
-  public InvariantStatus check_unmodified(Object value, int count) {
+  public InvariantStatus check_unmodified(long value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
-
-  // This has no additional suppression factories beyond those of Invariant.
 
 }
 
