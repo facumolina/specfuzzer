@@ -9,6 +9,7 @@ that capture complex properties over linked structures.
 
 import sys
 import javalang
+import networkx as nx
 
 def parse_java_file(file):
   """Parse the given Java file"""
@@ -18,22 +19,36 @@ def parse_java_file(file):
 
 def build_type_graph(t,visited):
   """Build the type graph from the given starting type"""
-  print(t.name)
   visited.append(t.name)
+  type_graph.add_node(t.name)
+  # Get the fields of the given type
   fields = [decl for decl in t.body if isinstance(decl,javalang.tree.FieldDeclaration)]
   to_visit = set([])
   for fld in fields:
     if (fld.declarators[0].initializer==None):
-      print(fld.declarators[0].name,"-->",fld.type.name)  
+      # For each fields that has no initializer
+      fld_decl_name = fld.declarators[0].name
+      type_graph.add_node(fld.type.name)
+      type_graph.add_edge(t.name,fld.type.name,label=fld_decl_name)
       to_visit.add(fld.type.name)
 
-  print() 
+  # Visit each the field type that has not been visited yet
   inner_classes = [decl for decl in t.body if isinstance(decl,javalang.tree.ClassDeclaration)]
   for cl_decl in inner_classes:
     if (cl_decl.name in to_visit):
       build_type_graph(cl_decl,visited)
 
+type_graph = nx.DiGraph() # Type graph of the SUT
+
 if __name__ == "__main__":
   java_file = open(sys.argv[1], "r")
+  print("Parsing java file:",java_file.name)
   tree = parse_java_file(java_file)
+  print("Building the type graph")
   build_type_graph(tree.types[0],[])
+  print()
+  print("Type Graph")
+  print("nodes: ",type_graph.nodes.data())
+  print("edges: ",type_graph.edges.data())
+  print()
+  print("Done!")
