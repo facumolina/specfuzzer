@@ -6,7 +6,7 @@
         ["<Quantified_Expr>"],
 
     "<Quantified_Expr>":
-        ["<Quantifier> n : <List_Set_Expr> : <List_Obj_Qt_Cmp>"],
+        ["<Quantifier> n : <List_Set_Expr> : <List_Obj_Qt_Cmp>", "<Quantifier> n : <List_Set_Expr> : <List_Integer_Qt_Cmp>"],
 
     "<Quantifier>":
         ["all","some"],
@@ -27,7 +27,19 @@
         ["n.*next", "n.^next"],
 
     "<Var_Set_Cmp_Op>":
-        ["in", "not in"]
-    
+        ["in", "not in"],
+
+    "<List_Integer_Qt_Cmp>":
+        ["<List_Integer_Qt_Obj> <Int_Op> <List_Integer_Qt_Obj>","<List_Integer_Qt_Obj> <Int_Op> <Integer>"],
+
+    "<List_Integer_Qt_Obj>":
+        ["n.x","n.next.x"],
+
+    "<Integer>":
+        ["0", "1"],
+
+    "<Int_Op>":
+        ["==","!=",">","<",">=","<="]
+
 }
 
