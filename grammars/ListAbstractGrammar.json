@@ -1,35 +1,29 @@
 {
     "<start>":
-        ["<logical_expr>"],
+        ["<Logical_Expr>"],
 
-    "<logical_expr>":
-        ["<quantified_expr>","<reference_comparison>"],
+    "<Logical_Expr>":
+        ["<Quantified_Expr>"],
 
-    "<quantified_expr>":
-        ["<quantifier> n : <Node_Set_Expr> : <Node_Obj_Qt_Cmp>"],
+    "<Quantified_Expr>":
+        ["<Quantifier> n : <List_Set_Expr> : <List_Obj_Qt_Cmp>"],
 
-    "<reference_comparison>":
-        ["<reference_var> <Reference_Op> <reference_var>"],
-
-    "<quantifier>":
+    "<Quantifier>":
         ["all","some"],
 
     "<Reference_Op>":
         ["==","!="],
 
-    "<reference_var>":
-        ["List.header", "List.header.next"],
-
-    "<Node_Set_Expr>":
-        ["List.header.*next","List.header.^next","Node.*next"],
+    "<List_Set_Expr>":
+        ["List.*next","List.^next"],
     
-    "<Node_Obj_Qt_Cmp>":
-        ["<Node_Qt_Obj> <Reference_Op> <Node_Qt_Obj>", "<Node_Qt_Obj> <Var_Set_Cmp_Op> <Node_Set_Qt_Expr>"],
+    "<List_Obj_Qt_Cmp>":
+        ["<List_Qt_Obj> <Reference_Op> <List_Qt_Obj>", "<List_Qt_Obj> <Var_Set_Cmp_Op> <List_Set_Qt_Expr>"],
    
-    "<Node_Qt_Obj>":
-        ["n", "n.next", "n.next.next"],
+    "<List_Qt_Obj>":
+        ["n", "n.next", "n.next.next", "null"],
 
-    "<Node_Set_Qt_Expr>":
+    "<List_Set_Qt_Expr>":
         ["n.*next", "n.^next"],
 
     "<Var_Set_Cmp_Op>":
