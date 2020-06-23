@@ -38,7 +38,7 @@ def build_type_graph(t,visited):
     if (cl_decl.name in to_visit):
       build_type_graph(cl_decl,visited)
 
-type_graph = nx.DiGraph() # Type graph of the SUT
+type_graph = nx.MultiDiGraph() # Type graph of the SUT
 
 if __name__ == "__main__":
   java_file = open(sys.argv[1], "r")
