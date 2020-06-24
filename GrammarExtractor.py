@@ -59,7 +59,9 @@ def extract_grammar(t):
   for name in grammar:
     print(name,":",grammar[name])
   print()
-  print("Full grammar:",json.dumps(grammar))
+  print("Saving grammar to file:","grammars/"+t.name+"Grammar.json")
+  with open("grammars/"+t.name+"Grammar.json", 'w') as grammar_file:
+    json.dump(grammar, grammar_file)
 
 type_graph = nx.MultiDiGraph() # Type graph of the SUT
 bound = 3 # Bound on graph exploration

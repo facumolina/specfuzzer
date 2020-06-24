@@ -42,8 +42,16 @@ def get_set_symbol(type_name):
   """Return the non-terminal symbol denoting a set of the given type"""
   return "<" + type_name + "_Set_Expr>"
 
+def get_qt_obj_symbol(type_name):
+  """Return the non-terminal symbol denoting a quantified object of the given type"""
+  return "<" + type_name + "_Qt_Obj>"
+
+def get_qt_obj_set_symbol(type_name):
+  """Return the non-terminal symbol denoting a quantified set of the given type"""
+  return "<" + type_name + "_Set_Qt_Expr>"
+
 def get_qt_obj_cmp_symbol(type_name):
-  """Return the non-terminal symbol denotign an obj of a set of the given type"""
+  """Return the non-terminal symbol denotign a comparison of objects of a set of the given type"""
   return "<" + type_name + "_Qt_Obj_Cmp>"
 
 def extend_grammar(grammar, symbol, value):
@@ -57,8 +65,22 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
   current_set_symbol = get_set_symbol(type_name)
   extend_grammar(grammar,current_set_symbol,currExpr + ".*" + label)
   extend_grammar(grammar,current_set_symbol,currExpr + ".^" + label)
-  # Also, extend the options for the quantified expressions
-  current_set_obj_symbol = get_qt_obj_cmp_symbol(type_name)
-  quantified_option = QUANTIFIER + " n : " + current_set_symbol + " : " + current_set_obj_symbol
+  # Options for the quantified expressions
+  current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name)
+  quantified_option = QUANTIFIER + " n : " + current_set_symbol + " : " + current_obj_cmp_symbol
   extend_grammar(grammar,QT_EXPR,quantified_option)
+  # Options for the quantified objects comparisons
+  current_qt_obj_symbol = get_qt_obj_symbol(type_name)
+  qt_object_cmp_option = "n " + REF_OP + " " + current_qt_obj_symbol
+  extend_grammar(grammar,current_obj_cmp_symbol,qt_object_cmp_option)
+  current_qt_obj_set_symbol = get_qt_obj_set_symbol(type_name)
+  qt_var_set_cmp_option = "n " + VAR_SET_CMP_OP + " " + current_qt_obj_set_symbol
+  extend_grammar(grammar,current_obj_cmp_symbol,qt_var_set_cmp_option)
+  # Options for the quantified objects 
+  extend_grammar(grammar,current_qt_obj_symbol,"n." + label)
+  extend_grammar(grammar,current_qt_obj_symbol,"n." + label + "." + label)
+  extend_grammar(grammar,current_qt_obj_symbol,"null")
+  # Options for the quantified sets
+  extend_grammar(grammar,current_qt_obj_set_symbol,"n.*" + label)
+  extend_grammar(grammar,current_qt_obj_set_symbol,"n.^" + label)
 
