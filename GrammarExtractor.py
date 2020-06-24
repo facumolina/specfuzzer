@@ -10,6 +10,8 @@ that capture complex properties over linked structures.
 import sys
 import javalang
 import networkx as nx
+import json
+import BaseGrammar as base
 
 def parse_java_file(file):
   """Parse the given Java file"""
@@ -38,17 +40,34 @@ def build_type_graph(t,visited):
     if (cl_decl.name in to_visit):
       build_type_graph(cl_decl,visited)
 
+def extract_grammar(t):
+  """Extract the grammar from the obtained type graph"""
+  print("Extracting grammar from initial type:",t.name)
+  base_grammar = base.create()
+  print("Base is:",json.dumps(base_grammar))
+
 type_graph = nx.MultiDiGraph() # Type graph of the SUT
 
 if __name__ == "__main__":
+  
+  # Get the arguments
   java_file = open(sys.argv[1], "r")
+  
+  # Parse the given java file
   print("Parsing java file:",java_file.name)
   tree = parse_java_file(java_file)
-  print("Building the type graph")
-  build_type_graph(tree.types[0],[])
+  main_type = tree.types[0]
   print()
-  print("Type Graph")
+
+  # Build the corresponding type graph
+  print("Building the Type Graph")
+  build_type_graph(main_type,[])
   print("nodes: ",type_graph.nodes.data())
   print("edges: ",type_graph.edges.data())
+  print()
+
+  # Extract the Grammar
+  print("Generating the Grammar from the Type Graph")
+  extract_grammar(main_type)
   print()
   print("Done!")
