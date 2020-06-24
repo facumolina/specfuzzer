@@ -2,4 +2,7 @@
 Fuzzing Software Specifications
 
 # instructions
-`python FuzzSpecs.py grammars/NCLLGrammar.json 10`
+
+`python GrammarExtractor.py src/examples/DataStructures/List.java`
+
+`python FuzzSpecs.py grammars/ListGrammar.json 10`
