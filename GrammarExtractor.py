@@ -46,11 +46,8 @@ def traverse_graph(type_name,currExpr,grammar,k):
     for edge in type_graph.adj[type_name]:
       label = type_graph[type_name][edge][0]['label']
       if (edge==type_name):
-        # We have a closure case
-        #grammar[builder.get_set_symbol(type_name)] = []
-        current_set_symbol = builder.get_set_symbol(type_name)
-        builder.extend_grammar(grammar,current_set_symbol,currExpr + ".*" + label)
-        builder.extend_grammar(grammar,current_set_symbol,currExpr + ".^" + label)
+        # We have a closure case, so create the quantificaiton related symbols
+        builder.add_quantification_symbols(grammar,type_name,currExpr,label)
         
 def extract_grammar(t):
   """Extract the grammar from the obtained type graph"""
@@ -58,7 +55,11 @@ def extract_grammar(t):
   grammar = builder.create()
   traverse_graph(t.name,t.name,grammar,bound)
   print()
-  print("Grammar is:",json.dumps(grammar))
+  print("Symbols:")
+  for name in grammar:
+    print(name,":",grammar[name])
+  print()
+  print("Full grammar:",json.dumps(grammar))
 
 type_graph = nx.MultiDiGraph() # Type graph of the SUT
 bound = 3 # Bound on graph exploration

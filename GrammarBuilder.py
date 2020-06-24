@@ -42,9 +42,23 @@ def get_set_symbol(type_name):
   """Return the non-terminal symbol denoting a set of the given type"""
   return "<" + type_name + "_Set_Expr>"
 
+def get_qt_obj_cmp_symbol(type_name):
+  """Return the non-terminal symbol denotign an obj of a set of the given type"""
+  return "<" + type_name + "_Qt_Obj_Cmp>"
+
 def extend_grammar(grammar, symbol, value):
   """Add the given value as an option for the symbol of the given grammar"""
   if not grammar.get(symbol):
     grammar[symbol] = []
   grammar[symbol].append(value)
+
+def add_quantification_symbols(grammar, type_name, currExpr, label):
+  """Add quantification symbols to the given grammar"""
+  current_set_symbol = get_set_symbol(type_name)
+  extend_grammar(grammar,current_set_symbol,currExpr + ".*" + label)
+  extend_grammar(grammar,current_set_symbol,currExpr + ".^" + label)
+  # Also, extend the options for the quantified expressions
+  current_set_obj_symbol = get_qt_obj_cmp_symbol(type_name)
+  quantified_option = QUANTIFIER + " n : " + current_set_symbol + " : " + current_set_obj_symbol
+  extend_grammar(grammar,QT_EXPR,quantified_option)
 
