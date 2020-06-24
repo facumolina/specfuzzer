@@ -11,7 +11,7 @@ import sys
 import javalang
 import networkx as nx
 import json
-import BaseGrammar as base
+import GrammarBuilder as builder
 
 def parse_java_file(file):
   """Parse the given Java file"""
@@ -40,13 +40,28 @@ def build_type_graph(t,visited):
     if (cl_decl.name in to_visit):
       build_type_graph(cl_decl,visited)
 
+def traverse_graph(type_name,currExpr,grammar,k):
+  """"Traverse the type graph from the given type and extend the given grammar"""
+  if (k > 0):
+    for edge in type_graph.adj[type_name]:
+      label = type_graph[type_name][edge][0]['label']
+      if (edge==type_name):
+        # We have a closure case
+        #grammar[builder.get_set_symbol(type_name)] = []
+        current_set_symbol = builder.get_set_symbol(type_name)
+        builder.extend_grammar(grammar,current_set_symbol,currExpr + ".*" + label)
+        builder.extend_grammar(grammar,current_set_symbol,currExpr + ".^" + label)
+        
 def extract_grammar(t):
   """Extract the grammar from the obtained type graph"""
   print("Extracting grammar from initial type:",t.name)
-  base_grammar = base.create()
-  print("Base is:",json.dumps(base_grammar))
+  grammar = builder.create()
+  traverse_graph(t.name,t.name,grammar,bound)
+  print()
+  print("Grammar is:",json.dumps(grammar))
 
 type_graph = nx.MultiDiGraph() # Type graph of the SUT
+bound = 3 # Bound on graph exploration
 
 if __name__ == "__main__":
   

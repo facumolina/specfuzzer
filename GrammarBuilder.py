@@ -1,4 +1,4 @@
-"""BaseGrammar
+"""GrammarBuilder
 
 Module that contains the basic part of the grammars that will later be extended
 when analyzing a particular SUT
@@ -38,4 +38,13 @@ def create():
   base_grammar[NUMERIC_OP] = NUMERIC_OP_VALUE
   return base_grammar
 
+def get_set_symbol(type_name):
+  """Return the non-terminal symbol denoting a set of the given type"""
+  return "<" + type_name + "_Set_Expr>"
+
+def extend_grammar(grammar, symbol, value):
+  """Add the given value as an option for the symbol of the given grammar"""
+  if not grammar.get(symbol):
+    grammar[symbol] = []
+  grammar[symbol].append(value)
 
