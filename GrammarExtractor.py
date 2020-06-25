@@ -48,18 +48,20 @@ def traverse_graph(type_name,currExpr,grammar,k):
   """Traverse the type graph from the given type and extend the given grammar"""
   if (k > 0):
     for edge in type_graph.adj[type_name]:
-      label = type_graph[type_name][edge][0]['label']
-      if (edge == type_name):
-        # We have a closure case, so create the quantificaiton related symbols
-        builder.add_quantification_symbols(grammar,type_name,currExpr,label)
-        for dest in type_graph.adj[type_name]:
-          if (dest != type_name):
-            dest_label = type_graph[type_name][dest][0]['label']
-            builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,label,dest_label)
-      else:
-        # This is not a closure case, continue exploring only reference types
-        if types_util.is_reference(edge):
-          traverse_graph(edge,currExpr+"."+label,grammar,k-1)
+      for i in type_graph[type_name][edge]:
+        label = type_graph[type_name][edge][i]['label']
+        if (edge == type_name):
+          # We have a closure case, so create the quantificaiton related symbols
+          builder.add_quantification_symbols(grammar,type_name,currExpr,label)
+          for dest in type_graph.adj[type_name]:
+            if (dest != type_name):
+              for j in type_graph[type_name][dest]:
+                dest_label = type_graph[type_name][dest][j]['label']
+                builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,label,dest_label)
+        else:
+          # This is not a closure case, continue exploring only reference types
+          if types_util.is_reference(edge):
+            traverse_graph(edge,currExpr+"."+label,grammar,k-1)
 
 
 def extract_grammar(t):
