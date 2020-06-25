@@ -13,6 +13,8 @@ import networkx as nx
 import json
 import GrammarBuilder as builder
 
+GRAMMARS_DIR = "grammars/"
+
 def parse_java_file(file):
   """Parse the given Java file"""
   content = file.read()
@@ -41,13 +43,17 @@ def build_type_graph(t,visited):
       build_type_graph(cl_decl,visited)
 
 def traverse_graph(type_name,currExpr,grammar,k):
-  """"Traverse the type graph from the given type and extend the given grammar"""
+  """Traverse the type graph from the given type and extend the given grammar"""
   if (k > 0):
     for edge in type_graph.adj[type_name]:
       label = type_graph[type_name][edge][0]['label']
-      if (edge==type_name):
+      if (edge == type_name):
         # We have a closure case, so create the quantificaiton related symbols
         builder.add_quantification_symbols(grammar,type_name,currExpr,label)
+        for dest in type_graph.adj[type_name]:
+          if (dest != type_name):
+            dest_label = type_graph[type_name][dest][0]['label']
+            builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,label,dest_label)
         
 def extract_grammar(t):
   """Extract the grammar from the obtained type graph"""
@@ -59,8 +65,8 @@ def extract_grammar(t):
   for name in grammar:
     print(name,":",grammar[name])
   print()
-  print("Saving grammar to file:","grammars/"+t.name+"Grammar.json")
-  with open("grammars/"+t.name+"Grammar.json", 'w') as grammar_file:
+  print("Saving grammar to file:",GRAMMARS_DIR+t.name+"Grammar.json")
+  with open(GRAMMARS_DIR+t.name+"Grammar.json", 'w') as grammar_file:
     json.dump(grammar, grammar_file)
 
 type_graph = nx.MultiDiGraph() # Type graph of the SUT
