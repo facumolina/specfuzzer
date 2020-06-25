@@ -27,6 +27,9 @@ VAR_SET_CMP_OP_VALUE = ["in", "not in"]
 NUMERIC_OP = "<Num_Op>"
 NUMERIC_OP_VALUE = ["==","!=",">","<",">=","<="]
 
+# Quantified variable name
+QT_VAR_NAME = "n"
+
 def create():
   """Create a Base Grammar that will serve as base for generating grammars"""
   base_grammar = {}
@@ -51,8 +54,12 @@ def get_qt_obj_set_symbol(type_name):
   return "<" + type_name + "_Set_Qt_Expr>"
 
 def get_qt_obj_cmp_symbol(type_name):
-  """Return the non-terminal symbol denotign a comparison of objects of a set of the given type"""
-  return "<" + type_name + "_Qt_Obj_Cmp>"
+  """Return the non-terminal symbol denoting a comparison of objects of a set of the given type"""
+  return "<Qt_" + type_name + "_Obj_Cmp>"
+
+def get_qt_obj_dest_cmp_symbol(type_name,dest_type):
+  """Return the non-terminal symbol denoting a comparison of objects of a set of the given type"""
+  return "<Qt_" + type_name + "_Obj_" + dest_type + "_Cmp>"
 
 def extend_grammar(grammar, symbol, value):
   """Add the given value as an option for the symbol of the given grammar"""
@@ -67,20 +74,30 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
   extend_grammar(grammar,current_set_symbol,currExpr + ".^" + label)
   # Options for the quantified expressions
   current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name)
-  quantified_option = QUANTIFIER + " n : " + current_set_symbol + " : " + current_obj_cmp_symbol
+  quantified_option = QUANTIFIER + " " + QT_VAR_NAME + " : " + current_set_symbol + " : " + current_obj_cmp_symbol
   extend_grammar(grammar,QT_EXPR,quantified_option)
   # Options for the quantified objects comparisons
   current_qt_obj_symbol = get_qt_obj_symbol(type_name)
-  qt_object_cmp_option = "n " + REF_OP + " " + current_qt_obj_symbol
+  qt_object_cmp_option = QT_VAR_NAME + " " + REF_OP + " " + current_qt_obj_symbol
   extend_grammar(grammar,current_obj_cmp_symbol,qt_object_cmp_option)
   current_qt_obj_set_symbol = get_qt_obj_set_symbol(type_name)
-  qt_var_set_cmp_option = "n " + VAR_SET_CMP_OP + " " + current_qt_obj_set_symbol
+  qt_var_set_cmp_option = QT_VAR_NAME + " " + VAR_SET_CMP_OP + " " + current_qt_obj_set_symbol
   extend_grammar(grammar,current_obj_cmp_symbol,qt_var_set_cmp_option)
   # Options for the quantified objects 
-  extend_grammar(grammar,current_qt_obj_symbol,"n." + label)
-  extend_grammar(grammar,current_qt_obj_symbol,"n." + label + "." + label)
+  extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + label)
+  extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + label + "." + label)
   extend_grammar(grammar,current_qt_obj_symbol,"null")
   # Options for the quantified sets
-  extend_grammar(grammar,current_qt_obj_set_symbol,"n.*" + label)
-  extend_grammar(grammar,current_qt_obj_set_symbol,"n.^" + label)
+  extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".*" + label)
+  extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".^" + label)
+
+def add_quantification_over_field_symbols(grammar, type_name, currExpr, dest_type, cyclic_label, dest_label):
+  """Add quantification symbols to the given grammar"""
+  current_set_symbol = get_set_symbol(type_name)
+  current_obj_dest_cmp_symbol = get_qt_obj_dest_cmp_symbol(type_name, dest_type)
+  quantified_option = QUANTIFIER + " " + QT_VAR_NAME + " : " + current_set_symbol + " : " + current_obj_dest_cmp_symbol
+  extend_grammar(grammar,QT_EXPR,quantified_option)
+  # Options for the quantified object field comparison
+  qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " <Int_Op> n." + cyclic_label + "." + dest_label
+  extend_grammar(grammar,current_obj_dest_cmp_symbol,qt_obj_field_option)
 
