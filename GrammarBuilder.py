@@ -6,6 +6,7 @@ when analyzing a particular SUT
 @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
 """
 import json
+import utils.TypesUtil as types_util
 
 # Constant symbols that will be part of all the grammars
 START_SYMBOL = "<start>"
@@ -67,6 +68,13 @@ def extend_grammar(grammar, symbol, value):
     grammar[symbol] = []
   grammar[symbol].append(value)
 
+def get_cmp_symbol(type_name):
+  """Get the comparison symbol for the given type"""
+  if types_util.is_numeric(type_name):
+    return NUMERIC_OP
+  else:
+    return REF_OP
+
 def add_quantification_symbols(grammar, type_name, currExpr, label):
   """Add quantification symbols to the given grammar"""
   current_set_symbol = get_set_symbol(type_name)
@@ -94,10 +102,12 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
 def add_quantification_over_field_symbols(grammar, type_name, currExpr, dest_type, cyclic_label, dest_label):
   """Add quantification symbols to the given grammar"""
   current_set_symbol = get_set_symbol(type_name)
-  current_obj_dest_cmp_symbol = get_qt_obj_dest_cmp_symbol(type_name, dest_type)
+  formatted_dest_type = types_util.format_type(dest_type)
+  current_obj_dest_cmp_symbol = get_qt_obj_dest_cmp_symbol(type_name, formatted_dest_type)
   quantified_option = QUANTIFIER + " " + QT_VAR_NAME + " : " + current_set_symbol + " : " + current_obj_dest_cmp_symbol
   extend_grammar(grammar,QT_EXPR,quantified_option)
   # Options for the quantified object field comparison
-  qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " <Int_Op> n." + cyclic_label + "." + dest_label
+  cmp_symbol = get_cmp_symbol(formatted_dest_type)
+  qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " " + QT_VAR_NAME + "." + cyclic_label + "." + dest_label
   extend_grammar(grammar,current_obj_dest_cmp_symbol,qt_obj_field_option)
 
