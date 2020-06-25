@@ -69,7 +69,8 @@ def extend_grammar(grammar, symbol, value):
   """Add the given value as an option for the symbol of the given grammar"""
   if not grammar.get(symbol):
     grammar[symbol] = []
-  grammar[symbol].append(value)
+  if not value in grammar[symbol]:
+    grammar[symbol].append(value)
 
 def get_cmp_symbol(type_name):
   """Get the comparison symbol for the given type"""
