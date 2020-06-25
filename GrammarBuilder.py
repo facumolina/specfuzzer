@@ -31,6 +31,9 @@ NUMERIC_OP_VALUE = ["==","!=",">","<",">=","<="]
 # Quantified variable name
 QT_VAR_NAME = "n"
 
+# Other constants
+NULL = "null"
+
 def create():
   """Create a Base Grammar that will serve as base for generating grammars"""
   base_grammar = {}
@@ -94,7 +97,7 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
   # Options for the quantified objects 
   extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + label)
   extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + label + "." + label)
-  extend_grammar(grammar,current_qt_obj_symbol,"null")
+  extend_grammar(grammar,current_qt_obj_symbol,NULL)
   # Options for the quantified sets
   extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".*" + label)
   extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".^" + label)
