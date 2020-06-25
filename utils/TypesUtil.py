@@ -10,17 +10,24 @@ FLOAT = "Float"
 DOUBLE = "Double"
 BOOLEAN = "Boolean"
 
-def format_type(type_name):
-  """Format the given type name"""
-  if type_name=="int":
-    return INTEGER
-  if type_name=="float":
-    return FLOAT
-  if type_name=="double":
-    return DOUBLE
-  if type_name=="boolean":
-    return BOOLEAN
-  return type_name
+BASIC_JAVA_TYPES = ["int","float","double","boolean"]
 
-def is_numeric(type_name):
-	return type_name==INTEGER or type_name==FLOAT or type_name==DOUBLE
+def is_reference(java_type_name):
+	"""Returns true if the given type is a reference"""
+	return (java_type_name not in BASIC_JAVA_TYPES)
+
+def format_type(java_type_name):
+  """Format the given type name"""
+  if java_type_name=="int":
+    return INTEGER
+  if java_type_name=="float":
+    return FLOAT
+  if java_type_name=="double":
+    return DOUBLE
+  if java_type_name=="boolean":
+    return BOOLEAN
+  return java_type_name
+
+def is_numeric(formatted_type_name):
+	"""Returns true if the given formatted type is numeric or not"""
+	return formatted_type_name==INTEGER or formatted_type_name==FLOAT or formatted_type_name==DOUBLE 

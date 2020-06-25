@@ -13,6 +13,8 @@ import networkx as nx
 import json
 import GrammarBuilder as builder
 
+import utils.TypesUtil as types_util
+
 GRAMMARS_DIR = "grammars/"
 
 def parse_java_file(file):
@@ -54,7 +56,12 @@ def traverse_graph(type_name,currExpr,grammar,k):
           if (dest != type_name):
             dest_label = type_graph[type_name][dest][0]['label']
             builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,label,dest_label)
-        
+      else:
+        # This is not a closure case, continue exploring only reference types
+        if types_util.is_reference(edge):
+          traverse_graph(edge,currExpr+"."+label,grammar,k-1)
+
+
 def extract_grammar(t):
   """Extract the grammar from the obtained type graph"""
   print("Extracting grammar from initial type:",t.name)
