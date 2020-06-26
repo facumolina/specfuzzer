@@ -49,6 +49,14 @@ def get_set_symbol(type_name):
   """Return the non-terminal symbol denoting a set of the given type"""
   return "<" + type_name + "_Set_Expr>"
 
+def get_set_label_symbol(type_name):
+  """Return the non-terminal symbol denoting a single label to build a set of the given type"""
+  return "<" + type_name + "_Set_Label>"
+
+def get_set_labels_symbol(type_name):
+  """Return the non-terminal symbol denoting the labels to build a set of the given type"""
+  return "<" + type_name + "_Set_Labels>"
+
 def get_qt_obj_symbol(type_name):
   """Return the non-terminal symbol denoting a quantified object of the given type"""
   return "<" + type_name + "_Qt_Obj>"
@@ -72,6 +80,12 @@ def extend_grammar(grammar, symbol, value):
   if not value in grammar[symbol]:
     grammar[symbol].append(value)
 
+def extend_labels_set(grammar, label_symbol, labels_symbol):
+  """Allow to create sets using more than one label if necessary"""
+  if (len(grammar[label_symbol])>1):
+    additional_option = label_symbol + " + " + label_symbol
+    extend_grammar(grammar,labels_symbol,additional_option)
+
 def get_cmp_symbol(type_name):
   """Get the comparison symbol for the given type"""
   if types_util.is_numeric(type_name):
@@ -82,8 +96,14 @@ def get_cmp_symbol(type_name):
 def add_quantification_symbols(grammar, type_name, currExpr, label):
   """Add quantification symbols to the given grammar"""
   current_set_symbol = get_set_symbol(type_name)
-  extend_grammar(grammar,current_set_symbol,currExpr + ".*" + label)
-  extend_grammar(grammar,current_set_symbol,currExpr + ".^" + label)
+  current_set_labels_symbol = get_set_labels_symbol(type_name)
+  extend_grammar(grammar,current_set_symbol,currExpr + ".*(" + current_set_labels_symbol + ")")
+  extend_grammar(grammar,current_set_symbol,currExpr + ".^(" + current_set_labels_symbol + ")")
+  current_set_label_symbol = get_set_label_symbol(type_name)
+  extend_grammar(grammar,current_set_labels_symbol,current_set_label_symbol)
+  extend_grammar(grammar,current_set_label_symbol,label)
+  extend_labels_set(grammar,current_set_label_symbol,current_set_labels_symbol)
+
   # Options for the quantified expressions
   current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name)
   quantified_option = QUANTIFIER + " " + QT_VAR_NAME + " : " + current_set_symbol + " : " + current_obj_cmp_symbol

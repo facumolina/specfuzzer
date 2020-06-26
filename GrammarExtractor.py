@@ -44,33 +44,28 @@ def build_type_graph(t,visited):
     if (cl_decl.name in to_visit):
       build_type_graph(cl_decl,visited)
 
-def add_quantification_symbols_from_labels(grammar, type_name, currExpr, labels):
-  """Create the quantification related symbols from labels"""
-  builder.add_quantification_symbols(grammar,type_name,currExpr,labels)
+def add_quantification_symbols_from_label(grammar, type_name, currExpr, label):
+  """Create the quantification related symbols from label"""
+  builder.add_quantification_symbols(grammar,type_name,currExpr,label)
   for dest in type_graph.adj[type_name]:
     if (dest != type_name):
       for j in type_graph[type_name][dest]:
         dest_label = type_graph[type_name][dest][j]['label']
-        builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,labels,dest_label)
+        builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,label,dest_label)
 
 def traverse_graph(type_name,currExpr,grammar,k):
   """Traverse the type graph from the given type and extend the given grammar"""
   if (k > 0):
     for edge in type_graph.adj[type_name]:
-      closured_labels = set([])
       for i in type_graph[type_name][edge]:
         label = type_graph[type_name][edge][i]['label']
         if (edge == type_name):
           # We have a closure case, so create the quantificaiton related symbols
-          closured_labels.add(label)
-          add_quantification_symbols_from_labels(grammar, type_name, currExpr, label)
+          add_quantification_symbols_from_label(grammar, type_name, currExpr, label)
         else:
           # This is not a closure case, continue exploring only reference types
           if types_util.is_reference(edge):
             traverse_graph(edge,currExpr+"."+label,grammar,k-1)
-      if len(closured_labels)>1:
-        # It means that we can create expressions for the form e.*(f1 + ... + fn)
-        print(closured_labels)
 
 
 def extract_grammar(t):
