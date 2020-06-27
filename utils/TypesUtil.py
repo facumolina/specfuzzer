@@ -31,3 +31,7 @@ def format_type(java_type_name):
 def is_numeric(formatted_type_name):
 	"""Returns true if the given formatted type is numeric or not"""
 	return formatted_type_name==INTEGER or formatted_type_name==FLOAT or formatted_type_name==DOUBLE 
+
+def is_integer(formatted_type_name):
+	"""Returns true if the given formatted type is integer"""
+	return formatted_type_name==INTEGER
