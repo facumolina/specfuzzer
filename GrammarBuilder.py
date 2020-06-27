@@ -115,8 +115,8 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
   qt_var_set_cmp_option = QT_VAR_NAME + " " + VAR_SET_CMP_OP + " " + current_qt_obj_set_symbol
   extend_grammar(grammar,current_obj_cmp_symbol,qt_var_set_cmp_option)
   # Options for the quantified objects 
-  extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + label)
-  extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + label + "." + label)
+  extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + current_set_label_symbol)
+  extend_grammar(grammar,current_qt_obj_symbol,QT_VAR_NAME + "." + current_set_label_symbol + "." + current_set_label_symbol)
   extend_grammar(grammar,current_qt_obj_symbol,NULL)
   # Options for the quantified sets
   extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".*(" + current_set_labels_symbol + ")")
@@ -125,12 +125,13 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
 def add_quantification_over_field_symbols(grammar, type_name, currExpr, dest_type, cyclic_label, dest_label):
   """Add quantification symbols to the given grammar"""
   current_set_symbol = get_set_symbol(type_name)
+  current_set_label_symbol = get_set_label_symbol(type_name)
   formatted_dest_type = types_util.format_type(dest_type)
   current_obj_dest_cmp_symbol = get_qt_obj_dest_cmp_symbol(type_name, formatted_dest_type)
   quantified_option = QUANTIFIER + " " + QT_VAR_NAME + " : " + current_set_symbol + " : " + current_obj_dest_cmp_symbol
   extend_grammar(grammar,QT_EXPR,quantified_option)
   # Options for the quantified object field comparison
   cmp_symbol = get_cmp_symbol(formatted_dest_type)
-  qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " " + QT_VAR_NAME + "." + cyclic_label + "." + dest_label
+  qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " " + QT_VAR_NAME + "." + current_set_label_symbol + "." + dest_label
   extend_grammar(grammar,current_obj_dest_cmp_symbol,qt_obj_field_option)
 
