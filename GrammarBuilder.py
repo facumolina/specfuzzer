@@ -80,6 +80,11 @@ def get_qt_obj_dest_cmp_symbol(type_name,dest_type):
   """Return the non-terminal symbol denoting a comparison of objects of a set of the given type"""
   return "<Qt_" + type_name + "_Obj_" + dest_type + "_Cmp>"
 
+def get_symbol_for_type(type_name):
+  """Return the corresponding symbol for the given type"""
+  formatted_type = types_util.format_type(type_name)
+  return "<" + formatted_type + ">" 
+
 def extend_grammar(grammar, symbol, value):
   """Add the given value as an option for the symbol of the given grammar"""
   if not grammar.get(symbol):
@@ -100,12 +105,12 @@ def get_cmp_symbol(type_name):
   else:
     return REF_OP
 
-def add_quantification_symbols(grammar, type_name, currExpr, label):
+def add_quantification_symbols(grammar, type_name, curr_expr, label):
   """Add quantification symbols to the given grammar"""
   current_set_symbol = get_set_symbol(type_name)
   current_set_labels_symbol = get_set_labels_symbol(type_name)
-  extend_grammar(grammar,current_set_symbol,currExpr + ".*(" + current_set_labels_symbol + ")")
-  extend_grammar(grammar,current_set_symbol,currExpr + ".^(" + current_set_labels_symbol + ")")
+  extend_grammar(grammar,current_set_symbol,curr_expr + ".*(" + current_set_labels_symbol + ")")
+  extend_grammar(grammar,current_set_symbol,curr_expr + ".^(" + current_set_labels_symbol + ")")
   current_set_label_symbol = get_set_label_symbol(type_name)
   extend_grammar(grammar,current_set_labels_symbol,current_set_label_symbol)
   extend_grammar(grammar,current_set_label_symbol,label)
@@ -134,7 +139,7 @@ def add_quantification_symbols(grammar, type_name, currExpr, label):
   extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".*(" + current_set_labels_symbol + ")")
   extend_grammar(grammar,current_qt_obj_set_symbol,QT_VAR_NAME + ".^(" + current_set_labels_symbol + ")")
 
-def add_quantification_over_field_symbols(grammar, type_name, currExpr, dest_type, cyclic_label, dest_label):
+def add_quantification_over_field_symbols(grammar, type_name, curr_expr, dest_type, cyclic_label, dest_label):
   """Add quantification symbols to the given grammar"""
   current_set_symbol = get_set_symbol(type_name)
   current_set_label_symbol = get_set_label_symbol(type_name)

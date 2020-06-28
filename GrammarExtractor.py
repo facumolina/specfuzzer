@@ -44,16 +44,21 @@ def build_type_graph(t,visited):
     if (cl_decl.name in to_visit):
       build_type_graph(cl_decl,visited)
 
-def add_quantification_symbols_from_label(grammar, type_name, currExpr, label):
+def add_quantification_symbols_from_label(grammar, type_name, curr_expr, label):
   """Create the quantification related symbols from label"""
-  builder.add_quantification_symbols(grammar,type_name,currExpr,label)
+  builder.add_quantification_symbols(grammar,type_name,curr_expr,label)
   for dest in type_graph.adj[type_name]:
     if (dest != type_name):
       for j in type_graph[type_name][dest]:
         dest_label = type_graph[type_name][dest][j]['label']
-        builder.add_quantification_over_field_symbols(grammar,type_name,currExpr,dest,label,dest_label)
+        builder.add_quantification_over_field_symbols(grammar,type_name,curr_expr,dest,label,dest_label)
 
-def traverse_graph(type_name,currExpr,grammar,k):
+def add_symbol_for_type(type_name, curr_expr, grammar):
+  """Add the the given current expresion as a symbol for the corresponding type"""
+  type_symbol = builder.get_symbol_for_type(type_name)
+  builder.extend_grammar(grammar, type_symbol, curr_expr)
+
+def traverse_graph(type_name,curr_expr,grammar,k):
   """Traverse the type graph from the given type and extend the given grammar"""
   if (k > 0):
     for edge in type_graph.adj[type_name]:
@@ -61,11 +66,15 @@ def traverse_graph(type_name,currExpr,grammar,k):
         label = type_graph[type_name][edge][i]['label']
         if (edge == type_name):
           # We have a closure case, so create the quantificaiton related symbols
-          add_quantification_symbols_from_label(grammar, type_name, currExpr, label)
+          add_quantification_symbols_from_label(grammar, type_name, curr_expr, label)
         else:
           # This is not a closure case, continue exploring only reference types
           if types_util.is_reference(edge):
-            traverse_graph(edge,currExpr+"."+label,grammar,k-1)
+            traverse_graph(edge,curr_expr+"."+label,grammar,k-1)
+          else:
+            add_symbol_for_type(edge,curr_expr+"."+label,grammar)
+            
+
 
 
 def extract_grammar(t):
