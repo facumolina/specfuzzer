@@ -1,0 +1,20 @@
+<project>
+   
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+  <property name="lib.dir" value="lib"/>
+  
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac includeantruntime="false" srcdir="src/examples" destdir="build/classes" classpathref="classpath"/>
+    <javac includeantruntime="false" srcdir="src/main" destdir="build/classes" classpathref="classpath"/>
+  </target>
+
+</project>
+
