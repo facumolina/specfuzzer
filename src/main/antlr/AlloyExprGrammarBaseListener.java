@@ -16,6 +16,18 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFile(AlloyExprGrammarParser.FileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFile(AlloyExprGrammarParser.FileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpr(AlloyExprGrammarParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -52,37 +64,37 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQt_obj_cmp(AlloyExprGrammarParser.Qt_obj_cmpContext ctx) { }
+	@Override public void enterCompare_op(AlloyExprGrammarParser.Compare_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQt_obj_cmp(AlloyExprGrammarParser.Qt_obj_cmpContext ctx) { }
+	@Override public void exitCompare_op(AlloyExprGrammarParser.Compare_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType_id(AlloyExprGrammarParser.Type_idContext ctx) { }
+	@Override public void enterBinary_op(AlloyExprGrammarParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType_id(AlloyExprGrammarParser.Type_idContext ctx) { }
+	@Override public void exitBinary_op(AlloyExprGrammarParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterField_id(AlloyExprGrammarParser.Field_idContext ctx) { }
+	@Override public void enterUnary_op(AlloyExprGrammarParser.Unary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitField_id(AlloyExprGrammarParser.Field_idContext ctx) { }
+	@Override public void exitUnary_op(AlloyExprGrammarParser.Unary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -107,6 +119,30 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitQuantifier(AlloyExprGrammarParser.QuantifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterName(AlloyExprGrammarParser.NameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitName(AlloyExprGrammarParser.NameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

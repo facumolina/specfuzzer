@@ -1,36 +1,89 @@
 // Define the Alloy Expressions Grammar
 grammar AlloyExprGrammar;
 
-expr: 
-	qt_expr
+file : expr* EOF;
+
+expr:
+  name
+  | qt_expr
+  | expr binary_op expr
+  | expr compare_op expr
+  | unary_op expr
+  | set_expr
+  | NUMBER
 	;
 
 qt_expr:
-	quantifier 'n' ':' set_expr ':' qt_obj_cmp
-	;
+  quantifier name ':' set_expr ':' expr
+  ;
 
 set_expr:
-	type_id '.' closure_op '(' field_id ')'
-	;
+  name '.' closure_op '(' closure_field ')'
+  ;
 
-qt_obj_cmp:
-	'n != null'
-	;
-	  
-type_id:
-	'List'
-	;
+compare_op:
+  '='
+  | '!='
+  | 'in'
+  | '<'
+  | '>'
+  | '<='
+  | '>='
+  ;
 
-field_id : 'next' ; // match lower-case identifiers
+binary_op:
+  '||'
+  | 'or'
+  | '&&'
+  | 'and'
+  | 'implies'
+  | '=>'
+  ;
+
+unary_op:
+  '!'
+  | 'not'
+  | 'no'
+  ;
 
 closure_op:
-	'*'
-	| '^'
-	;
+  '*'
+  | '^'
+  ;
 
 quantifier:
-	'all'
-	| 'some'
-	;
+  'all'
+  | 'some'
+  ;
+
+name:
+  ID
+  | ID '.' name
+  ;
+
+closure_field:
+  ID
+  | ID '+' closure_field
+  ;
+
+ID
+  : ID_START ID_CHAR*
+  ;
+
+ID_START:
+  [A-Z] 
+  | [a-z]
+  | '_'
+  ;
+
+ID_CHAR: 
+  ID_START 
+  | [0-9]
+  ;
+
+NUMBER:
+  [0-9]+
+  | [0-9]+ '.' [0-9]+
+  ;
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines

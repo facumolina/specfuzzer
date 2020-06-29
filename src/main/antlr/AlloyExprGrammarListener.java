@@ -8,6 +8,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface AlloyExprGrammarListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void enterFile(AlloyExprGrammarParser.FileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void exitFile(AlloyExprGrammarParser.FileContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
@@ -38,35 +48,35 @@ public interface AlloyExprGrammarListener extends ParseTreeListener {
 	 */
 	void exitSet_expr(AlloyExprGrammarParser.Set_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#qt_obj_cmp}.
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#compare_op}.
 	 * @param ctx the parse tree
 	 */
-	void enterQt_obj_cmp(AlloyExprGrammarParser.Qt_obj_cmpContext ctx);
+	void enterCompare_op(AlloyExprGrammarParser.Compare_opContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#qt_obj_cmp}.
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#compare_op}.
 	 * @param ctx the parse tree
 	 */
-	void exitQt_obj_cmp(AlloyExprGrammarParser.Qt_obj_cmpContext ctx);
+	void exitCompare_op(AlloyExprGrammarParser.Compare_opContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#type_id}.
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#binary_op}.
 	 * @param ctx the parse tree
 	 */
-	void enterType_id(AlloyExprGrammarParser.Type_idContext ctx);
+	void enterBinary_op(AlloyExprGrammarParser.Binary_opContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#type_id}.
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#binary_op}.
 	 * @param ctx the parse tree
 	 */
-	void exitType_id(AlloyExprGrammarParser.Type_idContext ctx);
+	void exitBinary_op(AlloyExprGrammarParser.Binary_opContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#field_id}.
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#unary_op}.
 	 * @param ctx the parse tree
 	 */
-	void enterField_id(AlloyExprGrammarParser.Field_idContext ctx);
+	void enterUnary_op(AlloyExprGrammarParser.Unary_opContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#field_id}.
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#unary_op}.
 	 * @param ctx the parse tree
 	 */
-	void exitField_id(AlloyExprGrammarParser.Field_idContext ctx);
+	void exitUnary_op(AlloyExprGrammarParser.Unary_opContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#closure_op}.
 	 * @param ctx the parse tree
@@ -87,4 +97,24 @@ public interface AlloyExprGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitQuantifier(AlloyExprGrammarParser.QuantifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void enterName(AlloyExprGrammarParser.NameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void exitName(AlloyExprGrammarParser.NameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#closure_field}.
+	 * @param ctx the parse tree
+	 */
+	void enterClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#closure_field}.
+	 * @param ctx the parse tree
+	 */
+	void exitClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx);
 }
