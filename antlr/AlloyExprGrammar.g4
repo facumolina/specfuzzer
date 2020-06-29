@@ -1,7 +1,9 @@
 // Define the Alloy Expressions Grammar
 grammar AlloyExprGrammar;
 
-file : expr* EOF;
+parse
+  :  expr EOF
+  ;
 
 expr:
   name
@@ -25,6 +27,7 @@ compare_op:
   '='
   | '!='
   | 'in'
+  | 'not in'
   | '<'
   | '>'
   | '<='
