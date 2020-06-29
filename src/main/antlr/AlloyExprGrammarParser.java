@@ -20,25 +20,25 @@ public class AlloyExprGrammarParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
-		T__24=25, ID=26, ID_START=27, ID_CHAR=28, NUMBER=29, WS=30;
+		T__24=25, T__25=26, ID=27, ID_START=28, ID_CHAR=29, NUMBER=30, WS=31;
 	public static final int
-		RULE_file = 0, RULE_expr = 1, RULE_qt_expr = 2, RULE_set_expr = 3, RULE_compare_op = 4, 
+		RULE_parse = 0, RULE_expr = 1, RULE_qt_expr = 2, RULE_set_expr = 3, RULE_compare_op = 4, 
 		RULE_binary_op = 5, RULE_unary_op = 6, RULE_closure_op = 7, RULE_quantifier = 8, 
 		RULE_name = 9, RULE_closure_field = 10;
 	public static final String[] ruleNames = {
-		"file", "expr", "qt_expr", "set_expr", "compare_op", "binary_op", "unary_op", 
+		"parse", "expr", "qt_expr", "set_expr", "compare_op", "binary_op", "unary_op", 
 		"closure_op", "quantifier", "name", "closure_field"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "':'", "'.'", "'('", "')'", "'='", "'!='", "'in'", "'<'", "'>'", 
-		"'<='", "'>='", "'||'", "'or'", "'&&'", "'and'", "'implies'", "'=>'", 
+		null, "':'", "'.'", "'('", "')'", "'='", "'!='", "'in'", "'not in'", "'<'", 
+		"'>'", "'<='", "'>='", "'||'", "'or'", "'&&'", "'and'", "'implies'", "'=>'", 
 		"'!'", "'not'", "'no'", "'*'", "'^'", "'all'", "'some'", "'+'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, "ID", "ID_START", "ID_CHAR", "NUMBER", "WS"
+		null, null, null, "ID", "ID_START", "ID_CHAR", "NUMBER", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -89,50 +89,34 @@ public class AlloyExprGrammarParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
-	public static class FileContext extends ParserRuleContext {
+	public static class ParseContext extends ParserRuleContext {
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
 		public TerminalNode EOF() { return getToken(AlloyExprGrammarParser.EOF, 0); }
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public FileContext(ParserRuleContext parent, int invokingState) {
+		public ParseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_file; }
+		@Override public int getRuleIndex() { return RULE_parse; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterFile(this);
+			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterParse(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitFile(this);
+			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitParse(this);
 		}
 	}
 
-	public final FileContext file() throws RecognitionException {
-		FileContext _localctx = new FileContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_file);
-		int _la;
+	public final ParseContext parse() throws RecognitionException {
+		ParseContext _localctx = new ParseContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_parse);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(25);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__22) | (1L << T__23) | (1L << ID) | (1L << NUMBER))) != 0)) {
-				{
-				{
-				setState(22);
-				expr(0);
-				}
-				}
-				setState(27);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(28);
+			setState(22);
+			expr(0);
+			setState(23);
 			match(EOF);
 			}
 		}
@@ -202,63 +186,63 @@ public class AlloyExprGrammarParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(38);
+			setState(33);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				{
-				setState(31);
+				setState(26);
 				name();
 				}
 				break;
 			case 2:
 				{
-				setState(32);
+				setState(27);
 				qt_expr();
 				}
 				break;
 			case 3:
 				{
-				setState(33);
+				setState(28);
 				unary_op();
-				setState(34);
+				setState(29);
 				expr(3);
 				}
 				break;
 			case 4:
 				{
-				setState(36);
+				setState(31);
 				set_expr();
 				}
 				break;
 			case 5:
 				{
-				setState(37);
+				setState(32);
 				match(NUMBER);
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(50);
+			setState(45);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(48);
+					setState(43);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(40);
+						setState(35);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(41);
+						setState(36);
 						binary_op();
-						setState(42);
+						setState(37);
 						expr(6);
 						}
 						break;
@@ -266,20 +250,20 @@ public class AlloyExprGrammarParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(44);
+						setState(39);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(45);
+						setState(40);
 						compare_op();
-						setState(46);
+						setState(41);
 						expr(5);
 						}
 						break;
 					}
 					} 
 				}
-				setState(52);
+				setState(47);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
 			}
 		}
@@ -327,17 +311,17 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53);
+			setState(48);
 			quantifier();
-			setState(54);
+			setState(49);
 			name();
-			setState(55);
+			setState(50);
 			match(T__0);
-			setState(56);
+			setState(51);
 			set_expr();
-			setState(57);
+			setState(52);
 			match(T__0);
-			setState(58);
+			setState(53);
 			expr(0);
 			}
 		}
@@ -382,17 +366,17 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60);
+			setState(55);
 			name();
-			setState(61);
+			setState(56);
 			match(T__1);
-			setState(62);
+			setState(57);
 			closure_op();
-			setState(63);
+			setState(58);
 			match(T__2);
-			setState(64);
+			setState(59);
 			closure_field();
-			setState(65);
+			setState(60);
 			match(T__3);
 			}
 		}
@@ -429,9 +413,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(67);
+			setState(62);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -474,9 +458,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
+			setState(64);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -519,9 +503,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(71);
+			setState(66);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__17) | (1L << T__18) | (1L << T__19))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__18) | (1L << T__19) | (1L << T__20))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -564,9 +548,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(73);
+			setState(68);
 			_la = _input.LA(1);
-			if ( !(_la==T__20 || _la==T__21) ) {
+			if ( !(_la==T__21 || _la==T__22) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -609,9 +593,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(75);
+			setState(70);
 			_la = _input.LA(1);
-			if ( !(_la==T__22 || _la==T__23) ) {
+			if ( !(_la==T__23 || _la==T__24) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -655,24 +639,24 @@ public class AlloyExprGrammarParser extends Parser {
 		NameContext _localctx = new NameContext(_ctx, getState());
 		enterRule(_localctx, 18, RULE_name);
 		try {
-			setState(81);
+			setState(76);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(77);
+				setState(72);
 				match(ID);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(78);
+				setState(73);
 				match(ID);
-				setState(79);
+				setState(74);
 				match(T__1);
-				setState(80);
+				setState(75);
 				name();
 				}
 				break;
@@ -712,24 +696,24 @@ public class AlloyExprGrammarParser extends Parser {
 		Closure_fieldContext _localctx = new Closure_fieldContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_closure_field);
 		try {
-			setState(87);
+			setState(82);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(83);
+				setState(78);
 				match(ID);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(84);
+				setState(79);
 				match(ID);
-				setState(85);
-				match(T__24);
-				setState(86);
+				setState(80);
+				match(T__25);
+				setState(81);
 				closure_field();
 				}
 				break;
@@ -764,29 +748,27 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3 \\\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\3\2\7\2\32\n\2\f\2\16\2\35\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\5\3)\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3\63\n\3\f\3\16\3"+
-		"\66\13\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3"+
-		"\6\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3\13\3\13\5\13T\n\13\3\f"+
-		"\3\f\3\f\3\f\5\fZ\n\f\3\f\2\3\4\r\2\4\6\b\n\f\16\20\22\24\26\2\7\3\2\7"+
-		"\r\3\2\16\23\3\2\24\26\3\2\27\30\3\2\31\32\2Y\2\33\3\2\2\2\4(\3\2\2\2"+
-		"\6\67\3\2\2\2\b>\3\2\2\2\nE\3\2\2\2\fG\3\2\2\2\16I\3\2\2\2\20K\3\2\2\2"+
-		"\22M\3\2\2\2\24S\3\2\2\2\26Y\3\2\2\2\30\32\5\4\3\2\31\30\3\2\2\2\32\35"+
-		"\3\2\2\2\33\31\3\2\2\2\33\34\3\2\2\2\34\36\3\2\2\2\35\33\3\2\2\2\36\37"+
-		"\7\2\2\3\37\3\3\2\2\2 !\b\3\1\2!)\5\24\13\2\")\5\6\4\2#$\5\16\b\2$%\5"+
-		"\4\3\5%)\3\2\2\2&)\5\b\5\2\')\7\37\2\2( \3\2\2\2(\"\3\2\2\2(#\3\2\2\2"+
-		"(&\3\2\2\2(\'\3\2\2\2)\64\3\2\2\2*+\f\7\2\2+,\5\f\7\2,-\5\4\3\b-\63\3"+
-		"\2\2\2./\f\6\2\2/\60\5\n\6\2\60\61\5\4\3\7\61\63\3\2\2\2\62*\3\2\2\2\62"+
-		".\3\2\2\2\63\66\3\2\2\2\64\62\3\2\2\2\64\65\3\2\2\2\65\5\3\2\2\2\66\64"+
-		"\3\2\2\2\678\5\22\n\289\5\24\13\29:\7\3\2\2:;\5\b\5\2;<\7\3\2\2<=\5\4"+
-		"\3\2=\7\3\2\2\2>?\5\24\13\2?@\7\4\2\2@A\5\20\t\2AB\7\5\2\2BC\5\26\f\2"+
-		"CD\7\6\2\2D\t\3\2\2\2EF\t\2\2\2F\13\3\2\2\2GH\t\3\2\2H\r\3\2\2\2IJ\t\4"+
-		"\2\2J\17\3\2\2\2KL\t\5\2\2L\21\3\2\2\2MN\t\6\2\2N\23\3\2\2\2OT\7\34\2"+
-		"\2PQ\7\34\2\2QR\7\4\2\2RT\5\24\13\2SO\3\2\2\2SP\3\2\2\2T\25\3\2\2\2UZ"+
-		"\7\34\2\2VW\7\34\2\2WX\7\33\2\2XZ\5\26\f\2YU\3\2\2\2YV\3\2\2\2Z\27\3\2"+
-		"\2\2\b\33(\62\64SY";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3!W\4\2\t\2\4\3\t\3"+
+		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f"+
+		"\t\f\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3$\n\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\7\3.\n\3\f\3\16\3\61\13\3\3\4\3\4\3\4\3\4\3\4\3\4"+
+		"\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3"+
+		"\n\3\13\3\13\3\13\3\13\5\13O\n\13\3\f\3\f\3\f\3\f\5\fU\n\f\3\f\2\3\4\r"+
+		"\2\4\6\b\n\f\16\20\22\24\26\2\7\3\2\7\16\3\2\17\24\3\2\25\27\3\2\30\31"+
+		"\3\2\32\33\2S\2\30\3\2\2\2\4#\3\2\2\2\6\62\3\2\2\2\b9\3\2\2\2\n@\3\2\2"+
+		"\2\fB\3\2\2\2\16D\3\2\2\2\20F\3\2\2\2\22H\3\2\2\2\24N\3\2\2\2\26T\3\2"+
+		"\2\2\30\31\5\4\3\2\31\32\7\2\2\3\32\3\3\2\2\2\33\34\b\3\1\2\34$\5\24\13"+
+		"\2\35$\5\6\4\2\36\37\5\16\b\2\37 \5\4\3\5 $\3\2\2\2!$\5\b\5\2\"$\7 \2"+
+		"\2#\33\3\2\2\2#\35\3\2\2\2#\36\3\2\2\2#!\3\2\2\2#\"\3\2\2\2$/\3\2\2\2"+
+		"%&\f\7\2\2&\'\5\f\7\2\'(\5\4\3\b(.\3\2\2\2)*\f\6\2\2*+\5\n\6\2+,\5\4\3"+
+		"\7,.\3\2\2\2-%\3\2\2\2-)\3\2\2\2.\61\3\2\2\2/-\3\2\2\2/\60\3\2\2\2\60"+
+		"\5\3\2\2\2\61/\3\2\2\2\62\63\5\22\n\2\63\64\5\24\13\2\64\65\7\3\2\2\65"+
+		"\66\5\b\5\2\66\67\7\3\2\2\678\5\4\3\28\7\3\2\2\29:\5\24\13\2:;\7\4\2\2"+
+		";<\5\20\t\2<=\7\5\2\2=>\5\26\f\2>?\7\6\2\2?\t\3\2\2\2@A\t\2\2\2A\13\3"+
+		"\2\2\2BC\t\3\2\2C\r\3\2\2\2DE\t\4\2\2E\17\3\2\2\2FG\t\5\2\2G\21\3\2\2"+
+		"\2HI\t\6\2\2I\23\3\2\2\2JO\7\35\2\2KL\7\35\2\2LM\7\4\2\2MO\5\24\13\2N"+
+		"J\3\2\2\2NK\3\2\2\2O\25\3\2\2\2PU\7\35\2\2QR\7\35\2\2RS\7\34\2\2SU\5\26"+
+		"\f\2TP\3\2\2\2TQ\3\2\2\2U\27\3\2\2\2\7#-/NT";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

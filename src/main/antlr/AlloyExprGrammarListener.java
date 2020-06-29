@@ -8,15 +8,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface AlloyExprGrammarListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#file}.
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#parse}.
 	 * @param ctx the parse tree
 	 */
-	void enterFile(AlloyExprGrammarParser.FileContext ctx);
+	void enterParse(AlloyExprGrammarParser.ParseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#file}.
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#parse}.
 	 * @param ctx the parse tree
 	 */
-	void exitFile(AlloyExprGrammarParser.FileContext ctx);
+	void exitParse(AlloyExprGrammarParser.ParseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#expr}.
 	 * @param ctx the parse tree

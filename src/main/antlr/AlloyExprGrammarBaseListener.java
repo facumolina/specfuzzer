@@ -16,13 +16,13 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFile(AlloyExprGrammarParser.FileContext ctx) { }
+	@Override public void enterParse(AlloyExprGrammarParser.ParseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFile(AlloyExprGrammarParser.FileContext ctx) { }
+	@Override public void exitParse(AlloyExprGrammarParser.ParseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
