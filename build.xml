@@ -5,7 +5,8 @@
   </target>
 
   <property name="lib.dir" value="lib"/>
-  
+  <property name="test.dir" location="src/test" />
+
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
@@ -14,6 +15,20 @@
     <mkdir dir="build/classes"/>
     <javac includeantruntime="false" srcdir="src/examples" destdir="build/classes" classpathref="classpath"/>
     <javac includeantruntime="false" srcdir="src/main" destdir="build/classes" classpathref="classpath"/>
+    <javac includeantruntime="false" srcdir="src/test" destdir="build/classes" classpathref="classpath"/>
+  </target>
+
+  <target name="junit" depends="compile">
+    <junit printsummary="yes" haltonfailure="no">
+      <classpath refid="classpath" />
+      <classpath location="build/classes" />
+      <!--formatter type="plain" /-->
+      <batchtest fork="yes">
+        <fileset dir="src/test">
+          <include name="**/*Test*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
   </target>
 
 </project>
