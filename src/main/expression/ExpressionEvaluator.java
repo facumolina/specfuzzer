@@ -67,7 +67,9 @@ public class ExpressionEvaluator {
     Binary_opContext binary_op = ectx.binary_op();
     if (binary_op != null) {
       // The expression is a binary one
-
+      List<ExprContext> exprs = ectx.expr();
+      assert (exprs.size() == 2);
+      return BinaryExpressionEvaluator.eval(exprs.get(0), binary_op, exprs.get(1), o);
     }
 
     Compare_opContext cmp_op = ectx.compare_op();

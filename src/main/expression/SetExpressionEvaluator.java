@@ -49,7 +49,7 @@ public class SetExpressionEvaluator {
     }
     Closure_fieldContext extraFields = fields.closure_field();
     if (extraFields != null)
-      closureFromFields(base, fields, visited);
+      closureFromFields(base, extraFields, visited);
   }
 
   /**
