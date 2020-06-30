@@ -40,6 +40,10 @@ public class QuantifiedTreeExpressionEvaluatorTest {
         .asList(new Object[][] { { "all n : AvlTreeList.root.*(left) : n != n.right", true },
             { "all n : AvlTreeList.root.*(right) : n != n.right", true },
             { "all n : AvlTreeList.root.*(left + right) : n != n.right", true },
+            { "all n : AvlTreeList.root.*(left + right) : n not in n.^(left+right)", true },
+            { "all n : AvlTreeList.root.*(left + right) : n in n.^(left+right)", false },
+            { "all n : AvlTreeList.root.*(left + right) : n in n.^(left)", false },
+            { "all n : AvlTreeList.root.*(left + right) : n not in n.^(right)", true },
             { "all n : AvlTreeList.root.*(left + right) : n = n.right", false },
             { "some n : AvlTreeList.root.*(left + right) : n = n.right.left", false },
             { "all n : AvlTreeList.root.^(left) : n.height < n.left.height", false },
@@ -47,6 +51,10 @@ public class QuantifiedTreeExpressionEvaluatorTest {
             { "all n : AvlTreeList.root.*(left + right) : n.size > n.right.size", true },
             { "all n : AvlTreeList.root.*(left + right) : n.size > n.left.size", true },
             { "all n : AvlTreeList.root.*(left + right) : n.size > n.left.size and n.size > n.right.size",
+                true },
+            { "all n : AvlTreeList.root.*(left + right) : n.size < n.left.size and n.size > n.right.size",
+                false },
+            { "all n : AvlTreeList.root.*(left + right) : n.height > n.left.height and n.height > n.right.height",
                 true } });
   }
 
