@@ -1,13 +1,20 @@
 package expression;
 
+import java.util.List;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
+import antlr.AlloyExprGrammarParser.Binary_opContext;
+import antlr.AlloyExprGrammarParser.Compare_opContext;
 import antlr.AlloyExprGrammarParser.ExprContext;
+import antlr.AlloyExprGrammarParser.NameContext;
+import antlr.AlloyExprGrammarParser.ParseContext;
 import antlr.AlloyExprGrammarParser.Qt_exprContext;
+import antlr.AlloyExprGrammarParser.Set_exprContext;
 
 /**
  * This class represents an Expression Evaluator. Provides a method that given a Java object and an
@@ -42,22 +49,47 @@ public class ExpressionEvaluator {
       throw new IllegalArgumentException("The given expression contains syntax errors");
 
     // Evaluate the expression on the object
-    return eval((AlloyExprGrammarParser.ParseContext) tree, o);
+    ParseContext ctx = (ParseContext) tree;
+    return (Boolean) eval(ctx.expr(), o);
 
   }
 
   /**
    * Evaluate the given ParseTree on the given java Object
    */
-  private static boolean eval(AlloyExprGrammarParser.ParseContext ctx, Object o) {
-    // Get the expression
-    ExprContext ectx = ctx.expr();
+  public static Object eval(ExprContext ectx, Object o) {
 
     Qt_exprContext qt_expr_ctx = ectx.qt_expr();
     if (qt_expr_ctx != null)
       return QuantifiedExpressionEvaluator.eval(qt_expr_ctx, o);
 
-    throw new IllegalStateException("Unable to evaluate the expression!");
+    Binary_opContext binary_op = ectx.binary_op();
+    if (binary_op != null) {
+      // The expression is a binary one
+
+    }
+
+    Compare_opContext cmp_op = ectx.compare_op();
+    if (cmp_op != null) {
+      // The expression is a comparisson
+      List<ExprContext> exprs = ectx.expr();
+      assert (exprs.size() == 2);
+      return ComparisonExpressionEvaluator.eval(exprs.get(0), cmp_op, exprs.get(1), o);
+    }
+
+    NameContext name_ctx = ectx.name();
+    if (name_ctx != null) {
+      // The expression is a name
+      return NameExpressionEvaluator.eval(name_ctx, o);
+    }
+
+    Set_exprContext set_expr = ectx.set_expr();
+    if (set_expr != null) {
+      // The expression is a set
+      return SetExpressionEvaluator.eval(set_expr, o);
+    }
+
+    throw new IllegalStateException("Unable to evaluate the expression: " + ectx.getText());
   }
 
 }

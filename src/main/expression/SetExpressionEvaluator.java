@@ -28,7 +28,6 @@ public class SetExpressionEvaluator {
     Closure_fieldContext fields = set_expr_ctx.closure_field();
 
     // Start exploring applying the fields as indicated by the closure operation
-    assert (left_part.ID().getText().equals(o.getClass().getSimpleName()));
     Object base_object = NameExpressionEvaluator.eval(left_part, o);
     Set<Object> set = new HashSet<Object>();
     if (closure_op.getText().equals("*"))
@@ -58,7 +57,8 @@ public class SetExpressionEvaluator {
    */
   private static void verifyTypes(NameContext name, Object o) {
     if (o != null) {
-      if (!name.getText().contains(o.getClass().getSimpleName()))
+      if (!name.getText().contains(o.getClass().getSimpleName())
+          && !name.getText().equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
         throw new IllegalArgumentException("Object class " + o.getClass().getSimpleName()
             + " is not compatible with name " + name.getText());
     }

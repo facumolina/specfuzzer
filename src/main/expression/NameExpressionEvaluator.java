@@ -17,13 +17,19 @@ public class NameExpressionEvaluator {
    * Evaluate the given name on the given object
    */
   public static Object eval(NameContext name_ctx, Object o) {
+    if (name_ctx == null)
+      throw new IllegalArgumentException("The name can't be null!");
     Object curr = eval(name_ctx.ID(), o);
     NameContext fields = name_ctx.name();
 
-    if (fields == null || curr == null) // No fields to apply
+    if (fields == null) // No fields to apply
       return curr;
 
-    return eval(fields.name(), curr);
+    if (curr == null)
+      throw new NonEvaluableExpressionException(
+          "Can't continue evaluating fields " + fields.getText());
+
+    return eval(fields, curr);
   }
 
   /**
@@ -34,7 +40,7 @@ public class NameExpressionEvaluator {
       return null;
     if (ID.getText().equals(o.getClass().getSimpleName()))
       return o;
-    if (ID.getText().equals("n"))
+    if (ID.getText().equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
       return o;
     try {
       // Get the field and evaluate it, o continue evaluating

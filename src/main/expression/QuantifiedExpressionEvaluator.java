@@ -16,6 +16,8 @@ public class QuantifiedExpressionEvaluator {
   private static final String ALL = "all";
   private static final String SOME = "some";
 
+  public static final String QT_VAR_NAME = "n";
+
   /**
    * Evaluate the given quantified expression on the given java Object
    */
@@ -38,7 +40,14 @@ public class QuantifiedExpressionEvaluator {
    */
   private static boolean computeAll(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
-      // TODO if expr doesnot holds return false
+      try {
+        if (!(Boolean) ExpressionEvaluator.eval(expr, o))
+          return false;
+      } catch (NonEvaluableExpressionException e) {
+        // For now, when an expression can't be evaluated in the body, ignore it
+        // This simulates null safe
+        continue;
+      }
     }
     return true;
   }
@@ -48,7 +57,14 @@ public class QuantifiedExpressionEvaluator {
    */
   private static boolean computeSome(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
-      // TODO if expr holds return true
+      try {
+        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+          return true;
+      } catch (NonEvaluableExpressionException e) {
+        // For now, when an expression can't be evaluated in the body, ignore it
+        // This simulates null safe
+        continue;
+      }
     }
     return false;
   }
