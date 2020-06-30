@@ -10,9 +10,9 @@ expr:
   | qt_expr
   | expr binary_op expr
   | expr compare_op expr
-  | unary_op expr
+  | unary_op '(' expr ')'
   | set_expr
-  | NUMBER
+  | number
 	;
 
 qt_expr:
@@ -47,6 +47,7 @@ unary_op:
   '!'
   | 'not'
   | 'no'
+  | '#'
   ;
 
 closure_op:
@@ -84,9 +85,8 @@ ID_CHAR:
   | [0-9]
   ;
 
-NUMBER:
-  [0-9]+
-  | [0-9]+ '.' [0-9]+
+number: 
+  '0'
   ;
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines

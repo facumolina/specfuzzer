@@ -143,6 +143,18 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumber(AlloyExprGrammarParser.NumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumber(AlloyExprGrammarParser.NumberContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

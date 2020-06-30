@@ -117,4 +117,14 @@ public interface AlloyExprGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumber(AlloyExprGrammarParser.NumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumber(AlloyExprGrammarParser.NumberContext ctx);
 }
