@@ -35,7 +35,9 @@ public class ComparisonExpressionEvaluator {
   private static boolean eval(Object o1, String op, Object o2) {
     switch (op) {
     case EQ:
-      throw new IllegalArgumentException("Operator " + op + " not supported yet in comparisons");
+      if (o1 == null)
+        return o2 == null;
+      return o1.equals(o2);
     case NOT_EQ:
       if (o1 == null)
         return o2 != null;
