@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
+import DataStructures.AvlTreeList;
 import DataStructures.List;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
@@ -56,6 +57,37 @@ public class UnaryExpressionEvaluatorTest {
     assert (o instanceof Integer);
     Integer i = (Integer) o;
     assertTrue(i == 3);
+  }
+
+  @Test
+  public void cardinality4() {
+    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    Object o = evaluateUnary("#(AvlTreeList.root.*(left + right))", t);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 1);
+  }
+
+  @Test
+  public void cardinality5() {
+    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    t.add(2);
+    Object o = evaluateUnary("#(AvlTreeList.root.*(left + right))", t);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 2);
+  }
+
+  @Test
+  public void cardinality6() {
+    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    t.add(2);
+    t.add(4);
+    t.add(5);
+    Object o = evaluateUnary("#(AvlTreeList.root.*(left + right))", t);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 4);
   }
 
 }
