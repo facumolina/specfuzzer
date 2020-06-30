@@ -18,13 +18,13 @@ import DataStructures.List;
  *
  */
 @RunWith(Parameterized.class)
-public class QuantifiedExpressionEvaluatorTest {
+public class QuantifiedListExpressionEvaluatorTest {
 
   private String alloy_expr;
   private Boolean expected_result;
   private List list;
 
-  public QuantifiedExpressionEvaluatorTest(String alloy_expr, Boolean expected_result) {
+  public QuantifiedListExpressionEvaluatorTest(String alloy_expr, Boolean expected_result) {
     this.alloy_expr = alloy_expr;
     this.expected_result = expected_result;
     // List object
