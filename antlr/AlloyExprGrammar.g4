@@ -6,12 +6,12 @@ parse
   ;
 
 expr:
-  name
-  | qt_expr
-  | expr binary_op expr
+  qt_expr
   | expr compare_op expr
+  | expr binary_op expr
   | unary_op '(' expr ')'
   | set_expr
+  | name
   | number
 	;
 
@@ -23,6 +23,15 @@ set_expr:
   name '.' closure_op '(' closure_field ')'
   ;
 
+binary_op:
+  '||'
+  | 'or'
+  | '&&'
+  | 'and'
+  | 'implies'
+  | '=>'
+  ;
+
 compare_op:
   '='
   | '!='
@@ -32,15 +41,6 @@ compare_op:
   | '>'
   | '<='
   | '>='
-  ;
-
-binary_op:
-  '||'
-  | 'or'
-  | '&&'
-  | 'and'
-  | 'implies'
-  | '=>'
   ;
 
 unary_op:

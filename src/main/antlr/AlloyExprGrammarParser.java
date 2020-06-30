@@ -23,17 +23,17 @@ public class AlloyExprGrammarParser extends Parser {
 		T__24=25, T__25=26, T__26=27, T__27=28, ID=29, ID_START=30, ID_CHAR=31, 
 		WS=32;
 	public static final int
-		RULE_parse = 0, RULE_expr = 1, RULE_qt_expr = 2, RULE_set_expr = 3, RULE_compare_op = 4, 
-		RULE_binary_op = 5, RULE_unary_op = 6, RULE_closure_op = 7, RULE_quantifier = 8, 
+		RULE_parse = 0, RULE_expr = 1, RULE_qt_expr = 2, RULE_set_expr = 3, RULE_binary_op = 4, 
+		RULE_compare_op = 5, RULE_unary_op = 6, RULE_closure_op = 7, RULE_quantifier = 8, 
 		RULE_name = 9, RULE_closure_field = 10, RULE_number = 11;
 	public static final String[] ruleNames = {
-		"parse", "expr", "qt_expr", "set_expr", "compare_op", "binary_op", "unary_op", 
+		"parse", "expr", "qt_expr", "set_expr", "binary_op", "compare_op", "unary_op", 
 		"closure_op", "quantifier", "name", "closure_field", "number"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'('", "')'", "':'", "'.'", "'='", "'!='", "'in'", "'not in'", "'<'", 
-		"'>'", "'<='", "'>='", "'||'", "'or'", "'&&'", "'and'", "'implies'", "'=>'", 
+		null, "'('", "')'", "':'", "'.'", "'||'", "'or'", "'&&'", "'and'", "'implies'", 
+		"'=>'", "'='", "'!='", "'in'", "'not in'", "'<'", "'>'", "'<='", "'>='", 
 		"'!'", "'not'", "'no'", "'#'", "'*'", "'^'", "'all'", "'some'", "'+'", 
 		"'0'"
 	};
@@ -134,9 +134,6 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static class ExprContext extends ParserRuleContext {
-		public NameContext name() {
-			return getRuleContext(NameContext.class,0);
-		}
 		public Qt_exprContext qt_expr() {
 			return getRuleContext(Qt_exprContext.class,0);
 		}
@@ -152,14 +149,17 @@ public class AlloyExprGrammarParser extends Parser {
 		public Set_exprContext set_expr() {
 			return getRuleContext(Set_exprContext.class,0);
 		}
+		public NameContext name() {
+			return getRuleContext(NameContext.class,0);
+		}
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
 		}
-		public Binary_opContext binary_op() {
-			return getRuleContext(Binary_opContext.class,0);
-		}
 		public Compare_opContext compare_op() {
 			return getRuleContext(Compare_opContext.class,0);
+		}
+		public Binary_opContext binary_op() {
+			return getRuleContext(Binary_opContext.class,0);
 		}
 		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -196,31 +196,31 @@ public class AlloyExprGrammarParser extends Parser {
 			case 1:
 				{
 				setState(28);
-				name();
+				qt_expr();
 				}
 				break;
 			case 2:
 				{
 				setState(29);
-				qt_expr();
+				unary_op();
+				setState(30);
+				match(T__0);
+				setState(31);
+				expr(0);
+				setState(32);
+				match(T__1);
 				}
 				break;
 			case 3:
 				{
-				setState(30);
-				unary_op();
-				setState(31);
-				match(T__0);
-				setState(32);
-				expr(0);
-				setState(33);
-				match(T__1);
+				setState(34);
+				set_expr();
 				}
 				break;
 			case 4:
 				{
 				setState(35);
-				set_expr();
+				name();
 				}
 				break;
 			case 5:
@@ -247,11 +247,11 @@ public class AlloyExprGrammarParser extends Parser {
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(39);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(40);
-						binary_op();
+						compare_op();
 						setState(41);
-						expr(6);
+						expr(7);
 						}
 						break;
 					case 2:
@@ -259,11 +259,11 @@ public class AlloyExprGrammarParser extends Parser {
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(43);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(44);
-						compare_op();
+						binary_op();
 						setState(45);
-						expr(5);
+						expr(6);
 						}
 						break;
 					}
@@ -399,31 +399,31 @@ public class AlloyExprGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Compare_opContext extends ParserRuleContext {
-		public Compare_opContext(ParserRuleContext parent, int invokingState) {
+	public static class Binary_opContext extends ParserRuleContext {
+		public Binary_opContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_compare_op; }
+		@Override public int getRuleIndex() { return RULE_binary_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterCompare_op(this);
+			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterBinary_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitCompare_op(this);
+			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitBinary_op(this);
 		}
 	}
 
-	public final Compare_opContext compare_op() throws RecognitionException {
-		Compare_opContext _localctx = new Compare_opContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_compare_op);
+	public final Binary_opContext binary_op() throws RecognitionException {
+		Binary_opContext _localctx = new Binary_opContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_binary_op);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(66);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -444,31 +444,31 @@ public class AlloyExprGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Binary_opContext extends ParserRuleContext {
-		public Binary_opContext(ParserRuleContext parent, int invokingState) {
+	public static class Compare_opContext extends ParserRuleContext {
+		public Compare_opContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_binary_op; }
+		@Override public int getRuleIndex() { return RULE_compare_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterBinary_op(this);
+			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterCompare_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitBinary_op(this);
+			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitCompare_op(this);
 		}
 	}
 
-	public final Binary_opContext binary_op() throws RecognitionException {
-		Binary_opContext _localctx = new Binary_opContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_binary_op);
+	public final Compare_opContext compare_op() throws RecognitionException {
+		Compare_opContext _localctx = new Compare_opContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_compare_op);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(68);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -784,9 +784,9 @@ public class AlloyExprGrammarParser extends Parser {
 	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
-			return precpred(_ctx, 5);
+			return precpred(_ctx, 6);
 		case 1:
-			return precpred(_ctx, 4);
+			return precpred(_ctx, 5);
 		}
 		return true;
 	}
@@ -799,13 +799,13 @@ public class AlloyExprGrammarParser extends Parser {
 		"\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\7\3\7\3"+
 		"\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3\13\3\13\5\13S\n\13\3\f\3\f\3\f\3\f"+
 		"\5\fY\n\f\3\r\3\r\3\r\2\3\4\16\2\4\6\b\n\f\16\20\22\24\26\30\2\7\3\2\7"+
-		"\16\3\2\17\24\3\2\25\30\3\2\31\32\3\2\33\34\2X\2\32\3\2\2\2\4\'\3\2\2"+
-		"\2\6\66\3\2\2\2\b=\3\2\2\2\nD\3\2\2\2\fF\3\2\2\2\16H\3\2\2\2\20J\3\2\2"+
-		"\2\22L\3\2\2\2\24R\3\2\2\2\26X\3\2\2\2\30Z\3\2\2\2\32\33\5\4\3\2\33\34"+
-		"\7\2\2\3\34\3\3\2\2\2\35\36\b\3\1\2\36(\5\24\13\2\37(\5\6\4\2 !\5\16\b"+
-		"\2!\"\7\3\2\2\"#\5\4\3\2#$\7\4\2\2$(\3\2\2\2%(\5\b\5\2&(\5\30\r\2\'\35"+
-		"\3\2\2\2\'\37\3\2\2\2\' \3\2\2\2\'%\3\2\2\2\'&\3\2\2\2(\63\3\2\2\2)*\f"+
-		"\7\2\2*+\5\f\7\2+,\5\4\3\b,\62\3\2\2\2-.\f\6\2\2./\5\n\6\2/\60\5\4\3\7"+
+		"\f\3\2\r\24\3\2\25\30\3\2\31\32\3\2\33\34\2X\2\32\3\2\2\2\4\'\3\2\2\2"+
+		"\6\66\3\2\2\2\b=\3\2\2\2\nD\3\2\2\2\fF\3\2\2\2\16H\3\2\2\2\20J\3\2\2\2"+
+		"\22L\3\2\2\2\24R\3\2\2\2\26X\3\2\2\2\30Z\3\2\2\2\32\33\5\4\3\2\33\34\7"+
+		"\2\2\3\34\3\3\2\2\2\35\36\b\3\1\2\36(\5\6\4\2\37 \5\16\b\2 !\7\3\2\2!"+
+		"\"\5\4\3\2\"#\7\4\2\2#(\3\2\2\2$(\5\b\5\2%(\5\24\13\2&(\5\30\r\2\'\35"+
+		"\3\2\2\2\'\37\3\2\2\2\'$\3\2\2\2\'%\3\2\2\2\'&\3\2\2\2(\63\3\2\2\2)*\f"+
+		"\b\2\2*+\5\f\7\2+,\5\4\3\t,\62\3\2\2\2-.\f\7\2\2./\5\n\6\2/\60\5\4\3\b"+
 		"\60\62\3\2\2\2\61)\3\2\2\2\61-\3\2\2\2\62\65\3\2\2\2\63\61\3\2\2\2\63"+
 		"\64\3\2\2\2\64\5\3\2\2\2\65\63\3\2\2\2\66\67\5\22\n\2\678\5\24\13\289"+
 		"\7\5\2\29:\5\b\5\2:;\7\5\2\2;<\5\4\3\2<\7\3\2\2\2=>\5\24\13\2>?\7\6\2"+
