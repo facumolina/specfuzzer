@@ -1,8 +1,6 @@
 package expression;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Set;
+import static org.junit.Assert.assertTrue;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -20,47 +18,44 @@ import antlr.AlloyExprGrammarParser.ParseContext;
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  *
  */
-public class SetExpressionEvaluatorTest {
+public class UnaryExpressionEvaluatorTest {
 
-  private Set<Object> evaluateSet(String alloy_expr, Object o) {
+  private Object evaluateUnary(String alloy_expr, Object o) {
     AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
-    return (Set<Object>) ExpressionEvaluator.eval(ctx.expr(), o);
+    return ExpressionEvaluator.eval(ctx.expr(), o);
   }
 
   @Test
-  public void emptySet() {
+  public void cardinality1() {
     List l = new List();
-    Set<Object> set = evaluateSet("List.*(next)", l);
-    assertEquals(set.size(), 1);
+    Object o = evaluateUnary("#(List.^(next))", l);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 0);
   }
 
   @Test
-  public void emptySet2() {
+  public void cardinality2() {
     List l = new List();
-    Set<Object> set = evaluateSet("List.^(next)", l);
-    assertEquals(set.size(), 0);
+    Object o = evaluateUnary("#(List.*(next))", l);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 1);
   }
 
   @Test
-  public void filledSet() {
+  public void cardinality3() {
     List l = new List();
+    l.insert(1);
     l.insert(2);
-    l.insert(3);
-    Set<Object> set = evaluateSet("List.*(next)", l);
-    assertEquals(set.size(), 3);
-  }
-
-  @Test
-  public void filledSet2() {
-    List l = new List();
-    l.insert(2);
-    l.insert(3);
-    Set<Object> set = evaluateSet("List.^(next)", l);
-    assertEquals(set.size(), 2);
+    Object o = evaluateUnary("#(List.*(next))", l);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 3);
   }
 
 }

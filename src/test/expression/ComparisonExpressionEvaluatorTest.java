@@ -1,8 +1,7 @@
 package expression;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Set;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -20,47 +19,55 @@ import antlr.AlloyExprGrammarParser.ParseContext;
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  *
  */
-public class SetExpressionEvaluatorTest {
+public class ComparisonExpressionEvaluatorTest {
 
-  private Set<Object> evaluateSet(String alloy_expr, Object o) {
+  private Boolean evaluateCmp(String alloy_expr, Object o) {
     AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
-    return (Set<Object>) ExpressionEvaluator.eval(ctx.expr(), o);
+    return (Boolean) ExpressionEvaluator.eval(ctx.expr(), o);
   }
 
   @Test
-  public void emptySet() {
+  public void not_equals() {
     List l = new List();
-    Set<Object> set = evaluateSet("List.*(next)", l);
-    assertEquals(set.size(), 1);
+    assertFalse(evaluateCmp("List.x != List.x", l));
   }
 
   @Test
-  public void emptySet2() {
+  public void lt_eq() {
     List l = new List();
-    Set<Object> set = evaluateSet("List.^(next)", l);
-    assertEquals(set.size(), 0);
+    assertTrue(evaluateCmp("List.x <= List.x", l));
   }
 
   @Test
-  public void filledSet() {
+  public void eq() {
     List l = new List();
-    l.insert(2);
-    l.insert(3);
-    Set<Object> set = evaluateSet("List.*(next)", l);
-    assertEquals(set.size(), 3);
+    assertTrue(evaluateCmp("List.x = List.x", l));
   }
 
   @Test
-  public void filledSet2() {
+  public void eq2() {
     List l = new List();
     l.insert(2);
-    l.insert(3);
-    Set<Object> set = evaluateSet("List.^(next)", l);
-    assertEquals(set.size(), 2);
+    l.insert(2);
+    assertTrue(evaluateCmp("List.x = List.next.x", l));
+  }
+
+  @Test
+  public void constant_gt() {
+    List l = new List();
+    l.insert(1);
+    assertFalse(evaluateCmp("0 > List.x", l));
+  }
+
+  @Test
+  public void cardinal_gte() {
+    List l = new List();
+    l.insert(1);
+    assertTrue(evaluateCmp("#(List.*(next)) >= List.x", l));
   }
 
 }
