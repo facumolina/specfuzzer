@@ -73,9 +73,6 @@ def traverse_graph(type_name,curr_expr,grammar,k):
             traverse_graph(edge,curr_expr+"."+label,grammar,k-1)
           else:
             add_symbol_for_type(edge,curr_expr+"."+label,grammar)
-            
-
-
 
 def extract_grammar(t):
   """Extract the grammar from the obtained type graph"""

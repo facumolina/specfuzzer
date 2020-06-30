@@ -18,7 +18,7 @@ QUANTIFIER_VALUE = ["all", "some"]
 
 # Reference comparisons
 REF_OP = "<Reference_Op>"
-REF_OP_VALUE = ["==","!="]
+REF_OP_VALUE = ["=","!="]
 
 # Reference and Set comparison
 VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>"
@@ -31,7 +31,7 @@ INTEGER = "<Integer>"
 
 # Numeric operators
 NUMERIC_OP = "<Num_Op>"
-NUMERIC_OP_VALUE = ["==","!=",">","<",">=","<="]
+NUMERIC_OP_VALUE = ["=","!=",">","<",">=","<="]
 
 # Quantified variable name
 QT_VAR_NAME = "n"
