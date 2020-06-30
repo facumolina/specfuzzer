@@ -15,6 +15,7 @@ import antlr.AlloyExprGrammarParser.NameContext;
 import antlr.AlloyExprGrammarParser.ParseContext;
 import antlr.AlloyExprGrammarParser.Qt_exprContext;
 import antlr.AlloyExprGrammarParser.Set_exprContext;
+import antlr.AlloyExprGrammarParser.Unary_opContext;
 
 /**
  * This class represents an Expression Evaluator. Provides a method that given a Java object and an
@@ -77,6 +78,14 @@ public class ExpressionEvaluator {
       return ComparisonExpressionEvaluator.eval(exprs.get(0), cmp_op, exprs.get(1), o);
     }
 
+    Unary_opContext unary_op = ectx.unary_op();
+    if (unary_op != null) {
+      // The expression is a unary one
+      List<ExprContext> exprs = ectx.expr();
+      assert (exprs.size() == 1);
+      return UnaryExpressionEvaluator.eval(unary_op, exprs.get(0), o);
+    }
+
     NameContext name_ctx = ectx.name();
     if (name_ctx != null) {
       // The expression is a name
@@ -87,6 +96,12 @@ public class ExpressionEvaluator {
     if (set_expr != null) {
       // The expression is a set
       return SetExpressionEvaluator.eval(set_expr, o);
+    }
+
+    try {
+      // Try to parse an Integer
+      return Integer.parseInt(ectx.getText());
+    } catch (NumberFormatException e) {
     }
 
     throw new IllegalStateException("Unable to evaluate the expression: " + ectx.getText());
