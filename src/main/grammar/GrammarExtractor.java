@@ -4,15 +4,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
-
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DirectedPseudograph;;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.json.simple.JSONObject;;
 
 public class GrammarExtractor {
 
@@ -58,9 +59,8 @@ public class GrammarExtractor {
       type_graph.addVertex(cut.getSimpleName());
       // Get the fields of the given type
       Set<Class<?>> to_visit = new HashSet<Class<?>>();
-      Field[] fields = cut.getDeclaredFields();
-      for (int i = 0; i < fields.length; i++) {
-        Field fld = fields[i];
+      List<Field> fields = getAllFields(new LinkedList<Field>(), cut);
+      for (Field fld : fields) {
         if (!Modifier.isStatic(fld.getModifiers())) {
           // For each non static field
           String fld_decl_name = fld.getName();
@@ -78,6 +78,19 @@ public class GrammarExtractor {
           build_type_graph(cls, visited);
       }
     }
+  }
+
+  /**
+   * Get all fields from CUT (even the inherited ones)
+   */
+  private static List<Field> getAllFields(List<Field> fields, Class<?> cut) {
+    fields.addAll(Arrays.asList(cut.getDeclaredFields()));
+
+    if (cut.getSuperclass() != null) {
+      getAllFields(fields, cut.getSuperclass());
+    }
+
+    return fields;
   }
 
   /**
@@ -156,7 +169,7 @@ public class GrammarExtractor {
     JSONObject json_grammar = new JSONObject(grammar);
     System.out.println(json_grammar.toJSONString());
     System.out.println();
-    save_to_file(json_grammar,cut.getSimpleName() + "Grammar.json");    
+    save_to_file(json_grammar, cut.getSimpleName() + "Grammar.json");
   }
 
 }
