@@ -1,11 +1,15 @@
 package grammar;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.json.simple.JSONObject;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedPseudograph;;
@@ -44,11 +48,6 @@ public class GrammarExtractor {
     extract_grammar(cut);
     System.out.println();
     System.out.println("Done!");
-
-    // Map<String, List<String>> grammar = GrammarBuilder.create();
-    // GrammarBuilder.extend_grammar(grammar, "<blablabla>", "<new_val>");
-    // JSONObject json_grammar = new JSONObject(grammar);
-    // System.out.println(json_grammar.toJSONString());
   }
 
   /**
@@ -134,6 +133,19 @@ public class GrammarExtractor {
   }
 
   /**
+   * Save the given JSONObject Grammar to a file using the given name
+   */
+  private static void save_to_file(JSONObject json_grammar, String file_name) {
+    System.out.println("Saving grammar to file:" + GRAMMARS_DIR + file_name);
+    try (FileWriter file = new FileWriter(GRAMMARS_DIR + file_name)) {
+      file.write(json_grammar.toJSONString());
+      file.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
    * Extract the grammar from the obtained type graph
    */
   private static void extract_grammar(Class<?> cut) {
@@ -141,15 +153,10 @@ public class GrammarExtractor {
     Map<String, List<String>> grammar = GrammarBuilder.create();
     traverse_graph(cut.getSimpleName(), cut.getSimpleName(), grammar, bound);
     System.out.println();
-    System.out.println("Symbols:");
-    for (String name : grammar.keySet()) {
-      System.out.println(name + ":" + grammar.get(name).toString());
-    }
+    JSONObject json_grammar = new JSONObject(grammar);
+    System.out.println(json_grammar.toJSONString());
     System.out.println();
-    System.out
-        .println("Saving grammar to file:" + GRAMMARS_DIR + cut.getSimpleName() + "Grammar.json");
-    // with open(GRAMMARS_DIR+t.name+"Grammar.json", 'w') as grammar_file:
-    // json.dump(grammar, grammar_file)
+    save_to_file(json_grammar,cut.getSimpleName() + "Grammar.json");    
   }
 
 }
