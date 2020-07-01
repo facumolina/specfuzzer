@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;;
+import org.jgrapht.graph.DirectedPseudograph;;
 
 public class GrammarExtractor {
 
@@ -19,8 +19,12 @@ public class GrammarExtractor {
 
   public static void main(String[] args) throws ClassNotFoundException {
 
+    if (args.length != 1) {
+      System.out.println("Only the fully quallified name of the CUT is expected");
+    }
+
     // Get the class
-    String qualified_name = "DataStructures.List";
+    String qualified_name = args[0];
 
     Class<?> cut = Class.forName(qualified_name);
 
@@ -29,7 +33,7 @@ public class GrammarExtractor {
 
     // Build the corresponding type graph
     System.out.println("Building the Type Graph");
-    type_graph = new DefaultDirectedGraph<String, LabeledEdge>(LabeledEdge.class);
+    type_graph = new DirectedPseudograph<String, LabeledEdge>(LabeledEdge.class);
     build_type_graph(cut, new HashSet<String>());
     System.out.println("Nodes: " + type_graph.vertexSet().toString());
     System.out.println("Edges: " + type_graph.edgeSet().toString());
