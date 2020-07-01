@@ -33,7 +33,7 @@ public class GrammarBuilder {
 
   // Numeric comparison expression
   public static String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
-  public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays.asList("<Integer> <Num_Op> <Integer");
+  public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays.asList("<Integer> <Num_Op> <Integer>");
   public static String INTEGER = "<Integer>";
 
   // Numeric operators
