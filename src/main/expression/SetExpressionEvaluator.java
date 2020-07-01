@@ -44,8 +44,8 @@ public class SetExpressionEvaluator {
       Set<Object> visited) {
     Object curr = NameExpressionEvaluator.eval(fields.ID(), base);
     if (curr != null) {
-      visited.add(curr);
-      closureFromFields(curr, fields, visited);
+      if (visited.add(curr))
+        closureFromFields(curr, fields, visited);
     }
     Closure_fieldContext extraFields = fields.closure_field();
     if (extraFields != null)

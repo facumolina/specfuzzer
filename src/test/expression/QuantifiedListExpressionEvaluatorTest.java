@@ -12,7 +12,8 @@ import org.junit.runners.Parameterized;
 import DataStructures.List;
 
 /**
- * This class contains tests to ensure that the expression evaluator is working properly
+ * This class contains tests to ensure that the expression evaluator is working properly on class
+ * List
  * 
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  *
