@@ -30,6 +30,15 @@
       </batchtest>
     </junit>
   </target>
+  
+  <target name="jar" depends="compile">
+    <mkdir dir="dest/jar"/>
+    <jar destfile="dest/jar/FuzzSpecs.jar" basedir="build/classes">
+      <!--manifest>
+        <attribute name="Main-Class" value="oata.HelloWorld"/>
+      </manifest-->
+    </jar>
+  </target>
 
 </project>
 

@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;;
 
 public class GrammarExtractor {
 
   // Type graph of the CUT
-  private static DirectedGraph<String, LabeledEdge> type_graph;
+  private static Graph<String, LabeledEdge> type_graph;
   private static int bound = 3;
   private static String GRAMMARS_DIR = "/Users/fmolina/phd/software/fuzzing-specs/grammars/";
 
