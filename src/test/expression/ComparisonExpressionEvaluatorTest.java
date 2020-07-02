@@ -72,8 +72,38 @@ public class ComparisonExpressionEvaluatorTest {
   }
 
   @Test
+  public void set_sizes() {
+    List l = new List();
+    l.insert(1);
+    l.insert(2);
+    assertFalse(evaluateCmp("#(List.^(next)) >= #(List.*(next))", l));
+  }
+
+  @Test
+  public void set_size_non_zero() {
+    List l = new List();
+    l.insert(2);
+    l.insert(3);
+    assertTrue(evaluateCmp("#(List.*(next)) != 0", l));
+    assertTrue(evaluateCmp("#(List.*(next)) > 0", l));
+    assertTrue(evaluateCmp("#(List.*(next)) >= 1", l));
+  }
+
+  @Test
   public void int_field() {
     NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<Integer>();
     assertTrue(evaluateCmp("0 <= NodeCachingLinkedList.cacheSize", ncll));
   }
+
+  @Test
+  public void set_sizes_ncll() {
+    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<Integer>();
+    ncll.add(1);
+    ncll.add(2);
+    ncll.add(3);
+    assertTrue(evaluateCmp(
+        "#(NodeCachingLinkedList.header.*(next)) = #(NodeCachingLinkedList.header.*(previous))",
+        ncll));
+  }
+
 }
