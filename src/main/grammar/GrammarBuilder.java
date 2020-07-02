@@ -31,14 +31,22 @@ public class GrammarBuilder {
   public static String VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>";
   public static List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
 
-  // Numeric comparison expression
-  public static String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
-  public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays.asList("<Integer> <Num_Op> <Integer>");
-  public static String INTEGER = "<Integer>";
-
   // Numeric operators
   public static String NUMERIC_OP = "<Num_Op>";
   public static List<String> NUMERIC_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=", "<=");
+
+  // Numeric expressions
+  public static String INTEGER = "<Integer>";
+  public static String INTEGER_CONSTANT = "<Integer_Constant>";
+  public static List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
+  public static String INTEGER_FIELD = "<Integer_Field>";
+  public static String INTEGER_SET_SIZE = "<Integer_Set_Size>";
+  public static List<String> INTEGER_VALUE = Arrays.asList(INTEGER_CONSTANT, INTEGER_SET_SIZE,
+      INTEGER_FIELD);
+
+  public static String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
+  public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
+      .asList(INTEGER_SET_SIZE + " " + NUMERIC_OP + " " + INTEGER);
 
   // Quantified variable name
   public static String QT_VAR_NAME = "n";
@@ -57,8 +65,10 @@ public class GrammarBuilder {
     grammar.put(VAR_SET_CMP_OP, VAR_SET_CMP_OP_VALUE);
     grammar.put(NUMERIC_CMP_EXPR, NUMERIC_CMP_EXPR_VALUE);
     grammar.put(NUMERIC_OP, NUMERIC_OP_VALUE);
-    grammar.put(INTEGER, new LinkedList<String>());
-    grammar.get(INTEGER).add("0");
+    grammar.put(INTEGER, INTEGER_VALUE);
+    grammar.put(INTEGER_CONSTANT, INTEGER_CONSTANT_VALUE);
+    grammar.put(INTEGER_FIELD, new LinkedList<String>());
+    grammar.put(INTEGER_SET_SIZE, new LinkedList<String>());
     return grammar;
   }
 
@@ -116,6 +126,8 @@ public class GrammarBuilder {
    */
   public static String get_symbol_for_type(String type_name) {
     String formatted_type = TypesUtil.format_type(type_name);
+    if (TypesUtil.INTEGER.equals(formatted_type))
+      formatted_type += "_Field";
     return "<" + formatted_type + ">";
   }
 
@@ -175,7 +187,7 @@ public class GrammarBuilder {
     String quantified_option = QUANTIFIER + " " + QT_VAR_NAME + " : " + current_set_symbol + " : "
         + current_obj_cmp_symbol;
     extend_grammar(grammar, QT_EXPR, quantified_option);
-    add_integer_option(grammar, "#(" + current_set_symbol + ")");
+    extend_grammar(grammar, INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
     // Options for the quantified objects comparisons
     String current_qt_obj_symbol = get_qt_obj_symbol(type_name);
     String qt_object_cmp_option = QT_VAR_NAME + " " + REF_OP + " " + current_qt_obj_symbol;

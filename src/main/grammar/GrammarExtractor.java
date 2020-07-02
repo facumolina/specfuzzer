@@ -112,7 +112,7 @@ public class GrammarExtractor {
   }
 
   /**
-   * Add the the given current expresion as a symbol for the corresponding type
+   * Add the the given current expression as a symbol for the corresponding type
    */
   private static void add_symbol_for_type(String type_name, String curr_expr,
       Map<String, List<String>> grammar) {
