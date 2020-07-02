@@ -41,8 +41,8 @@ public class QuantifiedNodeCachingLLExpressionEvaluatorTest {
     return Arrays.asList(new Object[][] {
         { "all n : NodeCachingLinkedList.firstCachedNode.^(previous + next) : n = n.next.next",
             true },
-        { "all n : NodeCachingLinkedList.header.*(previous + next) : n = n.next.previous",
-            true } });
+        { "all n : NodeCachingLinkedList.header.*(previous + next) : n = n.next.previous", true },
+        { "all n : NodeCachingLinkedList.header.^(next) : n not in n.*(next)", false } });
   }
 
   @Test

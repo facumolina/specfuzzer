@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import DataStructures.AvlTreeList;
 import DataStructures.List;
+import DataStructures.commonscollections.NodeCachingLinkedList;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import antlr.AlloyExprGrammarParser.ParseContext;
@@ -90,4 +91,23 @@ public class UnaryExpressionEvaluatorTest {
     assertTrue(i == 4);
   }
 
+  @Test
+  public void cardinality7() {
+    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<Integer>();
+    ncll.add(1);
+    ncll.add(2);
+    ncll.add(3);
+    Object o = evaluateUnary("#(NodeCachingLinkedList.header.^(next))", ncll);
+    Object o1 = evaluateUnary("#(NodeCachingLinkedList.header.*(next+previous))", ncll);
+    Object o2 = evaluateUnary("#(NodeCachingLinkedList.header.*(previous))", ncll);
+    assert (o instanceof Integer);
+    assert (o1 instanceof Integer);
+    assert (o2 instanceof Integer);
+    Integer i = (Integer) o;
+    Integer i1 = (Integer) o1;
+    Integer i2 = (Integer) o2;
+    assertTrue(i == 4);
+    assertTrue(i == i1);
+    assertTrue(i == i2);
+  }
 }
