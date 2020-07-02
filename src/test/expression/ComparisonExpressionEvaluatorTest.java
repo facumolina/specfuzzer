@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import DataStructures.List;
 import DataStructures.commonscollections.NodeCachingLinkedList;
+import DataStructures.commonscollections.TreeList;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import antlr.AlloyExprGrammarParser.ParseContext;
@@ -106,4 +107,12 @@ public class ComparisonExpressionEvaluatorTest {
         ncll));
   }
 
+  @Test
+  public void set_size_treelist() {
+    TreeList<Integer> tl = new TreeList<Integer>();
+    tl.add(1);
+    tl.add(2);
+    tl.add(3);
+    assertTrue(evaluateCmp("#(TreeList.root.*(left+right)) = TreeList.size", tl));
+  }
 }
