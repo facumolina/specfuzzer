@@ -10,12 +10,13 @@ import java.util.List;
  */
 public class TypesUtil {
 
-  public static String INTEGER = "Integer";
-  public static String FLOAT = "Float";
-  public static String DOUBLE = "Double";
-  public static String BOOLEAN = "Boolean";
+  public static final String INTEGER = "Integer";
+  public static final String FLOAT = "Float";
+  public static final String DOUBLE = "Double";
+  public static final String BOOLEAN = "Boolean";
 
-  public static List<String> BASIC_JAVA_TYPES = Arrays.asList("int", "float", "double", "boolean");
+  public static final List<String> BASIC_JAVA_TYPES = Arrays.asList("int", "float", "double",
+      "boolean");
 
   /**
    * Returns true if the given type is a reference

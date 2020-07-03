@@ -16,43 +16,44 @@ import java.util.Map;
 public class GrammarBuilder {
 
   // Constant symbols that will be part of all the grammars
-  public static String START_SYMBOL = "<start>";
+  public static final String START_SYMBOL = "<start>";
 
   // Quantifications
-  public static String QT_EXPR = "<Quantified_Expr>";
-  public static String QUANTIFIER = "<Quantifier>";
-  public static List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some");
+  public static final String QT_EXPR = "<Quantified_Expr>";
+  public static final String QUANTIFIER = "<Quantifier>";
+  public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some");
 
   // Reference comparisons
-  public static String REF_OP = "<Reference_Op>";
-  public static List<String> REF_OP_VALUE = Arrays.asList("=", "!=");
+  public static final String REF_OP = "<Reference_Op>";
+  public static final List<String> REF_OP_VALUE = Arrays.asList("=", "!=");
 
   // Reference and Set comparison
-  public static String VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>";
-  public static List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
+  public static final String VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>";
+  public static final List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
 
   // Numeric operators
-  public static String NUMERIC_OP = "<Num_Op>";
-  public static List<String> NUMERIC_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=", "<=");
+  public static final String NUMERIC_OP = "<Num_Op>";
+  public static final List<String> NUMERIC_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=",
+      "<=");
 
   // Numeric expressions
-  public static String INTEGER = "<Integer>";
-  public static String INTEGER_CONSTANT = "<Integer_Constant>";
-  public static List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
-  public static String INTEGER_FIELD = "<Integer_Field>";
-  public static String INTEGER_SET_SIZE = "<Integer_Set_Size>";
+  public static final String INTEGER = "<Integer>";
+  public static final String INTEGER_CONSTANT = "<Integer_Constant>";
+  public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
+  public static final String INTEGER_FIELD = "<Integer_Field>";
+  public static final String INTEGER_SET_SIZE = "<Integer_Set_Size>";
   public static List<String> INTEGER_VALUE = Arrays.asList(INTEGER_CONSTANT, INTEGER_SET_SIZE,
       INTEGER_FIELD);
 
-  public static String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
+  public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
   public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
       .asList(INTEGER_SET_SIZE + " " + NUMERIC_OP + " " + INTEGER);
 
   // Quantified variable name
-  public static String QT_VAR_NAME = "n";
+  public static final String QT_VAR_NAME = "n";
 
   // Other constants
-  public static String NULL = "null";
+  public static final String NULL = "null";
 
   public static Map<String, List<String>> create() {
     Map<String, List<String>> grammar = new HashMap<String, List<String>>();
