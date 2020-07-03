@@ -39,7 +39,10 @@ public class QuantifiedTreeListExpressionEvaluatorTest {
   public static Collection alloyExpressions() {
     return Arrays.asList(new Object[][] {
         { "all n : TreeList.root.^(right) : n.rightIsNext != n.right.rightIsNext", true },
-        { "some n : TreeList.root.*(left) : n.value != n.left.value", true } });
+        { "some n : TreeList.root.*(left) : n.value != n.left.value", true },
+        { "all n : TreeList.root.*(right) : n.rightIsNext", false },
+        { "all n : TreeList.root.*(left + left) : n not in n.*(right) implies n.relativePosition < n.right.relativePosition",
+            true } });
   }
 
   @Test

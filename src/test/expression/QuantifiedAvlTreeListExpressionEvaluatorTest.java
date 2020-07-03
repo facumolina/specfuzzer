@@ -57,7 +57,9 @@ public class QuantifiedAvlTreeListExpressionEvaluatorTest {
             false },
         { "all n : AvlTreeList.root.*(left + right) : n.height > n.left.height and n.height > n.right.height",
             true },
-        { "some n : AvlTreeList.root.*(right + right) : n.size >= n.left.size", true } });
+        { "some n : AvlTreeList.root.*(right + right) : n.size >= n.left.size", true },
+        { "some n : AvlTreeList.root.^(right + right) : n != n.left implies n.value != n.left.value",
+            true } });
   }
 
   @Test

@@ -44,6 +44,8 @@ public class QuantifiedNodeCachingLLExpressionEvaluatorTest {
         { "all n : NodeCachingLinkedList.header.*(previous + next) : n = n.next.previous", true },
         { "all n : NodeCachingLinkedList.header.^(next) : n not in n.*(next)", false },
         { "some n : NodeCachingLinkedList.header.*(previous + next) : n.value != n.previous.value",
+            true },
+        { "all n : NodeCachingLinkedList.header.^(previous) : n not in n.*(next + previous) implies n not in n.^(next + next)",
             true } });
   }
 
