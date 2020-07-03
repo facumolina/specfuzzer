@@ -42,6 +42,10 @@ public class BinaryExpressionEvaluator {
       return b1 || b2;
     case (OR_2):
       return b1 || b2;
+    case (IMPLIES_1):
+      return !b1 || b2;
+    case (IMPLIES_2):
+      return !b1 || b2;
     }
     throw new IllegalArgumentException("Binary operator " + op + " still not implemented");
   }
