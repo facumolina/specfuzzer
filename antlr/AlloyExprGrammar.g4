@@ -7,6 +7,7 @@ parse
 
 expr:
   qt_expr
+  | expr num_binary_op expr
   | expr compare_op expr
   | expr binary_op expr
   | unary_op '(' expr ')'
@@ -21,6 +22,11 @@ qt_expr:
 
 set_expr:
   name '.' closure_op '(' closure_field ')'
+  ;
+
+num_binary_op:
+  '+'
+  | '-'
   ;
 
 binary_op:

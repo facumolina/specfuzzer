@@ -64,6 +64,18 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNum_binary_op(AlloyExprGrammarParser.Num_binary_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNum_binary_op(AlloyExprGrammarParser.Num_binary_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBinary_op(AlloyExprGrammarParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
