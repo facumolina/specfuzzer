@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
+import DataStructures.AvlTreeList;
 import DataStructures.List;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import DataStructures.commonscollections.TreeList;
@@ -114,5 +115,15 @@ public class ComparisonExpressionEvaluatorTest {
     tl.add(2);
     tl.add(3);
     assertTrue(evaluateCmp("#(TreeList.root.*(left+right)) = TreeList.size", tl));
+  }
+
+  @Test
+  public void set_size_avl() {
+    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    t.add(2);
+    t.add(4);
+    t.add(5);
+    assertTrue(evaluateCmp("#(AvlTreeList.root.*(left + right)) = AvlTreeList.root.size + 1", t));
+    assertTrue(evaluateCmp("#(AvlTreeList.root.*(left + right)) - 1 = AvlTreeList.root.size", t));
   }
 }

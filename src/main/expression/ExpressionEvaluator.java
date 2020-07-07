@@ -12,6 +12,7 @@ import antlr.AlloyExprGrammarParser.Binary_opContext;
 import antlr.AlloyExprGrammarParser.Compare_opContext;
 import antlr.AlloyExprGrammarParser.ExprContext;
 import antlr.AlloyExprGrammarParser.NameContext;
+import antlr.AlloyExprGrammarParser.Num_binary_opContext;
 import antlr.AlloyExprGrammarParser.ParseContext;
 import antlr.AlloyExprGrammarParser.Qt_exprContext;
 import antlr.AlloyExprGrammarParser.Set_exprContext;
@@ -64,6 +65,14 @@ public class ExpressionEvaluator {
     if (qt_expr_ctx != null)
       return QuantifiedExpressionEvaluator.eval(qt_expr_ctx, o);
 
+    Num_binary_opContext num_binary_op = ectx.num_binary_op();
+    if (num_binary_op != null) {
+      // We have a numeric binary operator, i.e., + or -
+      List<ExprContext> exprs = ectx.expr();
+      assert (exprs.size() == 2);
+      return NumericBinaryExpressionEvaluator.eval(exprs.get(0), num_binary_op, exprs.get(1), o);
+    }
+
     Binary_opContext binary_op = ectx.binary_op();
     if (binary_op != null) {
       // The expression is a binary one
@@ -74,7 +83,7 @@ public class ExpressionEvaluator {
 
     Compare_opContext cmp_op = ectx.compare_op();
     if (cmp_op != null) {
-      // The expression is a comparisson
+      // The expression is a comparison
       List<ExprContext> exprs = ectx.expr();
       assert (exprs.size() == 2);
       return ComparisonExpressionEvaluator.eval(exprs.get(0), cmp_op, exprs.get(1), o);
