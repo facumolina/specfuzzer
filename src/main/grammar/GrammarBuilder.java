@@ -35,13 +35,17 @@ public class GrammarBuilder {
   public static final List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
 
   // Numeric operators
-  public static final String NUMERIC_OP = "<Num_Op>";
-  public static final List<String> NUMERIC_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=",
+  public static final String NUMERIC_CMP_OP = "<Num_Cmp_Op>";
+  public static final List<String> NUMERIC_CMP_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=",
       "<=");
 
   // Logic operators
   public static final String LOGIC_OP = "<Logic_Op>";
   public static final List<String> LOGIC_OP_VALUE = Arrays.asList("implies");
+
+  // Binary numeric operators
+  public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
+  public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-");
 
   // Numeric expressions
   public static final String INTEGER = "<Integer>";
@@ -51,10 +55,13 @@ public class GrammarBuilder {
   public static final String INTEGER_SET_SIZE = "<Integer_Set_Size>";
   public static List<String> INTEGER_VALUE = Arrays.asList(INTEGER_CONSTANT, INTEGER_SET_SIZE,
       INTEGER_FIELD);
+  public static final String INTEGER_EXPR = "<Integer_Expr>";
+  public static final List<String> INTEGER_EXPR_VALUE = Arrays.asList(INTEGER,
+      INTEGER_FIELD + " " + NUMERIC_BIN_OP + " " + INTEGER);
 
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
   public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
-      .asList(INTEGER_SET_SIZE + " " + NUMERIC_OP + " " + INTEGER);
+      .asList(INTEGER_SET_SIZE + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR);
 
   // Other constants
   public static final String QT_VAR_NAME = "n";
@@ -76,8 +83,10 @@ public class GrammarBuilder {
     grammar.put(REF_OP, REF_OP_VALUE);
     grammar.put(VAR_SET_CMP_OP, VAR_SET_CMP_OP_VALUE);
     grammar.put(NUMERIC_CMP_EXPR, NUMERIC_CMP_EXPR_VALUE);
-    grammar.put(NUMERIC_OP, NUMERIC_OP_VALUE);
+    grammar.put(NUMERIC_CMP_OP, NUMERIC_CMP_OP_VALUE);
+    grammar.put(NUMERIC_BIN_OP, NUMERIC_BIN_OP_VALUE);
     grammar.put(LOGIC_OP, LOGIC_OP_VALUE);
+    grammar.put(INTEGER_EXPR, INTEGER_EXPR_VALUE);
     grammar.put(INTEGER, INTEGER_VALUE);
     grammar.put(INTEGER_CONSTANT, INTEGER_CONSTANT_VALUE);
     grammar.put(INTEGER_FIELD, new LinkedList<String>());
@@ -194,7 +203,7 @@ public class GrammarBuilder {
    */
   public static String get_cmp_symbol(String type_name) {
     if (TypesUtil.is_numeric(type_name))
-      return NUMERIC_OP;
+      return NUMERIC_CMP_OP;
     else
       return REF_OP;
   }
