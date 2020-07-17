@@ -3,7 +3,7 @@ Fuzzing Software Specifications
 
 # Requirements
 
-* `java >= 11`
+* `java >= 1.8`
 * `python >= 3.7`
 
 # Compilation
