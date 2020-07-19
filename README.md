@@ -8,36 +8,40 @@ Fuzzing Software Specifications
 
 # Compilation
 
-## Compile sources and create jar
+Compile sources and create jar:
 
 1. `ant compile`
 2. `ant jar`
 
-## Run tests
+Run tests
 `ant junit`
 
 # Grammar Generation
 
-## Extracting a Grammar
+Extracting a Grammar:
 
 `java -cp dest/jar/FuzzSpecs.jar:lib/* grammar.GrammarExtractor DataStructures.List`
 
-## Fuzzing Specifications
+Fuzzing Specifications
 
-`python FuzzSpecs.py grammars/ListGrammar.json 1`
+Python: `python FuzzSpecs.py grammars/ListGrammar.json 1`
 
-`java -cp dest/jar/FuzzSpecs.jar fuzzer.Fuzzer grammars/ListGrammar.json`
+Java: `java -cp dest/jar/FuzzSpecs.jar fuzzer.Fuzzer grammars/ListGrammar.json`
 
-## Running the Alloy expressions parser
+Running the Alloy expressions parser
 `java -cp lib/antlr-4.7.1-complete.jar:build/classes/ org.antlr.v4.gui.TestRig antlr.AlloyExprGrammar expr -tree`
 
 # Running Daikon with the Fuzzing support
 
-## Run DynComp
+Run DynComp to perform dynamic comparability:
+
 `java -cp build/classes/:lib/daikon.jar daikon.DynComp DataStructures.ListTester --output-dir=daikon-outputs`
 
-## Run Chicory front-end
+Run Chicory front-end to produce the dtrace file from the tester class:
+
 `java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/ --comparability-file=daikon-outputs/ListTester.decls-DynComp DataStructures.ListTester`
 
-## Run Daikon from Fuzzed specs
+Run Daikon from Fuzzed specs:
+`TBD`
+
 
