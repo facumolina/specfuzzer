@@ -41,7 +41,8 @@ Run Chicory front-end to produce the dtrace file from the tester class:
 
 `java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/ --comparability-file=daikon-outputs/ListTester.decls-DynComp DataStructures.ListTester`
 
-Run Daikon from Fuzzed specs:
-`TBD`
+Run Daikon including Fuzzed Invariants:
+
+`java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant daikon-outputs/ListTester.dtrace.gz`
 
 
