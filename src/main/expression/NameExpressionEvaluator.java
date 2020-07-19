@@ -42,6 +42,8 @@ public class NameExpressionEvaluator {
       return o;
     if (ID.getText().equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
       return o;
+    if (ID.getText().equals("null"))
+      return null;
     try {
       // Get the field and evaluate it, o continue evaluating
       Field field = getField(o.getClass(), ID.getText());

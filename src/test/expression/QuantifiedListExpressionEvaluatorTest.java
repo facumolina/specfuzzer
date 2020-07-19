@@ -50,7 +50,8 @@ public class QuantifiedListExpressionEvaluatorTest {
         { "all n : List.*(next) : n = n.next", false },
         { "some n : List.*(next) : n.x < n.next.x", true },
         { "all n : List.*(next) : n.x > n.next.x implies n.x != n.next.x", true },
-        { "all n : List.*(next) : n = n.next.next implies n != n.next", true } });
+        { "all n : List.*(next) : n = n.next.next implies n != n.next", true },
+        { "all n : List.^(next) : n != null implies n.x <= n.next.x", true } });
   }
 
   @Test
