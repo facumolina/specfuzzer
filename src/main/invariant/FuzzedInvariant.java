@@ -9,6 +9,7 @@ import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import fuzzer.Fuzzer;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -28,15 +29,27 @@ public class FuzzedInvariant extends PointerInvariant {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
+  // Fuzzed spec represented by this invariant
+  private static String fuzzed_spec;
+
   ///
   /// Required methods
   ///
-  private FuzzedInvariant(PptSlice ppt) {
+  private FuzzedInvariant(PptSlice ppt, String spec) {
     super(ppt);
+    fuzzed_spec = spec;
   }
 
   private @Prototype FuzzedInvariant() {
     super();
+    get_fuzzed_spec();
+  }
+
+  /** Fuzz the spec represented by this invariant */
+  private void get_fuzzed_spec() {
+    fuzzed_spec = Fuzzer
+        .fuzz("/Users/fmolina/phd/software/fuzzing-specs/grammars/ListGrammar.json");
+    System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
   private static @Prototype FuzzedInvariant proto = new @Prototype FuzzedInvariant();
@@ -55,14 +68,14 @@ public class FuzzedInvariant extends PointerInvariant {
   /** instantiate an invariant on the specified slice */
   @Override
   public FuzzedInvariant instantiate_dyn(@Prototype FuzzedInvariant this, PptSlice slice) {
-    return new FuzzedInvariant(slice);
+    return new FuzzedInvariant(slice, fuzzed_spec);
   }
 
   // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied FuzzedInvariant this, OutputFormat format) {
-    return "FuzzedInvariants holds for: " + var().name();
+    return "FuzzedInvariant ( " + fuzzed_spec + ") holds for: " + var().name();
   }
 
   @Override
