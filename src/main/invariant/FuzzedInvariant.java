@@ -100,7 +100,6 @@ public class FuzzedInvariant extends PointerInvariant {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
-
   }
 
   @Override
@@ -120,6 +119,8 @@ public class FuzzedInvariant extends PointerInvariant {
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof FuzzedInvariant;
-    return true;
+    FuzzedInvariant fuzzed_inv = (FuzzedInvariant) other;
+    assert (fuzzed_inv.fuzzed_spec != null);
+    return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec);
   }
 }
