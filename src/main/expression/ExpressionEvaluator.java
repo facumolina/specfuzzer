@@ -38,9 +38,23 @@ public class ExpressionEvaluator {
   }
 
   /**
+   * Validate that the given expression is applicable to the given object class
+   */
+  private static void validate(String alloy_expr, Class<?> cl) {
+    String class_name = cl.getSimpleName();
+    if (!alloy_expr.contains(" " + class_name))
+      throw new IllegalArgumentException(
+          "The expression is not applicable to class: " + class_name);
+  }
+
+  /**
    * Evaluate the given Alloy expression on the given object
    */
   public static boolean eval(String alloy_expr, Object o) {
+    if (alloy_expr == null || o == null)
+      throw new IllegalArgumentException("Neither the expression nor the object can be null.");
+
+    validate(alloy_expr, o.getClass());
 
     setup(alloy_expr);
 
