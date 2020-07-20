@@ -82,6 +82,14 @@ public class ComparisonExpressionEvaluatorTest {
   }
 
   @Test
+  public void set_sizes_two() {
+    List l = new List();
+    l.insert(1);
+    l.insert(2);
+    assertTrue(evaluateCmp("#(List.*(next)) >= #(List.*(next))", l));
+  }
+
+  @Test
   public void set_size_non_zero() {
     List l = new List();
     l.insert(2);
