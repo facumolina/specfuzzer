@@ -15,7 +15,7 @@ import DataStructures.List;
  */
 public class UnexpectedObjectTypeTest {
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = NonApplicableExpressionException.class)
   public void testExpressionEvaluator() {
     List l = new List();
     assertEquals(false, ExpressionEvaluator

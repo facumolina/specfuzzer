@@ -43,7 +43,7 @@ public class ExpressionEvaluator {
   private static void validate(String alloy_expr, Class<?> cl) {
     String class_name = cl.getSimpleName();
     if (!alloy_expr.contains(" " + class_name))
-      throw new IllegalArgumentException(
+      throw new NonApplicableExpressionException(
           "The expression is not applicable to class: " + class_name);
   }
 
