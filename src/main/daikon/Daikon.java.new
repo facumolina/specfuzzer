@@ -421,6 +421,7 @@ public final class Daikon {
   public static final String list_type_SWITCH = "list_type";
   public static final String user_defined_invariant_SWITCH = "user-defined-invariant";
   public static final String fuzzed_invariants_SWITCH = "fuzzed-invariants";
+  public static final String grammar_to_fuzz_SWITCH = "grammar-to-fuzz";
   public static final String disable_all_invariants_SWITCH = "disable-all-invariants";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
@@ -994,6 +995,7 @@ public final class Daikon {
           new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(user_defined_invariant_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(fuzzed_invariants_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(grammar_to_fuzz_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(disable_all_invariants_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -1127,6 +1129,11 @@ public final class Daikon {
             if (fuzzed_invs <= 0)
               throw new Daikon.UserError("Argument for "+fuzzed_invariants_SWITCH+ " must be greater than zero.");
             fuzzed_invariants = fuzzed_invs;
+          } else if (grammar_to_fuzz_SWITCH.equals(option_name)) {
+            String grammar_to_fuzz_str = getOptarg(g);
+            if (grammar_to_fuzz_SWITCH==null || grammar_to_fuzz_SWITCH.equals(""))
+              throw new Daikon.UserError("Invalid grammar");
+            grammar_to_fuzz = grammar_to_fuzz_str;
           } else if (disable_all_invariants_SWITCH.equals(option_name)) {
             // There are two possibilities:
             //  * a given invariant class is not yet loaded, in which case
@@ -1462,6 +1469,8 @@ public final class Daikon {
       new ArrayList<@ClassGetName String>();
 
   private static int fuzzed_invariants = 1; 
+
+  public static String grammar_to_fuzz;
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants. New invariants must be

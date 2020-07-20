@@ -4,6 +4,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
+import daikon.Daikon;
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -48,18 +49,14 @@ public class FuzzedInvariant extends PointerInvariant {
 
   /** Fuzz the spec represented by this invariant */
   private void get_fuzzed_spec() {
-    fuzzed_spec = BasicFuzzer
-        .fuzz("/Users/fmolina/phd/software/fuzzing-specs/grammars/ListGrammar.json");
+    if (Daikon.grammar_to_fuzz == null)
+      throw new Daikon.UserError("When using FuzzedInvariant, the grammar must be specified");
+    fuzzed_spec = BasicFuzzer.fuzz(Daikon.grammar_to_fuzz);
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
-  // private static @Prototype FuzzedInvariant proto;
-
   /** Returns the prototype invariant. */
   public static @Prototype FuzzedInvariant get_proto() {
-    // if (proto == null)
-    // proto = new @Prototype FuzzedInvariant();
-    // return proto;
     return new @Prototype FuzzedInvariant();
   }
 
