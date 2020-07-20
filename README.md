@@ -14,6 +14,7 @@ Compile sources and create jar:
 2. `ant jar`
 
 Run tests
+
 `ant junit`
 
 # Grammar Generation
