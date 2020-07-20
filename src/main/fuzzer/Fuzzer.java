@@ -37,7 +37,7 @@ public class Fuzzer {
 
   public static void main(String[] args) {
     if (args.length != 1) {
-      System.out.println("Only the fully grammar file name is expected");
+      throw new IllegalArgumentException("Only the fully grammar file name is expected");
     }
 
     // Get the class
