@@ -26,7 +26,7 @@ Fuzzing Specifications
 
 Python: `python FuzzSpecs.py grammars/ListGrammar.json 1`
 
-Java: `java -cp dest/jar/FuzzSpecs.jar fuzzer.Fuzzer grammars/ListGrammar.json`
+Java: `java -cp dest/jar/FuzzSpecs.jar:lib/* fuzzer.BasicFuzzer grammars/ListGrammar.json`
 
 Running the Alloy expressions parser
 `java -cp lib/antlr-4.7.1-complete.jar:build/classes/ org.antlr.v4.gui.TestRig antlr.AlloyExprGrammar expr -tree`
