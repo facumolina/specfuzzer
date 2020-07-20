@@ -43,6 +43,5 @@ Run Chicory front-end to produce the dtrace file from the tester class:
 
 Run Daikon including Fuzzed Invariants:
 
-`java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant daikon-outputs/ListTester.dtrace.gz`
-
+`java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant --fuzzed-invariants 50 daikon-outputs/ListTester.dtrace.gz`
 
