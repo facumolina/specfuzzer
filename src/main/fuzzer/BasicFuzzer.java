@@ -29,10 +29,12 @@ public class BasicFuzzer {
 
   private static String re_nonterminal = "(<[^<> ]*>)";
 
+  private static JSONObject grammar;
+
   /**
-   * Returns an expression of the given grammar produced with the Python fuzzer.
+   * Fuzz the given grammar and returns a valid expression
    */
-  public static String fuzz(JSONObject grammar) {
+  private static String fuzz() {
     Random rand = new Random();
     String term = GrammarBuilder.START_SYMBOL;
     int expansion_trials = 0;
@@ -53,6 +55,27 @@ public class BasicFuzzer {
       }
     }
     return term;
+  }
+
+  /**
+   * Fuzz the given grammar and returns a valid expression
+   */
+  public static String fuzz(String grammar_file_name) {
+    try {
+      if (grammar == null)
+        grammar = read_grammar(grammar_file_name);
+      return fuzz();
+    } catch (Exception e) {
+      System.out.println("Unable to read grammar: " + grammar_file_name);
+      return null;
+    }
+  }
+
+  /**
+   * Empty the grammar (just for testing purposes)
+   */
+  public static void emtpy_grammar() {
+    grammar = null;
   }
 
   /**
@@ -80,7 +103,6 @@ public class BasicFuzzer {
     while ((line = reader.readLine()) != null) {
       stringBuilder.append(line);
     }
-    // delete the last new line separator
     reader.close();
 
     String content = stringBuilder.toString();
@@ -93,12 +115,6 @@ public class BasicFuzzer {
       throw new IllegalArgumentException("Only the fully grammar file name is expected");
     }
     String grammar_file = args[0];
-    try {
-      JSONObject grammar = read_grammar(grammar_file);
-      System.out.println(fuzz(grammar));
-    } catch (Exception e) {
-      System.out.println("Unable to read grammar: " + grammar_file);
-    }
-
+    System.out.println(fuzz(grammar_file));
   }
 }
