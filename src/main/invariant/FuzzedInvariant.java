@@ -10,7 +10,7 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import expression.ExpressionEvaluator;
 import expression.NonApplicableExpressionException;
-import fuzzer.Fuzzer;
+import fuzzer.BasicFuzzer;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -48,7 +48,7 @@ public class FuzzedInvariant extends PointerInvariant {
 
   /** Fuzz the spec represented by this invariant */
   private void get_fuzzed_spec() {
-    fuzzed_spec = Fuzzer
+    fuzzed_spec = BasicFuzzer
         .fuzz("/Users/fmolina/phd/software/fuzzing-specs/grammars/ListGrammar.json");
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
