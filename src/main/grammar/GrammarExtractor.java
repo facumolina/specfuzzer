@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedPseudograph;
-import org.json.simple.JSONObject;;
+import org.json.simple.JSONObject;
 
 public class GrammarExtractor {
 
