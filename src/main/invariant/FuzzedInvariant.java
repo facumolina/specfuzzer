@@ -4,11 +4,12 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
-import DataStructures.List;
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import expression.ExpressionEvaluator;
+import expression.NonApplicableExpressionException;
 import fuzzer.Fuzzer;
 import typequals.prototype.qual.Prototype;
 
@@ -30,7 +31,7 @@ public class FuzzedInvariant extends PointerInvariant {
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   // Fuzzed spec represented by this invariant
-  private static String fuzzed_spec;
+  private String fuzzed_spec;
 
   ///
   /// Required methods
@@ -52,11 +53,14 @@ public class FuzzedInvariant extends PointerInvariant {
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
-  private static @Prototype FuzzedInvariant proto = new @Prototype FuzzedInvariant();
+  // private static @Prototype FuzzedInvariant proto;
 
   /** Returns the prototype invariant. */
   public static @Prototype FuzzedInvariant get_proto() {
-    return proto;
+    // if (proto == null)
+    // proto = new @Prototype FuzzedInvariant();
+    // return proto;
+    return new @Prototype FuzzedInvariant();
   }
 
   /** returns whether or not this invariant is enabled */
@@ -86,16 +90,17 @@ public class FuzzedInvariant extends PointerInvariant {
     if (o == null) {
       return InvariantStatus.FALSIFIED;
     }
-    if (o instanceof List) {
-      List l = (List) o;
-      // boolean b = ExpressionEvaluator.evaluateQuantifiedExpression("all","this . * next","n !in n
-      // . ^ next",l);
-      boolean b = true;
+    try {
+      boolean b = ExpressionEvaluator.eval(fuzzed_spec, o);
       if (!b) {
         return InvariantStatus.FALSIFIED;
       }
+    } catch (NonApplicableExpressionException ex) {
+      // The fuzzed spec can't be applied to the type of o, assume that is falsified
+      return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
+
   }
 
   @Override
