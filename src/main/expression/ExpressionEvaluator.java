@@ -42,9 +42,9 @@ public class ExpressionEvaluator {
    */
   private static void validate(String alloy_expr, Class<?> cl) {
     String class_name = cl.getSimpleName();
-    if (!alloy_expr.contains(" " + class_name))
+    if (!alloy_expr.contains(" " + class_name) && !alloy_expr.contains("(" + class_name))
       throw new NonApplicableExpressionException(
-          "The expression is not applicable to class: " + class_name);
+          "The expression " + alloy_expr + " is not applicable to class: " + class_name);
   }
 
   /**
