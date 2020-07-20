@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import com.thoughtworks.xstream.XStream;
 
+import daikon.Chicory;
+
 /**
  * This class allows to maintain the collection of all created objects during Chicory execution.
  * Moreover, a map between hashcodes and the corresponding objects is used. This is a workaround to
@@ -19,8 +21,9 @@ public class ObjectsCollector {
   /** The HashMap mapping hashcodes to objects */
   private static HashMap<Integer, Object> objects = new HashMap<Integer, Object>();
 
-  private static final String serialiazed_file_name = System.getProperty("user.dir")
-      + "/daikon-outputs/serializedobjects.xml";
+  private static String serialized_file_dir = System.getProperty("user.dir") + "/daikon-outputs/";
+
+  private static String class_name;
 
   /**
    * Map the given hashcode with the given object
@@ -28,6 +31,8 @@ public class ObjectsCollector {
   public static void addObject(int hashCode, Object object) {
     assert object != null : "The object to be saved should not be null";
     objects.put(hashCode, object);
+    if (class_name == null)
+      class_name = Chicory.dtrace_file.getName().replace(".dtrace.gz", "");
   }
 
   /**
@@ -37,25 +42,26 @@ public class ObjectsCollector {
     System.out.println("Saving Objects - Total: " + objects.size());
     ObjectOutputStream oos = null;
     XStream xstream = new XStream();
+    String serialized_file_name = serialized_file_dir + class_name + "-objects.xml";
     try {
       // Open the stream
-      oos = xstream.createObjectOutputStream(new FileOutputStream(serialiazed_file_name));
+      oos = xstream.createObjectOutputStream(new FileOutputStream(serialized_file_name));
     } catch (IOException e) {
-      throw new Error("Cannot open serial file: " + serialiazed_file_name);
+      throw new Error("Cannot open serial file: " + serialized_file_name);
     }
 
     // Write the objects map
     try {
       oos.writeObject(objects);
     } catch (IOException e) {
-      throw new Error("Cannot write objects to serial file: " + serialiazed_file_name);
+      throw new Error("Cannot write objects to serial file: " + serialized_file_name);
     }
 
     // Close the stream
     try {
       oos.close();
     } catch (IOException e) {
-      throw new Error("Cannot close serial file: " + serialiazed_file_name);
+      throw new Error("Cannot close serial file: " + serialized_file_name);
     }
 
   }

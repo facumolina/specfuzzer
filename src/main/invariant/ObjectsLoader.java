@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.thoughtworks.xstream.XStream;
 
+import daikon.Daikon;
+
 /**
  * This class allows to load and maintain the collection of all created objects during Chicory
  * execution. This is from where FuzzedInvariants retrieves the objects from hashcodes in order to
@@ -23,7 +25,8 @@ public final class ObjectsLoader {
   private static Map<Integer, Object> objects;
 
   /** The file from which the hashmap must be loaded */
-  private static final String serialiazed_file_name = "/Users/fmolina/phd/software/fuzzing-specs/daikon-outputs/serializedobjects.xml";
+  private static final String serialiazed_file_dir = System.getProperty("user.dir")
+      + "/daikon-outputs/";
 
   public static Object get_object(int hashcode) {
     if (objects == null)
@@ -34,9 +37,11 @@ public final class ObjectsLoader {
   private static void load_objects() {
     XStream xstream = new XStream();
     Object map_obj = new HashMap<Integer, Object>();
+    String serialized_file_name = serialiazed_file_dir
+        + Daikon.inv_file.getName().replace(".inv.gz", "-objects.xml");
     try {
       ObjectInputStream ois = xstream
-          .createObjectInputStream(new FileInputStream(serialiazed_file_name));
+          .createObjectInputStream(new FileInputStream(serialized_file_name));
       try {
         while (true) {
           map_obj = ois.readObject();
@@ -46,7 +51,7 @@ public final class ObjectsLoader {
       }
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
-      throw new RuntimeException("Cannot deserialize file: " + serialiazed_file_name);
+      throw new RuntimeException("Cannot deserialize file: " + serialized_file_name);
     }
     objects = (Map<Integer, Object>) map_obj;
     System.out.println("Loaded objects: " + objects.size());
