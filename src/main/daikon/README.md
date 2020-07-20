@@ -1,5 +1,7 @@
 Every file inside this directory was developed to be included in Daikon source code. For this code to work properly, the following modifications are required:
 
+* Copy the content of file Daikon.java.new to the file Daikon.java in Daikon's source code.
+
 * In class daikon.chicory.DaikonVariableInfo add the following line in method getObjectHashCode before the last return:
 ```java
 ObjectsCollector.addObject(hashCode,theObject); 
