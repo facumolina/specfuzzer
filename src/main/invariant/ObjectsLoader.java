@@ -10,6 +10,7 @@ import java.util.Map;
 import com.thoughtworks.xstream.XStream;
 
 import daikon.Daikon;
+import daikon.tools.InvariantChecker;
 
 /**
  * This class allows to load and maintain the collection of all created objects during Chicory
@@ -37,8 +38,9 @@ public final class ObjectsLoader {
   private static void load_objects() {
     XStream xstream = new XStream();
     Object map_obj = new HashMap<Integer, Object>();
-    String serialized_file_name = serialiazed_file_dir
-        + Daikon.inv_file.getName().replace(".inv.gz", "-objects.xml");
+
+    String serialized_file_name = get_serialized_filename();
+
     try {
       ObjectInputStream ois = xstream
           .createObjectInputStream(new FileInputStream(serialized_file_name));
@@ -55,5 +57,18 @@ public final class ObjectsLoader {
     }
     objects = (Map<Integer, Object>) map_obj;
     System.out.println("Loaded objects: " + objects.size());
+  }
+
+  /**
+   * Get the serialized file name
+   */
+  private static String get_serialized_filename() {
+    if (Daikon.inv_file != null)
+      return serialiazed_file_dir + Daikon.inv_file.getName().replace(".inv.gz", "-objects.xml");
+    if (InvariantChecker.invariant_file != null)
+      return serialiazed_file_dir
+          + InvariantChecker.invariant_file.getName().replace(".inv.gz", "-objects.xml");
+
+    throw new Daikon.UserError("Unable to get serialized_file_name");
   }
 }
