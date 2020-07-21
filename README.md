@@ -41,7 +41,7 @@ Run DynComp to perform dynamic comparability:
 
 Run Chicory front-end to produce the dtrace file from the tester class:
 
-`java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/ --comparability-file=daikon-outputs/ListTester.decls-DynComp DataStructures.ListTester`
+`java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/ --comparability-file=daikon-outputs/ListTester.decls-DynComp --ppt-omit-pattern='ListTester' DataStructures.ListTester`
 
 Run Daikon including Fuzzed Invariants:
 
