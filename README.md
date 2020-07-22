@@ -37,13 +37,13 @@ Running the Alloy expressions parser
 
 Run DynComp to perform dynamic comparability:
 
-`java -cp build/classes/:lib/daikon.jar daikon.DynComp DataStructures.ListTester --output-dir=daikon-outputs`
+`java -cp build/classes/:lib/daikon.jar daikon.DynComp testers.ListTesterDriver --output-dir=daikon-outputs`
 
 Run Chicory front-end to produce the dtrace file from the tester class:
 
-`java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/ --comparability-file=daikon-outputs/ListTester.decls-DynComp --ppt-omit-pattern='ListTester' DataStructures.ListTester`
+`java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/ --comparability-file=daikon-outputs/ListTesterDriver.decls-DynComp --ppt-omit-pattern='ListTester.*' testers.ListTesterDriver`
 
 Run Daikon including Fuzzed Invariants:
 
-`java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant --grammar-to-fuzz grammars/ListGrammar.json --fuzzed-invariants 10 daikon-outputs/ListTester.dtrace.gz`
+`java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant --grammar-to-fuzz grammars/ListGrammar.json --fuzzed-invariants 10 daikon-outputs/ListTesterDriver.dtrace.gz`
 
