@@ -293,6 +293,30 @@ public class ListTesterDriver {
             hadFailure = true;
             e.printStackTrace();
         }
+        try {
+            t0.test49();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test50();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test51();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test52();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
         if (hadFailure) {
             System.exit(1);
         }
