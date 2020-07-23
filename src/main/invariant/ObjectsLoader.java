@@ -26,8 +26,9 @@ public final class ObjectsLoader {
   private static Map<Integer, Object> objects;
 
   /** The file from which the hashmap must be loaded */
-  private static final String serialiazed_file_dir = System.getProperty("user.dir")
-      + "/daikon-outputs/";
+  private static final String serialiazed_file_dir = System.getProperty("user.dir") + "/";
+
+  private static String serialized_file_name;
 
   public static Object get_object(int hashcode) {
     if (objects == null)
@@ -39,11 +40,11 @@ public final class ObjectsLoader {
     XStream xstream = new XStream();
     Object map_obj = new HashMap<Integer, Object>();
 
-    String serialized_file_name = get_serialized_filename();
+    String final_serialized_file = get_serialized_filename();
 
     try {
       ObjectInputStream ois = xstream
-          .createObjectInputStream(new FileInputStream(serialized_file_name));
+          .createObjectInputStream(new FileInputStream(final_serialized_file));
       try {
         while (true) {
           map_obj = ois.readObject();
@@ -53,22 +54,25 @@ public final class ObjectsLoader {
       }
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
-      throw new RuntimeException("Cannot deserialize file: " + serialized_file_name);
+      throw new RuntimeException("Cannot deserialize file: " + final_serialized_file);
     }
     objects = (Map<Integer, Object>) map_obj;
-    System.out.println("Loaded objects: " + objects.size());
+    System.out
+        .println("Loaded objects: " + objects.size() + " from file: " + final_serialized_file);
   }
 
   /**
    * Get the serialized file name
    */
   private static String get_serialized_filename() {
+    if (Daikon.serialiazed_objects_file_name != null)
+      return serialiazed_file_dir + Daikon.serialiazed_objects_file_name;
     if (Daikon.inv_file != null)
-      return serialiazed_file_dir + Daikon.inv_file.getName().replace(".inv.gz", "-objects.xml");
+      return serialiazed_file_dir + "daikon-outputs/"
+          + Daikon.inv_file.getName().replace(".inv.gz", "-objects.xml");
     if (InvariantChecker.invariant_file != null)
       return serialiazed_file_dir
           + InvariantChecker.invariant_file.getName().replace(".inv.gz", "-objects.xml");
-
     throw new Daikon.UserError("Unable to get serialized_file_name");
   }
 }

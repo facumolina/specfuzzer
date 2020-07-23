@@ -422,6 +422,7 @@ public final class Daikon {
   public static final String user_defined_invariant_SWITCH = "user-defined-invariant";
   public static final String fuzzed_invariants_SWITCH = "fuzzed-invariants";
   public static final String grammar_to_fuzz_SWITCH = "grammar-to-fuzz";
+  public static final String objects_for_fuzzed_invs_SWITCH = "serialiazed-objects";
   public static final String disable_all_invariants_SWITCH = "disable-all-invariants";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
@@ -995,6 +996,7 @@ public final class Daikon {
           new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(user_defined_invariant_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(fuzzed_invariants_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(objects_for_fuzzed_invs_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(grammar_to_fuzz_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(disable_all_invariants_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -1129,9 +1131,14 @@ public final class Daikon {
             if (fuzzed_invs <= 0)
               throw new Daikon.UserError("Argument for "+fuzzed_invariants_SWITCH+ " must be greater than zero.");
             fuzzed_invariants = fuzzed_invs;
+          } else if (objects_for_fuzzed_invs_SWITCH.equals(option_name)){
+            String serialiazed_objects_file = getOptarg(g);
+            if (serialiazed_objects_file==null || serialiazed_objects_file.equals(""))
+              throw new Daikon.UserError("Invalid serialiazed file");
+            serialiazed_objects_file_name = serialiazed_objects_file;
           } else if (grammar_to_fuzz_SWITCH.equals(option_name)) {
             String grammar_to_fuzz_str = getOptarg(g);
-            if (grammar_to_fuzz_SWITCH==null || grammar_to_fuzz_SWITCH.equals(""))
+            if (grammar_to_fuzz_str==null || grammar_to_fuzz_str.equals(""))
               throw new Daikon.UserError("Invalid grammar");
             grammar_to_fuzz = grammar_to_fuzz_str;
           } else if (disable_all_invariants_SWITCH.equals(option_name)) {
@@ -1471,6 +1478,8 @@ public final class Daikon {
   private static int fuzzed_invariants = 1; 
 
   public static String grammar_to_fuzz;
+
+  public static String serialiazed_objects_file_name;
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants. New invariants must be
