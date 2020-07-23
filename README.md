@@ -49,5 +49,5 @@ Run Daikon including Fuzzed Invariants:
 
 Check Daikon inferred invariants:
 
-`java -cp build/classes/:lib/* daikon.tools.InvariantChecker --serialiazed-objects daikon-outputs/ListTesterDriver-objects.xml ListTesterDriver.inv.gz daikon-outputs/ListTesterDriver.dtrace.gz`
+`java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects daikon-outputs/ListTesterDriver-objects.xml ListTesterDriver.inv.gz daikon-outputs/ListTesterDriver.dtrace.gz`
 
