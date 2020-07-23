@@ -67,12 +67,8 @@ public final class ObjectsLoader {
   private static String get_serialized_filename() {
     if (Daikon.serialiazed_objects_file_name != null)
       return serialiazed_file_dir + Daikon.serialiazed_objects_file_name;
-    if (Daikon.inv_file != null)
-      return serialiazed_file_dir + "daikon-outputs/"
-          + Daikon.inv_file.getName().replace(".inv.gz", "-objects.xml");
-    if (InvariantChecker.invariant_file != null)
-      return serialiazed_file_dir
-          + InvariantChecker.invariant_file.getName().replace(".inv.gz", "-objects.xml");
+    if (InvariantChecker.serialiazed_objects_file_name != null)
+      return serialiazed_file_dir + InvariantChecker.serialiazed_objects_file_name;
     throw new Daikon.UserError("Unable to get serialized_file_name");
   }
 }
