@@ -76,7 +76,7 @@ public class FuzzedInvariant extends PointerInvariant {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied FuzzedInvariant this, OutputFormat format) {
-    return "FuzzedInvariant ( " + fuzzed_spec + ") holds for: " + var().name();
+    return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: " + var().name();
   }
 
   @Override
