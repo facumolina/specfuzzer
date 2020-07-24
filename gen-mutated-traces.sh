@@ -14,13 +14,19 @@ $MAJOR_HOME/bin/javac -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $bu
 echo '> Mutants generated!'
 echo ''
 
-echo '> Compiling mutants'
-javac -g mutants/1/$target_file -d $build_dir
-echo '> Mutants compiled and ready to create mutated traces!'
-echo ''
-
-echo '> Generating traces with Chicory'
-java -cp $build_dir:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/mutants --comparability-file=daikon-outputs/ListTesterDriver.decls-DynComp --ppt-omit-pattern='ListTester.*' --dtrace-file=ListTesterDriver-m1.dtrace.gz testers.ListTesterDriver daikon-outputs/mutants/ListTesterDriver-m1-objects.xml
+echo '> Processing mutants'
+for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
+do
+  echo '> Procesing mutant: '$dir$target_file
+  echo '> Compiling mutant'
+  javac -g $dir$target_file -d $build_dir
+  echo '> Mutant compiled'
+  echo '' 
+  echo '> Generating traces with Chicory from mutant'
+  dir2=${dir%*/}
+  number=${dir2##*/}
+  java -cp $build_dir:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/mutants --comparability-file=daikon-outputs/ListTesterDriver.decls-DynComp --ppt-omit-pattern='ListTester.*' --dtrace-file=ListTesterDriver-m$number.dtrace.gz testers.ListTesterDriver daikon-outputs/mutants/ListTesterDriver-m$number-objects.xml
+done
 
 echo '> Done!'
 
