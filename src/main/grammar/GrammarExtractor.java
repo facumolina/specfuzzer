@@ -20,7 +20,7 @@ public class GrammarExtractor {
   // Type graph of the CUT
   private static Graph<String, LabeledEdge> type_graph;
   private static int bound = 3;
-  private static String GRAMMARS_DIR = "/Users/fmolina/phd/software/fuzzing-specs/grammars/";
+  private static String GRAMMARS_DIR = System.getProperty("user.dir") + "/grammars/";
 
   public static void main(String[] args) throws ClassNotFoundException {
 
