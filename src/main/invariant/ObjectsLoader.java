@@ -28,11 +28,11 @@ public final class ObjectsLoader {
   /** The file from which the hashmap must be loaded */
   private static final String serialiazed_file_dir = System.getProperty("user.dir") + "/";
 
-  private static String serialized_file_name;
-
   public static Object get_object(int hashcode) {
-    if (objects == null)
+    if (objects == null) {
       load_objects();
+      System.out.println("Total loaded objects: " + objects.size());
+    }
     return objects.get(hashcode);
   }
 
@@ -40,35 +40,47 @@ public final class ObjectsLoader {
     XStream xstream = new XStream();
     Object map_obj = new HashMap<Integer, Object>();
 
-    String final_serialized_file = get_serialized_filename();
+    String[] final_serialized_files = get_serialized_filenames();
 
-    try {
-      ObjectInputStream ois = xstream
-          .createObjectInputStream(new FileInputStream(final_serialized_file));
+    for (int i = 0; i < final_serialized_files.length; i++) {
       try {
-        while (true) {
-          map_obj = ois.readObject();
+        ObjectInputStream ois = xstream
+            .createObjectInputStream(new FileInputStream(final_serialized_files[i]));
+        try {
+          while (true) {
+            map_obj = ois.readObject();
+          }
+        } catch (EOFException e) {
+          ois.close();
         }
-      } catch (EOFException e) {
-        ois.close();
+      } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Cannot deserialize file: " + final_serialized_files[i]);
       }
-    } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
-      throw new RuntimeException("Cannot deserialize file: " + final_serialized_file);
+      if (objects == null)
+        objects = (Map<Integer, Object>) map_obj;
+      else
+        objects.putAll((Map<Integer, Object>) map_obj);
+      System.out.println("Loaded objects from file: " + final_serialized_files[i]);
     }
-    objects = (Map<Integer, Object>) map_obj;
-    System.out
-        .println("Loaded objects: " + objects.size() + " from file: " + final_serialized_file);
   }
 
   /**
    * Get the serialized file name
    */
-  private static String get_serialized_filename() {
+  private static String[] get_serialized_filenames() {
+    String supplied_files = null;
     if (Daikon.serialiazed_objects_file_name != null)
-      return serialiazed_file_dir + Daikon.serialiazed_objects_file_name;
+      supplied_files = Daikon.serialiazed_objects_file_name;
     if (InvariantChecker.serialiazed_objects_file_name != null)
-      return serialiazed_file_dir + InvariantChecker.serialiazed_objects_file_name;
-    throw new Daikon.UserError("Unable to get serialized_file_name");
+      supplied_files = InvariantChecker.serialiazed_objects_file_name;
+    if (supplied_files == null)
+      throw new Daikon.UserError("Unable to get serialized_file_names");
+    String[] splitted = supplied_files.split(";");
+    String[] all_files = new String[splitted.length];
+    for (int i = 0; i < all_files.length; i++) {
+      all_files[i] = serialiazed_file_dir + splitted[i];
+    }
+    return all_files;
   }
 }
