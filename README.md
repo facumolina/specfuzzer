@@ -1,5 +1,5 @@
-# fuzzing-specs
-Fuzzing Software Specifications
+# spec-fuzzer
+SpecFuzzer: Fuzzing Software Specifications
 
 # Requirements
 
