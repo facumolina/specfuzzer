@@ -251,6 +251,15 @@ public class GrammarBuilder {
   /**
    * Add quantification symbols to the given grammar
    */
+  public static void add_special_quantification_symbols(Map<String, List<String>> grammar,
+      String type_name, String curr_expr) {
+    String current_set_symbol = get_set_symbol(type_name);
+    extend_grammar(grammar, current_set_symbol, curr_expr);
+  }
+
+  /**
+   * Add quantification symbols to the given grammar
+   */
   public static void add_quantification_over_field_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr, String dest_type, String cyclic_label,
       String dest_label) {

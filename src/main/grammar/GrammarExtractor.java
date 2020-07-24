@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,7 +24,8 @@ public class GrammarExtractor {
   private static int bound = 3;
   private static String GRAMMARS_DIR = System.getProperty("user.dir") + "/grammars/";
 
-  public static void main(String[] args) throws ClassNotFoundException {
+  public static void main(String[] args)
+      throws ClassNotFoundException, NoSuchFieldException, SecurityException {
 
     if (args.length != 1) {
       System.out.println("Only the fully quallified name of the CUT is expected");
@@ -33,11 +36,11 @@ public class GrammarExtractor {
 
     Class<?> cut = Class.forName(qualified_name);
 
-    System.out.println("Analyzing class: " + cut.getName());
+    System.out.println("> Analyzing class: " + cut.getName());
     System.out.println();
 
     // Build the corresponding type graph
-    System.out.println("Building the Type Graph");
+    System.out.println("> Building the Type Graph");
     type_graph = new DirectedPseudograph<Class<?>, LabeledEdge>(LabeledEdge.class);
     build_type_graph(cut, new HashSet<String>());
     System.out.println("Nodes: " + type_graph.vertexSet().toString());
@@ -45,10 +48,10 @@ public class GrammarExtractor {
     System.out.println();
 
     // Extract the Grammar
-    System.out.println("Generating the Grammar from the Type Graph");
+    System.out.println("> Generating the Grammar from the Type Graph");
     extract_grammar(cut);
     System.out.println();
-    System.out.println("Done!");
+    System.out.println("> Done!");
   }
 
   /**
@@ -111,6 +114,26 @@ public class GrammarExtractor {
   }
 
   /**
+   * Create the special quantification related symbols from label that leads to a Collection
+   * 
+   * @throws SecurityException
+   * @throws NoSuchFieldException
+   * @throws ClassNotFoundException
+   */
+  private static void add_special_quantification_symbols(Map<String, List<String>> grammar,
+      Class<?> cut, String curr_expr, String label)
+      throws NoSuchFieldException, SecurityException, ClassNotFoundException {
+    Field f = cut.getDeclaredField(label);
+    ParameterizedType pt = (ParameterizedType) f.getGenericType();
+    Class<?> collection_class = null;
+    for (Type t : pt.getActualTypeArguments()) {
+      collection_class = Class.forName(t.getTypeName());
+    }
+    GrammarBuilder.add_special_quantification_symbols(grammar, collection_class.getSimpleName(),
+        curr_expr + "." + label);
+  }
+
+  /**
    * Add the the given current expression as a symbol for the corresponding type
    */
   private static void add_symbol_for_type(String type_name, String curr_expr,
@@ -121,9 +144,14 @@ public class GrammarExtractor {
 
   /**
    * Traverse the type graph from the given type and extend the given grammar
+   * 
+   * @throws SecurityException
+   * @throws NoSuchFieldException
+   * @throws ClassNotFoundException
    */
   private static void traverse_graph(Class<?> cut, String curr_expr,
-      Map<String, List<String>> grammar, int k) {
+      Map<String, List<String>> grammar, int k)
+      throws NoSuchFieldException, SecurityException, ClassNotFoundException {
     if (k > 0) {
       Set<LabeledEdge> edges = type_graph.outgoingEdgesOf(cut);
       for (LabeledEdge edge : edges) {
@@ -132,8 +160,12 @@ public class GrammarExtractor {
           // We have a closure case, so create the quantification related symbols
           add_quantification_symbols_from_label(grammar, cut, curr_expr, edge.getLabel());
         } else {
-          // This is not a closure case, continue exploring only reference types
-          if (TypesUtil.is_reference(target_type.getSimpleName())) {
+          // This is not a closure case, continue exploring only non primitive types
+          if (!target_type.isPrimitive()) {
+            if (java.util.Collection.class.isAssignableFrom(target_type)) {
+              // The target type is a collection so we can create a quantification symbol
+              add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
+            }
             traverse_graph(target_type, curr_expr + "." + edge.getLabel(), grammar, k - 1);
           } else {
             add_symbol_for_type(target_type.getSimpleName(), curr_expr + "." + edge.getLabel(),
@@ -160,8 +192,13 @@ public class GrammarExtractor {
 
   /**
    * Extract the grammar from the obtained type graph
+   * 
+   * @throws SecurityException
+   * @throws NoSuchFieldException
+   * @throws ClassNotFoundException
    */
-  private static void extract_grammar(Class<?> cut) {
+  private static void extract_grammar(Class<?> cut)
+      throws NoSuchFieldException, SecurityException, ClassNotFoundException {
     System.out.println("Extracting grammar from initial type: " + cut.getName());
     Map<String, List<String>> grammar = GrammarBuilder.create();
     traverse_graph(cut, cut.getSimpleName(), grammar, bound);
