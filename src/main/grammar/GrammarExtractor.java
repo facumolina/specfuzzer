@@ -130,7 +130,7 @@ public class GrammarExtractor {
       for (LabeledEdge edge : edges) {
         String target_type = type_graph.getEdgeTarget(edge);
         if (type_name.equals(target_type)) {
-          // We have a closure case, so create the quantificaiton related symbols
+          // We have a closure case, so create the quantification related symbols
           add_quantification_symbols_from_label(grammar, type_name, curr_expr, edge.getLabel());
         } else {
           // This is not a closure case, continue exploring only reference types
