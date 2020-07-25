@@ -18,10 +18,15 @@ expr:
 
 qt_expr:
   quantifier name ':' set_expr ':' expr
+  | quantifier name ':' collection ':' expr
   ;
 
 set_expr:
   name '.' closure_op '(' closure_field ')'
+  ;
+
+collection:
+  name
   ;
 
 num_binary_op:
