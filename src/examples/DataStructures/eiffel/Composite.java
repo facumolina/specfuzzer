@@ -111,7 +111,7 @@ public class Composite {
     if (!c_different || !c_singleton_1 || !c_singleton_2)
       throw new IllegalArgumentException();
     int old_c_value = c.value;
-    Set<Composite> old_children_set = children_set();
+    // Set<Composite> old_children_set = children_set();
     Set<Composite> old_ancestors = new HashSet<>(ancestors);
 
     // do

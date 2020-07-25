@@ -12,6 +12,7 @@ import DataStructures.AvlTreeList;
 import DataStructures.List;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import DataStructures.commonscollections.TreeList;
+import DataStructures.eiffel.Composite;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import antlr.AlloyExprGrammarParser.ParseContext;
@@ -133,5 +134,16 @@ public class ComparisonExpressionEvaluatorTest {
     t.add(5);
     assertTrue(evaluateCmp("#(AvlTreeList.root.*(left + right)) = AvlTreeList.root.size + 1", t));
     assertTrue(evaluateCmp("#(AvlTreeList.root.*(left + right)) - 1 = AvlTreeList.root.size", t));
+  }
+
+  @Test
+  public void set_size_composite() {
+    Composite c = new Composite(3);
+    assertTrue(evaluateCmp("#(Composite.children) = 0", c));
+    c.add_child(new Composite(1));
+    assertTrue(evaluateCmp("#(Composite.children) = 1", c));
+    c.add_child(new Composite(2));
+    assertTrue(evaluateCmp("#(Composite.children) > 1", c));
+    assertTrue(evaluateCmp("#(Composite.ancestors) = 0", c));
   }
 }
