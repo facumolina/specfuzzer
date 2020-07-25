@@ -1,10 +1,12 @@
 package expression;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import antlr.AlloyExprGrammarParser.Closure_fieldContext;
 import antlr.AlloyExprGrammarParser.Closure_opContext;
+import antlr.AlloyExprGrammarParser.CollectionContext;
 import antlr.AlloyExprGrammarParser.NameContext;
 import antlr.AlloyExprGrammarParser.Set_exprContext;
 
@@ -35,6 +37,18 @@ public class SetExpressionEvaluator {
 
     closureFromFields(base_object, fields, set);
     return set;
+  }
+
+  /**
+   * Evaluate the given collection context on the given object
+   */
+  public static Set<Object> eval(CollectionContext collection_ctx, Object o) {
+    // Get the name
+    NameContext set_expr = collection_ctx.name();
+    Object set_field_res = NameExpressionEvaluator.eval(set_expr, o);
+    assert (set_field_res instanceof Collection);
+    Collection<?> col = (Collection<?>) set_field_res;
+    return new HashSet<Object>(col);
   }
 
   /**

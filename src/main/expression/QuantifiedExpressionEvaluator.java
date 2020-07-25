@@ -22,8 +22,9 @@ public class QuantifiedExpressionEvaluator {
    * Evaluate the given quantified expression on the given java Object
    */
   public static boolean eval(Qt_exprContext qt_expr, Object o) {
-    Set<Object> set = SetExpressionEvaluator.eval(qt_expr.set_expr(), o);
-
+    Set<Object> set = qt_expr.set_expr() != null
+        ? SetExpressionEvaluator.eval(qt_expr.set_expr(), o)
+        : SetExpressionEvaluator.eval(qt_expr.collection(), o);
     QuantifierContext qt = qt_expr.quantifier();
     switch (qt.getText()) {
     case ALL:

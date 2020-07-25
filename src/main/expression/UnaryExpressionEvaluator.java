@@ -1,6 +1,6 @@
 package expression;
 
-import java.util.Set;
+import java.util.Collection;
 
 import antlr.AlloyExprGrammarParser.ExprContext;
 import antlr.AlloyExprGrammarParser.Unary_opContext;
@@ -27,8 +27,8 @@ public class UnaryExpressionEvaluator {
   private static Object eval(String op, Object o) {
     switch (op) {
     case CARDINALITY:
-      assert (o instanceof Set);
-      Set<Object> set = (Set<Object>) o;
+      assert (o instanceof Collection);
+      Collection<Object> set = (Collection<Object>) o;
       return set.size();
     }
     throw new IllegalArgumentException(
