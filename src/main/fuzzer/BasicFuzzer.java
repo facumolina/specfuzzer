@@ -22,19 +22,25 @@ import grammar.GrammarBuilder;
  * 
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public class BasicFuzzer {
+public class BasicFuzzer extends GrammarBasedFuzzer {
 
   private static final int max_nonterminals = 15;
   private static final int max_expansion_trials = 100;
 
   private static String re_nonterminal = "(<[^<> ]*>)";
 
-  private static JSONObject grammar;
+  public BasicFuzzer(String grammar_file_name) {
+    try {
+      grammar = read_grammar(grammar_file_name);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Unable to read grammar: " + grammar_file_name);
+    }
+  }
 
   /**
    * Fuzz the given grammar and returns a valid expression
    */
-  private static String fuzz() {
+  public String fuzz() {
     Random rand = new Random();
     String term = GrammarBuilder.START_SYMBOL;
     int expansion_trials = 0;
@@ -58,30 +64,16 @@ public class BasicFuzzer {
   }
 
   /**
-   * Fuzz the given grammar and returns a valid expression
-   */
-  public static String fuzz(String grammar_file_name) {
-    try {
-      if (grammar == null)
-        grammar = read_grammar(grammar_file_name);
-      return fuzz();
-    } catch (Exception e) {
-      System.out.println("Unable to read grammar: " + grammar_file_name);
-      return null;
-    }
-  }
-
-  /**
    * Empty the grammar (just for testing purposes)
    */
-  public static void emtpy_grammar() {
+  public void emtpy_grammar() {
     grammar = null;
   }
 
   /**
    * Get the amount of non terminals symbols of the given symbol
    */
-  private static List<String> nonterminals(String symbol) {
+  private List<String> nonterminals(String symbol) {
     List<String> matches = new LinkedList<String>();
     Matcher m = Pattern.compile("(?=(" + re_nonterminal + "))").matcher(symbol);
     while (m.find()) {
@@ -95,8 +87,7 @@ public class BasicFuzzer {
    * 
    * @throws ParseException
    */
-  private static JSONObject read_grammar(String grammar_file_name)
-      throws IOException, ParseException {
+  private JSONObject read_grammar(String grammar_file_name) throws IOException, ParseException {
     BufferedReader reader = new BufferedReader(new FileReader(grammar_file_name));
     StringBuilder stringBuilder = new StringBuilder();
     String line = null;
@@ -115,6 +106,7 @@ public class BasicFuzzer {
       throw new IllegalArgumentException("Only the fully grammar file name is expected");
     }
     String grammar_file = args[0];
-    System.out.println(fuzz(grammar_file));
+    BasicFuzzer bf = new BasicFuzzer(grammar_file);
+    System.out.println(bf.fuzz());
   }
 }

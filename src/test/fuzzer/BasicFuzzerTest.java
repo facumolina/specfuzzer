@@ -25,8 +25,9 @@ public class BasicFuzzerTest {
     l.insert(3);
     // Fuzz invariants
     String grammar_file = System.getProperty("user.dir") + "/grammars/ListGrammar.json";
+    BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
-      String fuzzed_spec = BasicFuzzer.fuzz(grammar_file);
+      String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
       ExpressionEvaluator.eval(fuzzed_spec, l);
     }
@@ -40,10 +41,10 @@ public class BasicFuzzerTest {
     avl.add(4);
     avl.add(1);
     // Fuzz invariants
-    BasicFuzzer.emtpy_grammar();
     String grammar_file = System.getProperty("user.dir") + "/grammars/AvlTreeListGrammar.json";
+    BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
-      String fuzzed_spec = BasicFuzzer.fuzz(grammar_file);
+      String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
       ExpressionEvaluator.eval(fuzzed_spec, avl);
     }

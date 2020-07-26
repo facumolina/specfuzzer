@@ -12,6 +12,7 @@ import daikon.inv.OutputFormat;
 import expression.ExpressionEvaluator;
 import expression.NonApplicableExpressionException;
 import fuzzer.BasicFuzzer;
+import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -34,6 +35,9 @@ public class FuzzedInvariant extends PointerInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
+  // GrammarBasedFuzzer
+  private GrammarBasedFuzzer fuzzer;
+
   ///
   /// Required methods
   ///
@@ -51,7 +55,9 @@ public class FuzzedInvariant extends PointerInvariant {
   private void get_fuzzed_spec() {
     if (Daikon.grammar_to_fuzz == null)
       throw new Daikon.UserError("When using FuzzedInvariant, the grammar must be specified");
-    fuzzed_spec = BasicFuzzer.fuzz(Daikon.grammar_to_fuzz);
+    if (fuzzer == null)
+      fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
+    fuzzed_spec = fuzzer.fuzz();
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
