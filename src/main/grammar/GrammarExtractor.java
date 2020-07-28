@@ -59,25 +59,28 @@ public class GrammarExtractor {
    */
   private static void build_type_graph(Class<?> cut, Set<String> visited) {
     if (visited.add(cut.getName())) {
-      type_graph.addVertex(cut);
-      // Get the fields of the given type
-      Set<Class<?>> to_visit = new HashSet<Class<?>>();
-      List<Field> fields = getAllFields(new LinkedList<Field>(), cut);
-      for (Field fld : fields) {
-        if (!Modifier.isStatic(fld.getModifiers())) {
-          // For each non static field
-          String fld_decl_name = fld.getName();
-          Class<?> fld_type = fld.getType();
-          type_graph.addVertex(fld_type);
-          type_graph.addEdge(cut, fld_type, new LabeledEdge(fld_decl_name));
+      if (!cut.getName().contains("java.util")) {
+        // Only visit the fields of non java util classes
+        type_graph.addVertex(cut);
+        // Get the fields of the given type
+        Set<Class<?>> to_visit = new HashSet<Class<?>>();
+        List<Field> fields = getAllFields(new LinkedList<Field>(), cut);
+        for (Field fld : fields) {
+          if (!Modifier.isStatic(fld.getModifiers())) {
+            // For each non static field
+            String fld_decl_name = fld.getName();
+            Class<?> fld_type = fld.getType();
+            type_graph.addVertex(fld_type);
+            type_graph.addEdge(cut, fld_type, new LabeledEdge(fld_decl_name));
 
-          to_visit.add(fld_type);
+            to_visit.add(fld_type);
+          }
         }
-      }
-      for (Class<?> cls : to_visit) {
-        // Visit only non-primitive types for now
-        if (!cls.isPrimitive())
-          build_type_graph(cls, visited);
+        for (Class<?> cls : to_visit) {
+          // Visit fields only for non-primitive types for now
+          if (!cls.isPrimitive())
+            build_type_graph(cls, visited);
+        }
       }
     }
   }
@@ -127,10 +130,48 @@ public class GrammarExtractor {
     ParameterizedType pt = (ParameterizedType) f.getGenericType();
     Class<?> collection_class = null;
     for (Type t : pt.getActualTypeArguments()) {
-      collection_class = Class.forName(t.getTypeName());
+      String collection_class_name = t.getTypeName();
+      try {
+        collection_class = Class.forName(t.getTypeName());
+        collection_class_name = collection_class.getSimpleName();
+      } catch (ClassNotFoundException e) {
+      }
+      GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
+          curr_expr + "." + label);
     }
-    GrammarBuilder.add_special_quantification_symbols(grammar, collection_class.getSimpleName(),
-        curr_expr + "." + label);
+  }
+
+  /**
+   * Create the special quantification related symbols from label that leads to a Collection
+   *
+   */
+  private static void add_special_quantification_symbols_from_map(Map<String, List<String>> grammar,
+      Class<?> cut, String curr_expr, String label)
+      throws NoSuchFieldException, SecurityException, ClassNotFoundException {
+    Field f = cut.getDeclaredField(label);
+    ParameterizedType pt = (ParameterizedType) f.getGenericType();
+
+    Type[] types = pt.getActualTypeArguments();
+    assert (types.length == 2);
+    String collection_type_one = "";
+    String collection_type_two = "";
+    try {
+      // First type is the one related to the data and the second type is the one related to the
+      // value
+      collection_type_one = types[0].getTypeName();
+      collection_type_two = types[1].getTypeName();
+
+      Class<?> collection_class = Class.forName(collection_type_one);
+      collection_type_one = collection_class.getSimpleName();
+
+      collection_class = Class.forName(collection_type_two);
+      collection_type_two = collection_class.getSimpleName();
+    } catch (ClassNotFoundException e) {
+    }
+    GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_one,
+        curr_expr + "." + label + ".keys");
+    GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_two,
+        curr_expr + "." + label + ".data");
   }
 
   /**
@@ -162,10 +203,15 @@ public class GrammarExtractor {
         } else {
           // This is not a closure case, continue exploring only non primitive types
           if (!target_type.isPrimitive()) {
-            if (java.util.Collection.class.isAssignableFrom(target_type)) {
+            if (java.util.Map.class.isAssignableFrom(target_type)) {
+              // The target type is a map, so we can create quantifications symbol for
+              // the keys and values sets
+              add_special_quantification_symbols_from_map(grammar, cut, curr_expr, edge.getLabel());
+            } else if (java.util.Collection.class.isAssignableFrom(target_type)) {
               // The target type is a collection so we can create a quantification symbol
               add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
             }
+
             traverse_graph(target_type, curr_expr + "." + edge.getLabel(), grammar, k - 1);
           } else {
             add_symbol_for_type(target_type.getSimpleName(), curr_expr + "." + edge.getLabel(),
@@ -202,6 +248,7 @@ public class GrammarExtractor {
     System.out.println("Extracting grammar from initial type: " + cut.getName());
     Map<String, List<String>> grammar = GrammarBuilder.create();
     traverse_graph(cut, cut.getSimpleName(), grammar, bound);
+    GrammarBuilder.remove_non_expandable(grammar);
     System.out.println();
     JSONObject json_grammar = new JSONObject(grammar);
     System.out.println(json_grammar.toJSONString());

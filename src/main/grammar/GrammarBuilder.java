@@ -53,11 +53,9 @@ public class GrammarBuilder {
   public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
   public static final String INTEGER_FIELD = "<Integer_Field>";
   public static final String INTEGER_SET_SIZE = "<Integer_Set_Size>";
-  public static List<String> INTEGER_VALUE = Arrays.asList(INTEGER_CONSTANT, INTEGER_SET_SIZE,
-      INTEGER_FIELD);
+  public static List<String> INTEGER_VALUE = new LinkedList<String>();
   public static final String INTEGER_EXPR = "<Integer_Expr>";
-  public static final List<String> INTEGER_EXPR_VALUE = Arrays.asList(INTEGER,
-      INTEGER_FIELD + " " + NUMERIC_BIN_OP + " " + INTEGER);
+  public static List<String> INTEGER_EXPR_VALUE = new LinkedList<String>();
 
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
   public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
@@ -86,9 +84,16 @@ public class GrammarBuilder {
     grammar.put(NUMERIC_CMP_OP, NUMERIC_CMP_OP_VALUE);
     grammar.put(NUMERIC_BIN_OP, NUMERIC_BIN_OP_VALUE);
     grammar.put(LOGIC_OP, LOGIC_OP_VALUE);
+    INTEGER_EXPR_VALUE.add(INTEGER);
+    INTEGER_EXPR_VALUE.add(INTEGER_FIELD + " " + NUMERIC_BIN_OP + " " + INTEGER);
     grammar.put(INTEGER_EXPR, INTEGER_EXPR_VALUE);
+    INTEGER_VALUE.add(INTEGER_CONSTANT);
+    INTEGER_VALUE.add(INTEGER_SET_SIZE);
+    INTEGER_VALUE.add(INTEGER_FIELD);
     grammar.put(INTEGER, INTEGER_VALUE);
+
     grammar.put(INTEGER_CONSTANT, INTEGER_CONSTANT_VALUE);
+
     grammar.put(INTEGER_FIELD, new LinkedList<String>());
     grammar.put(INTEGER_SET_SIZE, new LinkedList<String>());
     quantified_sets = new HashSet<String>();
@@ -254,7 +259,16 @@ public class GrammarBuilder {
   public static void add_special_quantification_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr) {
     String current_set_symbol = get_set_symbol(type_name);
+    add_quantification_option(grammar, current_set_symbol);
     extend_grammar(grammar, current_set_symbol, curr_expr);
+    extend_grammar(grammar, INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
+    if (TypesUtil.is_integer(type_name)) {
+      String numeric_cmp_symbol = QT_VAR_NAME + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
+      extend_grammar(grammar, QT_EXPR_BODY, numeric_cmp_symbol);
+    } else {
+      String current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name);
+      extend_grammar(grammar, QT_EXPR_BODY, current_obj_cmp_symbol);
+    }
   }
 
   /**
@@ -285,4 +299,16 @@ public class GrammarBuilder {
     extend_grammar(grammar, INTEGER, option);
   }
 
+  /**
+   * Remove non expandable symbols
+   */
+  public static void remove_non_expandable(Map<String, List<String>> grammar) {
+    if (grammar.get(INTEGER_FIELD).size() == 0) {
+      // There are no integer fields, so remove the symbol and all the other non-terminal symbols
+      // mentioning the integer field symbol
+      grammar.remove(INTEGER_FIELD);
+      grammar.get(INTEGER_EXPR).removeIf(x -> x.contains(INTEGER_FIELD));
+      grammar.get(INTEGER).removeIf(x -> x.contains(INTEGER_FIELD));
+    }
+  }
 }
