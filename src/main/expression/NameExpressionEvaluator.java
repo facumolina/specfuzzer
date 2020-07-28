@@ -42,6 +42,8 @@ public class NameExpressionEvaluator {
       return null;
     if (ID.getText().equals(o.getClass().getSimpleName()))
       return o;
+    if (ExpressionEvaluator.vars.containsKey(ID.getText()))
+      return ExpressionEvaluator.vars.get(ID.getText());
     if (ID.getText().equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
       return o;
     if (ID.getText().equals(Constants.NULL))

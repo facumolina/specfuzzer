@@ -1,6 +1,8 @@
 package expression;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -28,6 +30,8 @@ public class ExpressionEvaluator {
 
   private static AlloyExprGrammarParser parser; // Alloy Expressions Parser
 
+  protected static Map<String, Object> vars; // Map from var name to object
+
   /**
    * Setup the parser
    */
@@ -35,6 +39,7 @@ public class ExpressionEvaluator {
     AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     parser = new AlloyExprGrammarParser(tokens);
+    vars = new HashMap<String, Object>();
   }
 
   /**
@@ -66,6 +71,7 @@ public class ExpressionEvaluator {
 
     // Evaluate the expression on the object
     ParseContext ctx = (ParseContext) tree;
+    vars.put(o.getClass().getSimpleName(), o);
     return (Boolean) eval(ctx.expr(), o);
 
   }
@@ -73,7 +79,7 @@ public class ExpressionEvaluator {
   /**
    * Evaluate the given ParseTree on the given java Object
    */
-  public static Object eval(ExprContext ectx, Object o) {
+  protected static Object eval(ExprContext ectx, Object o) {
 
     Qt_exprContext qt_expr_ctx = ectx.qt_expr();
     if (qt_expr_ctx != null)
