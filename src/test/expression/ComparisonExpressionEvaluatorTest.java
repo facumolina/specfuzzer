@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import DataStructures.AvlTreeList;
 import DataStructures.List;
+import DataStructures.MapWrapper;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import DataStructures.commonscollections.TreeList;
 import DataStructures.eiffel.Composite;
@@ -145,5 +146,13 @@ public class ComparisonExpressionEvaluatorTest {
     c.add_child(new Composite(2));
     assertTrue(evaluateCmp("#(Composite.children) > 1", c));
     assertTrue(evaluateCmp("#(Composite.ancestors) = 0", c));
+  }
+
+  @Test
+  public void sets_map_wrapper() {
+    MapWrapper wrapper = new MapWrapper();
+    wrapper.add(1, 2);
+    wrapper.add(2, 3);
+    assertTrue(evaluateCmp("#(MapWrapper.map.values) = #(MapWrapper.map.keySet)", wrapper));
   }
 }
