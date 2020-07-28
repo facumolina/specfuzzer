@@ -169,9 +169,9 @@ public class GrammarExtractor {
     } catch (ClassNotFoundException e) {
     }
     GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_one,
-        curr_expr + "." + label + ".keys");
+        curr_expr + "." + label + "." + Constants.MAP_KEY_SET);
     GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_two,
-        curr_expr + "." + label + ".data");
+        curr_expr + "." + label + "." + Constants.MAP_VALUES);
   }
 
   /**
