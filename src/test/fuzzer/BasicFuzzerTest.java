@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import DataStructures.AvlTreeList;
 import DataStructures.List;
+import DataStructures.MapWrapper;
 import expression.ExpressionEvaluator;
 
 /**
@@ -47,6 +48,24 @@ public class BasicFuzzerTest {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
       ExpressionEvaluator.eval(fuzzed_spec, avl);
+    }
+  }
+
+  @Test
+  public void fuzz_map_wrapper_invs() {
+    // Prepare list
+    MapWrapper wrapper = new MapWrapper();
+    wrapper.add(1, 32);
+    wrapper.add(2, 33);
+    wrapper.add(3, 34);
+    wrapper.add(4, 35);
+    // Fuzz invariants
+    String grammar_file = System.getProperty("user.dir") + "/grammars/MapWrapperGrammar.json";
+    BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
+    for (int i = 0; i < invs_to_fuzz; i++) {
+      String fuzzed_spec = fuzzer.fuzz();
+      System.out.println("Evaluating spec: " + fuzzed_spec);
+      ExpressionEvaluator.eval(fuzzed_spec, wrapper);
     }
   }
 }

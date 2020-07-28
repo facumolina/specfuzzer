@@ -41,7 +41,8 @@ public class QuantifiedMapWrapperExpressionEvaluatorTest {
     return Arrays.asList(new Object[][] { { "some n : MapWrapper.map.keySet : n >= 1", true },
         { "all n : MapWrapper.map.keySet : n > 1", false },
         { "some n : MapWrapper.map.values : n <= 0", false },
-        { "all n : MapWrapper.map.values : n > 0", true } });
+        { "all n : MapWrapper.map.values : n > 0", true },
+        { "some n : MapWrapper.map.keySet : n != #(MapWrapper.map.values)", true } });
   }
 
   @Test

@@ -3,6 +3,8 @@ package expression;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -32,6 +34,7 @@ public class ComparisonExpressionEvaluatorTest {
     AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
+    ExpressionEvaluator.vars = new HashMap<String, Object>();
     return (Boolean) ExpressionEvaluator.eval(ctx.expr(), o);
   }
 

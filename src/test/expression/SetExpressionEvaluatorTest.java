@@ -2,6 +2,7 @@ package expression;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import org.antlr.v4.runtime.CharStreams;
@@ -28,6 +29,7 @@ public class SetExpressionEvaluatorTest {
     AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
+    ExpressionEvaluator.vars = new HashMap<String, Object>();
     return (Set<Object>) ExpressionEvaluator.eval(ctx.expr(), o);
   }
 
