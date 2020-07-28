@@ -23,7 +23,6 @@ public class GrammarBuilder {
   // Quantifications
   public static final String QT_EXPR = "<Quantified_Expr>";
   public static final String QUANTIFIER = "<Quantifier>";
-  public static final String QT_EXPR_BODY = "<Quantified_Expr_Body>";
   public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some");
 
   // Reference comparisons
@@ -108,6 +107,13 @@ public class GrammarBuilder {
   }
 
   /**
+   * Return the non-terminal symbol denoting the body of a quantified expression of the given type
+   */
+  public static String get_qt_body_symbol(String type_name) {
+    return "<" + type_name + "_Qt_Expr_Body>";
+  }
+
+  /**
    * Return the non-terminal symbol denoting a single label to build a set of the given type
    */
   public static String get_set_label_symbol(String type_name) {
@@ -162,18 +168,14 @@ public class GrammarBuilder {
   /**
    * Add quantification option
    */
-  public static void add_quantification_option(Map<String, List<String>> grammar,
-      String set_symbol) {
+  private static void add_quantification_option(Map<String, List<String>> grammar,
+      String set_symbol, String body_symbol) {
     if (quantified_sets.add(set_symbol)) {
       // First time, create the proper quantification options
       grammar.get(QT_EXPR)
-          .add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : " + QT_EXPR_BODY);
+          .add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : " + body_symbol);
       grammar.get(QT_EXPR).add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : "
-          + QT_EXPR_BODY + " " + LOGIC_OP + " " + QT_EXPR_BODY);
-    }
-    if (quantified_sets.size() > 1) {
-      throw new IllegalStateException(
-          "At this time, having more than one quantified set option may lead to errors in the produced Grammar. Needs to be analyzed");
+          + body_symbol + " " + LOGIC_OP + " " + body_symbol);
     }
   }
 
@@ -230,8 +232,9 @@ public class GrammarBuilder {
     extend_labels_set(grammar, current_set_label_symbol, current_set_labels_symbol);
     // Options for the quantified expressions
     String current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name);
-    add_quantification_option(grammar, current_set_symbol);
-    extend_grammar(grammar, QT_EXPR_BODY, current_obj_cmp_symbol);
+    String current_obj_body_symbol = get_qt_body_symbol(type_name);
+    add_quantification_option(grammar, current_set_symbol, current_obj_body_symbol);
+    extend_grammar(grammar, current_obj_body_symbol, current_obj_cmp_symbol);
     extend_grammar(grammar, INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
     // Options for the quantified objects comparisons
     String current_qt_obj_symbol = get_qt_obj_symbol(type_name);
@@ -259,15 +262,16 @@ public class GrammarBuilder {
   public static void add_special_quantification_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr) {
     String current_set_symbol = get_set_symbol(type_name);
-    add_quantification_option(grammar, current_set_symbol);
+    String current_obj_body_symbol = get_qt_body_symbol(type_name);
+    add_quantification_option(grammar, current_set_symbol, current_obj_body_symbol);
     extend_grammar(grammar, current_set_symbol, curr_expr);
     extend_grammar(grammar, INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
     if (TypesUtil.is_integer(type_name)) {
       String numeric_cmp_symbol = QT_VAR_NAME + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
-      extend_grammar(grammar, QT_EXPR_BODY, numeric_cmp_symbol);
+      extend_grammar(grammar, current_obj_body_symbol, numeric_cmp_symbol);
     } else {
       String current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name);
-      extend_grammar(grammar, QT_EXPR_BODY, current_obj_cmp_symbol);
+      extend_grammar(grammar, current_obj_body_symbol, current_obj_cmp_symbol);
     }
   }
 
@@ -277,10 +281,11 @@ public class GrammarBuilder {
   public static void add_quantification_over_field_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr, String dest_type, String cyclic_label,
       String dest_label) {
+    String current_obj_body_symbol = get_qt_body_symbol(type_name);
     String current_set_label_symbol = get_set_label_symbol(type_name);
     String formatted_dest_type = TypesUtil.format_type(dest_type);
     String current_obj_dest_cmp_symbol = get_qt_obj_dest_cmp_symbol(type_name, formatted_dest_type);
-    extend_grammar(grammar, QT_EXPR_BODY, current_obj_dest_cmp_symbol);
+    extend_grammar(grammar, current_obj_body_symbol, current_obj_dest_cmp_symbol);
     // Options for the quantified object field comparison
     String cmp_symbol = get_cmp_symbol(formatted_dest_type);
     String qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " "
