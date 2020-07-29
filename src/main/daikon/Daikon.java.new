@@ -1731,7 +1731,7 @@ public final class Daikon {
       proto_invs.add(LinearTernaryFloat.get_proto());
     }
 
-    // User-defined invariants
+    // Already fuzzed invariants
     if (living_invariants_file_name!=null) {
       // A file with already valid supplied invariants has been provided.
       System.out.println();
@@ -1750,6 +1750,7 @@ public final class Daikon {
       System.out.println();
     }
 
+    // User-defined invariants
     for (String invariantClassName : userDefinedInvariants) {
       System.out.println("Fuzzing specs:");
       for (int i = 0; i < fuzzed_invariants; i++){

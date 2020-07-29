@@ -389,10 +389,10 @@ public class InvariantChecker {
   }
 
   /**
-   * Serialize the map between hashcodes and objects
+   * Serializes the given list of strings to the given file_name
    */
    private static void serialiaze_invs(List<String> invs, String file_name) {
-    System.out.println("Saving Objects - Total: " + invs.size());
+    System.out.println("Saving - Total: " + invs.size());
     ObjectOutputStream oos = null;
     XStream xstream = new XStream();
     try {
@@ -406,7 +406,7 @@ public class InvariantChecker {
     try {
       oos.writeObject(invs);
     } catch (IOException e) {
-      throw new Error("Cannot write objects to serial file: " + file_name);
+      throw new Error("Cannot write to serial file: " + file_name);
     }
 
     // Close the stream
