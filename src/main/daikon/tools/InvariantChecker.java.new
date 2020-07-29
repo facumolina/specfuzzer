@@ -19,6 +19,7 @@ import gnu.getopt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.OptionalDataException;
 import java.io.PrintStream;
@@ -28,6 +29,7 @@ import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +39,8 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.UtilPlume;
+
+import com.thoughtworks.xstream.XStream;
 
 /**
  * InvariantChecker reads an invariant file and trace file. It prints errors for any invariants that
@@ -373,8 +377,43 @@ public class InvariantChecker {
     }
     }
     Map<String,Integer> sorted = sortByValue(failedCounter, false);
+    List<String> to_preserve = new LinkedList<String>();
     for (Map.Entry<String,Integer> entry : sorted.entrySet()) {
       System.out.printf("#Fails: %s - Inv: %s%n",entry.getValue(),entry.getKey());
+      if (entry.getValue()>0 && entry.getKey().contains("FuzzedInvariant"))
+        to_preserve.add(entry.getKey());
+    }
+    String file_name = System.getProperty("user.dir") + "/invs_file.xml";
+    System.out.printf("Preserving %s invariants to file %s%n",to_preserve.size(),file_name);
+    serialiaze_invs(to_preserve,file_name);
+  }
+
+  /**
+   * Serialize the map between hashcodes and objects
+   */
+   private static void serialiaze_invs(List<String> invs, String file_name) {
+    System.out.println("Saving Objects - Total: " + invs.size());
+    ObjectOutputStream oos = null;
+    XStream xstream = new XStream();
+    try {
+      // Open the stream
+      oos = xstream.createObjectOutputStream(new FileOutputStream(file_name));
+    } catch (IOException e) {
+      throw new Error("Cannot open serial file: " + file_name);
+    }
+
+    // Write the objects map
+    try {
+      oos.writeObject(invs);
+    } catch (IOException e) {
+      throw new Error("Cannot write objects to serial file: " + file_name);
+    }
+
+    // Close the stream
+    try {
+      oos.close();
+    } catch (IOException e) {
+      throw new Error("Cannot close serial file: " + file_name);
     }
   }
 

@@ -51,6 +51,12 @@ public class FuzzedInvariant extends PointerInvariant {
     get_fuzzed_spec();
   }
 
+  private @Prototype FuzzedInvariant(String spec) {
+    super();
+    fuzzed_spec = spec;
+    System.out.println("Created from fuzzed spec: " + fuzzed_spec);
+  }
+
   /** Fuzz the spec represented by this invariant */
   private void get_fuzzed_spec() {
     if (Daikon.grammar_to_fuzz == null)
@@ -64,6 +70,10 @@ public class FuzzedInvariant extends PointerInvariant {
   /** Returns the prototype invariant. */
   public static @Prototype FuzzedInvariant get_proto() {
     return new @Prototype FuzzedInvariant();
+  }
+
+  public static @Prototype FuzzedInvariant get_proto_from_spec(String spec) {
+    return new @Prototype FuzzedInvariant(spec);
   }
 
   /** returns whether or not this invariant is enabled */
