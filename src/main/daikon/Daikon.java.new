@@ -1736,16 +1736,19 @@ public final class Daikon {
       // A file with already valid supplied invariants has been provided.
       System.out.println();
       System.out.println("Loading invariants from file: "+living_invariants_file_name);
-      //List<String> loaded_invs_str = load_serialized_invariants(living_invariants_file_name);
+      List<String> loaded_invs_str = load_serialized_invariants(living_invariants_file_name);
+      System.out.println("Loaded: "+loaded_invs_str.size());
+      for (String inv_str : loaded_invs_str){
       try {
         Class<?> invClass = Class.forName("invariant.FuzzedInvariant");
         Method get_proto_from_spec_method = invClass.getMethod("get_proto_from_spec", String.class);
         @SuppressWarnings("nullness")
-        Invariant inv = (Invariant) get_proto_from_spec_method.invoke(null, "all n : List.*(next) : n.x <= n.next.x");
+        Invariant inv = (Invariant) get_proto_from_spec_method.invoke(null, inv_str.replace("FuzzedInvariant:",""));
         proto_invs.add(inv);
       } catch (Exception e) {
         e.printStackTrace();
         throw new Daikon.UserError("Error loading invariants from file: "+living_invariants_file_name);
+      }
       }
       System.out.println();
     }
