@@ -28,7 +28,7 @@ public class GrammarExtractor {
       throws ClassNotFoundException, NoSuchFieldException, SecurityException {
 
     if (args.length != 1) {
-      System.out.println("Only the fully quallified name of the CUT is expected");
+      System.out.println("Only the fully qualified name of the CUT is expected");
     }
 
     // Get the class
