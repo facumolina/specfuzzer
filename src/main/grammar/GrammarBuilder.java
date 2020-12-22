@@ -3,8 +3,8 @@ package grammar;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,12 +18,12 @@ import java.util.Set;
 public class GrammarBuilder {
 
   // Constant symbols that will be part of all the grammars
-  public static final String START_SYMBOL = "<start>";
+  public static final String START_SYMBOL = "<Fuzzed_Spec>";
 
-  // Quantifications
+  // Quantification
   public static final String QT_EXPR = "<Quantified_Expr>";
   public static final String QUANTIFIER = "<Quantifier>";
-  public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some");
+  public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no", "one", "lone");
 
   // Reference comparisons
   public static final String REF_OP = "<Reference_Op>";
@@ -33,14 +33,21 @@ public class GrammarBuilder {
   public static final String VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>";
   public static final List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
 
-  // Numeric operators
+  // Logic comparison operators
+  public static final String LOGIC_OP = "<Logic_Op>";
+  public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "implies", "iff");
+
+  // Logic expressions
+  public static final String LOGIC_FROM_FIELD = "<Logic_From_Field>";
+  public static final String LOGIC_EXPR = "<Logic_Expr>";
+  public static final String LOGIC_CMP_EXPR = "<Logic_Cmp_Expr>";
+  public static List<String> LOGIC_CMP_EXPR_VALUE = Arrays
+          .asList("("+ LOGIC_EXPR + ") " + LOGIC_OP + " (" + LOGIC_EXPR + ")");
+
+  // Numeric comparison operators
   public static final String NUMERIC_CMP_OP = "<Num_Cmp_Op>";
   public static final List<String> NUMERIC_CMP_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=",
-      "<=");
-
-  // Logic operators
-  public static final String LOGIC_OP = "<Logic_Op>";
-  public static final List<String> LOGIC_OP_VALUE = Arrays.asList("implies");
+          "<=");
 
   // Binary numeric operators
   public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
@@ -50,6 +57,7 @@ public class GrammarBuilder {
   public static final String INTEGER = "<Integer>";
   public static final String INTEGER_CONSTANT = "<Integer_Constant>";
   public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
+  public static final String INTEGER_FROM_FIELD = "<Integer_From_Field>";
   public static final String INTEGER_FIELD = "<Integer_Field>";
   public static final String INTEGER_SET_SIZE = "<Integer_Set_Size>";
   public static List<String> INTEGER_VALUE = new LinkedList<String>();
@@ -58,7 +66,9 @@ public class GrammarBuilder {
 
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
   public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
-      .asList(INTEGER_SET_SIZE + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR);
+      .asList(INTEGER_FROM_FIELD + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR);
+
+  public static List<String> INTEGER_FROM_FIELD_VALUE = Arrays.asList(INTEGER_FIELD, INTEGER_SET_SIZE);
 
   // Other constants
   public static final String QT_VAR_NAME = "n";
@@ -71,31 +81,44 @@ public class GrammarBuilder {
    * Create a Grammar with the initial state
    */
   public static Map<String, List<String>> create() {
+    // Start
     Map<String, List<String>> grammar = new HashMap<String, List<String>>();
     grammar.put(START_SYMBOL, new LinkedList<String>());
     grammar.get(START_SYMBOL).add(QT_EXPR);
     grammar.get(START_SYMBOL).add(NUMERIC_CMP_EXPR);
+    grammar.get(START_SYMBOL).add(LOGIC_CMP_EXPR);
+
+    // Quantified
     grammar.put(QT_EXPR, new LinkedList<String>());
     grammar.put(QUANTIFIER, QUANTIFIER_VALUE);
     grammar.put(REF_OP, REF_OP_VALUE);
     grammar.put(VAR_SET_CMP_OP, VAR_SET_CMP_OP_VALUE);
+    quantified_sets = new HashSet<String>();
+
+    // Logic
+    grammar.put(LOGIC_OP, LOGIC_OP_VALUE);
+    grammar.put(LOGIC_EXPR,new LinkedList<String>());
+    grammar.get(LOGIC_EXPR).add(QT_EXPR);
+    grammar.get(LOGIC_EXPR).add(NUMERIC_CMP_EXPR);
+    grammar.get(LOGIC_EXPR).add(LOGIC_FROM_FIELD);
+    grammar.put(LOGIC_CMP_EXPR,LOGIC_CMP_EXPR_VALUE);
+    grammar.put(LOGIC_FROM_FIELD,new LinkedList<String>());
+
+    // Numeric
     grammar.put(NUMERIC_CMP_EXPR, NUMERIC_CMP_EXPR_VALUE);
     grammar.put(NUMERIC_CMP_OP, NUMERIC_CMP_OP_VALUE);
+    grammar.put(INTEGER_FROM_FIELD, INTEGER_FROM_FIELD_VALUE);
     grammar.put(NUMERIC_BIN_OP, NUMERIC_BIN_OP_VALUE);
-    grammar.put(LOGIC_OP, LOGIC_OP_VALUE);
     INTEGER_EXPR_VALUE.add(INTEGER);
-    INTEGER_EXPR_VALUE.add(INTEGER_FIELD + " " + NUMERIC_BIN_OP + " " + INTEGER);
+    INTEGER_EXPR_VALUE.add(INTEGER_FROM_FIELD + " " + NUMERIC_BIN_OP + " " + INTEGER);
     grammar.put(INTEGER_EXPR, INTEGER_EXPR_VALUE);
     INTEGER_VALUE.add(INTEGER_CONSTANT);
-    INTEGER_VALUE.add(INTEGER_SET_SIZE);
-    INTEGER_VALUE.add(INTEGER_FIELD);
+    INTEGER_VALUE.add(INTEGER_FROM_FIELD);
     grammar.put(INTEGER, INTEGER_VALUE);
-
     grammar.put(INTEGER_CONSTANT, INTEGER_CONSTANT_VALUE);
-
     grammar.put(INTEGER_FIELD, new LinkedList<String>());
     grammar.put(INTEGER_SET_SIZE, new LinkedList<String>());
-    quantified_sets = new HashSet<String>();
+
     return grammar;
   }
 
@@ -308,12 +331,22 @@ public class GrammarBuilder {
    * Remove non expandable symbols
    */
   public static void remove_non_expandable(Map<String, List<String>> grammar) {
-    if (grammar.get(INTEGER_FIELD).size() == 0) {
+    if (grammar.get(INTEGER_FIELD).isEmpty()) {
       // There are no integer fields, so remove the symbol and all the other non-terminal symbols
       // mentioning the integer field symbol
       grammar.remove(INTEGER_FIELD);
       grammar.get(INTEGER_EXPR).removeIf(x -> x.contains(INTEGER_FIELD));
       grammar.get(INTEGER).removeIf(x -> x.contains(INTEGER_FIELD));
+    }
+    if (grammar.get(INTEGER_SET_SIZE).isEmpty()) {
+      // There are not sets for computing size
+      grammar.remove(INTEGER_SET_SIZE);
+      grammar.get(INTEGER_FROM_FIELD).removeIf(x -> x.contains(INTEGER_SET_SIZE));
+    }
+    if (grammar.get(LOGIC_FROM_FIELD).isEmpty()) {
+      // There are no boolean fields
+      grammar.remove(LOGIC_FROM_FIELD);
+      grammar.get(LOGIC_EXPR).removeIf(x -> x.contains(LOGIC_FROM_FIELD));
     }
   }
 }
