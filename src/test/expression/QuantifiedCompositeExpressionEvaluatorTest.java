@@ -39,7 +39,7 @@ public class QuantifiedCompositeExpressionEvaluatorTest {
   @Parameterized.Parameters
   public static Collection alloyExpressions() {
     return Arrays.asList(new Object[][] { { "all n : Composite.children : n.value > 0", true }, {
-        "some n : Composite.ancestors : n.children = n.parent.children implies n.value != n.max_child.value",
+        "some n : Composite.ancestors : (n.children = n.parent.children) implies (n.value != n.max_child.value)",
         false }, { "all n : Composite.children : n.max_child = null", true },
         { "all n : Composite.children : n.parent != null", true } });
   }

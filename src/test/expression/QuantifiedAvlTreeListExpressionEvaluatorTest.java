@@ -51,14 +51,14 @@ public class QuantifiedAvlTreeListExpressionEvaluatorTest {
         { "all n : AvlTreeList.root.^(left) : n.height > n.left.height", true },
         { "all n : AvlTreeList.root.*(left + right) : n.size > n.right.size", true },
         { "all n : AvlTreeList.root.*(left + right) : n.size > n.left.size", true },
-        { "all n : AvlTreeList.root.*(left + right) : n.size > n.left.size and n.size > n.right.size",
+        { "all n : AvlTreeList.root.*(left + right) : (n.size > n.left.size) and (n.size > n.right.size)",
             true },
-        { "all n : AvlTreeList.root.*(left + right) : n.size < n.left.size and n.size > n.right.size",
+        { "all n : AvlTreeList.root.*(left + right) : (n.size < n.left.size) and (n.size > n.right.size)",
             false },
-        { "all n : AvlTreeList.root.*(left + right) : n.height > n.left.height and n.height > n.right.height",
+        { "all n : AvlTreeList.root.*(left + right) : (n.height > n.left.height) and (n.height > n.right.height)",
             true },
         { "some n : AvlTreeList.root.*(right + right) : n.size >= n.left.size", true },
-        { "some n : AvlTreeList.root.^(right + right) : n != n.left implies n.value != n.left.value",
+        { "some n : AvlTreeList.root.^(right + right) : (n != n.left) implies (n.value != n.left.value)",
             true } });
   }
 
