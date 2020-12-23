@@ -14,7 +14,7 @@ expr:
   | set_expr
   | name
   | number
-	;
+  ;
 
 qt_expr:
   quantifier name ':' set_expr ':' expr
@@ -69,6 +69,9 @@ closure_op:
 quantifier:
   'all'
   | 'some'
+  | 'lone'
+  | 'one'
+  | 'no'
   ;
 
 name:
