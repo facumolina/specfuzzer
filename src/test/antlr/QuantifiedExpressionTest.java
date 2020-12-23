@@ -18,24 +18,56 @@ public class QuantifiedExpressionTest {
   /**
    * Initialize the lexer and parser from the given alloy expr
    */ 
-  private void intialize(String alloy_expr) {
+  private void initialize(String alloy_expr) {
     lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     parser = new AlloyExprGrammarParser(tokens);
   }
 
   @Test
-  public void test_qt_1() {
+  public void test_qt_list_1() {
     String qt_expr = "all n : List.*(next) : n.next != null";
-    intialize(qt_expr);
+    initialize(qt_expr);
     ParseTree tree = parser.parse();
     assertTrue(parser.getNumberOfSyntaxErrors()==0);
   }
 
   @Test
-  public void test_qt_2() {
+  public void test_qt_list_2() {
+    String qt_expr = "some n : List.*(next) : n != n.next.next";
+    initialize(qt_expr);
+    ParseTree tree = parser.parse();
+    assertTrue(parser.getNumberOfSyntaxErrors()==0);
+  }
+
+  @Test
+  public void test_qt_list_3() {
+    String qt_expr = "lone n : List.*(next) : n != n.next.next";
+    initialize(qt_expr);
+    ParseTree tree = parser.parse();
+    assertTrue(parser.getNumberOfSyntaxErrors()==0);
+  }
+
+  @Test
+  public void test_qt_list_4() {
+    String qt_expr = "one n : List.^(next) : n.x < n.next.x";
+    initialize(qt_expr);
+    ParseTree tree = parser.parse();
+    assertTrue(parser.getNumberOfSyntaxErrors()==0);
+  }
+
+  @Test
+  public void test_qt_list_5() {
+    String qt_expr = "no n : List.*(next) : n != n.next";
+    initialize(qt_expr);
+    ParseTree tree = parser.parse();
+    assertTrue(parser.getNumberOfSyntaxErrors()==0);
+  }
+
+  @Test
+  public void test_qt_avl_1() {
   	String qt_expr = "all n : AvlTreeList.root.^(left) : n not in n.^(right)";
-  	intialize(qt_expr);
+    initialize(qt_expr);
     ParseTree tree = parser.parse();
     assertTrue(parser.getNumberOfSyntaxErrors()==0);
   }
@@ -43,7 +75,7 @@ public class QuantifiedExpressionTest {
   @Test
   public void test_bad_qt_1() {
     String bad_qt_expr = "badoperator n : List.*(next) : n.next != null";
-    intialize(bad_qt_expr);
+    initialize(bad_qt_expr);
     ParseTree tree = parser.parse();
     assertTrue(parser.getNumberOfSyntaxErrors() > 0);
   }

@@ -15,6 +15,9 @@ public class QuantifiedExpressionEvaluator {
 
   private static final String ALL = "all";
   private static final String SOME = "some";
+  private static final String NO = "no";
+  private static final String LONE = "lone";
+  private static final String ONE = "one";
 
   public static final String QT_VAR_NAME = "n";
 
@@ -31,6 +34,12 @@ public class QuantifiedExpressionEvaluator {
       return computeAll(set, qt_expr.expr());
     case SOME:
       return computeSome(set, qt_expr.expr());
+    case NO:
+      return computeNo(set, qt_expr.expr());
+    case LONE:
+      return computeLone(set, qt_expr.expr());
+    case ONE:
+      return computeOne(set, qt_expr.expr());
     }
 
     return true;
@@ -68,6 +77,63 @@ public class QuantifiedExpressionEvaluator {
       }
     }
     return false;
+  }
+
+  /**
+   * Returns true if NONE of the objects in the given set satisfies the given expression
+   */
+  private static boolean computeNo(Set<Object> set, ExprContext expr) {
+    for (Object o : set) {
+      try {
+        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+          return false;
+      } catch (NonEvaluableExpressionException e) {
+        // For now, when an expression can't be evaluated in the body, ignore it
+        // This simulates null safe
+        continue;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns true if ZERO or ONE of the objects in the given set satisfies the given expression
+   */
+  private static boolean computeLone(Set<Object> set, ExprContext expr) {
+    int satisfying = 0;
+    for (Object o : set) {
+      try {
+        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+          satisfying++;
+        if (satisfying > 1)
+          return false;
+      } catch (NonEvaluableExpressionException e) {
+        // For now, when an expression can't be evaluated in the body, ignore it
+        // This simulates null safe
+        continue;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns true if ONE of the objects in the given set satisfies the given expression
+   */
+  private static boolean computeOne(Set<Object> set, ExprContext expr) {
+    int satisfying = 0;
+    for (Object o : set) {
+      try {
+        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+          satisfying++;
+        if (satisfying > 1)
+          return false;
+      } catch (NonEvaluableExpressionException e) {
+        // For now, when an expression can't be evaluated in the body, ignore it
+        // This simulates null safe
+        continue;
+      }
+    }
+    return satisfying==1;
   }
 
 }

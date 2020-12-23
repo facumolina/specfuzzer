@@ -51,7 +51,16 @@ public class QuantifiedListExpressionEvaluatorTest {
         { "some n : List.*(next) : n.x < n.next.x", true },
         { "all n : List.*(next) : n.x > n.next.x implies n.x != n.next.x", true },
         { "all n : List.*(next) : n = n.next.next implies n != n.next", true },
-        { "all n : List.^(next) : n != null implies n.x <= n.next.x", true } });
+        { "all n : List.^(next) : n != null implies n.x <= n.next.x", true },
+        { "no n: List.*(next) : n.x = 0", true},
+        { "no n: List.*(next) : n.x = 1", false},
+        { "lone n: List.*(next) : n.x = 0", true},
+        { "lone n: List.*(next) : n.x = 1", true},
+        { "lone n: List.*(next) : n.x > 1", false},
+        { "one n: List.*(next) : n.x = 0", false},
+        { "one n: List.*(next) : n.x > 1", false},
+        { "one n: List.*(next) : n.x = 1", true}
+    });
   }
 
   @Test
