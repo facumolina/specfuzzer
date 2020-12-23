@@ -17,9 +17,13 @@ Run tests
 
 `ant junit`
 
+# Alloy Parser Generation
+
+`java -jar lib/antlr-4.7.1-complete.jar -package antlr -o src/main/ antlr/AlloyExprGrammar.g4`
+
 # Grammar Generation
 
-Extracting a Grammar:
+Extracting a Grammar from class:
 
 `java -cp dest/jar/FuzzSpecs.jar:lib/* grammar.GrammarExtractor DataStructures.List`
 
