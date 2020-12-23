@@ -197,8 +197,8 @@ public class GrammarBuilder {
       // First time, create the proper quantification options
       grammar.get(QT_EXPR)
           .add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : " + body_symbol);
-      grammar.get(QT_EXPR).add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : "
-          + body_symbol + " " + LOGIC_OP + " " + body_symbol);
+      grammar.get(QT_EXPR).add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : ("
+          + body_symbol + ") " + LOGIC_OP + " (" + body_symbol + ")");
     }
   }
 
