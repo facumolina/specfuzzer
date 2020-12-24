@@ -16,6 +16,7 @@ public class BinaryExpressionEvaluator {
   private static final String OR_2 = "or";
   private static final String IMPLIES_1 = "=>";
   private static final String IMPLIES_2 = "implies";
+  private static final String IFF = "iff";
 
   /**
    * Evaluate the given comparison
@@ -46,6 +47,8 @@ public class BinaryExpressionEvaluator {
       return !b1 || b2;
     case (IMPLIES_2):
       return !b1 || b2;
+    case (IFF):
+      return b1 == b2;
     }
     throw new IllegalArgumentException("Binary operator " + op + " still not implemented");
   }
