@@ -66,4 +66,50 @@ public class LogicExpressionEvaluatorTest {
         assertFalse(evaluateLogicCmp("(List.x = 0) and (List.next = null)", l));
     }
 
+    @Test
+    public void implies_false() {
+        List l = new List();
+        l.insert(1);
+        assertFalse(evaluateLogicCmp("(#(List.*(next)) > 0) implies (List.x = 2)", l));
+    }
+
+    @Test
+    public void implies_true() {
+        List l = new List();
+        assertTrue(evaluateLogicCmp("(#(List.^(next)) <= 1) implies (List.x != 1)", l));
+    }
+
+    @Test
+    public void implies_true_2() {
+        List l = new List();
+        assertTrue(evaluateLogicCmp("(List.x = 1) implies (List.x < 1)", l));
+    }
+
+    @Test
+    public void iff_false() {
+        List l = new List();
+        assertFalse(evaluateLogicCmp("(List.x < 0) iff (List.x >= 0)", l));
+    }
+
+    @Test
+    public void iff_false_2() {
+        List l = new List();
+        l.insert(1);
+        assertFalse(evaluateLogicCmp("(#(List.*(next)) >= 1) iff (List.x = 0)", l));
+    }
+
+    @Test
+    public void iff_true_by_false() {
+        List l = new List();
+        l.insert(1);
+        assertTrue(evaluateLogicCmp("(#(List.*(next)) < 0) iff (#(List.*(next)) < 1)", l));
+    }
+
+    @Test
+    public void iff_true_by_true() {
+        List l = new List();
+        l.insert(1);
+        assertTrue(evaluateLogicCmp("(#(List.*(next)) > 0) iff (#(List.*(next)) >= 1)", l));
+    }
+
 }

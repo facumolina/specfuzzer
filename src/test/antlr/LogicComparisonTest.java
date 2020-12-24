@@ -33,4 +33,12 @@ public class LogicComparisonTest {
         assertTrue(parser.getNumberOfSyntaxErrors()==0);
     }
 
+    @Test
+    public void test_list_iff() {
+        String logic_expr = "(List.x < 0) iff (List.x <= List.x + List.x)";
+        initialize(logic_expr);
+        ParseTree tree = parser.parse();
+        assertTrue(parser.getNumberOfSyntaxErrors()==0);
+    }
+
 }
