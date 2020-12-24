@@ -42,6 +42,7 @@ public class ComparisonExpressionEvaluatorTest {
   public void not_equals() {
     List l = new List();
     assertFalse(evaluateCmp("List.x != List.x", l));
+    assertTrue(evaluateCmp("#(List.^(next)) != List.x - 1", l));
   }
 
   @Test
@@ -76,6 +77,7 @@ public class ComparisonExpressionEvaluatorTest {
     List l = new List();
     l.insert(1);
     assertTrue(evaluateCmp("#(List.*(next)) >= List.x", l));
+    assertFalse(evaluateCmp("List.x > #(List.*(next)) + 1", l));
   }
 
   @Test
