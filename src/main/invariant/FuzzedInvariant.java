@@ -35,7 +35,7 @@ public class FuzzedInvariant extends PointerInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
-  // GrammarBasedFuzzer
+  // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
 
   ///
