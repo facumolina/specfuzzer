@@ -41,6 +41,7 @@ binary_op:
   | 'and'
   | 'implies'
   | '=>'
+  | 'iff'
   ;
 
 compare_op:
