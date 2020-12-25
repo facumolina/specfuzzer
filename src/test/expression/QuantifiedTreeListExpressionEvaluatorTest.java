@@ -47,7 +47,6 @@ public class QuantifiedTreeListExpressionEvaluatorTest {
 
   @Test
   public void testExpressionEvaluator() {
-    System.out.println("Parameterized expr is : " + alloy_expr);
     assertEquals(expected_result, ExpressionEvaluator.eval(alloy_expr, tlist));
   }
 

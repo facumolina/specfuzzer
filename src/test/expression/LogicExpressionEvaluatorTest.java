@@ -70,7 +70,7 @@ public class LogicExpressionEvaluatorTest {
     public void implies_false() {
         List l = new List();
         l.insert(1);
-        assertFalse(evaluateLogicCmp("(#(List.*(next)) > 0) implies (List.x = 2)", l));
+        assertFalse(evaluateLogicCmp("(#(List.*(next)) > 0) implies (List.x = 0)", l));
     }
 
     @Test
