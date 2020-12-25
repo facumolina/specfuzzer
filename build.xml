@@ -22,7 +22,7 @@
     <junit printsummary="yes" haltonfailure="no">
       <classpath refid="classpath" />
       <classpath location="build/classes" />
-      <!--formatter type="plain" /-->
+      <!--formatter type="plain" usefile="false"/-->
       <batchtest fork="yes">
         <fileset dir="src/test">
           <include name="**/*Test*.java" />
