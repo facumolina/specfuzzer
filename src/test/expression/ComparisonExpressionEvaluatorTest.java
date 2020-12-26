@@ -29,13 +29,6 @@ import antlr.AlloyExprGrammarParser.ParseContext;
 public class ComparisonExpressionEvaluatorTest {
 
   private Boolean evaluateCmp(String alloy_expr, Object o) {
-    //AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
-    //CommonTokenStream tokens = new CommonTokenStream(lexer);
-    //AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
-    //ParseTree tree = parser.parse();
-    //ParseContext ctx = (ParseContext) tree;
-    //ExpressionEvaluator.vars = new HashMap<String, Object>();
-    //return (Boolean) ExpressionEvaluator.eval(ctx.expr(), o);
     return ExpressionEvaluator.eval(alloy_expr, o);
   }
 

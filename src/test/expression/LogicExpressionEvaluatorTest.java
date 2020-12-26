@@ -1,6 +1,7 @@
 package expression;
 
 import DataStructures.List;
+import DataStructures.MapWrapper;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import org.antlr.v4.runtime.CharStreams;
@@ -20,13 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class LogicExpressionEvaluatorTest {
 
     private Boolean evaluateLogicCmp(String alloy_expr, Object o) {
-        AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
-        ParseTree tree = parser.parse();
-        AlloyExprGrammarParser.ParseContext ctx = (AlloyExprGrammarParser.ParseContext) tree;
-        ExpressionEvaluator.vars = new HashMap<String, Object>();
-        return (Boolean) ExpressionEvaluator.eval(ctx.expr(), o);
+        return ExpressionEvaluator.eval(alloy_expr, o);
     }
 
     @Test
