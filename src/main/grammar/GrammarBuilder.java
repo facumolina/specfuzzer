@@ -68,7 +68,7 @@ public class GrammarBuilder {
   public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
       .asList(INTEGER_FROM_FIELD + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR);
 
-  public static List<String> INTEGER_FROM_FIELD_VALUE = Arrays.asList(INTEGER_FIELD, INTEGER_SET_SIZE);
+  public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<String>();
 
   // Other constants
   public static final String QT_VAR_NAME = "n";
@@ -107,6 +107,8 @@ public class GrammarBuilder {
     // Numeric
     grammar.put(NUMERIC_CMP_EXPR, NUMERIC_CMP_EXPR_VALUE);
     grammar.put(NUMERIC_CMP_OP, NUMERIC_CMP_OP_VALUE);
+    INTEGER_FROM_FIELD_VALUE.add(INTEGER_FIELD);
+    INTEGER_FROM_FIELD_VALUE.add(INTEGER_SET_SIZE);
     grammar.put(INTEGER_FROM_FIELD, INTEGER_FROM_FIELD_VALUE);
     grammar.put(NUMERIC_BIN_OP, NUMERIC_BIN_OP_VALUE);
     INTEGER_EXPR_VALUE.add(INTEGER);
@@ -336,6 +338,7 @@ public class GrammarBuilder {
       // mentioning the integer field symbol
       grammar.remove(INTEGER_FIELD);
       grammar.get(INTEGER_EXPR).removeIf(x -> x.contains(INTEGER_FIELD));
+      grammar.get(INTEGER_FROM_FIELD).removeIf(x -> x.contains(INTEGER_FIELD));
       grammar.get(INTEGER).removeIf(x -> x.contains(INTEGER_FIELD));
     }
     if (grammar.get(INTEGER_SET_SIZE).isEmpty()) {
