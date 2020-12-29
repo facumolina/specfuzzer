@@ -1815,7 +1815,7 @@ public final class Daikon {
     }
   }
 
-  private static List<String> load_serialized_invariants(String file_name) {
+  public static List<String> load_serialized_invariants(String file_name) {
     XStream xstream = new XStream();
     Object list_obj = new LinkedList<String>();
     try {

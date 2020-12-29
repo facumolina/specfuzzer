@@ -385,7 +385,7 @@ public class InvariantChecker {
         to_preserve.add(entry.getKey());
     }
     String file_name = System.getProperty("user.dir") + "/invs_file.xml";
-    System.out.printf("Preserving %s invariants to file %s%n",to_preserve.size(),file_name);
+    System.out.printf("Preserving %s new invariants to file %s%n",to_preserve.size(),file_name);
     serialiaze_invs(to_preserve,file_name);
   }
 
@@ -393,19 +393,24 @@ public class InvariantChecker {
    * Serializes the given list of strings to the given file_name
    */
    private static void serialiaze_invs(List<String> invs, String file_name) {
-    System.out.println("Saving - Total: " + invs.size());
     ObjectOutputStream oos = null;
     XStream xstream = new XStream();
+
+    // First load the already serialized invs
+    List<String> loaded_invs = Daikon.load_serialized_invariants(file_name);
     try {
       // Open the stream
       oos = xstream.createObjectOutputStream(new FileOutputStream(file_name));
     } catch (IOException e) {
       throw new Error("Cannot open serial file: " + file_name);
     }
+    System.out.printf("Already preserved invariants: %s%n",loaded_invs.size(),file_name);
+    loaded_invs.addAll(invs);
+    System.out.println("Saving - Total: " + loaded_invs.size());
 
     // Write the objects map
     try {
-      oos.writeObject(invs);
+      oos.writeObject(loaded_invs);
     } catch (IOException e) {
       throw new Error("Cannot write to serial file: " + file_name);
     }
