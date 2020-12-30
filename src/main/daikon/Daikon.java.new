@@ -1736,7 +1736,7 @@ public final class Daikon {
       // A file with already valid supplied invariants has been provided.
       System.out.println();
       System.out.println("Loading invariants from file: "+living_invariants_file_name);
-      List<String> loaded_invs_str = load_serialized_invariants(living_invariants_file_name);
+      Set<String> loaded_invs_str = load_serialized_invariants(living_invariants_file_name);
       System.out.println("Loaded: "+loaded_invs_str.size());
       for (String inv_str : loaded_invs_str){
       try {
@@ -1815,9 +1815,9 @@ public final class Daikon {
     }
   }
 
-  public static List<String> load_serialized_invariants(String file_name) {
+  public static Set<String> load_serialized_invariants(String file_name) {
     XStream xstream = new XStream();
-    Object list_obj = new LinkedList<String>();
+    Object list_obj = new HashSet<String>();
     try {
       ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(file_name));
       try {
@@ -1832,7 +1832,7 @@ public final class Daikon {
       throw new RuntimeException("Cannot deserialize file: " + file_name);
     }
     @SuppressWarnings("unchecked")
-    List<String> l = (List<String>)list_obj;
+    Set<String> l = (Set<String>)list_obj;
     return l;    
   }
 

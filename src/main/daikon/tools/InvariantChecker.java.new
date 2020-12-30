@@ -378,7 +378,7 @@ public class InvariantChecker {
     }
     }
     Map<String,Integer> sorted = sortByValue(failedCounter, false);
-    List<String> to_preserve = new LinkedList<String>();
+    Set<String> to_preserve = new HashSet<String>();
     for (Map.Entry<String,Integer> entry : sorted.entrySet()) {
       System.out.printf("#Fails: %s - Inv: %s%n",entry.getValue(),entry.getKey());
       if (entry.getValue()>0 && entry.getKey().contains("FuzzedInvariant"))
@@ -392,12 +392,12 @@ public class InvariantChecker {
   /**
    * Serializes the given list of strings to the given file_name
    */
-   private static void serialiaze_invs(List<String> invs, String file_name) {
+   private static void serialiaze_invs(Set<String> invs, String file_name) {
     ObjectOutputStream oos = null;
     XStream xstream = new XStream();
 
     // First load the already serialized invs
-    List<String> loaded_invs = Daikon.load_serialized_invariants(file_name);
+    Set<String> loaded_invs = Daikon.load_serialized_invariants(file_name);
     try {
       // Open the stream
       oos = xstream.createObjectOutputStream(new FileOutputStream(file_name));
