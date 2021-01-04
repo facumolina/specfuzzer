@@ -17,4 +17,5 @@ ObjectsCollector.serializeObjects();
 * In directory $DAIKONDIR/java/lib add the following jar files:
 1. `xstream-1.4.11.1.jar`
 2. `xmlpull_1_0_5.jar`
+3. `commons-csv-1.8.jar`
 
