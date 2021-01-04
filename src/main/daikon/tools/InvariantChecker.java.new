@@ -17,6 +17,7 @@ import daikon.inv.filter.InvariantFilters;
 import daikon.split.PptSplitter;
 import daikon.inv.OutputFormat;
 import gnu.getopt.*;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.io.OptionalDataException;
 import java.io.PrintStream;
 import java.io.StreamCorruptedException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.HashSet;
@@ -39,6 +42,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+
 import org.plumelib.util.UtilPlume;
 
 import com.thoughtworks.xstream.XStream;
@@ -376,7 +383,15 @@ public class InvariantChecker {
     for (Invariant inv : failedInvariants) {
       System.out.printf("+%s failing at ppt %s%n", inv.format(), inv.ppt.name());
     }
-    }
+    }    
+    serialiaze_invs();
+  }
+
+  /**
+   * Serializes the given list of strings to the given file_name
+   */
+   private static void serialiaze_invs() {
+
     Map<String,Integer> sorted = sortByValue(failedCounter, false);
     Set<String> to_preserve = new HashSet<String>();
     for (Map.Entry<String,Integer> entry : sorted.entrySet()) {
@@ -386,13 +401,9 @@ public class InvariantChecker {
     }
     String file_name = System.getProperty("user.dir") + "/invs_file.xml";
     System.out.printf("Preserving %s new invariants to file %s%n",to_preserve.size(),file_name);
-    serialiaze_invs(to_preserve,file_name);
-  }
 
-  /**
-   * Serializes the given list of strings to the given file_name
-   */
-   private static void serialiaze_invs(Set<String> invs, String file_name) {
+    update_csv(to_preserve, sorted, System.getProperty("user.dir") + "/invs.csv");
+
     ObjectOutputStream oos = null;
     XStream xstream = new XStream();
 
@@ -405,7 +416,7 @@ public class InvariantChecker {
       throw new Error("Cannot open serial file: " + file_name);
     }
     System.out.printf("Already preserved invariants: %s%n",loaded_invs.size(),file_name);
-    loaded_invs.addAll(invs);
+    loaded_invs.addAll(to_preserve);
     System.out.println("Saving - Total: " + loaded_invs.size());
 
     // Write the objects map
@@ -420,6 +431,24 @@ public class InvariantChecker {
       oos.close();
     } catch (IOException e) {
       throw new Error("Cannot close serial file: " + file_name);
+    }
+
+    // 
+  }
+
+  /**
+   * Update the csv containing the information of incrementally discovered invariants
+   */
+  private static void update_csv(Set<String> invs, Map<String,Integer> all_invs_sorted, String file_name) {
+    try {
+      BufferedWriter writer = Files.newBufferedWriter(Paths.get(file_name));
+      CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("invariant", "fst_iteration", "times_fuzzed", "mutant", "fails"));
+      for (String inv : invs) {
+        csvPrinter.printRecord(inv, "1", "1", "m2", all_invs_sorted.get(inv));
+      }
+      csvPrinter.flush();
+    } catch (IOException e) {
+      System.out.println("There was a problem generating the csv file");
     }
   }
 
