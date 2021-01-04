@@ -8,7 +8,7 @@ mutants_dir="daikon-outputs/mutants";
 invs_file=$target_name".inv.gz"
 
 iterations=2;
-invs_to_fuzz=10;
+invs_to_fuzz=$3;
 
 echo '> SpecFuzzer'
 echo ''
