@@ -442,11 +442,12 @@ public class InvariantChecker {
   private static void update_csv(Set<String> invs, Map<String,Integer> all_invs_sorted, String file_name) {
     try {
       BufferedWriter writer = Files.newBufferedWriter(Paths.get(file_name));
-      CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("invariant", "fst_iteration", "times_fuzzed", "mutant", "fails"));
+      CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("invariant", "fails"));
       for (String inv : invs) {
-        csvPrinter.printRecord(inv, "1", "1", "m2", all_invs_sorted.get(inv));
+        csvPrinter.printRecord(inv, all_invs_sorted.get(inv));
       }
       csvPrinter.flush();
+      writer.close();
     } catch (IOException e) {
       System.out.println("There was a problem generating the csv file");
     }
