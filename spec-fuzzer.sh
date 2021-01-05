@@ -7,7 +7,7 @@ dtrace_file="daikon-outputs/"$2".dtrace.gz";
 mutants_dir="daikon-outputs/mutants";
 invs_file=$target_name".inv.gz"
 
-iterations=2;
+iterations=1;
 invs_to_fuzz=$3;
 
 echo '> SpecFuzzer'
@@ -26,13 +26,20 @@ do
   for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
     base_name=${mutant_dtrace/%$".dtrace.gz"}
     mutant_objects_file=$base_name"-objects.xml"
+
     echo '> Checking on mutant: '$mutant_dtrace
     java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
     echo ''
+
+    echo '> Saving mutants results file'
+    python3 single-mutant-result.py invs.csv $i $mutant_dtrace
+
   done
   echo ''
 
   ((i = i + 1))
 done
+
+python3 process-final-results.py invs-by-mutants.csv
 
 echo '> Done!'
