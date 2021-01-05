@@ -40,6 +40,7 @@ do
   ((i = i + 1))
 done
 
+echo '> Rating living invariants by mutation killing ability'
 python3 process-final-results.py invs-by-mutants.csv
 
 echo '> Done!'
