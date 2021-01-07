@@ -443,8 +443,8 @@ public class InvariantChecker {
     try {
       BufferedWriter writer = Files.newBufferedWriter(Paths.get(file_name));
       CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("invariant", "fails"));
-      for (String inv : invs) {
-        csvPrinter.printRecord(inv, all_invs_sorted.get(inv));
+      for (Map.Entry<String,Integer> entry : all_invs_sorted.entrySet()) {
+        csvPrinter.printRecord(entry.getKey(), entry.getValue());
       }
       csvPrinter.flush();
       writer.close();
