@@ -27,8 +27,8 @@ for index, row in df.iterrows():
         final_df = final_df.append(pd.DataFrame(row_to_add), ignore_index=True)
 
 print("Invariants sorted by mutation killing ability (times that failed in program points)")
-killing_ability = final_df.sort_values(by=['fails'], ascending=False, ignore_index=True)
+ka = final_df.sort_values(by=['fails'], ascending=False, ignore_index=True)
 
 pd.set_option('max_colwidth', 800)
 
-print(killing_ability)
+print(ka)
