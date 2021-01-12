@@ -6,6 +6,7 @@ rm -rf mutants/
 
 MAJOR_HOME=../major/
 target_file=$1;
+driver_base=$2;
 build_dir=build/classes
 source_dir=src/examples/
 
@@ -25,7 +26,7 @@ do
   echo '> Generating traces with Chicory from mutant'
   dir2=${dir%*/}
   number=${dir2##*/}
-  java -cp $build_dir:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/mutants --comparability-file=daikon-outputs/ListTesterDriver.decls-DynComp --ppt-omit-pattern='ListTester.*' --dtrace-file=ListTesterDriver-m$number.dtrace.gz testers.ListTesterDriver daikon-outputs/mutants/ListTesterDriver-m$number-objects.xml
+  java -cp $build_dir:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/mutants --comparability-file=daikon-outputs/$driver_base'Driver.decls-DynComp' --ppt-omit-pattern=$driver_base'.*' --dtrace-file=$driver_base'Driver-m'$number'.dtrace.gz' testers.$driver_base'Driver' daikon-outputs/mutants/$driver_base'Driver-m'$number'-objects.xml'
 done
 
 echo '> Done!'

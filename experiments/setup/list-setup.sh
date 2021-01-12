@@ -19,4 +19,8 @@ java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=$SPECFUZZER/d
 echo 'Objects saved in file: '$SPECFUZZER'/daikon-outputs/ListTesterDriver-objects.xml'
 echo ''
 
+echo '> Generating mutants with MAJOR'
+./experiments/setup/gen-mutated-traces.sh DataStructures/List.java ListTester
+echo ''
+
 echo '> Done!'
