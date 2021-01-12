@@ -13,6 +13,10 @@ invs_to_fuzz=$4;
 echo '> SpecFuzzer'
 echo ''
 
+# Clean file for this step to work properly
+cp base_invs_file.xml invs_file.xml
+cp base-invs-by-mutants.csv invs-by-mutants.csv 
+
 echo '> Performing '$iterations' iterations analyzing specs for file: '$dtrace_file
 echo ''
 
