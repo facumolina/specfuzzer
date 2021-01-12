@@ -14,6 +14,7 @@ import daikon.VarInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.filter.InvariantFilters;
+import daikon.inv.filter.InvariantFilter;
 import daikon.split.PptSplitter;
 import daikon.inv.OutputFormat;
 import gnu.getopt.*;
@@ -575,6 +576,8 @@ public class InvariantChecker {
             : "ppt " + ppt.name + " has 0 samples and " + ppt.var_infos.length + " variables";
       }
 
+      //print_invariants(ppt);
+
       // Loop through each slice
       slice_loop:
       for (PptSlice slice : ppt.views_iterable()) {
@@ -626,8 +629,16 @@ public class InvariantChecker {
           // Store string representation of original invariant for verbose mode
           String invRep = quiet ? null : inv.format();
 
+          InvariantFilters fi = InvariantFilters.defaultFilters();
+          InvariantFilter filter_result = fi.shouldKeep(inv);
+          boolean fi_accepted = (filter_result == null);    
+          if (!(fi_accepted && !inv.isGuardingPredicate)) {
+            continue;
+          }
+
           InvariantStatus status = inv.add_sample(vt, 1);
           sample_cnt++;
+
           if (status != InvariantStatus.NO_CHANGE) {
             if (!quiet) {
               output_stream.println(
@@ -658,4 +669,5 @@ public class InvariantChecker {
   private static String invariant2str(PptTopLevel ppt, Invariant inv) {
     return ppt.name + " == " + inv.repr() + inv.getClass() + inv.varNames() + ": " + inv.format();
   }
+
 }
