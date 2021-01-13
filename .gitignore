@@ -1,0 +1,8 @@
+# Dirs
+/build/
+/bin/
+/dest/
+/out/
+
+# Files
+invs*
