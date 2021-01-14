@@ -47,12 +47,15 @@ public class ExpressionEvaluator {
    */
   private static void validate(String alloy_expr, Class<?> cl) {
     String class_name = cl.getSimpleName();
-    if (alloy_expr.contains(class_name+".")) {
-      int idx = alloy_expr.indexOf(class_name);
-      if (!(idx==0 || alloy_expr.charAt(idx-1)==' ' || alloy_expr.charAt(idx-1)=='('))
-        throw new NonApplicableExpressionException(
+    if (!alloy_expr.contains(class_name+"."))
+      throw new NonApplicableExpressionException(
               "The expression " + alloy_expr + " is not applicable to class: " + class_name);
-    }
+
+    int idx = alloy_expr.indexOf(class_name);
+    if (!(idx==0 || alloy_expr.charAt(idx-1)==' ' || alloy_expr.charAt(idx-1)=='('))
+      throw new NonApplicableExpressionException(
+              "The expression " + alloy_expr + " is not applicable to class: " + class_name);
+
   }
 
   /**
