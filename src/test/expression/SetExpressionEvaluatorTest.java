@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Set;
 
+import DataStructures.AvlTreeList;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -63,6 +64,13 @@ public class SetExpressionEvaluatorTest {
     l.insert(3);
     Set<Object> set = evaluateSet("List.^(next)", l);
     assertEquals(set.size(), 2);
+  }
+
+  @Test
+  public void filledAvlSet() {
+    AvlTreeList<Integer> avl = new AvlTreeList<Integer>();
+    Set<Object> set = evaluateSet("AvlTreeList.root.*(left)", avl);
+    assertEquals(set.size(), 1);
   }
 
 }

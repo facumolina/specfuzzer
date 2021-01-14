@@ -2,6 +2,7 @@ package expression;
 
 import static org.junit.Assert.assertEquals;
 
+import DataStructures.AvlTreeList;
 import org.junit.Test;
 
 import DataStructures.List;
@@ -20,6 +21,13 @@ public class UnexpectedObjectTypeTest {
     List l = new List();
     assertEquals(false, ExpressionEvaluator
         .eval("all n : AvlTreeList.root.*(left + right) : n in n.^(left+right)", l));
+  }
+
+  @Test(expected = NonApplicableExpressionException.class)
+  public void testExpressionEvaluatorTwo() {
+    AvlTreeList.Node n = AvlTreeList.Node.EMPTY_LEAF;
+    assertEquals(false, ExpressionEvaluator
+            .eval("all n : AvlTreeList.root.*(left + right) : n in n.^(left+right)", n));
   }
 
 }
