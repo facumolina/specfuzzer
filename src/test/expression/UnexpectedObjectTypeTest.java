@@ -25,9 +25,8 @@ public class UnexpectedObjectTypeTest {
 
   @Test(expected = NonApplicableExpressionException.class)
   public void testExpressionEvaluatorTwo() {
-    AvlTreeList.Node n = AvlTreeList.Node.EMPTY_LEAF;
     assertEquals(false, ExpressionEvaluator
-            .eval("all n : AvlTreeList.root.*(left + right) : n in n.^(left+right)", n));
+            .eval("all n : AvlTreeList.root.*(left + right) : n in n.^(left+right)", new String()));
   }
 
 }
