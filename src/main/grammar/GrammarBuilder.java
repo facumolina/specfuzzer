@@ -224,9 +224,18 @@ public class GrammarBuilder {
    */
   public static void extend_labels_set(Map<String, List<String>> grammar, String label_symbol,
       String labels_symbol) {
-    if (grammar.get(label_symbol).size() > 1) {
-      String additional_option = label_symbol + " + " + label_symbol;
-      extend_grammar(grammar, labels_symbol, additional_option);
+    // Add single labels
+    List<String> curr_labels = grammar.get(label_symbol);
+    curr_labels.forEach(label -> {
+      extend_grammar(grammar, labels_symbol, label);
+    });
+    // Add pairs of labels
+    for (int i=0; i < curr_labels.size() - 1; i++) {
+      String fst = curr_labels.get(i);
+      for (int j = i+1; j < curr_labels.size(); j++) {
+        String snd = curr_labels.get(j);
+        extend_grammar(grammar, labels_symbol, fst + " + " + snd);
+      }
     }
   }
 
@@ -252,7 +261,6 @@ public class GrammarBuilder {
     extend_grammar(grammar, current_set_symbol,
         curr_expr + ".^(" + current_set_labels_symbol + ")");
     String current_set_label_symbol = get_set_label_symbol(type_name);
-    extend_grammar(grammar, current_set_labels_symbol, current_set_label_symbol);
     extend_grammar(grammar, current_set_label_symbol, label);
     extend_labels_set(grammar, current_set_label_symbol, current_set_labels_symbol);
     // Options for the quantified expressions
