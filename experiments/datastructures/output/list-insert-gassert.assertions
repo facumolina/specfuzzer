@@ -1,0 +1,4 @@
+assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),(((old_data >= old_data) && ((0 % 1) <= old_this_x)) || ((old_this_x - data) != (this.SENTINEL - (old_data + this.SENTINEL))))));
+assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),(this.x <= old_this_x)));
+assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),(this.SENTINEL != this.x)));
+assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),(((((old_data >= old_data) && ((0 % 1) <= old_this_x)) || ((old_this_x - data) != (this.SENTINEL - (old_data + this.SENTINEL)))) && ((this.x <= old_this_x) && (this.SENTINEL != this.x))))));

@@ -1,0 +1,72 @@
+===========================================================================
+DataStructures.List:::OBJECT
+FuzzedInvariant ( #(List.*(next)) > #(List.^(next)) - 0 ) holds for: this
+FuzzedInvariant ( #(List.*(next)) >= #(List.*(next)) ) holds for: this
+FuzzedInvariant ( (List.x != 1) or (List.x >= List.x) ) holds for: this
+FuzzedInvariant ( (List.x > #(List.^(next))) or (no n : List.^(next) : n not in n.*(next)) ) holds for: this
+FuzzedInvariant ( (all n : List.*(next) : n.x <= n.next.x) iff (#(List.*(next)) >= #(List.^(next))) ) holds for: this
+FuzzedInvariant ( (lone n : List.*(next) : n = n.next) or (lone n : List.^(next) : n not in n.^(next)) ) holds for: this
+FuzzedInvariant ( (lone n : List.^(next) : n not in n.*(next)) or (List.x != #(List.*(next)) + 1) ) holds for: this
+FuzzedInvariant ( (lone n : List.^(next) : n.x > n.next.x) iff (#(List.*(next)) != #(List.^(next))) ) holds for: this
+FuzzedInvariant ( (no n : List.^(next) : n in n.^(next)) or (lone n : List.*(next) : n.x <= n.next.x) ) holds for: this
+FuzzedInvariant ( (no n : List.^(next) : n not in n.*(next)) implies (some n : List.*(next) : n != null) ) holds for: this
+FuzzedInvariant ( (one n : List.*(next) : n.x != n.next.x) implies (#(List.^(next)) != 0) ) holds for: this
+FuzzedInvariant ( (some n : List.^(next) : n.x <= n.next.x) implies (all n : List.^(next) : n not in n.^(next)) ) holds for: this
+FuzzedInvariant ( all n : List.*(next) : n not in n.^(next) ) holds for: this
+FuzzedInvariant ( lone n : List.*(next) : n = n.next.next ) holds for: this
+FuzzedInvariant ( lone n : List.*(next) : n not in n.*(next) ) holds for: this
+FuzzedInvariant ( no n : List.*(next) : n = null ) holds for: this
+FuzzedInvariant ( no n : List.*(next) : n in n.^(next) ) holds for: this
+FuzzedInvariant ( no n : List.^(next) : n not in n.*(next) ) holds for: this
+FuzzedInvariant ( no n : List.^(next) : n.x > n.next.x ) holds for: this
+this.x <= this.next.x
+this.x <= this.next.next.x
+this.next.x <= this.next.next.x
+===========================================================================
+DataStructures.List.insert(int):::ENTER
+FuzzedInvariant ( #(List.*(next)) != #(List.^(next)) ) holds for: this
+FuzzedInvariant ( #(List.*(next)) != #(List.^(next)) ) holds for: this
+FuzzedInvariant ( (List.x >= List.x) implies (List.x < List.x + 1) ) holds for: this
+FuzzedInvariant ( (some n : List.^(next) : n not in n.^(next)) iff (no n : List.*(next) : n not in n.*(next)) ) holds for: this
+FuzzedInvariant ( List.x < #(List.*(next)) + List.x ) holds for: this
+FuzzedInvariant ( List.x < #(List.^(next)) + List.x ) holds for: this
+FuzzedInvariant ( no n : List.*(next) : n.x > n.next.x ) holds for: this
+FuzzedInvariant ( no n : List.*(next) : n.x > n.next.x ) holds for: this
+FuzzedInvariant ( some n : List.*(next) : n.x <= n.next.x ) holds for: this
+FuzzedInvariant ( some n : List.^(next) : n != n.next ) holds for: this
+===========================================================================
+DataStructures.List.insert(int):::EXIT
+FuzzedInvariant ( #(List.*(next)) != #(List.^(next)) ) holds for: this.next
+FuzzedInvariant ( #(List.*(next)) != #(List.^(next)) ) holds for: this.next
+FuzzedInvariant ( #(List.*(next)) > #(List.^(next)) - 0 ) holds for: this.next
+FuzzedInvariant ( #(List.*(next)) >= #(List.*(next)) ) holds for: this.next
+FuzzedInvariant ( (List.x != 1) or (List.x >= List.x) ) holds for: this.next
+FuzzedInvariant ( (List.x > #(List.^(next))) or (no n : List.^(next) : n not in n.*(next)) ) holds for: this.next
+FuzzedInvariant ( (all n : List.*(next) : n.x <= n.next.x) iff (#(List.*(next)) >= #(List.^(next))) ) holds for: this.next
+FuzzedInvariant ( (lone n : List.*(next) : n = n.next) or (lone n : List.^(next) : n not in n.^(next)) ) holds for: this.next
+FuzzedInvariant ( (lone n : List.^(next) : n not in n.*(next)) or (List.x != #(List.*(next)) + 1) ) holds for: this.next
+FuzzedInvariant ( (lone n : List.^(next) : n.x > n.next.x) iff (#(List.*(next)) != #(List.^(next))) ) holds for: this.next
+FuzzedInvariant ( (no n : List.^(next) : n in n.^(next)) or (lone n : List.*(next) : n.x <= n.next.x) ) holds for: this.next
+FuzzedInvariant ( (no n : List.^(next) : n not in n.*(next)) implies (some n : List.*(next) : n != null) ) holds for: this.next
+FuzzedInvariant ( (one n : List.*(next) : n.x != n.next.x) implies (#(List.^(next)) != 0) ) holds for: this.next
+FuzzedInvariant ( (some n : List.^(next) : n.x <= n.next.x) implies (all n : List.^(next) : n not in n.^(next)) ) holds for: this.next
+FuzzedInvariant ( all n : List.*(next) : n not in n.^(next) ) holds for: this.next
+FuzzedInvariant ( lone n : List.*(next) : n = n.next.next ) holds for: this.next
+FuzzedInvariant ( lone n : List.*(next) : n not in n.*(next) ) holds for: this.next
+FuzzedInvariant ( no n : List.*(next) : n = null ) holds for: this.next
+FuzzedInvariant ( no n : List.*(next) : n in n.^(next) ) holds for: this.next
+FuzzedInvariant ( no n : List.*(next) : n.x > n.next.x ) holds for: this.next
+FuzzedInvariant ( no n : List.*(next) : n.x > n.next.x ) holds for: this.next
+FuzzedInvariant ( no n : List.^(next) : n not in n.*(next) ) holds for: this.next
+FuzzedInvariant ( no n : List.^(next) : n.x > n.next.x ) holds for: this.next
+this.next != null
+this.x <= orig(this.x)
+this.x <= orig(this.next.x)
+this.x <= orig(this.next.next.x)
+this.x <= orig(data)
+this.next.x >= orig(this.x)
+this.next.x <= orig(this.next.x)
+this.next.x <= orig(this.next.next.x)
+this.next.next.x >= orig(this.x)
+this.next.next.x >= orig(this.next.x)
+this.next.next.x <= orig(this.next.next.x)
