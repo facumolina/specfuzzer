@@ -6,6 +6,7 @@ output_folder=experiments/datastructures/output/
 
 technique=$1
 invs_to_fuzz=100
+method='insert'
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
@@ -18,12 +19,7 @@ if [ $technique == "daikon" ]
 then
   output_file=list-insert-daikon.assertions
   echo '> Inferring with Daikon standalone'
-  java -cp build/classes/:lib/* daikon.Daikon daikon-outputs/ListTesterDriver.dtrace.gz
-  rm -f $output_file
-  echo ''
-  echo '> Writing output to file: '$output_folder$output_file
-  java -cp lib/daikon.jar daikon.PrintInvariants ListTesterDriver.inv.gz --ppt-select '.:::OBJECT' > $output_folder$output_file
-  java -cp lib/daikon.jar daikon.PrintInvariants ListTesterDriver.inv.gz --ppt-select '.insert.' >> $output_folder$output_file
+  ./experiments/datastructures/run-daikon.sh daikon-outputs/ListTesterDriver.dtrace.gz ListTesterDriver.inv.gz $method $output_folder$output_file
 fi
 
 # Daikon with SpecFuzzer
