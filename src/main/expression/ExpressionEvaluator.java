@@ -50,12 +50,12 @@ public class ExpressionEvaluator {
     if (!alloy_expr.contains(class_name+"."))
       throw new NonApplicableExpressionException(
               "The expression " + alloy_expr + " is not applicable to class: " + class_name);
-
     int idx = alloy_expr.indexOf(class_name);
-    if (!(idx==0 || alloy_expr.charAt(idx-1)==' ' || alloy_expr.charAt(idx-1)=='('))
-      throw new NonApplicableExpressionException(
-              "The expression " + alloy_expr + " is not applicable to class: " + class_name);
-
+    while (idx >= 0) {
+      if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
+        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
+      idx = alloy_expr.indexOf(class_name,idx+1);
+    }
   }
 
   /**
