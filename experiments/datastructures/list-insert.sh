@@ -35,6 +35,12 @@ then
   java -cp build/classes/:lib/* daikon.PrintInvariants ListTesterDriver.inv.gz --ppt-select '.:::OBJECT' > $output_folder$output_file
   java -cp build/classes/:lib/* daikon.PrintInvariants ListTesterDriver.inv.gz --ppt-select '.insert.' >> $output_folder$output_file
 fi
+if [ $technique = "specfuzzer" ]
+then
+  output_file=list-insert-specfuzzer.assertions
+  echo '> Inferring with Daikon + SpecFuzzer'
+  ./experiments/datastructures/run-specfuzzer.sh daikon-outputs/ListTesterDriver.dtrace.gz daikon-outputs/ListTesterDriver-objects.xml grammars/grammars/ListGrammar.json $invs_to_fuzz ListTesterDriver.inv.gz $class $method $output_folder$output_file
+fi
 
 # GAssert
 if [ $technique == "gassert" ] 
