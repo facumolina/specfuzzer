@@ -3504,18 +3504,6 @@ public class NodeCachingLinkedListTesterDriver {
             hadFailure = true;
             e.printStackTrace();
         }
-        try {
-            t1.test584();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
-        try {
-            t1.test585();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
         if (hadFailure) {
             System.exit(1);
         }
