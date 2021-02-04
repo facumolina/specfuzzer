@@ -2,7 +2,7 @@
 
 output_folder=experiments/datastructures/output/
 
-# This script allows to generate invariants for the List case study by using a given technique: daikon, specfuzzer or gassert
+# This script allows to generate invariants for the NodeCachingLinkedList.addLast case study by using a given technique: daikon, specfuzzer or gassert
 
 technique=$1
 invs_to_fuzz=500
