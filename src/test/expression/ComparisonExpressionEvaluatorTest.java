@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
+import DataStructures.korat.binarysearchtree.SearchTree;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -154,5 +155,23 @@ public class ComparisonExpressionEvaluatorTest {
     wrapper.add(1, 2);
     wrapper.add(2, 3);
     assertTrue(evaluateCmp("#(MapWrapper.map.values) = #(MapWrapper.map.keySet)", wrapper));
+  }
+
+  @Test
+  public void size_searchtree() {
+    SearchTree stree = new SearchTree();
+    assertFalse(evaluateCmp("SearchTree.size != 0", stree));
+    assertFalse(evaluateCmp("SearchTree.size > 0", stree));
+    assertTrue(evaluateCmp("SearchTree.size = #(SearchTree.root.*(left + right))",stree));
+  }
+
+  @Test
+  public void size_searchtree_twp() {
+    SearchTree stree = new SearchTree();
+    stree.insert(2);
+    stree.insert(5);
+    stree.insert(56);
+    assertTrue(evaluateCmp("SearchTree.size > 0", stree));
+    assertTrue(evaluateCmp("SearchTree.size = #(SearchTree.root.*(left + right))",stree));
   }
 }
