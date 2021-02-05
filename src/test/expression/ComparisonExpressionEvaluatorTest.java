@@ -3,12 +3,7 @@ package expression;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-
 import DataStructures.korat.binarysearchtree.SearchTree;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import DataStructures.AvlTreeList;
@@ -17,9 +12,6 @@ import DataStructures.MapWrapper;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import DataStructures.commonscollections.TreeList;
 import DataStructures.eiffel.Composite;
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
-import antlr.AlloyExprGrammarParser.ParseContext;
 
 /**
  * This class contains tests to ensure that the expression evaluator is working properly
