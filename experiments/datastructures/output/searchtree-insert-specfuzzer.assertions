@@ -1,0 +1,54 @@
+===========================================================================
+DataStructures.korat.binarysearchtree.SearchTree:::OBJECT
+FuzzedInvariant ( #(SearchTree.root.^(left + right)) >= #(SearchTree.root.^(right)) ) holds for: this
+FuzzedInvariant ( #(SearchTree.root.^(left + right)) >= 1 ) holds for: this
+FuzzedInvariant ( (#(SearchTree.root.*(left)) < 0) implies (all n : SearchTree.root.*(right) : n.info <= n.right.info) ) holds for: this
+FuzzedInvariant ( (#(SearchTree.root.*(left)) = #(SearchTree.root.^(left)) - 0) iff (#(SearchTree.root.*(left + right)) = #(SearchTree.root.^(right))) ) holds for: this
+FuzzedInvariant ( (#(SearchTree.root.^(left)) != 1) or (lone n : SearchTree.root.^(left) : n not in n.^(right)) ) holds for: this
+FuzzedInvariant ( (#(SearchTree.root.^(right)) = 1) or (SearchTree.size <= SearchTree.size + 1) ) holds for: this
+FuzzedInvariant ( (SearchTree.size != #(SearchTree.root.*(left + right))) implies (lone n : SearchTree.root.*(right) : n not in n.*(right)) ) holds for: this
+FuzzedInvariant ( (SearchTree.size <= #(SearchTree.root.*(right))) implies (no n : SearchTree.root.^(right) : n in n.^(left + right)) ) holds for: this
+FuzzedInvariant ( (SearchTree.size = #(SearchTree.root.^(left + right))) or (#(SearchTree.root.*(left + right)) > 0) ) holds for: this
+FuzzedInvariant ( (SearchTree.size = SearchTree.size) or (all n : SearchTree.root.^(right) : n in n.^(left)) ) holds for: this
+FuzzedInvariant ( (all n : SearchTree.root.*(right) : n not in n.^(left)) or (#(SearchTree.root.^(right)) < 1) ) holds for: this
+FuzzedInvariant ( (lone n : SearchTree.root.*(left + right) : n not in n.^(left)) implies (some n : SearchTree.root.^(left + right) : n.info < n.left.info) ) holds for: this
+FuzzedInvariant ( (lone n : SearchTree.root.*(left + right) : n.info > n.right.info) or (#(SearchTree.root.^(right)) <= 1) ) holds for: this
+FuzzedInvariant ( (lone n : SearchTree.root.*(left) : n = null) or (#(SearchTree.root.^(left)) <= 0) ) holds for: this
+FuzzedInvariant ( (lone n : SearchTree.root.^(left + right) : n = null) or (lone n : SearchTree.root.^(left + right) : n != n.left) ) holds for: this
+FuzzedInvariant ( (lone n : SearchTree.root.^(left + right) : n not in n.*(left)) or (lone n : SearchTree.root.*(left) : n in n.^(right)) ) holds for: this
+FuzzedInvariant ( (lone n : SearchTree.root.^(right) : n != n.left.right) or (lone n : SearchTree.root.^(left) : n = n.right.left) ) holds for: this
+FuzzedInvariant ( (no n : SearchTree.root.^(left + right) : n.info = n.left.info) iff (no n : SearchTree.root.^(left + right) : n = null) ) holds for: this
+FuzzedInvariant ( (no n : SearchTree.root.^(left) : n in n.^(right)) or (#(SearchTree.root.^(left)) = 1) ) holds for: this
+FuzzedInvariant ( (some n : SearchTree.root.*(right) : n not in n.*(left)) implies (#(SearchTree.root.*(left + right)) != 1) ) holds for: this
+FuzzedInvariant ( (some n : SearchTree.root.*(right) : n not in n.^(right)) or (SearchTree.root.info < SearchTree.size) ) holds for: this
+FuzzedInvariant ( SearchTree.root.info != SearchTree.size ) holds for: this
+FuzzedInvariant ( SearchTree.size <= SearchTree.size ) holds for: this
+FuzzedInvariant ( SearchTree.size >= #(SearchTree.root.*(left + right)) ) holds for: this
+FuzzedInvariant ( all n : SearchTree.root.*(left) : n.info <= n.right.info ) holds for: this
+FuzzedInvariant ( all n : SearchTree.root.*(right) : n != n.right.right ) holds for: this
+FuzzedInvariant ( all n : SearchTree.root.^(left + right) : n in n.*(left) ) holds for: this
+FuzzedInvariant ( all n : SearchTree.root.^(left) : n not in n.^(left) ) holds for: this
+FuzzedInvariant ( all n : SearchTree.root.^(left) : n not in n.^(right) ) holds for: this
+FuzzedInvariant ( no n : SearchTree.root.^(left + right) : n = n.right ) holds for: this
+FuzzedInvariant ( some n : SearchTree.root.*(right) : n != n.right ) holds for: this
+this.size >= 0
+this.root.left.info < this.root.right.info
+this.root.left.info < this.root.info
+this.root.right.info >= this.root.info
+===========================================================================
+DataStructures.korat.binarysearchtree.SearchTree.insert(int):::ENTER
+this.root.left.info != 0
+===========================================================================
+DataStructures.korat.binarysearchtree.SearchTree.insert(int):::EXIT
+this.root.left.info == orig(this.root.left.info)
+this.root.right.info == orig(this.root.right.info)
+this.root.info == orig(this.root.info)
+this.root != null
+this.size >= 1
+this.root.left.info < orig(this.root.right.info)
+this.root.left.info < orig(this.root.info)
+this.root.right.info > orig(this.root.left.info)
+this.root.right.info >= orig(this.root.info)
+this.root.info > orig(this.root.left.info)
+this.root.info <= orig(this.root.right.info)
+this.size - orig(this.size) - 1 == 0

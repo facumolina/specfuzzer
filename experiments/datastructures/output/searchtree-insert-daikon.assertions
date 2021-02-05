@@ -1,0 +1,23 @@
+===========================================================================
+DataStructures.korat.binarysearchtree.SearchTree:::OBJECT
+this.size >= 0
+this.root.left.info < this.root.right.info
+this.root.left.info < this.root.info
+this.root.right.info >= this.root.info
+===========================================================================
+DataStructures.korat.binarysearchtree.SearchTree.insert(int):::ENTER
+this.root.left.info != 0
+===========================================================================
+DataStructures.korat.binarysearchtree.SearchTree.insert(int):::EXIT
+this.root.left.info == orig(this.root.left.info)
+this.root.right.info == orig(this.root.right.info)
+this.root.info == orig(this.root.info)
+this.root != null
+this.size >= 1
+this.root.left.info < orig(this.root.right.info)
+this.root.left.info < orig(this.root.info)
+this.root.right.info > orig(this.root.left.info)
+this.root.right.info >= orig(this.root.info)
+this.root.info > orig(this.root.left.info)
+this.root.info <= orig(this.root.right.info)
+this.size - orig(this.size) - 1 == 0
