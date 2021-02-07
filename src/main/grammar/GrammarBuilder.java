@@ -23,8 +23,9 @@ public class GrammarBuilder {
   // Quantification
   public static final String QT_EXPR = "<Quantified_Expr>";
   public static final String QUANTIFIER = "<Quantifier>";
-  public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no", "one", "lone");
-
+  public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no");
+  //public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no", "one", "lone");
+  
   // Reference comparisons
   public static final String REF_OP = "<Reference_Op>";
   public static final List<String> REF_OP_VALUE = Arrays.asList("=", "!=");
