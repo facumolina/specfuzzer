@@ -1,5 +1,6 @@
 package invariant;
 
+import expression.NonEvaluableExpressionException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -14,6 +15,8 @@ import expression.NonApplicableExpressionException;
 import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
+
+import java.util.List;
 
 /**
  * Represents a candidate invariant which is obtained by fuzzing a grammar
@@ -101,16 +104,19 @@ public class FuzzedInvariant extends PointerInvariant {
   public InvariantStatus check_modified(long v, int count) {
     // Recover the object
     int i = (int) v;
-    Object o = ObjectsLoader.get_object(i);
-    if (o == null) {
+    String key = i+"-"+ppt.parent.name;
+    List<Object> l = ObjectsLoader.get_object(key);
+    if (l == null)
       return InvariantStatus.FALSIFIED;
-    }
+
     try {
-      boolean b = ExpressionEvaluator.eval(fuzzed_spec, o);
-      if (!b) {
-        return InvariantStatus.FALSIFIED;
+      for (Object o : l) {
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o);
+        if (!b) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
-    } catch (NonApplicableExpressionException ex) {
+    } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified
       return InvariantStatus.FALSIFIED;
     }

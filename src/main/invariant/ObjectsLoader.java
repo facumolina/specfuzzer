@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -23,17 +24,17 @@ import daikon.tools.InvariantChecker;
 public final class ObjectsLoader {
 
   /** The HashMap mapping hashcodes to objects */
-  private static Map<Integer, Object> objects;
+  private static Map<String, List<Object>> objects;
 
   /** The file from which the hashmap must be loaded */
   private static final String serialiazed_file_dir = System.getProperty("user.dir") + "/";
 
-  public static Object get_object(int hashcode) {
+  public static List<Object> get_object(String key) {
     if (objects == null) {
       load_objects();
       System.out.println("Total loaded objects: " + objects.size());
     }
-    return objects.get(hashcode);
+    return objects.get(key);
   }
 
   private static void load_objects() {
@@ -44,8 +45,7 @@ public final class ObjectsLoader {
 
     for (int i = 0; i < final_serialized_files.length; i++) {
       try {
-        ObjectInputStream ois = xstream
-            .createObjectInputStream(new FileInputStream(final_serialized_files[i]));
+        ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(final_serialized_files[i]));
         try {
           while (true) {
             map_obj = ois.readObject();
@@ -58,9 +58,9 @@ public final class ObjectsLoader {
         throw new RuntimeException("Cannot deserialize file: " + final_serialized_files[i]);
       }
       if (objects == null)
-        objects = (Map<Integer, Object>) map_obj;
+        objects = (Map<String, List<Object>>) map_obj;
       else
-        objects.putAll((Map<Integer, Object>) map_obj);
+        objects.putAll((Map<String, List<Object>>) map_obj);
       System.out.println("Loaded objects from file: " + final_serialized_files[i]);
     }
   }
