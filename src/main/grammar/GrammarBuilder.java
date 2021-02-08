@@ -25,7 +25,7 @@ public class GrammarBuilder {
   public static final String QUANTIFIER = "<Quantifier>";
   public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no");
   //public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no", "one", "lone");
-  
+
   // Reference comparisons
   public static final String REF_OP = "<Reference_Op>";
   public static final List<String> REF_OP_VALUE = Arrays.asList("=", "!=");
@@ -39,11 +39,12 @@ public class GrammarBuilder {
   public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "implies", "iff");
 
   // Logic expressions
+  public static final String BOOLEAN_FIELD = "<Boolean_Field>";
   public static final String LOGIC_FROM_FIELD = "<Logic_From_Field>";
   public static final String LOGIC_EXPR = "<Logic_Expr>";
   public static final String LOGIC_CMP_EXPR = "<Logic_Cmp_Expr>";
   public static List<String> LOGIC_CMP_EXPR_VALUE = Arrays
-          .asList("("+ LOGIC_EXPR + ") " + LOGIC_OP + " (" + LOGIC_EXPR + ")");
+          .asList("("+ LOGIC_FROM_FIELD + ") " + LOGIC_OP + " (" + LOGIC_EXPR + ")");
 
   // Numeric comparison operators
   public static final String NUMERIC_CMP_OP = "<Num_Cmp_Op>";
@@ -101,9 +102,11 @@ public class GrammarBuilder {
     grammar.put(LOGIC_EXPR,new LinkedList<String>());
     grammar.get(LOGIC_EXPR).add(QT_EXPR);
     grammar.get(LOGIC_EXPR).add(NUMERIC_CMP_EXPR);
-    grammar.get(LOGIC_EXPR).add(LOGIC_FROM_FIELD);
+    //grammar.get(LOGIC_EXPR).add(LOGIC_FROM_FIELD);
     grammar.put(LOGIC_CMP_EXPR,LOGIC_CMP_EXPR_VALUE);
     grammar.put(LOGIC_FROM_FIELD,new LinkedList<String>());
+    grammar.get(LOGIC_FROM_FIELD).add(BOOLEAN_FIELD);
+    grammar.put(BOOLEAN_FIELD, new LinkedList<String>());
 
     // Numeric
     grammar.put(NUMERIC_CMP_EXPR, NUMERIC_CMP_EXPR_VALUE);
@@ -187,6 +190,8 @@ public class GrammarBuilder {
   public static String get_symbol_for_type(String type_name) {
     String formatted_type = TypesUtil.format_type(type_name);
     if (TypesUtil.INTEGER.equals(formatted_type))
+      formatted_type += "_Field";
+    if (TypesUtil.BOOLEAN.equals(formatted_type))
       formatted_type += "_Field";
     return "<" + formatted_type + ">";
   }
@@ -350,15 +355,25 @@ public class GrammarBuilder {
       grammar.get(INTEGER_FROM_FIELD).removeIf(x -> x.contains(INTEGER_FIELD));
       grammar.get(INTEGER).removeIf(x -> x.contains(INTEGER_FIELD));
     }
+
     if (grammar.get(INTEGER_SET_SIZE).isEmpty()) {
       // There are not sets for computing size
       grammar.remove(INTEGER_SET_SIZE);
       grammar.get(INTEGER_FROM_FIELD).removeIf(x -> x.contains(INTEGER_SET_SIZE));
     }
+
+    if (grammar.get(BOOLEAN_FIELD).isEmpty()) {
+      grammar.remove(BOOLEAN_FIELD);
+      grammar.get(LOGIC_FROM_FIELD).removeIf(x -> x .contains(BOOLEAN_FIELD));
+    }
+
     if (grammar.get(LOGIC_FROM_FIELD).isEmpty()) {
       // There are no boolean fields
       grammar.remove(LOGIC_FROM_FIELD);
-      grammar.get(LOGIC_EXPR).removeIf(x -> x.contains(LOGIC_FROM_FIELD));
+      grammar.remove(LOGIC_CMP_EXPR);
+      grammar.remove(LOGIC_EXPR);
+      grammar.get(START_SYMBOL).removeIf(x -> x.contains(LOGIC_CMP_EXPR));
     }
+
   }
 }
