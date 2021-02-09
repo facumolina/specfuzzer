@@ -127,17 +127,28 @@ public class GrammarExtractor {
       Class<?> cut, String curr_expr, String label)
       throws NoSuchFieldException, SecurityException, ClassNotFoundException {
     Field f = cut.getDeclaredField(label);
-    ParameterizedType pt = (ParameterizedType) f.getGenericType();
-    Class<?> collection_class = null;
-    for (Type t : pt.getActualTypeArguments()) {
-      String collection_class_name = t.getTypeName();
-      try {
-        collection_class = Class.forName(t.getTypeName());
-        collection_class_name = collection_class.getSimpleName();
-      } catch (ClassNotFoundException e) {
+    Type type = f.getGenericType();
+    if (type instanceof ParameterizedType) {
+      ParameterizedType pt = (ParameterizedType) type;
+      Class<?> collection_class = null;
+      for (Type t : pt.getActualTypeArguments()) {
+        String collection_class_name = t.getTypeName();
+        try {
+          collection_class = Class.forName(t.getTypeName());
+          collection_class_name = collection_class.getSimpleName();
+        } catch (ClassNotFoundException e) {
+        }
+        GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
+                curr_expr + "." + label);
       }
-      GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
-          curr_expr + "." + label);
+    } else {
+      // Use object as the collection class, since it hasn't been specified
+      //String collection_class_name = Object.class.getSimpleName();
+      //GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
+      //        curr_expr + "." + label);
+      System.out.println("Can't add special quantification symbol for field type: "+type.getTypeName());
+      System.out.println("Label: "+label);
+      System.out.println("Current expr: "+curr_expr);
     }
   }
 
@@ -149,29 +160,36 @@ public class GrammarExtractor {
       Class<?> cut, String curr_expr, String label)
       throws NoSuchFieldException, SecurityException, ClassNotFoundException {
     Field f = cut.getDeclaredField(label);
-    ParameterizedType pt = (ParameterizedType) f.getGenericType();
+    Type type = f.getGenericType();
+    if (type instanceof ParameterizedType) {
+      ParameterizedType pt = (ParameterizedType) type;
 
-    Type[] types = pt.getActualTypeArguments();
-    assert (types.length == 2);
-    String collection_type_one = "";
-    String collection_type_two = "";
-    try {
-      // First type is the one related to the data and the second type is the one related to the
-      // value
-      collection_type_one = types[0].getTypeName();
-      collection_type_two = types[1].getTypeName();
+      Type[] types = pt.getActualTypeArguments();
+      assert (types.length == 2);
+      String collection_type_one = "";
+      String collection_type_two = "";
+      try {
+        // First type is the one related to the data and the second type is the one related to the
+        // value
+        collection_type_one = types[0].getTypeName();
+        collection_type_two = types[1].getTypeName();
 
-      Class<?> collection_class = Class.forName(collection_type_one);
-      collection_type_one = collection_class.getSimpleName();
+        Class<?> collection_class = Class.forName(collection_type_one);
+        collection_type_one = collection_class.getSimpleName();
 
-      collection_class = Class.forName(collection_type_two);
-      collection_type_two = collection_class.getSimpleName();
-    } catch (ClassNotFoundException e) {
+        collection_class = Class.forName(collection_type_two);
+        collection_type_two = collection_class.getSimpleName();
+      } catch (ClassNotFoundException e) {
+      }
+      GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_one,
+              curr_expr + "." + label + "." + Constants.MAP_KEY_SET);
+      GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_two,
+              curr_expr + "." + label + "." + Constants.MAP_VALUES);
+    } else {
+      System.out.println("Can't add special quantification symbol from map for field type: "+type.getTypeName());
+      System.out.println("Label: "+label);
+      System.out.println("Current expr: "+curr_expr);
     }
-    GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_one,
-        curr_expr + "." + label + "." + Constants.MAP_KEY_SET);
-    GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_two,
-        curr_expr + "." + label + "." + Constants.MAP_VALUES);
   }
 
   /**
