@@ -11,7 +11,7 @@ public class Node implements Serializable {
   /**
    *
    */
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 20210205L;
 
   protected  Node left; // left child
 
@@ -23,9 +23,7 @@ public class Node implements Serializable {
     this.info = info;
   }
 
-  public Node() {
-
-  }
+  public Node() { }
 
   public String toString() {
     Set visited = new HashSet();

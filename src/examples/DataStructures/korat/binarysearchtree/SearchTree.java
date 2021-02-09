@@ -16,7 +16,7 @@ public class SearchTree implements Serializable {
   /**
    *
    */
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 20210205L;
 
   private Node root; // root node
 
@@ -58,6 +58,7 @@ public class SearchTree implements Serializable {
 
     size++;
   }
+
   /*
    * -----------------------------------------
    */
@@ -127,7 +128,7 @@ public class SearchTree implements Serializable {
     buf.append("{");
     if (root != null)
       buf.append(root.toString());
-    buf.append("}");
+    buf.append("}"+size);
     return buf.toString();
   }
 
