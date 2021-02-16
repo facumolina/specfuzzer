@@ -28,15 +28,7 @@ mkdir -p $results_dir
 echo '> SpecFuzzer'
 echo '> Target: '$sf110_project'/'$fqname$'.'$method_name
 
-echo ''
-echo '> tests exercising current method: '$tests_dir
-echo '> compiling tests ..'
-find $tests_dir -name "Regression*.java" > $tests_dir/sources.txt
-mkdir -p $tests_dir/build/classes
-cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$EVOSPEX/lib/hamcrest-core-1.3.jar:$EVOSPEX/lib/junit-4.12.jar
-javac -cp $cp_for_tests_compilation -g @$tests_dir/sources.txt -d $tests_dir/build/classes
 
-echo ''
 echo '> Results saved in '$results_dir
 
 echo '> Done!'
