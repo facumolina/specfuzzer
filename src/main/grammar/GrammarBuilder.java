@@ -375,5 +375,14 @@ public class GrammarBuilder {
       grammar.get(START_SYMBOL).removeIf(x -> x.contains(LOGIC_CMP_EXPR));
     }
 
+    if (grammar.get(QT_EXPR).isEmpty()) {
+      // There are no expressions to quantify
+      grammar.remove(QT_EXPR);
+      grammar.remove(QUANTIFIER);
+      grammar.get(START_SYMBOL).remove(QT_EXPR);
+      if (!grammar.get(LOGIC_EXPR).isEmpty())
+        grammar.get(LOGIC_EXPR).remove(QT_EXPR);
+    }
+
   }
 }
