@@ -38,10 +38,16 @@ mkdir -p $results_dir
 cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
 output_dir=$results_dir/$class_name/$method_name
 echo '> Dynamic Comparability Analysis'
-java -cp $cp_for_daikon daikon.DynComp $class_package.RegressionTestDriver --output-dir=$results_dir --decl-file=$class_name-$method_name.decls
+timeout 1m java -cp $cp_for_daikon daikon.DynComp $class_package.RegressionTestDriver --output-dir=$results_dir --decl-file=$class_name-$method_name.decls
+
+if [ -f "$results_dir/$class_name-$method_name.decls" ]; then
+    echo "$class_name-$method_name.decls exists."
+else 
+    echo "$class_name-$method_name.decls does not exist."
+fi
 
 echo '> Running Chicory for dtrace generation from driver: '$class_package'.RegressionTestDriver'
-java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir --comparability-file=$results_dir/$class_name-$method_name.decls --ppt-select-pattern=".*$method_name.*" $class_package.RegressionTestDriver $results_dir/$class_name-$method_name-objects.xml
+java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir --comparability-file=$results_dir/$class_name-$method_name.decls --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name.dtrace.gz $class_package.RegressionTestDriver $results_dir/$class_name-$method_name-objects.xml
 echo 'Objects saved in file: '$results_dir'/'$class_name'-'$method_name'-objects.xml'
 
 echo '> Done!'
