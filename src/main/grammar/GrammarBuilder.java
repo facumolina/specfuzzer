@@ -296,7 +296,9 @@ public class GrammarBuilder {
   }
 
   /**
-   * Add quantification symbols to the given grammar
+   * Add special quantification symbols to the given grammar
+   * These are called specials because they are symbols related to a quantification originated
+   * from label that leads to a Collection.
    */
   public static void add_special_quantification_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr) {
@@ -311,6 +313,10 @@ public class GrammarBuilder {
     } else {
       String current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name);
       extend_grammar(grammar, current_obj_body_symbol, current_obj_cmp_symbol);
+      String current_qt_obj_symbol = get_qt_obj_symbol(type_name);
+      String qt_object_cmp_option = QT_VAR_NAME + " " + REF_OP + " " + current_qt_obj_symbol;
+      extend_grammar(grammar, current_obj_cmp_symbol, qt_object_cmp_option);
+      extend_grammar(grammar, current_qt_obj_symbol, NULL);
     }
   }
 
