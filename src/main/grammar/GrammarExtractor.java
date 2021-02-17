@@ -20,8 +20,8 @@ import org.json.simple.JSONObject;
 public class GrammarExtractor {
 
   // Type graph of the CUT
-  private static Graph<Class<?>, LabeledEdge> type_graph;
-  private static int bound = 3;
+  protected static Graph<Class<?>, LabeledEdge> type_graph;
+  protected static int bound = 3;
   private static String GRAMMARS_DIR = System.getProperty("user.dir") + "/grammars/";
 
   public static void main(String[] args)
@@ -57,7 +57,7 @@ public class GrammarExtractor {
   /**
    * Build the type graph from the given starting type
    */
-  private static void build_type_graph(Class<?> cut, Set<String> visited) {
+  protected static void build_type_graph(Class<?> cut, Set<String> visited) {
     if (visited.add(cut.getName())) {
       if (!cut.getName().contains("java.util")) {
         // Only visit the fields of non java util classes
@@ -208,7 +208,7 @@ public class GrammarExtractor {
    * @throws NoSuchFieldException
    * @throws ClassNotFoundException
    */
-  private static void traverse_graph(Class<?> cut, String curr_expr,
+  protected static void traverse_graph(Class<?> cut, String curr_expr,
       Map<String, List<String>> grammar, int k)
       throws NoSuchFieldException, SecurityException, ClassNotFoundException {
     if (k > 0) {

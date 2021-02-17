@@ -380,7 +380,7 @@ public class GrammarBuilder {
       grammar.remove(QT_EXPR);
       grammar.remove(QUANTIFIER);
       grammar.get(START_SYMBOL).remove(QT_EXPR);
-      if (!grammar.get(LOGIC_EXPR).isEmpty())
+      if (grammar.get(LOGIC_EXPR) != null && !grammar.get(LOGIC_EXPR).isEmpty())
         grammar.get(LOGIC_EXPR).remove(QT_EXPR);
     }
 
