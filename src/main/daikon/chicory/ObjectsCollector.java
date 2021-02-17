@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
 import daikon.Chicory;
@@ -30,6 +30,8 @@ public class ObjectsCollector {
 
   public static String curr_ppt_name;
 
+  private static XStream xstream = new XStream();
+
   /**
    * Map the given hashcode with the given object
    */
@@ -40,8 +42,9 @@ public class ObjectsCollector {
       if (!objects.containsKey(key)) {
         objects.put(key, new LinkedList<Object>());
       }
-      Gson gson = new Gson();
-      objects.get(key).add(gson.fromJson(gson.toJson(object), object.getClass()));
+      //Gson gson = new Gson();
+      //objects.get(key).add(gson.fromJson(gson.toJson(object), object.getClass()));
+      objects.get(key).add(xstream.fromXML(xstream.toXML(object)));
     }
   }
 
@@ -52,7 +55,6 @@ public class ObjectsCollector {
     determine_file_name();
     System.out.println("Saving Objects - Total: " + objects.size());
     ObjectOutputStream oos = null;
-    XStream xstream = new XStream();
     String serialized_to_file = serialized_file_dir + serialized_file_name;
     try {
       // Open the stream
