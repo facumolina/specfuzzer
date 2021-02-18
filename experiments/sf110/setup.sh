@@ -23,7 +23,7 @@ tests_dir=$method_dir/2/tests
 results_dir=experiments/sf110/$sf110_project
 
 echo '> Extracting Grammar for class '$sf110_project'/'$fqname
-java -cp dest/jar/FuzzSpecs.jar:lib/*:$SF110SRC/$sf110_project/build/classes/ grammar.GrammarExtractor $fqname > /dev/null 2>&1
+java -cp dest/jar/FuzzSpecs.jar:lib/*:$SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/* grammar.GrammarExtractor $fqname
 
 echo ''
 echo '> Tests exercising current method: '$tests_dir
