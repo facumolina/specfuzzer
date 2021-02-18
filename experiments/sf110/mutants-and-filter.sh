@@ -17,9 +17,11 @@ project_dir=$EVOSPEX/src/test/resources/sf110/$sf110_project
 project_sources=$SF110SRC/$sf110_project
 class_dir=$project_dir/$class_name
 fqname=$(cat $project_dir/target-classes.txt | grep "\.$class_name")
+class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
 method_dir=$class_dir/$method_name
 tests_dir=$method_dir/2/tests
 results_dir=experiments/sf110/$sf110_project
+decls_file=$results_dir/$class_name-$method_name.decls
 objects_file=$results_dir/$class_name-$method_name-objects.xml
 dtrace_file=$results_dir/$class_name-$method_name.dtrace.gz
 
@@ -39,24 +41,25 @@ echo ''
 
 echo '> Processing mutants'
 reduced_file=${target_file#"$source_dir"}
+cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$EVOSPEX/lib/hamcrest-core-1.3.jar:$EVOSPEX/lib/junit-4.12.jar
+cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
 for dir in mutants/*/
 do
   echo '> Processing mutant: '$dir$reduced_file
   echo '> Compiling mutant'
+  javac -cp $SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/ -g $dir$reduced_file -d $build_dir
   echo '> Mutant compiled'
   echo '> Generating traces with Chicory from mutant'
+  dir2=${dir%*/}
+  number=${dir2##*/}
+  java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir/mutants --comparability-file=$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name-m$number.dtrace.gz $class_package.RegressionTestDriver $results_dir/mutants/$class_name-$method_name-m$number-objects.xml
 done
 echo 'All traces generated!'
 echo ''
 
 echo '> Filtering'
 echo ''
- 
-# Build classpath
-cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$EVOSPEX/lib/hamcrest-core-1.3.jar:$EVOSPEX/lib/junit-4.12.jar
-#javac -cp $cp_for_tests_compilation -g @$tests_dir/sources.txt -d $tests_dir/build/classes
 
-#cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
 
 echo '> Results saved in '$results_dir
 
