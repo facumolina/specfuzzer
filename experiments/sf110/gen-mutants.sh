@@ -54,13 +54,6 @@ do
   number=${dir2##*/}
   java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir/mutants --comparability-file=$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name-m$number.dtrace.gz $class_package.RegressionTestDriver $results_dir/mutants/$class_name-$method_name-m$number-objects.xml
 done
-echo 'All traces generated!'
-echo ''
-
-echo '> Filtering'
-echo ''
-
-
+echo '> All mutated traces generated!'
 echo '> Results saved in '$results_dir
-
 echo '> Done!'
