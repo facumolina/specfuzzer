@@ -17,10 +17,10 @@ for index, row in df.iterrows():
     if final_df[final_df['invariant']==row['invariant']].empty:
         min_it = df[df['invariant']==row['invariant']]['iteration'].min()
         total_it = len(df[df['invariant']==row['invariant']]['iteration'].unique())
-        fails = df[(df['invariant']==row['invariant']) & (df['iteration']==min_it)]['fails'].sum()
+        fails = len(df[(df['invariant']==row['invariant']) & (df['iteration']==min_it)])
         row_to_add = {
                         "invariant":[row['invariant']],
-                        "fails":[fails],
+			"fails":[fails],
                         "fst_it":[min_it],
                         "total_its":[total_it]
                      }
