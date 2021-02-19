@@ -22,8 +22,15 @@ method_dir=$class_dir/$method_name
 tests_dir=$method_dir/2/tests
 results_dir=experiments/sf110/$sf110_project
 
+echo '> Compiling project'
+cur_dir=$(pwd)
+cd $project_sources
+ant clean compile
+cd $cur_dir
+
 echo '> Extracting Grammar for class '$sf110_project'/'$fqname
 java -cp dest/jar/FuzzSpecs.jar:lib/*:$SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/* grammar.GrammarExtractor $fqname
+
 
 echo ''
 echo '> Tests exercising current method: '$tests_dir
@@ -49,5 +56,8 @@ fi
 echo '> Running Chicory for dtrace generation from driver: '$class_package'.RegressionTestDriver'
 java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir --comparability-file=$results_dir/$class_name-$method_name.decls --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name.dtrace.gz $class_package.RegressionTestDriver $results_dir/$class_name-$method_name-objects.xml
 echo 'Objects saved in file: '$results_dir'/'$class_name'-'$method_name'-objects.xml'
+echo ''
+
+./experiments/sf110/gen-mutants.sh $sf110_project $class_name $method_name
 
 echo '> Done!'
