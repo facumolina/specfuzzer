@@ -46,13 +46,20 @@ cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/cl
 for dir in mutants/*/
 do
   echo '> Processing mutant: '$dir$reduced_file
-  echo '> Compiling mutant'
-  javac -cp $SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/ -g $dir$reduced_file -d $build_dir
-  echo '> Mutant compiled'
-  echo '> Generating traces with Chicory from mutant'
   dir2=${dir%*/}
   number=${dir2##*/}
-  java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir/mutants --comparability-file=$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name-m$number.dtrace.gz $class_package.RegressionTestDriver $results_dir/mutants/$class_name-$method_name-m$number-objects.xml
+  mutant_line=$(sed $number"q;d" mutants.log)
+  echo 'Mutant line: '$mutant_line
+  if [[ "$mutant_line" == *"$method_name"* || "$mutant_line" == *"$class_name:"* ]]; then  
+    echo '> Compiling mutant'
+    javac -cp $cp_for_tests_compilation -g $dir$reduced_file -d $build_dir
+    #javac -cp $SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/* -g $dir$reduced_file -d $build_dir
+    echo '> Mutant compiled'
+    echo '> Generating traces with Chicory from mutant'
+    java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir/mutants --comparability-file=$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name-m$number.dtrace.gz $class_package.RegressionTestDriver $results_dir/mutants/$class_name-$method_name-m$number-objects.xml
+  else
+    echo '> Mutant not processed since it does not include current method or is not over an attribute'
+  fi
 done
 echo '> All mutated traces generated!'
 echo '> Results saved in '$results_dir
