@@ -1,5 +1,6 @@
 package invariant;
 
+import daikon.tools.InvariantChecker;
 import expression.NonEvaluableExpressionException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
@@ -107,7 +108,7 @@ public class FuzzedInvariant extends PointerInvariant {
     String key = i+"-"+ppt.parent.name;
     List<Object> l = ObjectsLoader.get_object(key);
     if (l == null)
-      return InvariantStatus.FALSIFIED;
+      return InvariantStatus.NO_CHANGE;
 
     try {
       for (Object o : l) {
@@ -144,4 +145,12 @@ public class FuzzedInvariant extends PointerInvariant {
     assert (fuzzed_inv.fuzzed_spec != null);
     return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec);
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof FuzzedInvariant))
+      return false;
+    return isSameFormula((FuzzedInvariant)other);
+  }
+
 }
