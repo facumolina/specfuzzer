@@ -1,6 +1,5 @@
 package invariant;
 
-import daikon.tools.InvariantChecker;
 import expression.NonEvaluableExpressionException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
