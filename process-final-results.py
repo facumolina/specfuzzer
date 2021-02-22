@@ -4,12 +4,18 @@ import sys
 
 # Load file and arguments
 df = pd.read_csv(sys.argv[1])
+
+# Calculate a print some useful information
 print("")
 total_invs = len(df['invariant'].value_counts())
 unique_ppt = df.ppt.unique()
+unique_mut = df.mutant.unique()
 print("Number of invariants killing mutants: ", total_invs)
+print()
 print("Unique program points: "+str(len(unique_ppt)))
-print(unique_ppt)
+print(list(unique_ppt))
+print()
+print("Unique mutants: "+str(len(unique_mut)))
 print()
 
 column_names = ["invariant", "fails", "fst_it", "total_its"]
