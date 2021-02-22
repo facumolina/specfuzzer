@@ -51,7 +51,9 @@ public class SetExpressionEvaluator {
     Object set_field_res = NameExpressionEvaluator.eval(set_expr, o);
     assert (set_field_res instanceof Collection);
     Collection<?> col = (Collection<?>) set_field_res;
-    return new HashSet<Object>(col);
+    if (col==null)
+      return new HashSet<>();
+    return new HashSet<>(col);
   }
 
   /**

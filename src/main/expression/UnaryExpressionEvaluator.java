@@ -29,7 +29,7 @@ public class UnaryExpressionEvaluator {
     case CARDINALITY:
       assert (o instanceof Collection);
       Collection<Object> set = (Collection<Object>) o;
-      return set.size();
+      return set==null ? 0 : set.size();
     }
     throw new IllegalArgumentException(
         "Operator " + op + " is not supported for unary expressions");

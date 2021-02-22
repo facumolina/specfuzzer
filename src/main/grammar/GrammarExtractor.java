@@ -59,8 +59,9 @@ public class GrammarExtractor {
    */
   protected static void build_type_graph(Class<?> cut, Set<String> visited) {
     if (visited.add(cut.getName())) {
-      if (!cut.getName().contains("java.util")) {
+      if (!cut.getName().contains("java.util") && !java.lang.Error.class.isAssignableFrom(cut)) {
         // Only visit the fields of non java util classes
+        // and that are not instances of java.lang.Error
         type_graph.addVertex(cut);
         // Get the fields of the given type
         Set<Class<?>> to_visit = new HashSet<Class<?>>();
