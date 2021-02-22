@@ -1,5 +1,7 @@
 package fuzzer;
 
+import DataStructures.CollectionAttribute;
+import DataStructures.eiffel.Composite;
 import org.junit.Test;
 
 import DataStructures.AvlTreeList;
@@ -20,7 +22,7 @@ public class BasicFuzzerTest {
 
   @Test
   public void fuzz_list_invs() {
-    // Prepare list
+    // Prepare List
     List l = new List();
     l.insert(2);
     l.insert(3);
@@ -36,7 +38,7 @@ public class BasicFuzzerTest {
 
   @Test
   public void fuzz_avltreelist_invs() {
-    // Prepare list
+    // Prepare AvlTreeList
     AvlTreeList<Integer> avl = new AvlTreeList<Integer>();
     avl.add(5);
     avl.add(4);
@@ -53,7 +55,7 @@ public class BasicFuzzerTest {
 
   @Test
   public void fuzz_map_wrapper_invs() {
-    // Prepare list
+    // Prepare MapWrapper
     MapWrapper wrapper = new MapWrapper();
     wrapper.add(1, 32);
     wrapper.add(2, 33);
@@ -68,4 +70,35 @@ public class BasicFuzzerTest {
       ExpressionEvaluator.eval(fuzzed_spec, wrapper);
     }
   }
+
+  @Test
+  public void fuzz_composite_invs() {
+    // Prepare Composite
+    Composite composite = new Composite(4);
+    Composite c1 = new Composite(1);
+    Composite c2 = new Composite(2);
+    composite.add_child(c1);
+    composite.add_child(c2);
+    String grammar_file = System.getProperty("user.dir") + "/grammars/CompositeGrammar.json";
+    BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
+    for (int i = 0; i < invs_to_fuzz; i++) {
+      String fuzzed_spec = fuzzer.fuzz();
+      System.out.println("Evaluating spec: " + fuzzed_spec);
+      ExpressionEvaluator.eval(fuzzed_spec, composite);
+    }
+  }
+
+  @Test
+  public void fuzz_collectionattributes_invs() {
+    // Prepare CollectionAttribute
+    CollectionAttribute collectionAttribute = new CollectionAttribute();
+    String grammar_file = System.getProperty("user.dir") + "/grammars/CollectionAttributeGrammar.json";
+    BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
+    for (int i = 0; i < invs_to_fuzz; i++) {
+      String fuzzed_spec = fuzzer.fuzz();
+      System.out.println("Evaluating spec: " + fuzzed_spec);
+      ExpressionEvaluator.eval(fuzzed_spec, collectionAttribute);
+    }
+  }
+
 }
