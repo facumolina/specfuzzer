@@ -144,13 +144,11 @@ public class GrammarExtractor {
       }
     } else {
       // Use object as the collection class, since it hasn't been specified
-      //String collection_class_name = Object.class.getSimpleName();
-      //GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
-      //        curr_expr + "." + label);
-      System.out.println("Can't add special quantification symbol for field type: "+type.getTypeName());
-      System.out.println("Label: "+label);
-      System.out.println("Current expr: "+curr_expr);
+      String collection_class_name = Object.class.getSimpleName();
+      GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
+              curr_expr + "." + label);
     }
+
   }
 
   /**
