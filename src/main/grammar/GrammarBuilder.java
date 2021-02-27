@@ -17,65 +17,6 @@ import java.util.Set;
  */
 public class GrammarBuilder {
 
-  // Constant symbols that will be part of all the grammars
-  public static final String START_SYMBOL = "<Fuzzed_Spec>";
-
-  // Quantification
-  public static final String QT_EXPR = "<Quantified_Expr>";
-  public static final String QUANTIFIER = "<Quantifier>";
-  public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no");
-  //public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no", "one", "lone");
-
-  // Reference comparisons
-  public static final String REF_OP = "<Reference_Op>";
-  public static final List<String> REF_OP_VALUE = Arrays.asList("=", "!=");
-
-  // Reference and Set comparison
-  public static final String VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>";
-  public static final List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
-
-  // Logic comparison operators
-  public static final String LOGIC_OP = "<Logic_Op>";
-  public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "implies", "iff");
-
-  // Logic expressions
-  public static final String BOOLEAN_FIELD = "<Boolean_Field>";
-  public static final String LOGIC_FROM_FIELD = "<Logic_From_Field>";
-  public static final String LOGIC_EXPR = "<Logic_Expr>";
-  public static final String LOGIC_CMP_EXPR = "<Logic_Cmp_Expr>";
-  public static List<String> LOGIC_CMP_EXPR_VALUE = Arrays
-          .asList("("+ LOGIC_FROM_FIELD + ") " + LOGIC_OP + " (" + LOGIC_EXPR + ")");
-
-  // Numeric comparison operators
-  public static final String NUMERIC_CMP_OP = "<Num_Cmp_Op>";
-  public static final List<String> NUMERIC_CMP_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=",
-          "<=");
-
-  // Binary numeric operators
-  public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
-  public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-");
-
-  // Numeric expressions
-  public static final String INTEGER = "<Integer>";
-  public static final String INTEGER_CONSTANT = "<Integer_Constant>";
-  public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
-  public static final String INTEGER_FROM_FIELD = "<Integer_From_Field>";
-  public static final String INTEGER_FIELD = "<Integer_Field>";
-  public static final String INTEGER_SET_SIZE = "<Integer_Set_Size>";
-  public static List<String> INTEGER_VALUE = new LinkedList<String>();
-  public static final String INTEGER_EXPR = "<Integer_Expr>";
-  public static List<String> INTEGER_EXPR_VALUE = new LinkedList<String>();
-
-  public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
-  public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
-      .asList(INTEGER_FROM_FIELD + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR);
-
-  public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<String>();
-
-  // Other constants
-  public static final String QT_VAR_NAME = "n";
-  public static final String NULL = "null";
-
   // Keep track of the quantified sets
   private static Set<String> quantified_sets;
 
@@ -85,115 +26,47 @@ public class GrammarBuilder {
   public static Map<String, List<String>> create() {
     // Start
     Map<String, List<String>> grammar = new HashMap<String, List<String>>();
-    grammar.put(START_SYMBOL, new LinkedList<String>());
-    grammar.get(START_SYMBOL).add(QT_EXPR);
-    grammar.get(START_SYMBOL).add(NUMERIC_CMP_EXPR);
-    grammar.get(START_SYMBOL).add(LOGIC_CMP_EXPR);
+    grammar.put(GrammarSymbols.START_SYMBOL, new LinkedList<String>());
+    grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.QT_EXPR);
+    grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.NUMERIC_CMP_EXPR);
+    grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.LOGIC_CMP_EXPR);
 
     // Quantified
-    grammar.put(QT_EXPR, new LinkedList<String>());
-    grammar.put(QUANTIFIER, QUANTIFIER_VALUE);
-    grammar.put(REF_OP, REF_OP_VALUE);
-    grammar.put(VAR_SET_CMP_OP, VAR_SET_CMP_OP_VALUE);
+    grammar.put(GrammarSymbols.QT_EXPR, new LinkedList<String>());
+    grammar.put(GrammarSymbols.QUANTIFIER, GrammarSymbols.QUANTIFIER_VALUE);
+    grammar.put(GrammarSymbols.REF_OP, GrammarSymbols.REF_OP_VALUE);
+    grammar.put(GrammarSymbols.VAR_SET_CMP_OP, GrammarSymbols.VAR_SET_CMP_OP_VALUE);
     quantified_sets = new HashSet<String>();
 
     // Logic
-    grammar.put(LOGIC_OP, LOGIC_OP_VALUE);
-    grammar.put(LOGIC_EXPR,new LinkedList<String>());
-    grammar.get(LOGIC_EXPR).add(QT_EXPR);
-    grammar.get(LOGIC_EXPR).add(NUMERIC_CMP_EXPR);
+    grammar.put(GrammarSymbols.LOGIC_OP, GrammarSymbols.LOGIC_OP_VALUE);
+    grammar.put(GrammarSymbols.LOGIC_EXPR,new LinkedList<String>());
+    grammar.get(GrammarSymbols.LOGIC_EXPR).add(GrammarSymbols.QT_EXPR);
+    grammar.get(GrammarSymbols.LOGIC_EXPR).add(GrammarSymbols.NUMERIC_CMP_EXPR);
     //grammar.get(LOGIC_EXPR).add(LOGIC_FROM_FIELD);
-    grammar.put(LOGIC_CMP_EXPR,LOGIC_CMP_EXPR_VALUE);
-    grammar.put(LOGIC_FROM_FIELD,new LinkedList<String>());
-    grammar.get(LOGIC_FROM_FIELD).add(BOOLEAN_FIELD);
-    grammar.put(BOOLEAN_FIELD, new LinkedList<String>());
+    grammar.put(GrammarSymbols.LOGIC_CMP_EXPR,GrammarSymbols.LOGIC_CMP_EXPR_VALUE);
+    grammar.put(GrammarSymbols.LOGIC_FROM_FIELD,new LinkedList<String>());
+    grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).add(GrammarSymbols.BOOLEAN_FIELD);
+    grammar.put(GrammarSymbols.BOOLEAN_FIELD, new LinkedList<String>());
 
     // Numeric
-    grammar.put(NUMERIC_CMP_EXPR, NUMERIC_CMP_EXPR_VALUE);
-    grammar.put(NUMERIC_CMP_OP, NUMERIC_CMP_OP_VALUE);
-    INTEGER_FROM_FIELD_VALUE.add(INTEGER_FIELD);
-    INTEGER_FROM_FIELD_VALUE.add(INTEGER_SET_SIZE);
-    grammar.put(INTEGER_FROM_FIELD, INTEGER_FROM_FIELD_VALUE);
-    grammar.put(NUMERIC_BIN_OP, NUMERIC_BIN_OP_VALUE);
-    INTEGER_EXPR_VALUE.add(INTEGER);
-    INTEGER_EXPR_VALUE.add(INTEGER_FROM_FIELD + " " + NUMERIC_BIN_OP + " " + INTEGER);
-    grammar.put(INTEGER_EXPR, INTEGER_EXPR_VALUE);
-    INTEGER_VALUE.add(INTEGER_CONSTANT);
-    INTEGER_VALUE.add(INTEGER_FROM_FIELD);
-    grammar.put(INTEGER, INTEGER_VALUE);
-    grammar.put(INTEGER_CONSTANT, INTEGER_CONSTANT_VALUE);
-    grammar.put(INTEGER_FIELD, new LinkedList<String>());
-    grammar.put(INTEGER_SET_SIZE, new LinkedList<String>());
+    grammar.put(GrammarSymbols.NUMERIC_CMP_EXPR, GrammarSymbols.NUMERIC_CMP_EXPR_VALUE);
+    grammar.put(GrammarSymbols.NUMERIC_CMP_OP, GrammarSymbols.NUMERIC_CMP_OP_VALUE);
+    GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_FIELD);
+    GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_SET_SIZE);
+    grammar.put(GrammarSymbols.INTEGER_FROM_FIELD, GrammarSymbols.INTEGER_FROM_FIELD_VALUE);
+    grammar.put(GrammarSymbols.NUMERIC_BIN_OP, GrammarSymbols.NUMERIC_BIN_OP_VALUE);
+    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER);
+    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD + " " + GrammarSymbols.NUMERIC_BIN_OP + " " + GrammarSymbols.INTEGER);
+    grammar.put(GrammarSymbols.INTEGER_EXPR, GrammarSymbols.INTEGER_EXPR_VALUE);
+    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
+    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
+    grammar.put(GrammarSymbols.INTEGER, GrammarSymbols.INTEGER_VALUE);
+    grammar.put(GrammarSymbols.INTEGER_CONSTANT, GrammarSymbols.INTEGER_CONSTANT_VALUE);
+    grammar.put(GrammarSymbols.INTEGER_FIELD, new LinkedList<String>());
+    grammar.put(GrammarSymbols.INTEGER_SET_SIZE, new LinkedList<String>());
 
     return grammar;
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a set of the given type
-   */
-  public static String get_set_symbol(String type_name) {
-    return "<" + type_name + "_Set_Expr>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting the body of a quantified expression of the given type
-   */
-  public static String get_qt_body_symbol(String type_name) {
-    return "<" + type_name + "_Qt_Expr_Body>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a single label to build a set of the given type
-   */
-  public static String get_set_label_symbol(String type_name) {
-    return "<" + type_name + "_Set_Label>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting the labels to build a set of the given type
-   */
-  public static String get_set_labels_symbol(String type_name) {
-    return "<" + type_name + "_Set_Labels>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a quantified object of the given type
-   */
-  public static String get_qt_obj_symbol(String type_name) {
-    return "<" + type_name + "_Qt_Obj>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a quantified set of the given type
-   */
-  public static String get_qt_obj_set_symbol(String type_name) {
-    return "<" + type_name + "_Set_Qt_Expr>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a comparison of objects of a set of the given type
-   */
-  public static String get_qt_obj_cmp_symbol(String type_name) {
-    return "<Qt_" + type_name + "_Obj_Cmp>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a comparison of objects of a set of the given type
-   */
-  public static String get_qt_obj_dest_cmp_symbol(String type_name, String dest_type) {
-    return "<Qt_" + type_name + "_Obj_" + dest_type + "_Cmp>";
-  }
-
-  /**
-   * Return the non-terminal symbol denoting a comparison of objects of a set of the given type
-   */
-  public static String get_symbol_for_type(String type_name) {
-    String formatted_type = TypesUtil.format_type(type_name);
-    if (TypesUtil.INTEGER.equals(formatted_type))
-      formatted_type += "_Field";
-    if (TypesUtil.BOOLEAN.equals(formatted_type))
-      formatted_type += "_Field";
-    return "<" + formatted_type + ">";
   }
 
   /**
@@ -203,10 +76,10 @@ public class GrammarBuilder {
       String set_symbol, String body_symbol) {
     if (quantified_sets.add(set_symbol)) {
       // First time, create the proper quantification options
-      grammar.get(QT_EXPR)
-          .add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : " + body_symbol);
-      grammar.get(QT_EXPR).add(QUANTIFIER + " " + QT_VAR_NAME + " : " + set_symbol + " : ("
-          + body_symbol + ") " + LOGIC_OP + " (" + body_symbol + ")");
+      grammar.get(GrammarSymbols.QT_EXPR)
+          .add(GrammarSymbols.QUANTIFIER + " " + GrammarSymbols.QT_VAR_NAME + " : " + set_symbol + " : " + body_symbol);
+      grammar.get(GrammarSymbols.QT_EXPR).add(GrammarSymbols.QUANTIFIER + " " + GrammarSymbols.QT_VAR_NAME + " : " + set_symbol + " : ("
+          + body_symbol + ") " + GrammarSymbols.LOGIC_OP + " (" + body_symbol + ")");
     }
   }
 
@@ -250,9 +123,9 @@ public class GrammarBuilder {
    */
   public static String get_cmp_symbol(String type_name) {
     if (TypesUtil.is_numeric(type_name))
-      return NUMERIC_CMP_OP;
+      return GrammarSymbols.NUMERIC_CMP_OP;
     else
-      return REF_OP;
+      return GrammarSymbols.REF_OP;
   }
 
   /**
@@ -260,39 +133,39 @@ public class GrammarBuilder {
    */
   public static void add_quantification_symbols(Map<String, List<String>> grammar, String type_name,
       String curr_expr, String label) {
-    String current_set_symbol = get_set_symbol(type_name);
-    String current_set_labels_symbol = get_set_labels_symbol(type_name);
+    String current_set_symbol = GrammarSymbols.get_set_symbol(type_name);
+    String current_set_labels_symbol = GrammarSymbols.get_set_labels_symbol(type_name);
     extend_grammar(grammar, current_set_symbol,
         curr_expr + ".*(" + current_set_labels_symbol + ")");
     extend_grammar(grammar, current_set_symbol,
         curr_expr + ".^(" + current_set_labels_symbol + ")");
-    String current_set_label_symbol = get_set_label_symbol(type_name);
+    String current_set_label_symbol = GrammarSymbols.get_set_label_symbol(type_name);
     extend_grammar(grammar, current_set_label_symbol, label);
     extend_labels_set(grammar, current_set_label_symbol, current_set_labels_symbol);
     // Options for the quantified expressions
-    String current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name);
-    String current_obj_body_symbol = get_qt_body_symbol(type_name);
+    String current_obj_cmp_symbol = GrammarSymbols.get_qt_obj_cmp_symbol(type_name);
+    String current_obj_body_symbol = GrammarSymbols.get_qt_body_symbol(type_name);
     add_quantification_option(grammar, current_set_symbol, current_obj_body_symbol);
     extend_grammar(grammar, current_obj_body_symbol, current_obj_cmp_symbol);
-    extend_grammar(grammar, INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
+    extend_grammar(grammar, GrammarSymbols.INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
     // Options for the quantified objects comparisons
-    String current_qt_obj_symbol = get_qt_obj_symbol(type_name);
-    String qt_object_cmp_option = QT_VAR_NAME + " " + REF_OP + " " + current_qt_obj_symbol;
+    String current_qt_obj_symbol = GrammarSymbols.get_qt_obj_symbol(type_name);
+    String qt_object_cmp_option = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.REF_OP + " " + current_qt_obj_symbol;
     extend_grammar(grammar, current_obj_cmp_symbol, qt_object_cmp_option);
-    String current_qt_obj_set_symbol = get_qt_obj_set_symbol(type_name);
-    String qt_var_set_cmp_option = QT_VAR_NAME + " " + VAR_SET_CMP_OP + " "
+    String current_qt_obj_set_symbol = GrammarSymbols.get_qt_obj_set_symbol(type_name);
+    String qt_var_set_cmp_option = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.VAR_SET_CMP_OP + " "
         + current_qt_obj_set_symbol;
     extend_grammar(grammar, current_obj_cmp_symbol, qt_var_set_cmp_option);
     // Options for the quantified objects
-    extend_grammar(grammar, current_qt_obj_symbol, QT_VAR_NAME + "." + current_set_label_symbol);
+    extend_grammar(grammar, current_qt_obj_symbol, GrammarSymbols.QT_VAR_NAME + "." + current_set_label_symbol);
     extend_grammar(grammar, current_qt_obj_symbol,
-        QT_VAR_NAME + "." + current_set_label_symbol + "." + current_set_label_symbol);
-    extend_grammar(grammar, current_qt_obj_symbol, NULL);
+            GrammarSymbols.QT_VAR_NAME + "." + current_set_label_symbol + "." + current_set_label_symbol);
+    extend_grammar(grammar, current_qt_obj_symbol, GrammarSymbols.NULL);
     // Options for the quantified sets
     extend_grammar(grammar, current_qt_obj_set_symbol,
-        QT_VAR_NAME + ".*(" + current_set_labels_symbol + ")");
+            GrammarSymbols.QT_VAR_NAME + ".*(" + current_set_labels_symbol + ")");
     extend_grammar(grammar, current_qt_obj_set_symbol,
-        QT_VAR_NAME + ".^(" + current_set_labels_symbol + ")");
+            GrammarSymbols.QT_VAR_NAME + ".^(" + current_set_labels_symbol + ")");
   }
 
   /**
@@ -302,21 +175,21 @@ public class GrammarBuilder {
    */
   public static void add_special_quantification_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr) {
-    String current_set_symbol = get_set_symbol(type_name);
-    String current_obj_body_symbol = get_qt_body_symbol(type_name);
+    String current_set_symbol = GrammarSymbols.get_set_symbol(type_name);
+    String current_obj_body_symbol = GrammarSymbols.get_qt_body_symbol(type_name);
     add_quantification_option(grammar, current_set_symbol, current_obj_body_symbol);
     extend_grammar(grammar, current_set_symbol, curr_expr);
-    extend_grammar(grammar, INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
+    extend_grammar(grammar, GrammarSymbols.INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
     if (TypesUtil.is_integer(type_name)) {
-      String numeric_cmp_symbol = QT_VAR_NAME + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
+      String numeric_cmp_symbol = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.NUMERIC_CMP_OP + " " + GrammarSymbols.INTEGER_EXPR;
       extend_grammar(grammar, current_obj_body_symbol, numeric_cmp_symbol);
     } else {
-      String current_obj_cmp_symbol = get_qt_obj_cmp_symbol(type_name);
+      String current_obj_cmp_symbol = GrammarSymbols.get_qt_obj_cmp_symbol(type_name);
       extend_grammar(grammar, current_obj_body_symbol, current_obj_cmp_symbol);
-      String current_qt_obj_symbol = get_qt_obj_symbol(type_name);
-      String qt_object_cmp_option = QT_VAR_NAME + " " + REF_OP + " " + current_qt_obj_symbol;
+      String current_qt_obj_symbol = GrammarSymbols.get_qt_obj_symbol(type_name);
+      String qt_object_cmp_option = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.REF_OP + " " + current_qt_obj_symbol;
       extend_grammar(grammar, current_obj_cmp_symbol, qt_object_cmp_option);
-      extend_grammar(grammar, current_qt_obj_symbol, NULL);
+      extend_grammar(grammar, current_qt_obj_symbol, GrammarSymbols.NULL);
     }
   }
 
@@ -326,19 +199,19 @@ public class GrammarBuilder {
   public static void add_quantification_over_field_symbols(Map<String, List<String>> grammar,
       String type_name, String curr_expr, String dest_type, String cyclic_label,
       String dest_label) {
-    String current_obj_body_symbol = get_qt_body_symbol(type_name);
-    String current_set_label_symbol = get_set_label_symbol(type_name);
+    String current_obj_body_symbol = GrammarSymbols.get_qt_body_symbol(type_name);
+    String current_set_label_symbol = GrammarSymbols.get_set_label_symbol(type_name);
     String formatted_dest_type = TypesUtil.format_type(dest_type);
-    String current_obj_dest_cmp_symbol = get_qt_obj_dest_cmp_symbol(type_name, formatted_dest_type);
+    String current_obj_dest_cmp_symbol = GrammarSymbols.get_qt_obj_dest_cmp_symbol(type_name, formatted_dest_type);
     extend_grammar(grammar, current_obj_body_symbol, current_obj_dest_cmp_symbol);
     // Options for the quantified object field comparison
     String cmp_symbol = get_cmp_symbol(formatted_dest_type);
-    String qt_obj_field_option = QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " "
-        + QT_VAR_NAME + "." + current_set_label_symbol + "." + dest_label;
+    String qt_obj_field_option = GrammarSymbols.QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " "
+        + GrammarSymbols.QT_VAR_NAME + "." + current_set_label_symbol + "." + dest_label;
     extend_grammar(grammar, current_obj_dest_cmp_symbol, qt_obj_field_option);
     if (TypesUtil.BOOLEAN.equals(formatted_dest_type)) {
       // The expression n.field can be directly in the body of the quantification
-      extend_grammar(grammar, current_obj_dest_cmp_symbol, QT_VAR_NAME + "." + dest_label);
+      extend_grammar(grammar, current_obj_dest_cmp_symbol, GrammarSymbols.QT_VAR_NAME + "." + dest_label);
     }
   }
 
@@ -346,48 +219,48 @@ public class GrammarBuilder {
    * Add the given option to the integer symbol
    */
   public static void add_integer_option(Map<String, List<String>> grammar, String option) {
-    extend_grammar(grammar, INTEGER, option);
+    extend_grammar(grammar, GrammarSymbols.INTEGER, option);
   }
 
   /**
    * Remove non expandable symbols
    */
   public static void remove_non_expandable(Map<String, List<String>> grammar) {
-    if (grammar.get(INTEGER_FIELD).isEmpty()) {
+    if (grammar.get(GrammarSymbols.INTEGER_FIELD).isEmpty()) {
       // There are no integer fields, so remove the symbol and all the other non-terminal symbols
       // mentioning the integer field symbol
-      grammar.remove(INTEGER_FIELD);
-      grammar.get(INTEGER_EXPR).removeIf(x -> x.contains(INTEGER_FIELD));
-      grammar.get(INTEGER_FROM_FIELD).removeIf(x -> x.contains(INTEGER_FIELD));
-      grammar.get(INTEGER).removeIf(x -> x.contains(INTEGER_FIELD));
+      grammar.remove(GrammarSymbols.INTEGER_FIELD);
+      grammar.get(GrammarSymbols.INTEGER_EXPR).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
+      grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
+      grammar.get(GrammarSymbols.INTEGER).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
     }
 
-    if (grammar.get(INTEGER_SET_SIZE).isEmpty()) {
+    if (grammar.get(GrammarSymbols.INTEGER_SET_SIZE).isEmpty()) {
       // There are not sets for computing size
-      grammar.remove(INTEGER_SET_SIZE);
-      grammar.get(INTEGER_FROM_FIELD).removeIf(x -> x.contains(INTEGER_SET_SIZE));
+      grammar.remove(GrammarSymbols.INTEGER_SET_SIZE);
+      grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).removeIf(x -> x.contains(GrammarSymbols.INTEGER_SET_SIZE));
     }
 
-    if (grammar.get(BOOLEAN_FIELD).isEmpty()) {
-      grammar.remove(BOOLEAN_FIELD);
-      grammar.get(LOGIC_FROM_FIELD).removeIf(x -> x .contains(BOOLEAN_FIELD));
+    if (grammar.get(GrammarSymbols.BOOLEAN_FIELD).isEmpty()) {
+      grammar.remove(GrammarSymbols.BOOLEAN_FIELD);
+      grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).removeIf(x -> x .contains(GrammarSymbols.BOOLEAN_FIELD));
     }
 
-    if (grammar.get(LOGIC_FROM_FIELD).isEmpty()) {
+    if (grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).isEmpty()) {
       // There are no boolean fields
-      grammar.remove(LOGIC_FROM_FIELD);
-      grammar.remove(LOGIC_CMP_EXPR);
-      grammar.remove(LOGIC_EXPR);
-      grammar.get(START_SYMBOL).removeIf(x -> x.contains(LOGIC_CMP_EXPR));
+      grammar.remove(GrammarSymbols.LOGIC_FROM_FIELD);
+      grammar.remove(GrammarSymbols.LOGIC_CMP_EXPR);
+      grammar.remove(GrammarSymbols.LOGIC_EXPR);
+      grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(GrammarSymbols.LOGIC_CMP_EXPR));
     }
 
-    if (grammar.get(QT_EXPR).isEmpty()) {
+    if (grammar.get(GrammarSymbols.QT_EXPR).isEmpty()) {
       // There are no expressions to quantify
-      grammar.remove(QT_EXPR);
-      grammar.remove(QUANTIFIER);
-      grammar.get(START_SYMBOL).remove(QT_EXPR);
-      if (grammar.get(LOGIC_EXPR) != null && !grammar.get(LOGIC_EXPR).isEmpty())
-        grammar.get(LOGIC_EXPR).remove(QT_EXPR);
+      grammar.remove(GrammarSymbols.QT_EXPR);
+      grammar.remove(GrammarSymbols.QUANTIFIER);
+      grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.QT_EXPR);
+      if (grammar.get(GrammarSymbols.LOGIC_EXPR) != null && !grammar.get(GrammarSymbols.LOGIC_EXPR).isEmpty())
+        grammar.get(GrammarSymbols.LOGIC_EXPR).remove(GrammarSymbols.QT_EXPR);
     }
 
   }

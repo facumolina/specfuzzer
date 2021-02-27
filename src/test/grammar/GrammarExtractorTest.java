@@ -26,7 +26,7 @@ public class GrammarExtractorTest {
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
-    assert(grammar.get(GrammarBuilder.INTEGER_FIELD).size()==4);
+    assert(grammar.get(GrammarSymbols.INTEGER_FIELD).size()==4);
   }
 
 }

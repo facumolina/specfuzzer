@@ -9,12 +9,11 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import grammar.GrammarSymbols;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import grammar.GrammarBuilder;
 
 /**
  * This class implements a Basic Fuzzer based on the Simple Grammar Fuzzer from The Fuzzing Book
@@ -42,7 +41,7 @@ public class BasicFuzzer extends GrammarBasedFuzzer {
    */
   public String fuzz() {
     Random rand = new Random();
-    String term = GrammarBuilder.START_SYMBOL;
+    String term = GrammarSymbols.START_SYMBOL;
     int expansion_trials = 0;
     List<String> non_terminals = nonterminals(term);
     while (non_terminals.size() > 0) {
