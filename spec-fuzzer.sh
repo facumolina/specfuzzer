@@ -24,7 +24,7 @@ i=1
 while [[ $i -le $iterations ]]
 do
   echo '> Running Daikon - Iteration '$i
-  java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant --grammar-to-fuzz $grammar_file --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file 
+  java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedUnaryInvariant --grammar-to-fuzz $grammar_file --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file 
 
   echo '> Checking invariants on Mutants - Iteration '$i
   for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do

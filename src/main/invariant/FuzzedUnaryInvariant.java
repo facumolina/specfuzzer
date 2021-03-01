@@ -19,11 +19,11 @@ import typequals.prototype.qual.Prototype;
 import java.util.List;
 
 /**
- * Represents a candidate invariant which is obtained by fuzzing a grammar
+ * Represents a candidate invariant over one variable which is obtained by fuzzing a grammar
  * 
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public class FuzzedInvariant extends PointerInvariant {
+public class FuzzedUnaryInvariant extends PointerInvariant {
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization. If you add or
@@ -44,17 +44,17 @@ public class FuzzedInvariant extends PointerInvariant {
   ///
   /// Required methods
   ///
-  private FuzzedInvariant(PptSlice ppt, String spec) {
+  private FuzzedUnaryInvariant(PptSlice ppt, String spec) {
     super(ppt);
     fuzzed_spec = spec;
   }
 
-  private @Prototype FuzzedInvariant() {
+  private @Prototype FuzzedUnaryInvariant() {
     super();
     get_fuzzed_spec();
   }
 
-  private @Prototype FuzzedInvariant(String spec) {
+  private @Prototype FuzzedUnaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
     System.out.println("Created from fuzzed spec: " + fuzzed_spec);
@@ -71,12 +71,12 @@ public class FuzzedInvariant extends PointerInvariant {
   }
 
   /** Returns the prototype invariant. */
-  public static @Prototype FuzzedInvariant get_proto() {
-    return new @Prototype FuzzedInvariant();
+  public static @Prototype FuzzedUnaryInvariant get_proto() {
+    return new FuzzedUnaryInvariant();
   }
 
-  public static @Prototype FuzzedInvariant get_proto_from_spec(String spec) {
-    return new @Prototype FuzzedInvariant(spec);
+  public static @Prototype FuzzedUnaryInvariant get_proto_from_spec(String spec) {
+    return new FuzzedUnaryInvariant(spec);
   }
 
   /** returns whether or not this invariant is enabled */
@@ -87,14 +87,14 @@ public class FuzzedInvariant extends PointerInvariant {
 
   /** instantiate an invariant on the specified slice */
   @Override
-  public FuzzedInvariant instantiate_dyn(@Prototype FuzzedInvariant this, PptSlice slice) {
-    return new FuzzedInvariant(slice, fuzzed_spec);
+  public FuzzedUnaryInvariant instantiate_dyn(@Prototype FuzzedUnaryInvariant this, PptSlice slice) {
+    return new FuzzedUnaryInvariant(slice, fuzzed_spec);
   }
 
   // A printed representation for user output
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied FuzzedInvariant this, OutputFormat format) {
+  public String format_using(@GuardSatisfied FuzzedUnaryInvariant this, OutputFormat format) {
     if (format == OutputFormat.JAVA)
       return "FuzzedInvariant:" + fuzzed_spec;
     return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: " + var().name();
@@ -139,17 +139,17 @@ public class FuzzedInvariant extends PointerInvariant {
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
-    assert other instanceof FuzzedInvariant;
-    FuzzedInvariant fuzzed_inv = (FuzzedInvariant) other;
+    assert other instanceof FuzzedUnaryInvariant;
+    FuzzedUnaryInvariant fuzzed_inv = (FuzzedUnaryInvariant) other;
     assert (fuzzed_inv.fuzzed_spec != null);
     return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec);
   }
 
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof FuzzedInvariant))
+    if (!(other instanceof FuzzedUnaryInvariant))
       return false;
-    return isSameFormula((FuzzedInvariant)other);
+    return isSameFormula((FuzzedUnaryInvariant)other);
   }
 
 }

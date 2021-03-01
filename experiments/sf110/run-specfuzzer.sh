@@ -42,7 +42,7 @@ cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
 
 # Run the SpecFuzzer
-java -cp $cp_for_daikon daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file
+java -cp $cp_for_daikon daikon.Daikon --user-defined-invariant invariant.FuzzedUnaryInvariant --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file
 
 invs_file=$target_name'.inv.gz'
 

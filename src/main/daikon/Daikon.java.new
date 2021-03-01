@@ -1741,7 +1741,7 @@ public final class Daikon {
       System.out.println("Loaded: "+loaded_invs_str.size());
       for (String inv_str : loaded_invs_str){
       try {
-        Class<?> invClass = Class.forName("invariant.FuzzedInvariant");
+        Class<?> invClass = Class.forName("invariant.FuzzedUnaryInvariant");
         Method get_proto_from_spec_method = invClass.getMethod("get_proto_from_spec", String.class);
         @SuppressWarnings("nullness")
         Invariant inv = (Invariant) get_proto_from_spec_method.invoke(null, inv_str.replace("FuzzedInvariant:",""));
