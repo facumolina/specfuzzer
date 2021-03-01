@@ -22,7 +22,7 @@ public class JavaTypesUtilTest {
   @Test
   public void arg_types_avltreelist() {
     Set<String> avltree_arg_types = JavaTypesUtil.all_arguments_types(AvlTreeList.class);
-    assertTrue(avltree_arg_types.size()==22);
+    assertTrue(avltree_arg_types.size()==2);
     assertTrue(avltree_arg_types.contains(JavaTypesUtil.INTEGER));
     assertTrue(avltree_arg_types.contains(JavaTypesUtil.OBJECT));
   }
