@@ -65,7 +65,7 @@ public class BasicFuzzer extends GrammarBasedFuzzer {
   /**
    * Empty the grammar (just for testing purposes)
    */
-  public void emtpy_grammar() {
+  public void empty_grammar() {
     grammar = null;
   }
 
