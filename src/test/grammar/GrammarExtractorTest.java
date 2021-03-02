@@ -22,7 +22,7 @@ public class GrammarExtractorTest {
     GrammarExtractor.type_graph = new DirectedPseudograph<Class<?>, LabeledEdge>(LabeledEdge.class);
     GrammarExtractor.build_type_graph(cut, new HashSet<String>());
     // Grammar extraction steps
-    Map<String, List<String>> grammar = GrammarBuilder.create();
+    Map<String, List<String>> grammar = GrammarBuilder.create(cut);
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar

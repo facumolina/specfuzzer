@@ -1,8 +1,5 @@
 package expression;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
 
@@ -12,6 +9,10 @@ import DataStructures.MapWrapper;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import DataStructures.commonscollections.TreeList;
 import DataStructures.eiffel.Composite;
+
+import java.util.Collection;
+
+import static org.junit.Assert.*;
 
 /**
  * This class contains tests to ensure that the expression evaluator is working properly
@@ -23,6 +24,10 @@ public class ComparisonExpressionEvaluatorTest {
 
   private Boolean evaluateCmp(String alloy_expr, Object o) {
     return ExpressionEvaluator.eval(alloy_expr, o);
+  }
+
+  private Boolean evaluateCmpBinary(String alloy_expr, Object o1, Object o2) {
+    return ExpressionEvaluator.eval(alloy_expr, o1, o2);
   }
 
   @Test
@@ -93,6 +98,23 @@ public class ComparisonExpressionEvaluatorTest {
     assertTrue(evaluateCmp("#(List.*(next)) > 0", l));
     assertTrue(evaluateCmp("#(List.*(next)) >= 1", l));
   }
+
+  @Test
+  public void set_size_binary_1() {
+    List l = new List();
+    l.insert(2);
+    l.insert(3);
+    assertTrue(evaluateCmpBinary("#(List.*(next)) = Integer_Variable", l, 3));
+  }
+
+  @Test
+  public void variables_binary_1() {
+    List l = new List();
+    l.insert(2);
+    l.insert(3);
+    assertFalse(evaluateCmpBinary("List.x = Integer_Variable", l, 10));
+  }
+
 
   @Test
   public void int_field() {

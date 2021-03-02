@@ -2,6 +2,9 @@ package fuzzer;
 
 import DataStructures.CollectionAttribute;
 import DataStructures.eiffel.Composite;
+import grammar.JavaTypesUtil;
+import invariant.FuzzedInvariantArity;
+import invariant.FuzzedInvariantUtil;
 import org.junit.Test;
 
 import DataStructures.AvlTreeList;
@@ -32,7 +35,11 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      ExpressionEvaluator.eval(fuzzed_spec, l);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, List.class);
+      if (vars.size()==1)
+        ExpressionEvaluator.eval(fuzzed_spec, l);
+      if (vars.size()==2)
+        ExpressionEvaluator.eval(fuzzed_spec, l, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
     }
   }
 
