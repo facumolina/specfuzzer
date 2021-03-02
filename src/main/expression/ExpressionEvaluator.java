@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import grammar.GrammarSymbols;
+import grammar.JavaTypesUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -59,7 +61,7 @@ public class ExpressionEvaluator {
   }
 
   /**
-   * Evaluate the given Alloy expression on the given object
+   * Evaluate the given unary Alloy expression on the given object
    */
   public static boolean eval(String alloy_expr, Object o) {
     if (alloy_expr == null || o == null)
@@ -79,8 +81,34 @@ public class ExpressionEvaluator {
     ParseContext ctx = (ParseContext) tree;
     vars.put(o.getClass().getSimpleName(), o);
     return (Boolean) eval(ctx.expr(), o);
+  }
+
+  /**
+   * Evaluate the given binary Alloy expression on the given objects
+   */
+  public static boolean eval(String alloy_expr, Object o1, Object o2) {
+    if (alloy_expr == null || o1 == null || o2 == null)
+      throw new IllegalArgumentException("Neither the expression nor the objects can be null.");
+
+    validate(alloy_expr, o1.getClass());
+
+    setup(alloy_expr);
+
+    // Parse the expression and get the tree
+    ParseTree tree = parser.parse();
+
+    if (parser.getNumberOfSyntaxErrors() > 0)
+      throw new IllegalArgumentException("The given expression contains syntax errors");
+
+    // Evaluate the expression on the object
+    ParseContext ctx = (ParseContext) tree;
+    vars.put(o1.getClass().getSimpleName(), o1);
+    String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.format_type(o2.getClass().getSimpleName()));
+    vars.put(var_name, o2);
+    return (Boolean) eval(ctx.expr(), o1);
 
   }
+
 
   /**
    * Evaluate the given ParseTree on the given java Object
