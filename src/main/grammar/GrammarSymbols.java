@@ -53,8 +53,9 @@ public class GrammarSymbols {
   public static final String INTEGER_CONSTANT = "<Integer_Constant>";
   public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
   public static final String INTEGER_FROM_FIELD = "<Integer_From_Field>";
+  public static final String INTEGER_SET = "<Integer_Set>";
   public static final String INTEGER_FIELD = "<Integer_Field>";
-  public static final String INTEGER_SET_SIZE = "<Integer_Set_Size>";
+  public static final String INTEGER_FROM_SET_SIZE = "<Integer_From_Set_Size>";
   public static List<String> INTEGER_VALUE = new LinkedList<String>();
   public static final String INTEGER_EXPR = "<Integer_Expr>";
   public static List<String> INTEGER_EXPR_VALUE = new LinkedList<String>();
@@ -68,6 +69,11 @@ public class GrammarSymbols {
   // Other constants
   public static final String QT_VAR_NAME = "n";
   public static final String NULL = "null";
+
+  // Specific symbols involving more than one variable
+  public static final String MEMBERSHIP_INTEGER_SET = "<Membership_Integer_Set>";
+  public static final List<String> MEMBERSHIP_INTEGER_SET_VALUE = Arrays.
+          asList(INTEGER + " " + VAR_SET_CMP_OP_VALUE + " " + INTEGER_SET);
 
   /**
    * Return the non-terminal symbol denoting a set of the given type
@@ -129,12 +135,21 @@ public class GrammarSymbols {
    * Return the non-terminal symbol denoting a comparison of objects of a set of the given type
    */
   public static String get_symbol_for_type(String type_name) {
-    String formatted_type = TypesUtil.format_type(type_name);
-    if (TypesUtil.INTEGER.equals(formatted_type))
+    String formatted_type = JavaTypesUtil.format_type(type_name);
+    if (JavaTypesUtil.INTEGER.equals(formatted_type))
       formatted_type += "_Field";
-    if (TypesUtil.BOOLEAN.equals(formatted_type))
+    if (JavaTypesUtil.BOOLEAN.equals(formatted_type))
       formatted_type += "_Field";
     return "<" + formatted_type + ">";
+  }
+
+  /**
+   * Return the special identifier for a variable of the given type, for instance, Integer_Variable
+   */
+  public static String get_special_identifier(String type_name) {
+    if (type_name==null)
+      throw new IllegalArgumentException("The type name can't be null");
+    return type_name + "_Variable";
   }
 
 }

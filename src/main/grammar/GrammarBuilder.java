@@ -1,6 +1,5 @@
 package grammar;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,17 +18,20 @@ public class GrammarBuilder {
 
   // Keep track of the quantified sets
   private static Set<String> quantified_sets;
-
+  private static Set<String> all_arguments_types;
   /**
    * Create a Grammar with the initial state
    */
-  public static Map<String, List<String>> create() {
+  public static Map<String, List<String>> create(Class<?> cut) {
     // Start
     Map<String, List<String>> grammar = new HashMap<String, List<String>>();
     grammar.put(GrammarSymbols.START_SYMBOL, new LinkedList<String>());
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.QT_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.NUMERIC_CMP_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.LOGIC_CMP_EXPR);
+
+    // Obtain all arguments types
+    all_arguments_types = JavaTypesUtil.all_arguments_types(cut);
 
     // Quantified
     grammar.put(GrammarSymbols.QT_EXPR, new LinkedList<String>());
@@ -53,7 +55,7 @@ public class GrammarBuilder {
     grammar.put(GrammarSymbols.NUMERIC_CMP_EXPR, GrammarSymbols.NUMERIC_CMP_EXPR_VALUE);
     grammar.put(GrammarSymbols.NUMERIC_CMP_OP, GrammarSymbols.NUMERIC_CMP_OP_VALUE);
     GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_FIELD);
-    GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_SET_SIZE);
+    GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_FROM_SET_SIZE);
     grammar.put(GrammarSymbols.INTEGER_FROM_FIELD, GrammarSymbols.INTEGER_FROM_FIELD_VALUE);
     grammar.put(GrammarSymbols.NUMERIC_BIN_OP, GrammarSymbols.NUMERIC_BIN_OP_VALUE);
     GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER);
@@ -61,10 +63,11 @@ public class GrammarBuilder {
     grammar.put(GrammarSymbols.INTEGER_EXPR, GrammarSymbols.INTEGER_EXPR_VALUE);
     GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
     GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
+    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.get_special_identifier("Integer"));
     grammar.put(GrammarSymbols.INTEGER, GrammarSymbols.INTEGER_VALUE);
     grammar.put(GrammarSymbols.INTEGER_CONSTANT, GrammarSymbols.INTEGER_CONSTANT_VALUE);
     grammar.put(GrammarSymbols.INTEGER_FIELD, new LinkedList<String>());
-    grammar.put(GrammarSymbols.INTEGER_SET_SIZE, new LinkedList<String>());
+    grammar.put(GrammarSymbols.INTEGER_FROM_SET_SIZE, new LinkedList<String>());
 
     return grammar;
   }
@@ -122,7 +125,7 @@ public class GrammarBuilder {
    * Get the comparison symbol for the given type
    */
   public static String get_cmp_symbol(String type_name) {
-    if (TypesUtil.is_numeric(type_name))
+    if (JavaTypesUtil.is_numeric(type_name))
       return GrammarSymbols.NUMERIC_CMP_OP;
     else
       return GrammarSymbols.REF_OP;
@@ -147,7 +150,7 @@ public class GrammarBuilder {
     String current_obj_body_symbol = GrammarSymbols.get_qt_body_symbol(type_name);
     add_quantification_option(grammar, current_set_symbol, current_obj_body_symbol);
     extend_grammar(grammar, current_obj_body_symbol, current_obj_cmp_symbol);
-    extend_grammar(grammar, GrammarSymbols.INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
+    extend_grammar(grammar, GrammarSymbols.INTEGER_FROM_SET_SIZE, "#(" + current_set_symbol + ")");
     // Options for the quantified objects comparisons
     String current_qt_obj_symbol = GrammarSymbols.get_qt_obj_symbol(type_name);
     String qt_object_cmp_option = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.REF_OP + " " + current_qt_obj_symbol;
@@ -179,8 +182,8 @@ public class GrammarBuilder {
     String current_obj_body_symbol = GrammarSymbols.get_qt_body_symbol(type_name);
     add_quantification_option(grammar, current_set_symbol, current_obj_body_symbol);
     extend_grammar(grammar, current_set_symbol, curr_expr);
-    extend_grammar(grammar, GrammarSymbols.INTEGER_SET_SIZE, "#(" + current_set_symbol + ")");
-    if (TypesUtil.is_integer(type_name)) {
+    extend_grammar(grammar, GrammarSymbols.INTEGER_FROM_SET_SIZE, "#(" + current_set_symbol + ")");
+    if (JavaTypesUtil.is_integer(type_name)) {
       String numeric_cmp_symbol = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.NUMERIC_CMP_OP + " " + GrammarSymbols.INTEGER_EXPR;
       extend_grammar(grammar, current_obj_body_symbol, numeric_cmp_symbol);
     } else {
@@ -201,7 +204,7 @@ public class GrammarBuilder {
       String dest_label) {
     String current_obj_body_symbol = GrammarSymbols.get_qt_body_symbol(type_name);
     String current_set_label_symbol = GrammarSymbols.get_set_label_symbol(type_name);
-    String formatted_dest_type = TypesUtil.format_type(dest_type);
+    String formatted_dest_type = JavaTypesUtil.format_type(dest_type);
     String current_obj_dest_cmp_symbol = GrammarSymbols.get_qt_obj_dest_cmp_symbol(type_name, formatted_dest_type);
     extend_grammar(grammar, current_obj_body_symbol, current_obj_dest_cmp_symbol);
     // Options for the quantified object field comparison
@@ -209,9 +212,14 @@ public class GrammarBuilder {
     String qt_obj_field_option = GrammarSymbols.QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " "
         + GrammarSymbols.QT_VAR_NAME + "." + current_set_label_symbol + "." + dest_label;
     extend_grammar(grammar, current_obj_dest_cmp_symbol, qt_obj_field_option);
-    if (TypesUtil.BOOLEAN.equals(formatted_dest_type)) {
+    if (JavaTypesUtil.BOOLEAN.equals(formatted_dest_type)) {
       // The expression n.field can be directly in the body of the quantification
       extend_grammar(grammar, current_obj_dest_cmp_symbol, GrammarSymbols.QT_VAR_NAME + "." + dest_label);
+    }
+    if (JavaTypesUtil.INTEGER.equals(formatted_dest_type)) {
+      // The expression n.field is an integer, so allow the comparison with any given integer
+      String integer_cmp_symbol = GrammarSymbols.QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " " + GrammarSymbols.INTEGER;
+      extend_grammar(grammar, current_obj_dest_cmp_symbol, integer_cmp_symbol);
     }
   }
 
@@ -226,6 +234,15 @@ public class GrammarBuilder {
    * Remove non expandable symbols
    */
   public static void remove_non_expandable(Map<String, List<String>> grammar) {
+    remove_non_expandable_from_integer(grammar);
+    remove_non_expandable_from_logic(grammar);
+    remove_non_expandable_from_quantification(grammar);
+  }
+
+  /**
+   * Remove non-expandable symbols involving integers
+   */
+  protected static void remove_non_expandable_from_integer(Map<String, List<String>> grammar) {
     if (grammar.get(GrammarSymbols.INTEGER_FIELD).isEmpty()) {
       // There are no integer fields, so remove the symbol and all the other non-terminal symbols
       // mentioning the integer field symbol
@@ -235,17 +252,26 @@ public class GrammarBuilder {
       grammar.get(GrammarSymbols.INTEGER).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
     }
 
-    if (grammar.get(GrammarSymbols.INTEGER_SET_SIZE).isEmpty()) {
+    if (grammar.get(GrammarSymbols.INTEGER_FROM_SET_SIZE).isEmpty()) {
       // There are not sets for computing size
-      grammar.remove(GrammarSymbols.INTEGER_SET_SIZE);
-      grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).removeIf(x -> x.contains(GrammarSymbols.INTEGER_SET_SIZE));
+      grammar.remove(GrammarSymbols.INTEGER_FROM_SET_SIZE);
+      grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_SET_SIZE));
     }
 
+    if (!all_arguments_types.contains(JavaTypesUtil.INTEGER)) {
+      // There are no arguments of type Integer, so The Integer_Variable option should be removed
+      grammar.get(GrammarSymbols.INTEGER).remove(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER));
+    }
+  }
+
+  /**
+   * Remove non-expandable symbols involving logic
+   */
+  protected static void remove_non_expandable_from_logic(Map<String, List<String>> grammar) {
     if (grammar.get(GrammarSymbols.BOOLEAN_FIELD).isEmpty()) {
       grammar.remove(GrammarSymbols.BOOLEAN_FIELD);
       grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).removeIf(x -> x .contains(GrammarSymbols.BOOLEAN_FIELD));
     }
-
     if (grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).isEmpty()) {
       // There are no boolean fields
       grammar.remove(GrammarSymbols.LOGIC_FROM_FIELD);
@@ -253,7 +279,12 @@ public class GrammarBuilder {
       grammar.remove(GrammarSymbols.LOGIC_EXPR);
       grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(GrammarSymbols.LOGIC_CMP_EXPR));
     }
+  }
 
+  /**
+   * Remove non-expandable symbols involving quantifications
+   */
+  protected static void remove_non_expandable_from_quantification(Map<String, List<String>> grammar) {
     if (grammar.get(GrammarSymbols.QT_EXPR).isEmpty()) {
       // There are no expressions to quantify
       grammar.remove(GrammarSymbols.QT_EXPR);
@@ -262,6 +293,6 @@ public class GrammarBuilder {
       if (grammar.get(GrammarSymbols.LOGIC_EXPR) != null && !grammar.get(GrammarSymbols.LOGIC_EXPR).isEmpty())
         grammar.get(GrammarSymbols.LOGIC_EXPR).remove(GrammarSymbols.QT_EXPR);
     }
-
   }
+
 }

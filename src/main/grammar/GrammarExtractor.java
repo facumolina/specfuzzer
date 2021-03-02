@@ -263,7 +263,7 @@ public class GrammarExtractor {
   private static void extract_grammar(Class<?> cut)
       throws NoSuchFieldException, SecurityException, ClassNotFoundException {
     System.out.println("Extracting grammar from initial type: " + cut.getName());
-    Map<String, List<String>> grammar = GrammarBuilder.create();
+    Map<String, List<String>> grammar = GrammarBuilder.create(cut);
     traverse_graph(cut, cut.getSimpleName(), grammar, bound);
     GrammarBuilder.remove_non_expandable(grammar);
     System.out.println();
