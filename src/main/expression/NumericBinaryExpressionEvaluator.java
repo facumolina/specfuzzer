@@ -18,9 +18,9 @@ public class NumericBinaryExpressionEvaluator {
    * 
    */
   public static Number eval(ExprContext expr1, Num_binary_opContext num_binary_op,
-      ExprContext expr2, Object o) {
-    Object o1 = ExpressionEvaluator.eval(expr1, o);
-    Object o2 = ExpressionEvaluator.eval(expr2, o);
+      ExprContext expr2) {
+    Object o1 = ExpressionEvaluator.eval(expr1);
+    Object o2 = ExpressionEvaluator.eval(expr2);
     return eval(o1, num_binary_op.getText(), o2);
   }
 

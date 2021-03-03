@@ -19,8 +19,8 @@ public class UnaryExpressionEvaluator {
    * Evaluate the given unary expression
    * 
    */
-  public static Object eval(Unary_opContext unary_op, ExprContext expr, Object o) {
-    Object o1 = ExpressionEvaluator.eval(expr, o);
+  public static Object eval(Unary_opContext unary_op, ExprContext expr) {
+    Object o1 = ExpressionEvaluator.eval(expr);
     return eval(unary_op.getText(), o1);
   }
 

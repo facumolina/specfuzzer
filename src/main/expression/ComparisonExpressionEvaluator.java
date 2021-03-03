@@ -25,10 +25,9 @@ public class ComparisonExpressionEvaluator {
    * Evaluate the given comparison
    * 
    */
-  public static boolean eval(ExprContext expr1, Compare_opContext cmp_op, ExprContext expr2,
-      Object o) {
-    Object o1 = ExpressionEvaluator.eval(expr1, o);
-    Object o2 = ExpressionEvaluator.eval(expr2, o);
+  public static boolean eval(ExprContext expr1, Compare_opContext cmp_op, ExprContext expr2) {
+    Object o1 = ExpressionEvaluator.eval(expr1);
+    Object o2 = ExpressionEvaluator.eval(expr2);
     return eval(o1, cmp_op.getText(), o2);
   }
 

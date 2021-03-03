@@ -5,6 +5,8 @@ import java.util.Set;
 import antlr.AlloyExprGrammarParser.ExprContext;
 import antlr.AlloyExprGrammarParser.Qt_exprContext;
 import antlr.AlloyExprGrammarParser.QuantifierContext;
+import grammar.GrammarSymbols;
+import org.antlr.v4.tool.Grammar;
 
 /**
  * This class provides methods to evaluate quantified expressions.
@@ -24,10 +26,10 @@ public class QuantifiedExpressionEvaluator {
   /**
    * Evaluate the given quantified expression on the given java Object
    */
-  public static boolean eval(Qt_exprContext qt_expr, Object o) {
+  public static boolean eval(Qt_exprContext qt_expr) {
     Set<Object> set = qt_expr.set_expr() != null
-        ? SetExpressionEvaluator.eval(qt_expr.set_expr(), o)
-        : SetExpressionEvaluator.eval(qt_expr.collection(), o);
+        ? SetExpressionEvaluator.eval(qt_expr.set_expr())
+        : SetExpressionEvaluator.eval(qt_expr.collection());
     QuantifierContext qt = qt_expr.quantifier();
     switch (qt.getText()) {
     case ALL:
@@ -50,8 +52,9 @@ public class QuantifiedExpressionEvaluator {
    */
   private static boolean computeAll(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
+      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
       try {
-        if (!(Boolean) ExpressionEvaluator.eval(expr, o))
+        if (!(Boolean) ExpressionEvaluator.eval(expr))
           return false;
       } catch (NonEvaluableExpressionException e) {
         // For now, when an expression can't be evaluated in the body, ignore it
@@ -68,7 +71,8 @@ public class QuantifiedExpressionEvaluator {
   private static boolean computeSome(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
       try {
-        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+        ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
+        if ((Boolean) ExpressionEvaluator.eval(expr))
           return true;
       } catch (NonEvaluableExpressionException e) {
         // For now, when an expression can't be evaluated in the body, ignore it
@@ -84,8 +88,9 @@ public class QuantifiedExpressionEvaluator {
    */
   private static boolean computeNo(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
+      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
       try {
-        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+        if ((Boolean) ExpressionEvaluator.eval(expr))
           return false;
       } catch (NonEvaluableExpressionException e) {
         // For now, when an expression can't be evaluated in the body, ignore it
@@ -102,8 +107,9 @@ public class QuantifiedExpressionEvaluator {
   private static boolean computeLone(Set<Object> set, ExprContext expr) {
     int satisfying = 0;
     for (Object o : set) {
+      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
       try {
-        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+        if ((Boolean) ExpressionEvaluator.eval(expr))
           satisfying++;
         if (satisfying > 1)
           return false;
@@ -122,8 +128,9 @@ public class QuantifiedExpressionEvaluator {
   private static boolean computeOne(Set<Object> set, ExprContext expr) {
     int satisfying = 0;
     for (Object o : set) {
+      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
       try {
-        if ((Boolean) ExpressionEvaluator.eval(expr, o))
+        if ((Boolean) ExpressionEvaluator.eval(expr))
           satisfying++;
         if (satisfying > 1)
           return false;

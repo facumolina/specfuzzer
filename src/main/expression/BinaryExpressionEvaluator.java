@@ -22,10 +22,9 @@ public class BinaryExpressionEvaluator {
    * Evaluate the given comparison
    * 
    */
-  public static boolean eval(ExprContext expr1, Binary_opContext binary_op, ExprContext expr2,
-      Object o) {
-    Object o1 = ExpressionEvaluator.eval(expr1, o);
-    Object o2 = ExpressionEvaluator.eval(expr2, o);
+  public static boolean eval(ExprContext expr1, Binary_opContext binary_op, ExprContext expr2) {
+    Object o1 = ExpressionEvaluator.eval(expr1);
+    Object o2 = ExpressionEvaluator.eval(expr2);
     return eval(o1, binary_op.getText(), o2);
   }
 

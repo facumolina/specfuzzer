@@ -20,18 +20,18 @@ public class SetExpressionEvaluator {
   /**
    * Evaluate the given set context on the given object
    */
-  public static Set<Object> eval(Set_exprContext set_expr_ctx, Object o) {
+  public static Set<Object> eval(Set_exprContext set_expr_ctx) {
     // Get the base part (left to closure operator)
     // Name at 0 is the part of the expression that starts from the object
     NameContext left_part = set_expr_ctx.name(0);
-    verifyTypes(left_part, o);
+    verifyTypes(left_part, null);
 
     // Get closure and fields
     Closure_opContext closure_op = set_expr_ctx.closure_op();
     Closure_fieldContext fields = set_expr_ctx.closure_field();
 
     // Start exploring applying the fields as indicated by the closure operation
-    Object base_object = NameExpressionEvaluator.eval(left_part, o);
+    Object base_object = NameExpressionEvaluator.eval(left_part, null);
     Set<Object> set = new HashSet<Object>();
 
     if (base_object!=null) {
@@ -56,10 +56,10 @@ public class SetExpressionEvaluator {
   /**
    * Evaluate the given collection context on the given object
    */
-  public static Set<Object> eval(CollectionContext collection_ctx, Object o) {
+  public static Set<Object> eval(CollectionContext collection_ctx) {
     // Get the name
     NameContext set_expr = collection_ctx.name();
-    Object set_field_res = NameExpressionEvaluator.eval(set_expr, o);
+    Object set_field_res = NameExpressionEvaluator.eval(set_expr, null);
     assert (set_field_res instanceof Collection);
     Collection<?> col = (Collection<?>) set_field_res;
     if (col==null)

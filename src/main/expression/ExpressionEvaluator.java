@@ -81,7 +81,7 @@ public class ExpressionEvaluator {
     // Evaluate the expression on the object
     ParseContext ctx = (ParseContext) tree;
     vars.put(o.getClass().getSimpleName(), o);
-    return (Boolean) eval(ctx.expr(), o);
+    return (Boolean) eval(ctx.expr());
   }
 
   /**
@@ -106,7 +106,7 @@ public class ExpressionEvaluator {
     vars.put(o1.getClass().getSimpleName(), o1);
     String var_name = FuzzedInvariantUtil.get_vars(alloy_expr, o1.getClass()).get(1);
     vars.put(var_name, o2);
-    return (Boolean) eval(ctx.expr(), o1);
+    return (Boolean) eval(ctx.expr());
 
   }
 
@@ -114,18 +114,18 @@ public class ExpressionEvaluator {
   /**
    * Evaluate the given ParseTree on the given java Object
    */
-  protected static Object eval(ExprContext ectx, Object o) {
+  protected static Object eval(ExprContext ectx) {
 
     Qt_exprContext qt_expr_ctx = ectx.qt_expr();
     if (qt_expr_ctx != null)
-      return QuantifiedExpressionEvaluator.eval(qt_expr_ctx, o);
+      return QuantifiedExpressionEvaluator.eval(qt_expr_ctx);
 
     Num_binary_opContext num_binary_op = ectx.num_binary_op();
     if (num_binary_op != null) {
       // We have a numeric binary operator, i.e., + or -
       List<ExprContext> exprs = ectx.expr();
       assert (exprs.size() == 2);
-      return NumericBinaryExpressionEvaluator.eval(exprs.get(0), num_binary_op, exprs.get(1), o);
+      return NumericBinaryExpressionEvaluator.eval(exprs.get(0), num_binary_op, exprs.get(1));
     }
 
     Binary_opContext binary_op = ectx.binary_op();
@@ -133,7 +133,7 @@ public class ExpressionEvaluator {
       // The expression is a binary one
       List<ExprContext> exprs = ectx.expr();
       assert (exprs.size() == 2);
-      return BinaryExpressionEvaluator.eval(exprs.get(0), binary_op, exprs.get(1), o);
+      return BinaryExpressionEvaluator.eval(exprs.get(0), binary_op, exprs.get(1));
     }
 
     Compare_opContext cmp_op = ectx.compare_op();
@@ -141,7 +141,7 @@ public class ExpressionEvaluator {
       // The expression is a comparison
       List<ExprContext> exprs = ectx.expr();
       assert (exprs.size() == 2);
-      return ComparisonExpressionEvaluator.eval(exprs.get(0), cmp_op, exprs.get(1), o);
+      return ComparisonExpressionEvaluator.eval(exprs.get(0), cmp_op, exprs.get(1));
     }
 
     Unary_opContext unary_op = ectx.unary_op();
@@ -149,19 +149,19 @@ public class ExpressionEvaluator {
       // The expression is a unary one
       List<ExprContext> exprs = ectx.expr();
       assert (exprs.size() == 1);
-      return UnaryExpressionEvaluator.eval(unary_op, exprs.get(0), o);
+      return UnaryExpressionEvaluator.eval(unary_op, exprs.get(0));
     }
 
     NameContext name_ctx = ectx.name();
     if (name_ctx != null) {
       // The expression is a name
-      return NameExpressionEvaluator.eval(name_ctx, o);
+      return NameExpressionEvaluator.eval(name_ctx, null);
     }
 
     Set_exprContext set_expr = ectx.set_expr();
     if (set_expr != null) {
       // The expression is a set
-      return SetExpressionEvaluator.eval(set_expr, o);
+      return SetExpressionEvaluator.eval(set_expr);
     }
 
     try {

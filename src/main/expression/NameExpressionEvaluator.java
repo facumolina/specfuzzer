@@ -38,10 +38,10 @@ public class NameExpressionEvaluator {
    * Evaluate the given ID on the given object
    */
   public static Object eval(TerminalNode ID, Object o) {
-    if (o == null)
-      return null;
-    if (ID.getText().equals(o.getClass().getSimpleName()))
-      return o;
+    if (o != null) {
+      if (ID.getText().equals(o.getClass().getSimpleName()))
+        return o;
+    }
     if (ExpressionEvaluator.vars.containsKey(ID.getText()))
       return ExpressionEvaluator.vars.get(ID.getText());
     if (ID.getText().equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
