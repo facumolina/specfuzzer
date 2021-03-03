@@ -56,7 +56,11 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      ExpressionEvaluator.eval(fuzzed_spec, avl);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, List.class);
+      if (vars.size()==1)
+        ExpressionEvaluator.eval(fuzzed_spec, avl);
+      if (vars.size()==2)
+        ExpressionEvaluator.eval(fuzzed_spec, avl, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
     }
   }
 
