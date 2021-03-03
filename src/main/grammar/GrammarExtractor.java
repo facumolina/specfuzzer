@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.antlr.v4.tool.Grammar;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.json.simple.JSONObject;
@@ -42,7 +43,7 @@ public class GrammarExtractor {
     // Build the corresponding type graph
     System.out.println("> Building the Type Graph");
     type_graph = new DirectedPseudograph<Class<?>, LabeledEdge>(LabeledEdge.class);
-    build_type_graph(cut, new HashSet<String>());
+    build_type_graph(cut, new HashSet<>());
     System.out.println("Nodes: " + type_graph.vertexSet().toString());
     System.out.println("Edges: " + type_graph.edgeSet().toString());
     System.out.println();
@@ -100,6 +101,26 @@ public class GrammarExtractor {
   }
 
   /**
+   * Create the membership related symbols from label
+   */
+  private static void add_membership_symbols(Map<String, List<String>> grammar, Class<?> cut,
+    String curr_expr, String label) {
+      // The base set can be built: curr_expr.*(label)
+      // TODO
+      // For each field that can be applied after label, i.e., starting from curr_expr.label type
+      // Create the corresponding set with he corresponding type
+    Set<LabeledEdge> edges = type_graph.outgoingEdgesOf(cut);
+    for (LabeledEdge edge : edges) {
+      Class<?> target_type = type_graph.getEdgeTarget(edge);
+      if (!cut.equals(target_type)) {
+        String dest_label = edge.getLabel();
+        String final_type = JavaTypesUtil.format_type(target_type.getSimpleName());
+        GrammarBuilder.add_membership_symbol(grammar, cut.getSimpleName(), curr_expr, dest_label, final_type);
+      }
+    }
+  }
+
+  /**
    * Create the quantification related symbols from label
    */
   private static void add_quantification_symbols_from_label(Map<String, List<String>> grammar,
@@ -114,7 +135,6 @@ public class GrammarExtractor {
             curr_expr, target_type.getSimpleName(), label, dest_label);
       }
     }
-
   }
 
   /**
@@ -217,6 +237,7 @@ public class GrammarExtractor {
         if (cut.equals(target_type)) {
           // We have a closure case, so create the quantification related symbols
           add_quantification_symbols_from_label(grammar, cut, curr_expr, edge.getLabel());
+          add_membership_symbols(grammar, cut, curr_expr, edge.getLabel());
         } else {
           // This is not a closure case, continue exploring only non primitive types
           if (!target_type.isPrimitive()) {

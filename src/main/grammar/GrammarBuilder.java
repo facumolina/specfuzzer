@@ -29,6 +29,7 @@ public class GrammarBuilder {
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.QT_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.NUMERIC_CMP_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.LOGIC_CMP_EXPR);
+    grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.MEMBERSHIP_EXPR);
 
     // Obtain all arguments types
     all_arguments_types = JavaTypesUtil.all_arguments_types(cut);
@@ -68,6 +69,10 @@ public class GrammarBuilder {
     grammar.put(GrammarSymbols.INTEGER_CONSTANT, GrammarSymbols.INTEGER_CONSTANT_VALUE);
     grammar.put(GrammarSymbols.INTEGER_FIELD, new LinkedList<String>());
     grammar.put(GrammarSymbols.INTEGER_FROM_SET_SIZE, new LinkedList<String>());
+
+    // Membership
+    grammar.put(GrammarSymbols.MEMBERSHIP_EXPR, new LinkedList<String>());
+
 
     return grammar;
   }
@@ -129,6 +134,19 @@ public class GrammarBuilder {
       return GrammarSymbols.NUMERIC_CMP_OP;
     else
       return GrammarSymbols.REF_OP;
+  }
+
+  /**
+   * Add membership symbols to the given grammar
+   */
+  public static void add_membership_symbol(Map<String, List<String>> grammar, String type_name,
+      String curr_expr, String final_label, String final_set_type) {
+    String current_set_symbol = GrammarSymbols.get_set_symbol(type_name);
+    String membership_expr_symbol = GrammarSymbols.get_membership_value(final_set_type);
+    String var = GrammarSymbols.get_special_identifier(final_set_type);
+    String membership_expr_value = var + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + current_set_symbol + "." + final_label;
+    extend_grammar(grammar, membership_expr_symbol, membership_expr_value);
+    extend_grammar(grammar, GrammarSymbols.MEMBERSHIP_EXPR, membership_expr_symbol);
   }
 
   /**

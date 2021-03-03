@@ -66,6 +66,9 @@ public class GrammarSymbols {
 
   public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<String>();
 
+  // Membership expressions
+  public static final String MEMBERSHIP_EXPR = "<Membership_Expr>";
+
   // Other constants
   public static final String QT_VAR_NAME = "n";
   public static final String NULL = "null";
@@ -152,4 +155,12 @@ public class GrammarSymbols {
     return type_name + "_Variable";
   }
 
+  /**
+   * Get the corresponding membership set from the given type
+   */
+  public static String get_membership_value(String type) {
+    if (JavaTypesUtil.INTEGER.equals(type))
+      return GrammarSymbols.MEMBERSHIP_INTEGER_SET;
+    throw new IllegalArgumentException("No membership set for type "+type);
+  }
 }
