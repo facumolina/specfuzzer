@@ -34,7 +34,8 @@ public class SetExpressionEvaluatorTest {
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
     ExpressionEvaluator.vars = new HashMap<String, Object>();
-    return (Collection<Object>) ExpressionEvaluator.eval(ctx.expr(), o);
+    ExpressionEvaluator.vars.put(o.getClass().getSimpleName(), o);
+    return (Collection<Object>) ExpressionEvaluator.eval(ctx.expr());
   }
 
   @Test
