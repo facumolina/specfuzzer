@@ -21,7 +21,7 @@ public class AlloyExprGrammarParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, ID=34, ID_START=35, ID_CHAR=36, WS=37;
+		T__31=32, T__32=33, T__33=34, ID=35, ID_START=36, ID_CHAR=37, WS=38;
 	public static final int
 		RULE_parse = 0, RULE_expr = 1, RULE_qt_expr = 2, RULE_set_expr = 3, RULE_collection = 4, 
 		RULE_num_binary_op = 5, RULE_binary_op = 6, RULE_compare_op = 7, RULE_unary_op = 8, 
@@ -34,16 +34,16 @@ public class AlloyExprGrammarParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'('", "')'", "':'", "'.'", "'+'", "'-'", "'||'", "'or'", "'&&'", 
-		"'and'", "'implies'", "'=>'", "'iff'", "'='", "'!='", "'in'", "'not in'", 
-		"'<'", "'>'", "'<='", "'>='", "'!'", "'not'", "'no'", "'#'", "'*'", "'^'", 
-		"'all'", "'some'", "'lone'", "'one'", "'0'", "'1'"
+		null, "'('", "')'", "':'", "'.'", "').'", "'+'", "'-'", "'||'", "'or'", 
+		"'&&'", "'and'", "'implies'", "'=>'", "'iff'", "'='", "'!='", "'in'", 
+		"'not in'", "'<'", "'>'", "'<='", "'>='", "'!'", "'not'", "'no'", "'#'", 
+		"'*'", "'^'", "'all'", "'some'", "'lone'", "'one'", "'0'", "'1'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, "ID", "ID_START", 
-		"ID_CHAR", "WS"
+		null, null, null, null, null, null, null, null, null, null, null, "ID", 
+		"ID_START", "ID_CHAR", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -395,8 +395,11 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static class Set_exprContext extends ParserRuleContext {
-		public NameContext name() {
-			return getRuleContext(NameContext.class,0);
+		public List<NameContext> name() {
+			return getRuleContexts(NameContext.class);
+		}
+		public NameContext name(int i) {
+			return getRuleContext(NameContext.class,i);
 		}
 		public Closure_opContext closure_op() {
 			return getRuleContext(Closure_opContext.class,0);
@@ -422,20 +425,45 @@ public class AlloyExprGrammarParser extends Parser {
 		Set_exprContext _localctx = new Set_exprContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_set_expr);
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(80);
-			name();
-			setState(81);
-			match(T__3);
-			setState(82);
-			closure_op();
-			setState(83);
-			match(T__0);
-			setState(84);
-			closure_field();
-			setState(85);
-			match(T__1);
+			setState(95);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(80);
+				name();
+				setState(81);
+				match(T__3);
+				setState(82);
+				closure_op();
+				setState(83);
+				match(T__0);
+				setState(84);
+				closure_field();
+				setState(85);
+				match(T__1);
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(87);
+				name();
+				setState(88);
+				match(T__3);
+				setState(89);
+				closure_op();
+				setState(90);
+				match(T__0);
+				setState(91);
+				closure_field();
+				setState(92);
+				match(T__4);
+				setState(93);
+				name();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -473,7 +501,7 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(87);
+			setState(97);
 			name();
 			}
 		}
@@ -510,9 +538,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(89);
+			setState(99);
 			_la = _input.LA(1);
-			if ( !(_la==T__4 || _la==T__5) ) {
+			if ( !(_la==T__5 || _la==T__6) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -555,9 +583,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(91);
+			setState(101);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -600,9 +628,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(93);
+			setState(103);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -645,9 +673,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(95);
+			setState(105);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -690,9 +718,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
+			setState(107);
 			_la = _input.LA(1);
-			if ( !(_la==T__25 || _la==T__26) ) {
+			if ( !(_la==T__26 || _la==T__27) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -735,9 +763,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(99);
+			setState(109);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__23) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__24) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -781,24 +809,24 @@ public class AlloyExprGrammarParser extends Parser {
 		NameContext _localctx = new NameContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_name);
 		try {
-			setState(105);
+			setState(115);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(101);
+				setState(111);
 				match(ID);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(102);
+				setState(112);
 				match(ID);
-				setState(103);
+				setState(113);
 				match(T__3);
-				setState(104);
+				setState(114);
 				name();
 				}
 				break;
@@ -838,24 +866,24 @@ public class AlloyExprGrammarParser extends Parser {
 		Closure_fieldContext _localctx = new Closure_fieldContext(_ctx, getState());
 		enterRule(_localctx, 24, RULE_closure_field);
 		try {
-			setState(111);
+			setState(121);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(107);
+				setState(117);
 				match(ID);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(108);
+				setState(118);
 				match(ID);
-				setState(109);
-				match(T__4);
-				setState(110);
+				setState(119);
+				match(T__5);
+				setState(120);
 				closure_field();
 				}
 				break;
@@ -894,9 +922,9 @@ public class AlloyExprGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(113);
+			setState(123);
 			_la = _input.LA(1);
-			if ( !(_la==T__31 || _la==T__32) ) {
+			if ( !(_la==T__32 || _la==T__33) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -935,34 +963,36 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\'v\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\64\n\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\7\3>\n\3\f\3\16\3A\13\3\3\4\3\4\3\4\3\4\3\4\3\4"+
-		"\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4Q\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
-		"\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3\f\3\f\3\r\3\r\3\r"+
-		"\3\r\5\rl\n\r\3\16\3\16\3\16\3\16\5\16r\n\16\3\17\3\17\3\17\2\3\4\20\2"+
-		"\4\6\b\n\f\16\20\22\24\26\30\32\34\2\t\3\2\7\b\3\2\t\17\3\2\20\27\3\2"+
-		"\30\33\3\2\34\35\4\2\32\32\36!\3\2\"#\2q\2\36\3\2\2\2\4\63\3\2\2\2\6P"+
-		"\3\2\2\2\bR\3\2\2\2\nY\3\2\2\2\f[\3\2\2\2\16]\3\2\2\2\20_\3\2\2\2\22a"+
-		"\3\2\2\2\24c\3\2\2\2\26e\3\2\2\2\30k\3\2\2\2\32q\3\2\2\2\34s\3\2\2\2\36"+
-		"\37\5\4\3\2\37 \7\2\2\3 \3\3\2\2\2!\"\b\3\1\2\"\64\5\6\4\2#$\7\3\2\2$"+
-		"%\5\4\3\2%&\7\4\2\2&\'\5\16\b\2\'(\7\3\2\2()\5\4\3\2)*\7\4\2\2*\64\3\2"+
-		"\2\2+,\5\22\n\2,-\7\3\2\2-.\5\4\3\2./\7\4\2\2/\64\3\2\2\2\60\64\5\b\5"+
-		"\2\61\64\5\30\r\2\62\64\5\34\17\2\63!\3\2\2\2\63#\3\2\2\2\63+\3\2\2\2"+
-		"\63\60\3\2\2\2\63\61\3\2\2\2\63\62\3\2\2\2\64?\3\2\2\2\65\66\f\t\2\2\66"+
-		"\67\5\f\7\2\678\5\4\3\n8>\3\2\2\29:\f\b\2\2:;\5\20\t\2;<\5\4\3\t<>\3\2"+
-		"\2\2=\65\3\2\2\2=9\3\2\2\2>A\3\2\2\2?=\3\2\2\2?@\3\2\2\2@\5\3\2\2\2A?"+
-		"\3\2\2\2BC\5\26\f\2CD\5\30\r\2DE\7\5\2\2EF\5\b\5\2FG\7\5\2\2GH\5\4\3\2"+
-		"HQ\3\2\2\2IJ\5\26\f\2JK\5\30\r\2KL\7\5\2\2LM\5\n\6\2MN\7\5\2\2NO\5\4\3"+
-		"\2OQ\3\2\2\2PB\3\2\2\2PI\3\2\2\2Q\7\3\2\2\2RS\5\30\r\2ST\7\6\2\2TU\5\24"+
-		"\13\2UV\7\3\2\2VW\5\32\16\2WX\7\4\2\2X\t\3\2\2\2YZ\5\30\r\2Z\13\3\2\2"+
-		"\2[\\\t\2\2\2\\\r\3\2\2\2]^\t\3\2\2^\17\3\2\2\2_`\t\4\2\2`\21\3\2\2\2"+
-		"ab\t\5\2\2b\23\3\2\2\2cd\t\6\2\2d\25\3\2\2\2ef\t\7\2\2f\27\3\2\2\2gl\7"+
-		"$\2\2hi\7$\2\2ij\7\6\2\2jl\5\30\r\2kg\3\2\2\2kh\3\2\2\2l\31\3\2\2\2mr"+
-		"\7$\2\2no\7$\2\2op\7\7\2\2pr\5\32\16\2qm\3\2\2\2qn\3\2\2\2r\33\3\2\2\2"+
-		"st\t\b\2\2t\35\3\2\2\2\b\63=?Pkq";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3(\u0080\4\2\t\2\4"+
+		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
+		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\64\n\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3>\n\3\f\3\16\3A\13\3\3\4\3\4\3\4\3\4\3"+
+		"\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4Q\n\4\3\5\3\5\3\5\3\5\3\5\3"+
+		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5b\n\5\3\6\3\6\3\7\3\7\3\b\3"+
+		"\b\3\t\3\t\3\n\3\n\3\13\3\13\3\f\3\f\3\r\3\r\3\r\3\r\5\rv\n\r\3\16\3\16"+
+		"\3\16\3\16\5\16|\n\16\3\17\3\17\3\17\2\3\4\20\2\4\6\b\n\f\16\20\22\24"+
+		"\26\30\32\34\2\t\3\2\b\t\3\2\n\20\3\2\21\30\3\2\31\34\3\2\35\36\4\2\33"+
+		"\33\37\"\3\2#$\2|\2\36\3\2\2\2\4\63\3\2\2\2\6P\3\2\2\2\ba\3\2\2\2\nc\3"+
+		"\2\2\2\fe\3\2\2\2\16g\3\2\2\2\20i\3\2\2\2\22k\3\2\2\2\24m\3\2\2\2\26o"+
+		"\3\2\2\2\30u\3\2\2\2\32{\3\2\2\2\34}\3\2\2\2\36\37\5\4\3\2\37 \7\2\2\3"+
+		" \3\3\2\2\2!\"\b\3\1\2\"\64\5\6\4\2#$\7\3\2\2$%\5\4\3\2%&\7\4\2\2&\'\5"+
+		"\16\b\2\'(\7\3\2\2()\5\4\3\2)*\7\4\2\2*\64\3\2\2\2+,\5\22\n\2,-\7\3\2"+
+		"\2-.\5\4\3\2./\7\4\2\2/\64\3\2\2\2\60\64\5\b\5\2\61\64\5\30\r\2\62\64"+
+		"\5\34\17\2\63!\3\2\2\2\63#\3\2\2\2\63+\3\2\2\2\63\60\3\2\2\2\63\61\3\2"+
+		"\2\2\63\62\3\2\2\2\64?\3\2\2\2\65\66\f\t\2\2\66\67\5\f\7\2\678\5\4\3\n"+
+		"8>\3\2\2\29:\f\b\2\2:;\5\20\t\2;<\5\4\3\t<>\3\2\2\2=\65\3\2\2\2=9\3\2"+
+		"\2\2>A\3\2\2\2?=\3\2\2\2?@\3\2\2\2@\5\3\2\2\2A?\3\2\2\2BC\5\26\f\2CD\5"+
+		"\30\r\2DE\7\5\2\2EF\5\b\5\2FG\7\5\2\2GH\5\4\3\2HQ\3\2\2\2IJ\5\26\f\2J"+
+		"K\5\30\r\2KL\7\5\2\2LM\5\n\6\2MN\7\5\2\2NO\5\4\3\2OQ\3\2\2\2PB\3\2\2\2"+
+		"PI\3\2\2\2Q\7\3\2\2\2RS\5\30\r\2ST\7\6\2\2TU\5\24\13\2UV\7\3\2\2VW\5\32"+
+		"\16\2WX\7\4\2\2Xb\3\2\2\2YZ\5\30\r\2Z[\7\6\2\2[\\\5\24\13\2\\]\7\3\2\2"+
+		"]^\5\32\16\2^_\7\7\2\2_`\5\30\r\2`b\3\2\2\2aR\3\2\2\2aY\3\2\2\2b\t\3\2"+
+		"\2\2cd\5\30\r\2d\13\3\2\2\2ef\t\2\2\2f\r\3\2\2\2gh\t\3\2\2h\17\3\2\2\2"+
+		"ij\t\4\2\2j\21\3\2\2\2kl\t\5\2\2l\23\3\2\2\2mn\t\6\2\2n\25\3\2\2\2op\t"+
+		"\7\2\2p\27\3\2\2\2qv\7%\2\2rs\7%\2\2st\7\6\2\2tv\5\30\r\2uq\3\2\2\2ur"+
+		"\3\2\2\2v\31\3\2\2\2w|\7%\2\2xy\7%\2\2yz\7\b\2\2z|\5\32\16\2{w\3\2\2\2"+
+		"{x\3\2\2\2|\33\3\2\2\2}~\t\b\2\2~\35\3\2\2\2\t\63=?Pau{";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

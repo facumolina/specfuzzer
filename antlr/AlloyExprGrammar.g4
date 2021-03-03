@@ -23,6 +23,7 @@ qt_expr:
 
 set_expr:
   name '.' closure_op '(' closure_field ')'
+  | name '.' closure_op '(' closure_field ').' name
   ;
 
 collection:
