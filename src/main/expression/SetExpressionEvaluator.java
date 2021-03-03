@@ -22,7 +22,8 @@ public class SetExpressionEvaluator {
    */
   public static Set<Object> eval(Set_exprContext set_expr_ctx, Object o) {
     // Get the base part (left to closure operator)
-    NameContext left_part = set_expr_ctx.name();
+    // Name at 0 is the part of the expression that starts from the object
+    NameContext left_part = set_expr_ctx.name(0);
     verifyTypes(left_part, o);
 
     // Get closure and fields
@@ -39,7 +40,17 @@ public class SetExpressionEvaluator {
       closureFromFields(base_object, fields, set);
     }
 
-    return set;
+    NameContext after_closure = set_expr_ctx.name(1);
+    // If the name after closure is null, then the set has been computed
+    if (after_closure==null)
+      return set;
+
+    Set<Object> after_closure_set = new HashSet<>();
+    set.forEach(elem -> {
+      after_closure_set.add(NameExpressionEvaluator.eval(after_closure, elem));
+    });
+
+    return after_closure_set;
   }
 
   /**
