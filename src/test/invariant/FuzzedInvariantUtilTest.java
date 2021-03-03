@@ -9,27 +9,27 @@ public class FuzzedInvariantUtilTest {
 
   @Test
   public void test_unary_1() {
-    assertTrue(FuzzedInvariantArity.ONE==FuzzedInvariantUtil.get_arity("List.x <= List.x", List.class));
+    assertTrue(1==FuzzedInvariantUtil.get_amount_of_vars("List.x <= List.x"));
   }
 
   @Test
   public void test_unary_2() {
-    assertTrue(FuzzedInvariantArity.ONE==FuzzedInvariantUtil.get_arity("no n : List.*(next) : n.x <= List.x", List.class));
+    assertTrue(1==FuzzedInvariantUtil.get_amount_of_vars("no n : List.*(next) : n.x <= List.x"));
   }
 
   @Test
   public void test_unary_3() {
-    assertTrue(FuzzedInvariantArity.ONE==FuzzedInvariantUtil.get_arity("List.x <= #(List.*(next)) - List.x", List.class));
+    assertTrue(1==FuzzedInvariantUtil.get_amount_of_vars("List.x <= #(List.*(next)) - List.x"));
   }
 
   @Test
   public void test_binary_1() {
-    assertTrue(FuzzedInvariantArity.TWO==FuzzedInvariantUtil.get_arity("#(List.^(next)) = Integer_Variable", List.class));
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) = Integer_Variable"));
   }
 
   @Test
   public void test_binary_2() {
-    assertTrue(FuzzedInvariantArity.TWO==FuzzedInvariantUtil.get_arity("#(List.^(next)) != List.x + Integer_Variable", List.class));
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) != List.x + Integer_Variable"));
   }
 
 }

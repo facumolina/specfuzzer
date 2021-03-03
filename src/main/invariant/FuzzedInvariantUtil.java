@@ -3,9 +3,7 @@ package invariant;
 import grammar.GrammarSymbols;
 import grammar.JavaTypesUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Class that contains utils for fuzzed invariants
@@ -13,21 +11,24 @@ import java.util.Random;
 public class FuzzedInvariantUtil {
 
   /**
-   * Returns the corresponding arity from a given fuzzed spec
+   * Return the list of class names
    */
-  public static FuzzedInvariantArity get_arity(String fuzzed_spec, Class<?> base_cut) {
-
-    String cut_name = base_cut.getSimpleName();
-    if (!fuzzed_spec.contains(cut_name))
-      throw new IllegalArgumentException(fuzzed_spec+ "can't be a spec for class "+cut_name);
-
-    if (fuzzed_spec.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER)))
-      return FuzzedInvariantArity.TWO;
-
-    if (fuzzed_spec.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT)))
-      return FuzzedInvariantArity.TWO;
-
-    return FuzzedInvariantArity.ONE;
+  public static int get_amount_of_vars(String fuzzed_spec) {
+    Set<String> class_names = new HashSet<String>();
+    int vars = 0;
+    for (int i=0 ; i < fuzzed_spec.length(); i++) {
+      if (Character.isUpperCase(fuzzed_spec.charAt(i))) {
+        if (i==0 || fuzzed_spec.charAt(i-1)==' ' || fuzzed_spec.charAt(i-1)=='(') {
+          String name = "";
+          while (i < fuzzed_spec.length() && fuzzed_spec.charAt(i)!='.' && fuzzed_spec.charAt(i)!=' ' && fuzzed_spec.charAt(i)!=')') {
+            name += fuzzed_spec.charAt(i);
+            i++;
+          }
+          class_names.add(name);
+        }
+      }
+    }
+    return class_names.size();
   }
 
   /**
@@ -57,11 +58,11 @@ public class FuzzedInvariantUtil {
   /**
    * Returns the Invariant class that needs to be used to encapsulate the given fuzzed spec
    */
-  public static Class<?> get_invariant_for_spec(String fuzzed_spec, Class<?> base_cut) {
-      FuzzedInvariantArity arity = get_arity(fuzzed_spec, base_cut);
-      if (arity==FuzzedInvariantArity.ONE)
+  public static Class<?> get_invariant_for_spec(String fuzzed_spec) {
+      int arity = get_amount_of_vars(fuzzed_spec);
+      if (arity==1)
         return FuzzedUnaryInvariant.class;
-      if (arity==FuzzedInvariantArity.TWO)
+      if (arity==2)
         return FuzzedBinaryInvariant.class;
       return null;
   }
