@@ -6,6 +6,7 @@ import java.util.Map;
 
 import grammar.GrammarSymbols;
 import grammar.JavaTypesUtil;
+import invariant.FuzzedInvariantUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -103,7 +104,7 @@ public class ExpressionEvaluator {
     // Evaluate the expression on the object
     ParseContext ctx = (ParseContext) tree;
     vars.put(o1.getClass().getSimpleName(), o1);
-    String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.format_type(o2.getClass().getSimpleName()));
+    String var_name = FuzzedInvariantUtil.get_vars(alloy_expr, o1.getClass()).get(1);
     vars.put(var_name, o2);
     return (Boolean) eval(ctx.expr(), o1);
 

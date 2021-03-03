@@ -142,7 +142,7 @@ public class GrammarBuilder {
   public static void add_membership_symbol(Map<String, List<String>> grammar, String type_name,
       String curr_expr, String final_label, String final_set_type) {
     String current_set_symbol = GrammarSymbols.get_set_symbol(type_name);
-    String membership_expr_symbol = GrammarSymbols.get_membership_value(final_set_type);
+    String membership_expr_symbol = GrammarSymbols.get_membership_symbol(final_set_type);
     String var = GrammarSymbols.get_special_identifier(final_set_type);
     String membership_expr_value = var + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + current_set_symbol + "." + final_label;
     extend_grammar(grammar, membership_expr_symbol, membership_expr_value);

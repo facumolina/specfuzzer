@@ -73,11 +73,6 @@ public class GrammarSymbols {
   public static final String QT_VAR_NAME = "n";
   public static final String NULL = "null";
 
-  // Specific symbols involving more than one variable
-  public static final String MEMBERSHIP_INTEGER_SET = "<Membership_Integer_Set>";
-  public static final List<String> MEMBERSHIP_INTEGER_SET_VALUE = Arrays.
-          asList(INTEGER + " " + VAR_SET_CMP_OP_VALUE + " " + INTEGER_SET);
-
   /**
    * Return the non-terminal symbol denoting a set of the given type
    */
@@ -156,11 +151,13 @@ public class GrammarSymbols {
   }
 
   /**
-   * Get the corresponding membership set from the given type
+   * Get membership symbol for type
    */
-  public static String get_membership_value(String type) {
-    if (JavaTypesUtil.INTEGER.equals(type))
-      return GrammarSymbols.MEMBERSHIP_INTEGER_SET;
-    throw new IllegalArgumentException("No membership set for type "+type);
+  public static String get_membership_symbol(String type) {
+    if (type==null)
+      throw new IllegalArgumentException("The type can't be null");
+
+    return "<Membership_" + type + "_Set>";
   }
+
 }
