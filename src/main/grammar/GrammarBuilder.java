@@ -255,6 +255,7 @@ public class GrammarBuilder {
     remove_non_expandable_from_integer(grammar);
     remove_non_expandable_from_logic(grammar);
     remove_non_expandable_from_quantification(grammar);
+    remove_non_expandable_membership(grammar);
   }
 
   /**
@@ -310,6 +311,15 @@ public class GrammarBuilder {
       grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.QT_EXPR);
       if (grammar.get(GrammarSymbols.LOGIC_EXPR) != null && !grammar.get(GrammarSymbols.LOGIC_EXPR).isEmpty())
         grammar.get(GrammarSymbols.LOGIC_EXPR).remove(GrammarSymbols.QT_EXPR);
+    }
+  }
+
+  /**
+   * Remove non-expandable symbol involving membership
+   */
+  protected static void remove_non_expandable_membership(Map<String, List<String>> grammar) {
+    if (grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).isEmpty()) {
+      grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.MEMBERSHIP_EXPR);
     }
   }
 

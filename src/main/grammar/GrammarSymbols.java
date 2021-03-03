@@ -156,7 +156,6 @@ public class GrammarSymbols {
   public static String get_membership_symbol(String type) {
     if (type==null)
       throw new IllegalArgumentException("The type can't be null");
-
     return "<Membership_" + type + "_Set>";
   }
 
