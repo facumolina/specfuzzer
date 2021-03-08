@@ -1,5 +1,6 @@
 package invariant;
 
+import daikon.chicory.PptTupleInfo;
 import expression.NonEvaluableExpressionException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
@@ -105,13 +106,14 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     // Recover the object
     int i = (int) v;
     String key = i+"-"+ppt.parent.name;
-    List<Object> l = ObjectsLoader.get_object(key);
+    List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
       return InvariantStatus.NO_CHANGE;
 
     try {
-      for (Object o : l) {
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o);
+      for (PptTupleInfo tuple : l) {
+        // The unary invariant is only evaluated on the this object of the tuple
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
         if (!b) {
           return InvariantStatus.FALSIFIED;
         }
