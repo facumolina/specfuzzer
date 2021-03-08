@@ -22,7 +22,7 @@ public class ObjectsCollector {
 
   /** The HashMap mapping string to list of objects */
   /** Each key is a pair hashcode-pptName pointing to a list of objects */
-  private static HashMap<String, List<Object>> objects = new HashMap<String, List<Object>>();
+  private static HashMap<String, List<PptTupleInfo>> objects = new HashMap<String, List<PptTupleInfo>>();
 
   private static String serialized_file_dir = System.getProperty("user.dir") + "/";
 
@@ -40,11 +40,22 @@ public class ObjectsCollector {
     if (Chicory.daikon_args.contains(object.getClass().getSimpleName())) {
       String key = hashCode + "-" + curr_ppt_name;
       if (!objects.containsKey(key)) {
-        objects.put(key, new LinkedList<Object>());
+        objects.put(key, new LinkedList<PptTupleInfo>());
       }
-      //Gson gson = new Gson();
-      //objects.get(key).add(gson.fromJson(gson.toJson(object), object.getClass()));
-      objects.get(key).add(xstream.fromXML(xstream.toXML(object)));
+      PptTupleInfo tupleInfo = new PptTupleInfo(xstream.fromXML(xstream.toXML(object)));
+      objects.get(key).add(tupleInfo);
+    }
+  }
+
+  public static void addObject(PptTupleInfo tupleInfo) {
+    assert tupleInfo != null && tupleInfo.thisObj != null : "The tuple info nor the this obj to be saved can be null";
+    if (Chicory.daikon_args.contains(tupleInfo.thisObj.getClass().getSimpleName())) {
+      int hashCode = System.identityHashCode(tupleInfo.thisObj);
+      String key = hashCode + "-" + curr_ppt_name;
+      if (!objects.containsKey(key)) {
+        objects.put(key, new LinkedList<PptTupleInfo>());
+      }
+      objects.get(key).add((PptTupleInfo) xstream.fromXML(xstream.toXML(tupleInfo)));
     }
   }
 

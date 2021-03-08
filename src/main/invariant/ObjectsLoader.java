@@ -11,6 +11,7 @@ import java.util.List;
 import com.thoughtworks.xstream.XStream;
 
 import daikon.Daikon;
+import daikon.chicory.PptTupleInfo;
 import daikon.tools.InvariantChecker;
 
 /**
@@ -24,12 +25,12 @@ import daikon.tools.InvariantChecker;
 public final class ObjectsLoader {
 
   /** The HashMap mapping hashcodes to objects */
-  private static Map<String, List<Object>> objects;
+  private static Map<String, List<PptTupleInfo>> objects;
 
   /** The file from which the hashmap must be loaded */
   private static final String serialiazed_file_dir = System.getProperty("user.dir") + "/";
 
-  public static List<Object> get_object(String key) {
+  public static List<PptTupleInfo> get_object(String key) {
     if (objects == null) {
       load_objects();
       System.out.println("Total loaded objects: " + objects.size());
@@ -58,9 +59,9 @@ public final class ObjectsLoader {
         throw new RuntimeException("Cannot deserialize file: " + final_serialized_files[i]);
       }
       if (objects == null)
-        objects = (Map<String, List<Object>>) map_obj;
+        objects = (Map<String, List<PptTupleInfo>>) map_obj;
       else
-        objects.putAll((Map<String, List<Object>>) map_obj);
+        objects.putAll((Map<String, List<PptTupleInfo>>) map_obj);
       System.out.println("Loaded objects from file: " + final_serialized_files[i]);
     }
   }
