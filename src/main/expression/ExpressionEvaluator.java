@@ -84,6 +84,7 @@ public class ExpressionEvaluator {
     return (Boolean) eval(ctx.expr());
   }
 
+
   /**
    * Evaluate the given binary Alloy expression on the given objects
    */
@@ -110,6 +111,28 @@ public class ExpressionEvaluator {
 
   }
 
+  /**
+   * Evaluate the given any expr (not necessarily boolean) on the given object
+   */
+  public static Object evalAnyExpr(String alloy_expr, Object o) {
+    if (alloy_expr == null || o == null)
+      throw new IllegalArgumentException("Neither the expression nor the object can be null.");
+
+    validate(alloy_expr, o.getClass());
+
+    setup(alloy_expr);
+
+    // Parse the expression and get the tree
+    ParseTree tree = parser.parse();
+
+    if (parser.getNumberOfSyntaxErrors() > 0)
+      throw new IllegalArgumentException("The given expression contains syntax errors");
+
+    // Evaluate the expression on the object
+    ParseContext ctx = (ParseContext) tree;
+    vars.put(o.getClass().getSimpleName(), o);
+    return eval(ctx.expr());
+  }
 
   /**
    * Evaluate the given ParseTree on the given java Object
