@@ -89,8 +89,8 @@ public class ExpressionEvaluator {
    * Evaluate the given binary Alloy expression on the given objects
    */
   public static boolean eval(String alloy_expr, Object o1, Object o2) {
-    if (alloy_expr == null || o1 == null || o2 == null)
-      throw new IllegalArgumentException("Neither the expression nor the objects can be null.");
+    if (alloy_expr == null || o1 == null)
+      throw new IllegalArgumentException("Neither the expression nor the object can be null.");
 
     validate(alloy_expr, o1.getClass());
 
