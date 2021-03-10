@@ -2,6 +2,7 @@ package invariant;
 
 import daikon.Daikon;
 import daikon.PptSlice;
+import daikon.chicory.PptTupleInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
@@ -13,7 +14,6 @@ import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 import java.util.List;
@@ -100,18 +100,59 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: <" + var1().name() + " , " + var2().name() + ">";
   }
 
+  /**
+   * Return the value that represents the object
+   */
+  private long getObject(long v1, long v2) {
+    if (var1().file_rep_type.isObject())
+      return v1;
+    else
+      return v2;
+  }
+
+  /**
+   * Return the value being compared with the object
+   */
+  private Object getValueForVariable(PptTupleInfo tuple) {
+    String valueName = getValueName();
+    Object varValue = null;
+    if (valueName.startsWith("this")) {
+      varValue = ExpressionEvaluator.evalAnyExpr(valueName.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
+    } else if (valueName.startsWith(tuple.getThisObject().getClass().getCanonicalName())) {
+      varValue = ExpressionEvaluator.evalAnyExpr(valueName.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
+    } else {
+      varValue = tuple.getVariableValue(valueName);
+    }
+    return varValue;
+  }
+
+  /**
+   * Return the name of the variable being compared with the object
+   */
+  private String getValueName() {
+    if (var1().file_rep_type.isPrimitive())
+      return var1().name();
+    else
+      return var2().name();
+  }
+
   @Override
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // Recover the object
-    int i = (int) v2;
+    int i = (int) getObject(v1, v2);
     String key = i+"-"+ppt.parent.name;
-    List<Object> l = ObjectsLoader.get_object(key);
+    List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
       return InvariantStatus.NO_CHANGE;
 
     try {
-      for (Object o : l) {
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o);
+      for (PptTupleInfo tuple : l) {
+        Object varValue = getValueForVariable(tuple);
+        if (varValue==null) {
+          continue;
+        }
+
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
         if (!b) {
           return InvariantStatus.FALSIFIED;
         }
@@ -120,6 +161,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified
       return InvariantStatus.FALSIFIED;
     }
+
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -148,6 +190,13 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     FuzzedBinaryInvariant fuzzed_inv = (FuzzedBinaryInvariant) invariant;
     assert (fuzzed_inv.fuzzed_spec != null);
     return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof FuzzedBinaryInvariant))
+      return false;
+    return isSameFormula((FuzzedBinaryInvariant)other);
   }
 
 }
