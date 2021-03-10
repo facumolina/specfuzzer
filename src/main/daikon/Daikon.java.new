@@ -169,6 +169,7 @@ import java.io.EOFException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.LineNumberReader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -1752,6 +1753,85 @@ public final class Daikon {
       }
       }
       System.out.println();
+    }
+
+    // Fuzzed invariants
+    if (grammar_to_fuzz != null) {
+      // Load the fuzzer class
+      Class<?> fuzzer_class;
+      Object fuzzer;
+      try {
+        fuzzer_class = Class.forName("fuzzer.BasicFuzzer");
+        Constructor<?> cons = fuzzer_class.getConstructor(String.class);
+        fuzzer = cons.newInstance(grammar_to_fuzz);
+      } catch (Exception e) {
+        throw new Daikon.UserError(
+          "Cannot load class fuzzer.BasicFuzzer or build instance. Is it on the classpath?"
+        );
+      }
+      
+      // Get the fuzz method
+      Method fuzz_method;
+      try {
+        fuzz_method = fuzzer_class.getMethod("fuzz");
+      } catch (NoSuchMethodException e) {
+        throw new Daikon.UserError(
+            "No fuzz() method in fuzzer class " + "fuzzer.BasicFuzzer");
+      } catch (SecurityException e) {
+        throw new Daikon.UserError(
+            e,
+            "SecurityException while looking up fuzz() method in fuzzer class "+ fuzzer_class);
+      }
+      System.out.println("Fuzzing specs:");
+      try {
+        int unique_fuzzed_invs = 0;
+        int unary_invs = 0;
+        int binary_invs = 0;
+        for (int i = 0; i < fuzzed_invariants; i++){
+          String fuzzed_spec = (String)fuzz_method.invoke(fuzzer);
+          Class<?> fuzzed_inv_util_class;
+          Class<?> inv_class;
+          try {
+            fuzzed_inv_util_class = Class.forName("invariant.FuzzedInvariantUtil");
+            Method get_amount_of_vars = fuzzed_inv_util_class.getMethod("get_amount_of_vars", String.class);
+            int total_vars = (Integer)get_amount_of_vars.invoke(null, fuzzed_spec);
+            boolean unary = true;
+            if (total_vars == 1) {
+              // The fuzzed spec is unary
+              inv_class = Class.forName("invariant.FuzzedUnaryInvariant");
+            } else if (total_vars == 2) {
+              // The fuzzed spec is binary
+              inv_class = Class.forName("invariant.FuzzedBinaryInvariant");
+              unary = false;
+            } else {
+              unary = false;
+              // Arity not supported
+              throw new Daikon.UserError(
+                "Fuzzed invariant class for arity not supported: "+total_vars
+              );
+            }
+            Method get_proto_from_spec_method = inv_class.getMethod("get_proto_from_spec", String.class);
+            @SuppressWarnings("nullness")
+            Invariant inv = (Invariant) get_proto_from_spec_method.invoke(null, fuzzed_spec);
+            if (!proto_invs.contains(inv)) {
+              proto_invs.add(inv);
+              unique_fuzzed_invs++;
+              if (unary)
+                unary_invs++;
+              else
+                binary_invs++;
+            }
+          } catch(Exception e) {
+            throw new Daikon.UserError(
+              "Cannot load class invariant.FuzzedInvariantUtil or build instance. Is it on the classpath?"
+            );
+          }
+        }
+        System.out.println("Unique fuzzed invariants: "+unique_fuzzed_invs+" ("+fuzzed_invariants+")");
+        System.out.println("Unary: "+unary_invs+" - Binary: "+binary_invs);
+      } catch (Exception e) {
+        throw new Daikon.UserError("Exception while invoking fuzz method");
+      }
     }
 
     // User-defined invariants
