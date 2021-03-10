@@ -148,10 +148,8 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     try {
       for (PptTupleInfo tuple : l) {
         Object varValue = getValueForVariable(tuple);
-        if (varValue==null) {
-          continue;
-        }
-
+        if (varValue==null)
+          return InvariantStatus.FALSIFIED;
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
         if (!b) {
           return InvariantStatus.FALSIFIED;
