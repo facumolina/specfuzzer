@@ -31,8 +31,15 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
     if (vis.length != 2) {
       return false;
     }
+    // Discard serial field
+    if (vis[0].name().contains("serialVersionUID") || vis[1].name().contains("serialVersionUID"))
+      return false;
 
-    return (vis[0].file_rep_type.baseIsPrimitive() && vis[1].file_rep_type.isObject());
+    // The variable represented the object must be the this object
+    boolean res = ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[0].name()=="this")
+      || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[1].name()=="this"));
+
+    return res;
   }
 
   /** Returns whether or not the variable order is currently swapped for this invariant. */
