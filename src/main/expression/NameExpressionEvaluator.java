@@ -38,29 +38,36 @@ public class NameExpressionEvaluator {
    * Evaluate the given ID on the given object
    */
   public static Object eval(TerminalNode ID, Object o) {
+    return eval(ID.getText(), o);
+  }
+
+  /**
+   * Evaluate the given string access field on the given object
+   */
+  public static Object eval(String access_field, Object o) {
     if (o != null) {
-      if (ID.getText().equals(o.getClass().getSimpleName()))
+      if (access_field.equals(o.getClass().getSimpleName()))
         return o;
     }
-    if (ExpressionEvaluator.vars.containsKey(ID.getText()))
-      return ExpressionEvaluator.vars.get(ID.getText());
-    if (ID.getText().equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
+    if (ExpressionEvaluator.vars.containsKey(access_field))
+      return ExpressionEvaluator.vars.get(access_field);
+    if (access_field.equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
       return o;
-    if (ID.getText().equals(Constants.NULL))
+    if (access_field.equals(Constants.NULL))
       return null;
-    if (ID.getText().equals(Constants.MAP_KEY_SET) && o instanceof java.util.Map)
-      return eval_method(ID.getText(), o);
-    if (ID.getText().equals(Constants.MAP_VALUES) && o instanceof java.util.Map)
-      return eval_method(ID.getText(), o);
+    if (access_field.equals(Constants.MAP_KEY_SET) && o instanceof java.util.Map)
+      return eval_method(access_field, o);
+    if (access_field.equals(Constants.MAP_VALUES) && o instanceof java.util.Map)
+      return eval_method(access_field, o);
     try {
       // Get the field and evaluate it, o continue evaluating
-      Field field = get_field(o.getClass(), ID.getText());
+      Field field = get_field(o.getClass(), access_field);
       field.setAccessible(true);
       return field.get(o);
     } catch (IllegalAccessException e) {
-      throw new IllegalStateException("The expression " + ID.getText()
-          + " can't be evaluated on object of type " + o.getClass().getSimpleName()
-          + "due to a IllegalAccessException: " + e.getMessage());
+      throw new IllegalStateException("The expression " + access_field
+              + " can't be evaluated on object of type " + o.getClass().getSimpleName()
+              + "due to a IllegalAccessException: " + e.getMessage());
     }
   }
 
