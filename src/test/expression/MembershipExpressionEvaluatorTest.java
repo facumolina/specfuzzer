@@ -21,6 +21,7 @@ public class MembershipExpressionEvaluatorTest {
     assertTrue(evaluateMembershipBinary("Integer_Variable not in List.*(next).x", l, 5));
     assertTrue(evaluateMembershipBinary("Integer_Variable in List.*(next).x", l, 2));
     assertFalse(evaluateMembershipBinary("Integer_Variable in List.*(next).x", l, 10));
+    assertFalse(evaluateMembershipBinary("Integer_Variable in List.^(next).x", l, 2));
   }
 
   @Test
