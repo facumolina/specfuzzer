@@ -37,8 +37,8 @@ public abstract class PointerInvariant extends UnaryInvariant {
    * method.)
    */
   public static final boolean valid_types_static(VarInfo[] vis) {
-    //return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
-    return ((vis.length == 1) && vis[0].file_rep_type.isObject());
+    // Unary pointer invariants are only supposed to be checked on the this object.
+    return ((vis.length == 1) && vis[0].file_rep_type.isObject() && vis[0].name()=="this");
   }
 
   /** Returns whether or not the specified types are valid for unary object. */
