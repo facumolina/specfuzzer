@@ -49,7 +49,7 @@ Run Chicory front-end to produce the dtrace file from the tester class:
 
 Run Daikon including Fuzzed Invariants:
 
-`java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedInvariant --grammar-to-fuzz grammars/ListGrammar.json --fuzzed-invariants 10 --serialiazed-objects daikon-outputs/ListTesterDriver-objects.xml daikon-outputs/ListTesterDriver.dtrace.gz`
+`java -cp "build/classes/:lib/*" daikon.Daikon --grammar-to-fuzz grammars/ListGrammar.json --fuzzed-invariants 10 --serialiazed-objects daikon-outputs/ListTesterDriver-objects.xml daikon-outputs/ListTesterDriver.dtrace.gz`
 
 Check Daikon inferred invariants:
 
