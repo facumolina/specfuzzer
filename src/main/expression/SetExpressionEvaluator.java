@@ -28,7 +28,7 @@ public class SetExpressionEvaluator {
 
     // Get closure and fields
     Closure_opContext closure_op = set_expr_ctx.closure_op();
-    Closure_fieldContext fields = set_expr_ctx.closure_field();
+    Closure_fieldContext field = set_expr_ctx.closure_field();
 
     // Start exploring applying the fields as indicated by the closure operation
     Object base_object = NameExpressionEvaluator.eval(left_part, null);
@@ -37,7 +37,11 @@ public class SetExpressionEvaluator {
     if (base_object!=null) {
       if (closure_op.getText().equals("*"))
         set.add(base_object);
-      closureFromFields(base_object, fields, set);
+      Closure_fieldContext extraField = field.closure_field();
+      if (extraField==null)
+        closureFromField(base_object, field, set);
+      else
+        closureFromTwoFields(base_object, field, extraField, set);
     }
 
     NameContext after_closure = set_expr_ctx.name(1);
@@ -68,18 +72,31 @@ public class SetExpressionEvaluator {
   }
 
   /**
-   * Recursively apply the fields in order to compute a set
+   * Recursively apply the field in order to compute a set
    */
-  private static void closureFromFields(Object base, Closure_fieldContext fields,
+  private static void closureFromField(Object base, Closure_fieldContext field,
       Set<Object> visited) {
-    Object curr = NameExpressionEvaluator.eval(fields.ID(), base);
+    Object curr = NameExpressionEvaluator.eval(field.ID(), base);
     if (curr != null) {
       if (visited.add(curr))
-        closureFromFields(curr, fields, visited);
+        closureFromField(curr, field, visited);
     }
-    Closure_fieldContext extraFields = fields.closure_field();
-    if (extraFields != null)
-      closureFromFields(base, extraFields, visited);
+  }
+
+  /**
+   * Recursively apply two fields in order to compute a set
+   */
+  private static void closureFromTwoFields(Object base, Closure_fieldContext field_one, Closure_fieldContext field_two, Set<Object> visited) {
+    Object curr = NameExpressionEvaluator.eval(field_one.ID(), base);
+    if (curr != null) {
+      if (visited.add(curr))
+        closureFromTwoFields(curr, field_one, field_two, visited);
+    }
+    curr = NameExpressionEvaluator.eval(field_two.ID(), base);
+    if (curr != null) {
+      if (visited.add(curr))
+        closureFromTwoFields(curr, field_one, field_two, visited);
+    }
   }
 
   /**
