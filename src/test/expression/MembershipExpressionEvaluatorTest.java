@@ -8,6 +8,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * This class contains tests to ensure that membership expressions are being evaluated properly
+ *
+ * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
+ *
+ */
 public class MembershipExpressionEvaluatorTest {
 
   private Boolean evaluateMembershipBinary(String alloy_expr, Object o1, Object o2) {
