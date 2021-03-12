@@ -2047,12 +2047,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     boolean samePpt = (var1.ppt == var2.ppt);
     assert samePpt;
 
-
     boolean allow=((var1.file_rep_type.isObject() && var2.file_rep_type.isPrimitive())
       || (var1.file_rep_type.isPrimitive() && var2.file_rep_type.isObject()));
 
-    if (allow)
+    if (allow) {
       return true;
+    }
   
     if (!comparableByType(var2)) {
       return false;
@@ -2097,11 +2097,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public boolean comparableByType(VarInfo var2) {
     VarInfo var1 = this;
-
-    if (var1.name().contains("this")&&var2.name().contains("data")) {
-      //System.out.printf("comparableByType(%s, %s)%n", var1, var2);
-      //System.out.println(var1.file_rep_type.toString());
-    }
 
     // the check ensures that a scalar or string and elements of an array of the same type are
     // labelled as comparable
