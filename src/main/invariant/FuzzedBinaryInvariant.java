@@ -115,7 +115,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
    */
   private Object getValueForVariable(PptTupleInfo tuple) {
     String valueName = getValueName();
-    Object varValue = null;
+    Object varValue;
     if (valueName.startsWith("this")) {
       varValue = ExpressionEvaluator.evalAnyExpr(valueName.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else if (valueName.startsWith(tuple.getThisObject().getClass().getCanonicalName())) {
@@ -150,6 +150,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
         Object varValue = getValueForVariable(tuple);
         if (varValue==null)
           return InvariantStatus.FALSIFIED;
+
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
         if (!b) {
           return InvariantStatus.FALSIFIED;
@@ -159,7 +160,6 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified
       return InvariantStatus.FALSIFIED;
     }
-
     return InvariantStatus.NO_CHANGE;
   }
 
