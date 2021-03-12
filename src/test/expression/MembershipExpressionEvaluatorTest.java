@@ -2,6 +2,7 @@ package expression;
 
 import DataStructures.AvlTreeList;
 import DataStructures.List;
+import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -33,6 +34,16 @@ public class MembershipExpressionEvaluatorTest {
     assertTrue(evaluateMembershipBinary("Integer_Variable in AvlTreeList.root.*(left + right).height", avl, 1));
     assertTrue(evaluateMembershipBinary("Object_Variable in AvlTreeList.root.*(left + right).value", avl, 3));
     assertTrue(evaluateMembershipBinary("Object_Variable not in AvlTreeList.root.*(left + right).value", avl, 20));
+  }
+
+  @Test
+  public void membership_test_3() {
+    SearchTree st = new SearchTree();
+    st.insert(0);
+    st.insert(9);
+    st.insert(-1);
+    st.insert(8);
+    assertTrue(evaluateMembershipBinary("Integer_Variable in SearchTree.root.*(left + right).info", st, 8));
   }
 
 }
