@@ -11,7 +11,7 @@ outputfile=$8
 
 echo '> Running Daikon + SpecFuzzer on dtrace file: '$dtrace
 
-java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedUnaryInvariant --grammar-to-fuzz $grammar --fuzzed-invariants $invstofuzz --serialiazed-objects $objects $dtrace
+java -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --fuzzed-invariants $invstofuzz --serialiazed-objects $objects $dtrace
 
 rm -f $outputfile
 echo ''
