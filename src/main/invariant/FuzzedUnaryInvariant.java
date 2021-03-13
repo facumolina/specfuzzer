@@ -107,8 +107,17 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     int i = (int) v;
     String key = i+"-"+ppt.parent.name;
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
-    if (l == null)
+    if (l == null) {
+      // First check if the fuzzed spec can be instantiated from the object type
+      // This check is done here since it may be the case that the given hashcode i
+      // corresponds to an object of an invalid type for the current fuzzed_spec
+      String type_str = var().type.toString();
+      String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name))
+        return InvariantStatus.FALSIFIED;
+
       return InvariantStatus.NO_CHANGE;
+    }
 
     try {
       for (PptTupleInfo tuple : l) {

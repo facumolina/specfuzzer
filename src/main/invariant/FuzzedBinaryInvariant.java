@@ -111,6 +111,16 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   }
 
   /**
+   * Return the class name that represents the object
+   */
+  private String getClassOfObject() {
+    if (var1().file_rep_type.isObject())
+      return var1().type.toString();
+    else
+      return var2().type.toString();
+  }
+
+  /**
    * Return the value being compared with the object
    */
   private Object getValueForVariable(PptTupleInfo tuple) {
@@ -142,9 +152,17 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     int i = (int) getObject(v1, v2);
     String key = i+"-"+ppt.parent.name;
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
-    if (l == null)
-      return InvariantStatus.NO_CHANGE;
+    if (l == null) {
+      // First check if the fuzzed spec can be instantiated from the object type
+      // This check is done here since it may be the case that the given hashcode i
+      // corresponds to an object of an invalid type for the current fuzzed_spec
+      String type_str = getClassOfObject();
+      String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name))
+        return InvariantStatus.FALSIFIED;
 
+      return InvariantStatus.NO_CHANGE;
+    }
     try {
       for (PptTupleInfo tuple : l) {
         Object varValue = getValueForVariable(tuple);
