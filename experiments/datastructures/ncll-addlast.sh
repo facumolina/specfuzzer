@@ -28,7 +28,7 @@ if [ $technique = "specfuzzer" ]
 then
   output_file=ncll-addlast-specfuzzer.assertions
   echo '> Inferring with Daikon + SpecFuzzer'
-  ./experiments/datastructures/run-specfuzzer.sh daikon-outputs/NodeCachingLinkedListTesterDriver.dtrace.gz daikon-outputs/NodeCachingLinkedListTesterDriver-objects.xml grammars/NodeCachingLinkedListGrammar-reduced.json $invs_to_fuzz NodeCachingLinkedListTesterDriver.inv.gz $class $method $output_folder$output_file
+  ./experiments/datastructures/run-specfuzzer.sh daikon-outputs/NodeCachingLinkedListTesterDriver.dtrace.gz daikon-outputs/NodeCachingLinkedListTesterDriver-objects.xml grammars/NodeCachingLinkedListGrammar.json $invs_to_fuzz NodeCachingLinkedListTesterDriver.inv.gz $class $method $output_folder$output_file
 fi
 
 # GAssert
