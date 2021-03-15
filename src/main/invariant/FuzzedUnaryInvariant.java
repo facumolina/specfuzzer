@@ -167,7 +167,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
    * Eval this invariant on every instance saved for the given ppt
    */
   public boolean eval_on_all_instances_ppt(String ppt_name) {
-    System.out.println(format());
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     for (PptTupleInfo tuple : tuples) {
       // The unary invariant is only evaluated on the this object of the tuple
