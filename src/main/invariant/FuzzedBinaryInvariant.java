@@ -2,6 +2,7 @@ package invariant;
 
 import daikon.Daikon;
 import daikon.PptSlice;
+import daikon.PptSlice2;
 import daikon.chicory.PptTupleInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -123,15 +124,14 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   /**
    * Return the value being compared with the object
    */
-  private Object getValueForVariable(PptTupleInfo tuple) {
-    String valueName = getValueName();
+  private Object getValueForVariable(PptTupleInfo tuple, String var_name) {
     Object varValue;
-    if (valueName.startsWith("this")) {
-      varValue = ExpressionEvaluator.evalAnyExpr(valueName.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
-    } else if (valueName.startsWith(tuple.getThisObject().getClass().getCanonicalName())) {
-      varValue = ExpressionEvaluator.evalAnyExpr(valueName.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
+    if (var_name.startsWith("this")) {
+      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
+    } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName())) {
+      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else {
-      varValue = tuple.getVariableValue(valueName);
+      varValue = tuple.getVariableValue(var_name);
     }
     return varValue;
   }
@@ -139,11 +139,11 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   /**
    * Return the name of the variable being compared with the object
    */
-  private String getValueName() {
-    if (var1().file_rep_type.isPrimitive())
-      return var1().name();
+  private String getVariableName(PptSlice2 ppt_slice2) {
+    if (ppt_slice2.var_infos[0].file_rep_type.isPrimitive())
+      return ppt_slice2.var_infos[0].name();
     else
-      return var2().name();
+      return ppt_slice2.var_infos[1].name();
   }
 
   @Override
@@ -165,7 +165,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     }
     try {
       for (PptTupleInfo tuple : l) {
-        Object varValue = getValueForVariable(tuple);
+        Object varValue = getValueForVariable(tuple,getVariableName((PptSlice2) this.ppt));
         if (varValue==null)
           return InvariantStatus.FALSIFIED;
 
@@ -213,6 +213,27 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     if (!(other instanceof FuzzedBinaryInvariant))
       return false;
     return isSameFormula((FuzzedBinaryInvariant)other);
+  }
+
+  /**
+   * Eval this invariant on every instance saved for the given ppt
+   */
+  public boolean eval_on_all_instances_ppt(PptSlice ppt) {
+    assert ppt.name().contains(":::ENTER");
+    String ppt_name = ppt.name().split(":::ENTER")[0];
+    List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
+    for (PptTupleInfo tuple : tuples) {
+      // The unary invariant is only evaluated on the this object of the tuple
+      String variable_name = getVariableName((PptSlice2) ppt);
+      Object varValue = getValueForVariable(tuple,variable_name);
+      if (varValue==null)
+        return false;
+
+      boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
+      if (!b)
+        return false;
+    }
+    return true;
   }
 
 }
