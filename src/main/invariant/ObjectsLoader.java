@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 
@@ -36,6 +37,18 @@ public final class ObjectsLoader {
       System.out.println("Total loaded objects: " + objects.size());
     }
     return objects.get(key);
+  }
+
+  /**
+   * Returns all PptTupleInfo that belongs to a key that is associated with the given ppt name.
+   */
+  public static List<PptTupleInfo> get_tuples_that_match_ppt(String ppt_name) {
+    List<PptTupleInfo> list = new LinkedList<>();
+    objects.keySet().forEach(key -> {
+      if (key.contains(ppt_name))
+        list.addAll(objects.get(key));
+    });
+    return list;
   }
 
   private static void load_objects() {

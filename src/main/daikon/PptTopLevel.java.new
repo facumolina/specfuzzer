@@ -116,6 +116,8 @@ import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
+import java.lang.reflect.Method;
+
 /**
  * All information about a single program point. A Ppt may also represent just part of the data: see
  * PptConditional.
@@ -3942,22 +3944,39 @@ public class PptTopLevel extends Ppt {
       // Copy each child invariant to the parent
       for (Invariant child_inv : cslice.invs) {
         if (
-          child_inv.format().contains("FuzzedInvariant")&&
+          child_inv.format().contains("FuzzedInvariant") &&
           cslice.toString().contains(":::EXIT") &&
-          !pslice.toString().contains(":::EXIT") &&
-          containsDerivedParamNotThis(cslice)
+          !pslice.toString().contains(":::EXIT") 
+          && containsDerivedParamNotThis(cslice)
         ) {
-          //System.out.println("Ignoring merge for fuzzed inv");
-          //System.out.println("Child with derived param: "+cslice.toString());
-          //System.out.println("Parent: "+pslice.toString());
-          //System.out.println("Inv: "+child_inv.format());
           continue;
         }
         Invariant parent_inv = child_inv.clone_and_permute(permute);
+        if (child_inv.getClass().getSimpleName().equals("FuzzedUnaryInvariant") && 
+          pslice.toString().contains(":::ENTER")) {
+          // We have a FuzzedUnaryInvariant, for entry points the invariant must be checked before merge.
+          if (!unary_fuzzed_invs_holds_for_entry(parent_inv, pslice))
+            continue;
+        }
         parent_inv.ppt = pslice;
         pslice.invs.add(parent_inv);
         if (Debug.logOn()) parent_inv.log("Added %s to %s", parent_inv.format(), pslice);
       }
+    }
+  }
+
+  /**
+   * Returns true if the given fuzzed unary invariant holds for the given entry slice 
+   */
+  private boolean unary_fuzzed_invs_holds_for_entry(Invariant inv, PptSlice slice) {
+    try {
+      Class<?> inv_class = Class.forName("invariant.FuzzedUnaryInvariant");
+      Method eval_on_all_instances_ppt_method = inv_class.getMethod("eval_on_all_instances_ppt", String.class);
+      boolean b = (Boolean) eval_on_all_instances_ppt_method.invoke(inv, slice.name().split(":::ENTER")[0]);
+      return b;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
     }
   }
 

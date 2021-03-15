@@ -163,4 +163,20 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     return isSameFormula((FuzzedUnaryInvariant)other);
   }
 
+  /**
+   * Eval this invariant on every instance saved for the given ppt
+   */
+  public boolean eval_on_all_instances_ppt(String ppt_name) {
+    System.out.println(format());
+    List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
+    for (PptTupleInfo tuple : tuples) {
+      // The unary invariant is only evaluated on the this object of the tuple
+      boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
+      if (!b) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 }
