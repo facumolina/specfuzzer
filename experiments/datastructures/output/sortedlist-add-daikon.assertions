@@ -1,0 +1,26 @@
+===========================================================================
+DataStructures.korat.singlysortedlist.SortedList:::OBJECT
+this.header == this.header.next.previous
+this.header == this.header.previous.next
+this.header != null
+this.header.element == 0
+this.header.next != null
+this.header.next.next != null
+this.header.previous != null
+this.header.previous.previous != null
+this.size >= 0
+this.header.next.element <= this.header.previous.element
+===========================================================================
+DataStructures.korat.singlysortedlist.SortedList.add(int):::ENTER
+===========================================================================
+DataStructures.korat.singlysortedlist.SortedList.add(int):::EXIT
+this.header == orig(this.header)
+this.header == orig(this.header.next.previous)
+this.header == orig(this.header.previous.next)
+this.header.element == orig(this.header.element)
+this.header.previous.element != 0
+this.size >= 1
+this.header.element != this.header.previous.element
+this.header.next.element <= orig(value)
+this.header.previous.element >= orig(value)
+this.size - orig(this.size) - 1 == 0

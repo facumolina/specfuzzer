@@ -1,0 +1,98 @@
+===========================================================================
+DataStructures.korat.singlysortedlist.SortedList:::OBJECT
+this.header == this.header.next.previous
+this.header == this.header.previous.next
+FuzzedInvariant ( #(SortedList.header.*(next + previous)) = #(SortedList.header.*(previous)) ) holds for: this
+FuzzedInvariant ( #(SortedList.header.*(next + previous)) >= SortedList.size ) holds for: this
+FuzzedInvariant ( #(SortedList.header.*(previous)) != 0 ) holds for: this
+FuzzedInvariant ( #(SortedList.header.^(next + previous)) = #(SortedList.header.*(previous)) ) holds for: this
+FuzzedInvariant ( #(SortedList.header.^(next)) != 0 ) holds for: this
+FuzzedInvariant ( SortedList.header.element < 1 ) holds for: this
+FuzzedInvariant ( SortedList.header.element >= 0 ) holds for: this
+FuzzedInvariant ( SortedList.size != #(SortedList.header.*(next + previous)) ) holds for: this
+FuzzedInvariant ( SortedList.size != #(SortedList.header.^(previous)) ) holds for: this
+FuzzedInvariant ( SortedList.size < #(SortedList.header.^(next)) + 1 ) holds for: this
+FuzzedInvariant ( SortedList.size <= #(SortedList.header.*(next)) ) holds for: this
+FuzzedInvariant ( SortedList.size <= #(SortedList.header.^(next + previous)) ) holds for: this
+FuzzedInvariant ( SortedList.size >= 0 ) holds for: this
+FuzzedInvariant ( all n : SortedList.header.*(next + previous) : n in n.^(next + previous) ) holds for: this
+FuzzedInvariant ( all n : SortedList.header.*(next) : n = n.previous.next ) holds for: this
+FuzzedInvariant ( no n : SortedList.header.*(previous) : n not in n.*(previous) ) holds for: this
+FuzzedInvariant ( no n : SortedList.header.^(next + previous) : n = null ) holds for: this
+FuzzedInvariant ( no n : SortedList.header.^(next) : n != n.next.previous ) holds for: this
+FuzzedInvariant ( no n : SortedList.header.^(next) : n not in n.*(previous) ) holds for: this
+this.header != null
+this.header.element == 0
+this.header.next != null
+this.header.next.next != null
+this.header.previous != null
+this.header.previous.previous != null
+this.size >= 0
+FuzzedInvariant ( #(SortedList.header.*(previous)) > Integer_Variable ) holds for: <this , this.header.element>
+FuzzedInvariant ( #(SortedList.header.^(next + previous)) > Integer_Variable ) holds for: <this , this.header.element>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next + previous).element ) holds for: <this , this.header.element>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next).element ) holds for: <this , this.header.element>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(previous).element ) holds for: <this , this.header.element>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next + previous).element ) holds for: <this , this.header.element>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next).element ) holds for: <this , this.header.element>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(previous).element ) holds for: <this , this.header.element>
+FuzzedInvariant ( SortedList.header.element != #(SortedList.header.^(previous)) + Integer_Variable ) holds for: <this , this.header.element>
+FuzzedInvariant ( SortedList.header.element = Integer_Variable ) holds for: <this , this.header.element>
+this.header.next.element <= this.header.previous.element
+===========================================================================
+DataStructures.korat.singlysortedlist.SortedList.add(int):::ENTER
+===========================================================================
+DataStructures.korat.singlysortedlist.SortedList.add(int):::EXIT
+this.header == orig(this.header)
+this.header == orig(this.header.next.previous)
+this.header == orig(this.header.previous.next)
+this.header.element == orig(this.header.element)
+this.header.previous.element != 0
+this.size >= 1
+FuzzedInvariant ( #(SortedList.header.*(next)) != 1 ) holds for: orig(this)
+FuzzedInvariant ( SortedList.size != SortedList.header.element ) holds for: orig(this)
+FuzzedInvariant ( SortedList.size > 0 ) holds for: orig(this)
+FuzzedInvariant ( SortedList.size >= 1 ) holds for: orig(this)
+FuzzedInvariant ( all n : SortedList.header.*(next + previous) : n != n.previous ) holds for: orig(this)
+FuzzedInvariant ( all n : SortedList.header.^(next + previous) : n != n.next ) holds for: orig(this)
+FuzzedInvariant ( some n : SortedList.header.^(next + previous) : n != n.next ) holds for: orig(this)
+FuzzedInvariant ( some n : SortedList.header.^(next) : n != n.previous ) holds for: orig(this)
+this.header.element != this.header.previous.element
+FuzzedInvariant ( #(SortedList.header.*(previous)) > Integer_Variable ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( #(SortedList.header.^(next + previous)) > Integer_Variable ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next + previous).element ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next).element ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(previous).element ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next + previous).element ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next).element ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(previous).element ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( SortedList.header.element != #(SortedList.header.^(previous)) + Integer_Variable ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( SortedList.header.element = Integer_Variable ) holds for: <this.header.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next + previous).element ) holds for: <this.header.next.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next).element ) holds for: <this.header.next.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(previous).element ) holds for: <this.header.next.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next + previous).element ) holds for: <this.header.next.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next).element ) holds for: <this.header.next.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(previous).element ) holds for: <this.header.next.element , orig(this)>
+this.header.next.element <= orig(value)
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next + previous).element ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next).element ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(previous).element ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next + previous).element ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next).element ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(previous).element ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( SortedList.header.element != #(SortedList.header.^(previous)) + Integer_Variable ) holds for: <this.header.previous.element , orig(this)>
+FuzzedInvariant ( SortedList.size != SortedList.size + Integer_Variable ) holds for: <this.header.previous.element , orig(this)>
+this.header.previous.element >= orig(value)
+FuzzedInvariant ( #(SortedList.header.*(previous)) > Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(SortedList.header.^(next + previous)) > Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( SortedList.header.element != #(SortedList.header.^(previous)) + Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( SortedList.size != SortedList.size + Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( SortedList.size >= #(SortedList.header.^(next)) - Integer_Variable ) holds for: <this.size , orig(this)>
+this.size - orig(this.size) - 1 == 0
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next + previous).element ) holds for: <orig(this) , orig(value)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(next).element ) holds for: <orig(this) , orig(value)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.*(previous).element ) holds for: <orig(this) , orig(value)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next + previous).element ) holds for: <orig(this) , orig(value)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(next).element ) holds for: <orig(this) , orig(value)>
+FuzzedInvariant ( Integer_Variable in SortedList.header.^(previous).element ) holds for: <orig(this) , orig(value)>
