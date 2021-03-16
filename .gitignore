@@ -6,3 +6,9 @@
 
 # Files
 invs*
+
+# IDE related files
+.classpath
+.project
+.idea
+.settings
