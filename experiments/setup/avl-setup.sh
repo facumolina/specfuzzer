@@ -22,7 +22,7 @@ echo ''
 
 # Use Major to create the mutated traces
 echo '> Generating mutants with MAJOR'
-./experiments/setup/gen-mutated-traces.sh DataStructures/AvlTreeList.java AvlTreeListTester
+#./experiments/setup/gen-mutated-traces.sh DataStructures/AvlTreeList.java AvlTreeListTester
 echo ''
 
 echo '> Done!'
