@@ -2,6 +2,7 @@ package expression;
 
 import DataStructures.AvlTreeList;
 import DataStructures.List;
+import DataStructures.commonscollections.TreeList;
 import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
 
@@ -50,6 +51,16 @@ public class MembershipExpressionEvaluatorTest {
     st.insert(-1);
     st.insert(8);
     assertTrue(evaluateMembershipBinary("Integer_Variable in SearchTree.root.*(left + right).info", st, 8));
+  }
+
+  @Test
+  public void membership_test_4() {
+    TreeList<Integer> tl = new TreeList<Integer>();
+    tl.add(0);
+    tl.add(9);
+    tl.add(-1);
+    tl.add(8);
+    assertTrue(evaluateMembershipBinary("Boolean_Variable in TreeList.root.*(right).leftIsPrevious", tl, true));
   }
 
 }

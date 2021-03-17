@@ -47,6 +47,11 @@ public class FuzzedInvariantUtil {
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
+    // Check for the boolean var
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+
     // Check for the object var
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT);
     if (fuzzed_spec.contains(var_name))
