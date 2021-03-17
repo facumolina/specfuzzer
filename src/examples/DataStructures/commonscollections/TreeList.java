@@ -66,10 +66,10 @@ public class TreeList<E> extends AbstractList<E> {
   // LinkedList = 270;7360;3350;55860;290720;2910;55200;
 
   /** The root node in the AVL tree */
-  public AVLNode<E> root;
+  private AVLNode<E> root;
 
   /** The current size of the list */
-  public int size;
+  private int size;
 
   // -----------------------------------------------------------------------
   /**
