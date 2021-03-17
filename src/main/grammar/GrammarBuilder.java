@@ -64,7 +64,7 @@ public class GrammarBuilder {
     grammar.put(GrammarSymbols.INTEGER_EXPR, GrammarSymbols.INTEGER_EXPR_VALUE);
     GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
     GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
-    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.get_special_identifier("Integer"));
+    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER));
     grammar.put(GrammarSymbols.INTEGER, GrammarSymbols.INTEGER_VALUE);
     grammar.put(GrammarSymbols.INTEGER_CONSTANT, GrammarSymbols.INTEGER_CONSTANT_VALUE);
     grammar.put(GrammarSymbols.INTEGER_FIELD, new LinkedList<String>());
