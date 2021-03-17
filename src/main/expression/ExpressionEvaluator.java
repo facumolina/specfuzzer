@@ -48,7 +48,7 @@ public class ExpressionEvaluator {
   /**
    * Validate that the given expression is applicable to the given object class
    */
-  private static void validate(String alloy_expr, Class<?> cl) {
+  private static void validate(String alloy_expr, Class<?> cl, Class<?> cl2) {
     String class_name = cl.getSimpleName();
     if (!alloy_expr.contains(class_name+"."))
       throw new NonApplicableExpressionException(
@@ -58,6 +58,14 @@ public class ExpressionEvaluator {
       if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
         throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
       idx = alloy_expr.indexOf(class_name,idx+1);
+    }
+    if (cl2 != null) {
+      // Either cl2.getSimpleName()_Variable string should exist or Object_Variable
+      String var_name = cl2.getSimpleName()+"_Variable";
+      if (!alloy_expr.contains(var_name) && !alloy_expr.contains("Object_Variable")) {
+        throw new NonApplicableExpressionException(
+                "The expression " + alloy_expr + " is not applicable to var: " + var_name);
+      }
     }
   }
 
@@ -83,7 +91,7 @@ public class ExpressionEvaluator {
     if (alloy_expr == null || o == null)
       throw new IllegalArgumentException("Neither the expression nor the object can be null.");
 
-    validate(alloy_expr, o.getClass());
+    validate(alloy_expr, o.getClass(), null);
 
     setup(alloy_expr);
 
@@ -107,7 +115,7 @@ public class ExpressionEvaluator {
     if (alloy_expr == null || o1 == null)
       throw new IllegalArgumentException("Neither the expression nor the object can be null.");
 
-    validate(alloy_expr, o1.getClass());
+    validate(alloy_expr, o1.getClass(), o2.getClass());
 
     setup(alloy_expr);
 
@@ -133,7 +141,7 @@ public class ExpressionEvaluator {
     if (alloy_expr == null || o == null)
       throw new IllegalArgumentException("Neither the expression nor the object can be null.");
 
-    validate(alloy_expr, o.getClass());
+    validate(alloy_expr, o.getClass(), null);
 
     setup(alloy_expr);
 

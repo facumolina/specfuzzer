@@ -228,10 +228,13 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       Object varValue = getValueForVariable(tuple,variable_name);
       if (varValue==null)
         return false;
-
-      boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
-      if (!b)
+      try {
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
+        if (!b)
+          return false;
+      } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
         return false;
+      }
     }
     return true;
   }
