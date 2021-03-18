@@ -13,6 +13,7 @@ source_dir=src/examples/
 echo '> Generating mutants with Major for file: '$target_file
 $MAJOR_HOME/bin/javac -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $build_dir $source_dir$target_file
 echo '> Mutants generated!'
+mv mutants.log daikon-outputs/mutants/$driver_base'Driver-mutants.log'
 echo ''
 
 echo '> Processing mutants'
