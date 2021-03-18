@@ -276,6 +276,19 @@ public class GrammarExtractor {
   }
 
   /**
+   * Show a report with some useful numbers
+   */
+  private static void show_report(Map<String, List<String>> grammar) {
+    int rules = grammar.size();
+    int potential_specs = GrammarBuilder.calculate_potential_specs(grammar);
+    System.out.println("Grammar numbers");
+    System.out.println("Rules: "+rules);
+    System.out.println("Potential specs: "+potential_specs);
+    System.out.println();
+  }
+
+
+  /**
    * Extract the grammar from the obtained type graph
    * 
    * @throws SecurityException
@@ -292,6 +305,7 @@ public class GrammarExtractor {
     JSONObject json_grammar = new JSONObject(grammar);
     System.out.println(json_grammar.toJSONString());
     System.out.println();
+    show_report(grammar);
     save_to_file(json_grammar, cut.getSimpleName() + "Grammar.json");
   }
 

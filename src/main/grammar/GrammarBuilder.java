@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class contains the basic part of the grammars that will later be extended when analyzing a
@@ -321,6 +323,43 @@ public class GrammarBuilder {
     if (grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).isEmpty()) {
       grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.MEMBERSHIP_EXPR);
     }
+  }
+
+  /**
+   * Return the number of specifications that can be generated from the given grammar
+   */
+  protected static int calculate_potential_specs(Map<String, List<String>> grammar) {
+    return calculate_potential_specs(grammar, GrammarSymbols.START_SYMBOL);
+  }
+
+  /**
+   * Return the number of specifications that can be generated from the given grammar and symbol
+   */
+  private static int calculate_potential_specs(Map<String, List<String>> grammar, String symbol) {
+    int specs = 0;
+    List<String> expansion = grammar.get(symbol);
+    for (String exp : expansion) {
+      List<String> non_terminals = nonterminals(exp);
+      int non_term_count = 1;
+      for (String non_term : non_terminals) {
+        non_term_count *= calculate_potential_specs(grammar, non_term);
+      }
+      specs += non_term_count;
+    }
+    return specs;
+  }
+
+  /**
+   * Get the amount of non terminals symbols of the given symbol
+   */
+  private static List<String> nonterminals(String symbol) {
+    String re_nonterminal = "(<[^<> ]*>)";
+    List<String> matches = new LinkedList<String>();
+    Matcher m = Pattern.compile("(?=(" + re_nonterminal + "))").matcher(symbol);
+    while (m.find()) {
+      matches.add(m.group(1));
+    }
+    return matches;
   }
 
 }
