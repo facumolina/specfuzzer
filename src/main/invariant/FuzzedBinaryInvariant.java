@@ -222,19 +222,19 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     assert ppt.name().contains(":::ENTER");
     String ppt_name = ppt.name().split(":::ENTER")[0];
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
-    for (PptTupleInfo tuple : tuples) {
-      // The unary invariant is only evaluated on the this object of the tuple
-      String variable_name = getVariableName((PptSlice2) ppt);
-      Object varValue = getValueForVariable(tuple,variable_name);
-      if (varValue==null)
-        return false;
-      try {
+    try {
+      for (PptTupleInfo tuple : tuples) {
+        // The unary invariant is only evaluated on the this object of the tuple
+        String variable_name = getVariableName((PptSlice2) ppt);
+        Object varValue = getValueForVariable(tuple,variable_name);
+        if (varValue==null)
+          return false;
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
         if (!b)
           return false;
-      } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
-        return false;
       }
+    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
+      return false;
     }
     return true;
   }
