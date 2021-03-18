@@ -1,0 +1,158 @@
+===========================================================================
+DataStructures.commonscollections.TreeList:::OBJECT
+this.root.left.value.getClass().getName() == this.root.right.value.getClass().getName()
+this.root.left.value.getClass().getName() == this.root.value.getClass().getName()
+this.root.right.value.getClass().getName() == this.root.value.getClass().getName()
+FuzzedInvariant ( #(TreeList.root.*(left + right)) >= #(TreeList.root.*(right)) ) holds for: this
+FuzzedInvariant ( #(TreeList.root.^(left + right)) >= #(TreeList.root.^(left + right)) ) holds for: this
+FuzzedInvariant ( #(TreeList.root.^(left)) <= #(TreeList.root.^(left)) + #(TreeList.root.*(right)) ) holds for: this
+FuzzedInvariant ( #(TreeList.root.^(right)) >= 0 ) holds for: this
+FuzzedInvariant ( TreeList.modCount <= #(TreeList.root.*(left + right)) - #(TreeList.root.*(right)) ) holds for: this
+FuzzedInvariant ( TreeList.modCount <= 1 ) holds for: this
+FuzzedInvariant ( TreeList.modCount <= TreeList.size - TreeList.modCount ) holds for: this
+FuzzedInvariant ( TreeList.modCount >= TreeList.modCount - #(TreeList.root.*(left)) ) holds for: this
+FuzzedInvariant ( all n : TreeList.root.*(left + right) : n not in n.^(left) ) holds for: this
+FuzzedInvariant ( all n : TreeList.root.*(left + right) : n not in n.^(right) ) holds for: this
+FuzzedInvariant ( all n : TreeList.root.*(left) : n not in n.^(right) ) holds for: this
+FuzzedInvariant ( all n : TreeList.root.^(left + right) : n in n.*(left + right) ) holds for: this
+FuzzedInvariant ( all n : TreeList.root.^(left) : n.height >= 0 ) holds for: this
+FuzzedInvariant ( all n : TreeList.root.^(right) : n != n.right ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.*(left) : n = n.right ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.*(right) : n = n.right ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.*(right) : n in n.^(right) ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.*(right) : n.relativePosition >= TreeList.size ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.^(left + right) : n in n.^(right) ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.^(left) : n not in n.*(right) ) holds for: this
+this.root.left.right != null
+this.root.left.height one of { 0, 1, 2 }
+this.root.left.relativePosition <= -1
+this.root.left.value != null
+this.root.left.value.getClass().getName() == java.lang.String.class
+this.root.right.left != null
+this.root.right.height one of { 0, 1, 2 }
+this.root.right.relativePosition one of { 1, 2, 3 }
+this.root.right.value != null
+this.root.right.value.getClass().getName() == java.lang.String.class
+this.root.height >= 0
+this.root.relativePosition >= 0
+this.root.value != null
+this.root.value.getClass().getName() == java.lang.String.class
+this.size >= 0
+this.root.left.height < this.root.height
+this.root.left.relativePosition < this.root.right.relativePosition
+this.root.left.relativePosition < this.root.relativePosition
+this.root.left.relativePosition < this.size
+this.root.right.height < this.root.height
+this.root.right.relativePosition < this.size
+this.root.relativePosition < this.size
+===========================================================================
+DataStructures.commonscollections.TreeList.clear():::ENTER
+FuzzedInvariant ( all n : TreeList.root.^(left) : n.leftIsPrevious != n.left.leftIsPrevious ) holds for: this
+FuzzedInvariant ( no n : TreeList.root.^(left) : n.leftIsPrevious = n.left.leftIsPrevious ) holds for: this
+this.root.left.relativePosition one of { -4, -2, -1 }
+===========================================================================
+DataStructures.commonscollections.TreeList.clear():::EXIT
+this.root == this.size
+this.root == null
+this.size == 0
+FuzzedInvariant ( #(TreeList.root.*(left + right)) < #(TreeList.root.*(left)) + 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.*(left + right)) <= 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.*(left + right)) = #(TreeList.root.^(right)) ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.*(left)) != 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.*(left)) < #(TreeList.root.^(left + right)) + 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(left + right)) < 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(left + right)) = 0 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(left)) < 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(left)) <= 0 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(right)) != 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(right)) < #(TreeList.root.*(left)) + 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(right)) <= 1 ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.^(right)) >= TreeList.size ) holds for: orig(this)
+FuzzedInvariant ( TreeList.modCount = #(TreeList.root.*(right)) ) holds for: orig(this)
+FuzzedInvariant ( TreeList.size = 0 ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left + right) : n = null ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left + right) : n.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n = n.right ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n = null ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n.leftIsPrevious != n.right.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n.relativePosition > #(TreeList.root.*(left + right)) ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n.rightIsNext != n.left.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n.rightIsNext = n.right.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(left) : n.value != n.left.value ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n = n.left ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n = n.left.left ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n.leftIsPrevious != n.left.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n.leftIsPrevious != n.right.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n.relativePosition < n.left.relativePosition ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.*(right) : n.rightIsNext != n.left.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left + right) : n != n.right.left ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left + right) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left + right) : n.relativePosition = 0 ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left + right) : n.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left + right) : n.value = n.left.value ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left) : n = null ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left) : n.height = n.right.height ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left) : n.height >= n.right.height ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(left) : n.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(right) : n != n.left.right ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(right) : n = null ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(right) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( all n : TreeList.root.^(right) : n.value != n.right.value ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(left + right) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(left + right) : n.relativePosition <= TreeList.size ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(left) : n.relativePosition <= #(TreeList.root.*(left)) ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(left) : n.relativePosition = #(TreeList.root.*(right)) ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(left) : n.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(right) : n not in n.^(right) ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(right) : n.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(right) : n.relativePosition <= 1 ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(right) : n.value != n.right.value ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.*(right) : n.value = n.left.value ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(left + right) : n = n.right.left ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(left + right) : n.leftIsPrevious != n.left.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(left + right) : n.value != n.left.value ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(left + right) : n.value != n.right.value ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(left) : n.leftIsPrevious != n.right.leftIsPrevious ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(left) : n.rightIsNext != n.right.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n != n.left.left ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n.height != 1 ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n.height > 0 ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n.height > n.right.height ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n.relativePosition < n.left.relativePosition ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n.rightIsNext ) holds for: orig(this)
+FuzzedInvariant ( no n : TreeList.root.^(right) : n.value != n.right.value ) holds for: orig(this)
+FuzzedInvariant ( #(TreeList.root.*(left)) <= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.*(left)) = Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.*(right)) <= #(TreeList.root.*(left + right)) - Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.*(right)) >= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.^(left + right)) <= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.^(left + right)) = Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.^(left + right)) >= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( #(TreeList.root.^(right)) <= #(TreeList.root.^(right)) - Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.*(left + right).height ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.*(left + right).relativePosition ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.*(left).height ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.*(left).relativePosition ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.*(right).height ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.*(right).relativePosition ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.^(left + right).height ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.^(left + right).relativePosition ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.^(left).height ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.^(left).relativePosition ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.^(right).height ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( Integer_Variable not in TreeList.root.^(right).relativePosition ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( TreeList.modCount <= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( TreeList.modCount = Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( TreeList.size = Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( TreeList.size >= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( all n : TreeList.root.^(right) : n.height < Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( no n : TreeList.root.*(left + right) : n.height >= Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( no n : TreeList.root.^(left + right) : n.relativePosition > Integer_Variable ) holds for: <this.size , orig(this)>
+FuzzedInvariant ( no n : TreeList.root.^(left) : n.height >= Integer_Variable ) holds for: <this.size , orig(this)>
+this.size > orig(this.root.left.relativePosition)
+this.size < orig(this.root.right.relativePosition)
+this.size <= orig(this.root.relativePosition)
+this.size <= orig(this.size)
