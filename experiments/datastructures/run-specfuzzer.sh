@@ -31,16 +31,16 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
   mutant_objects_file=$base_name"-objects.xml"
   mutant_number=${base_name#$mutants_dir'/'$target_name'-m'}
   curr_mutant=$(sed -n $mutant_number'p' $mutations_log)
-  echo 'Mutation is: '$curr_mutant
   if [[ $curr_mutant == *$class':'* || $curr_mutant == *$class*'<init>'* || $curr_mutant == *$class*$method* ]]; then
     # The mutant is in a static method OR in a constructor OR in the current method
+    echo 'Mutation is: '$curr_mutant
     echo 'Checking invs on mutant: '$mutant_dtrace
     java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
     echo 'Saving mutants results file'
     python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
     echo ''
   else
-    echo 'Ignored'
+    echo 'Ignored mutant: '$curr_mutant
   fi
 done
 
