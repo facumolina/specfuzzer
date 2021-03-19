@@ -58,7 +58,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private @Prototype FuzzedUnaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
-    System.out.println("Created from fuzzed spec: " + fuzzed_spec);
+    System.out.println("Fuzzed spec: " + fuzzed_spec);
   }
 
   /** Fuzz the spec represented by this invariant */
@@ -115,7 +115,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
       if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name))
         return InvariantStatus.FALSIFIED;
-
+      
       return InvariantStatus.NO_CHANGE;
     }
 
