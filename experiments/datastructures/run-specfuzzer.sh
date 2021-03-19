@@ -33,25 +33,29 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
   curr_mutant=$(sed -n $mutant_number'p' $mutations_log)
   if [[ $curr_mutant == *$class':'* || $curr_mutant == *$class*'<init>'* || $curr_mutant == *$class*$method* ]]; then
     # The mutant is in a static method OR in a constructor OR in the current method
-    echo 'Mutation is: '$curr_mutant
+    echo '> Mutation is: '$curr_mutant
     echo 'Checking invs on mutant: '$mutant_dtrace
     java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
     echo 'Saving mutants results file'
     python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
     echo ''
   else
-    echo 'Ignored mutant: '$curr_mutant
+    echo '> Ignored mutant: '$curr_mutant
   fi
 done
 
 echo '> Mutation killing ability'
 python3 process-final-results.py invs-by-mutants.csv
+mutka_file='experiments/datastructures/output/'$class'-'$method'-specfuzzer-invs-by-mutants.csv'
+echo '> Mutation killing ability results saved in: '$mutka_file
+cp invs-by-mutants.csv $mutka_file
 
 rm -f $output_file
 echo ''
 echo '> Writing output to file: '$output_file
 java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' > $output_file
 java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$method'.' >> $output_file
+mv $invs_file 'experiments/datastructures/output/'$class'-'$method'-specfuzzer.inv.gz'
 
 echo '> Output written.'
 
