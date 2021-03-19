@@ -3,10 +3,12 @@ package invariant;
 import daikon.Daikon;
 import daikon.PptSlice;
 import daikon.PptSlice2;
+import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.tools.InvariantChecker;
 import expression.ExpressionEvaluator;
 import expression.NonApplicableExpressionException;
 import expression.NonEvaluableExpressionException;
@@ -58,7 +60,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   private @Prototype FuzzedBinaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
-    System.out.println("Created from fuzzed spec: " + fuzzed_spec);
+    System.out.println("Fuzzed spec: " + fuzzed_spec);
   }
 
   /** Fuzz the spec represented by this invariant */
@@ -96,8 +98,8 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied FuzzedBinaryInvariant this, OutputFormat format) {
-    if (format == OutputFormat.JAVA)
-      return "FuzzedInvariant:" + fuzzed_spec;
+    //if (format == OutputFormat.JAVA)
+    //  return "FuzzedInvariant:" + fuzzed_spec;
     return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: <" + var1().name() + " , " + var2().name() + ">";
   }
 
@@ -124,11 +126,14 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   /**
    * Return the value being compared with the object
    */
-  private Object getValueForVariable(PptTupleInfo tuple, String var_name) {
+  private Object getValueForVariable(PptTupleInfo tuple, VarInfo var) {
+    String var_name = var.name();
     Object varValue;
     if (var_name.startsWith("this")) {
+      // Represents a field that can be obtained from the this object.
       varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName())) {
+      // Represents a static field
       varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else {
       varValue = tuple.getVariableValue(var_name);
@@ -137,14 +142,19 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   }
 
   /**
-   * Return the name of the variable being compared with the object
+   * Return the VarInfo corresponding to the variable  being compared with the object
    */
-  private String getVariableName(PptSlice2 ppt_slice2) {
+  private VarInfo getVariable(PptSlice2 ppt_slice2) {
     if (ppt_slice2.var_infos[0].file_rep_type.isPrimitive())
-      return ppt_slice2.var_infos[0].name();
+      return ppt_slice2.var_infos[0];
     else
-      return ppt_slice2.var_infos[1].name();
+      return ppt_slice2.var_infos[1];
   }
+
+  // Default status for situations in which the invariant can't evaluated.
+  // Should be FALSIFIED when inferring invariants.
+  // Should be NO_CHANGE when using InvariantChecker
+  private InvariantStatus default_status = InvariantStatus.FALSIFIED;
 
   @Override
   public InvariantStatus check_modified(long v1, long v2, int count) {
@@ -165,10 +175,10 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     }
     try {
       for (PptTupleInfo tuple : l) {
-        Object varValue = getValueForVariable(tuple,getVariableName((PptSlice2) this.ppt));
-        if (varValue==null)
-          return InvariantStatus.FALSIFIED;
-
+        Object varValue = getValueForVariable(tuple,getVariable((PptSlice2) this.ppt));
+        if (varValue==null) {
+          return getDefault();
+        }
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
         if (!b) {
           return InvariantStatus.FALSIFIED;
@@ -179,6 +189,13 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
+  }
+
+  private InvariantStatus getDefault() {
+    if (InvariantChecker.serialiazed_objects_file_name!=null)
+      return InvariantStatus.NO_CHANGE;
+    else
+      return InvariantStatus.FALSIFIED;
   }
 
   @Override
@@ -225,8 +242,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     try {
       for (PptTupleInfo tuple : tuples) {
         // The unary invariant is only evaluated on the this object of the tuple
-        String variable_name = getVariableName((PptSlice2) ppt);
-        Object varValue = getValueForVariable(tuple,variable_name);
+        Object varValue = getValueForVariable(tuple,getVariable((PptSlice2) ppt));
         if (varValue==null)
           return false;
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
