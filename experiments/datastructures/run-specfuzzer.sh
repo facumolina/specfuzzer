@@ -1,23 +1,57 @@
 #!/bin/bash
 
-dtrace=$1
-objects=$2
-grammar=$3
-invstofuzz=$4
-invfile=$5
-class=$6
-method=$7
-outputfile=$8
+target_name=$1;
+dtrace='daikon-outputs/'$target_name'.dtrace.gz';
+objects='daikon-outputs/'$target_name'-objects.xml';
+grammar=$2
+invs_to_fuzz=$3
+invs_file=$target_name'.inv.gz'
+class=$4
+method=$5
+output_file=$6
+mutants_dir='daikon-outputs/mutants';
 
-echo '> Running Daikon + SpecFuzzer on dtrace file: '$dtrace
+echo '> SpecFuzzer'
+echo 'dtrace: '$dtrace
+echo 'objects: '$objects
 
-java -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --fuzzed-invariants $invstofuzz --serialiazed-objects $objects $dtrace
+# Clean file for this step to work properly
+cp base_invs_file.xml invs_file.xml
+cp base-invs-by-mutants.csv invs-by-mutants.csv
 
-rm -f $outputfile
+# Actual execution of Daikon + Fuzzed specs
+java -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects $dtrace
+
+mutations_log=$mutants_dir'/'$target_name'-mutants.log'
+# Now perform the filtering step
+echo '> Filtering step'
 echo ''
-echo '> Writing output to file: '$outputfile
-java -cp build/classes/:lib/* daikon.PrintInvariants $invfile --ppt-select '.'$class':::OBJECT' > $outputfile
-java -cp build/classes/:lib/* daikon.PrintInvariants $invfile --ppt-select '.'$method'.' >> $outputfile
+for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
+  base_name=${mutant_dtrace/%$".dtrace.gz"}
+  mutant_objects_file=$base_name"-objects.xml"
+  mutant_number=${base_name#$mutants_dir'/'$target_name'-m'}
+  curr_mutant=$(sed -n $mutant_number'p' $mutations_log)
+  echo 'Mutation is: '$curr_mutant
+  if [[ $curr_mutant == *$class':'* || $curr_mutant == *$class*'<init>'* || $curr_mutant == *$class*$method* ]]; then
+    # The mutant is in a static method OR in a constructor OR in the current method
+    echo 'Checking invs on mutant: '$mutant_dtrace
+    java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
+    echo 'Saving mutants results file'
+    python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
+    echo ''
+  else
+    echo 'Ignored'
+  fi
+done
+
+echo '> Mutation killing ability'
+python3 process-final-results.py invs-by-mutants.csv
+
+rm -f $output_file
+echo ''
+echo '> Writing output to file: '$output_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' > $output_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$method'.' >> $output_file
 
 echo '> Output written.'
 
