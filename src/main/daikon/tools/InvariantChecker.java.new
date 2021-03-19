@@ -107,7 +107,7 @@ public class InvariantChecker {
   static HashSet<Invariant> testedInvariants = new HashSet<>(); // Yoav added
   static HashSet<Invariant> activeInvariants = new HashSet<>(); // Yoav added
   static LinkedHashSet<String> outputComma = new LinkedHashSet<>(); // Yoav added
-  static List<InvFailInfo> failedCounter = new LinkedList<InvFailInfo>(); // fmolina added
+  static List<InvFailInfo> failedCounter = new LinkedList<InvFailInfo>(); // fmolina added 
 
   public static void main(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -384,7 +384,7 @@ public class InvariantChecker {
     for (Invariant inv : failedInvariants) {
       System.out.printf("+%s failing at ppt %s%n", inv.format(), inv.ppt.name());
     }
-    }
+    }    
     serialiaze_invs();
   }
 
@@ -433,7 +433,7 @@ public class InvariantChecker {
       throw new Error("Cannot close serial file: " + file_name);
     }
 
-    //
+    // 
   }
 
   /**
@@ -616,8 +616,8 @@ public class InvariantChecker {
 
           InvariantFilters fi = InvariantFilters.defaultFilters();
           InvariantFilter filter_result = fi.shouldKeep(inv);
-          boolean fi_accepted = (filter_result == null);
-          if (!(fi_accepted && !inv.isGuardingPredicate)) {
+          boolean fi_accepted = (filter_result == null);    
+          if (!(fi_accepted && !inv.isGuardingPredicate) && !inv.format().contains("Fuzzed")) {
             continue;
           }
 
@@ -630,7 +630,7 @@ public class InvariantChecker {
                   "At ppt "
                       + ppt.name
                       + ", Invariant '"
-                      + invRep
+                      + inv.format_using(OutputFormat.JAVA)
                       + "' invalidated by sample "
                       + Debug.toString(slice.var_infos, vt)
                       + "at line "
