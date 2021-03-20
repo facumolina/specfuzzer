@@ -250,7 +250,6 @@ public class GrammarExtractor {
               // The target type is a collection so we can create a quantification symbol
               add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
             }
-
             traverse_graph(target_type, curr_expr + "." + edge.getLabel(), grammar, k - 1);
           } else {
             add_symbol_for_type(target_type.getSimpleName(), curr_expr + "." + edge.getLabel(),
@@ -259,7 +258,6 @@ public class GrammarExtractor {
         }
       }
     }
-
   }
 
   /**
