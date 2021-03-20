@@ -1,0 +1,12 @@
+assert(
+	ExpressionEvaluator.evaluateSetMembership(arg0,"this . * next . x",this) &&
+	this.next.x >= old_thisx - this.x + arg0 &&
+	arg0 <= old_thisx + old_thisx + this.next.x + 1 - 1 + 1 &&
+	arg0 != old_thisx + old_thisx + arg0 + 1 - this.x &&
+	this.next.x >= old_thisx &&
+	arg0 == arg0 &&
+	arg0 < old_thisx + old_thisx + this.next.x + 1 &&
+	ExpressionEvaluator.evaluateQuantifiedExpression("all","this . * next","!(n . next != null) || n . x <= n . next . x",this) &&
+	old_thisnext != this.next &&
+	ExpressionEvaluator.evaluateQuantifiedExpression("all","this . * next","n != n . next",this)
+);
