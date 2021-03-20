@@ -1,28 +1,18 @@
 #!/bin/bash
 
-# This script allows to perform valid and invalid trace generation to enable the fuzzing based specification inference technique for the SearchTree case study.
+# Setup for DataStructures.korat.singlysortedlist.SortedList
  
-# Verify that the required environment variables have been set
-[[ -z "$DAIKONDIR" ]] && { echo "> The environment variable DAIKONDIR is empty" ; exit 1; }
-[[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
+# Define vars
+fqname='DataStructures.korat.singlysortedlist.SortedList'
+tester_base='SortedListTester'
+omit_pattern=$tester_base'.*'
+driver_name='SortedListTesterDriver'
+driver='testers.SortedListTesterDriver'
+daikon_out=$SPECFUZZER'/daikon-outputs'
+cmp_file=$daikon_out'/SortedListTesterDriver.decls-DynComp'
+objs_file='daikon-outputs/SortedListTesterDriver-objects.xml'
+source_file='DataStructures/korat/singlysortedlist/SortedList.java'
 
-echo '> Starting experiment for case: DataStructures.korat.singlysortedlist.SortedList'
-echo ''
+# Actual setup
+./experiments/setup/common.sh $fqname $tester_base $driver_name $source_file
 
-# Perform the Dynamic Comparability Analysis
-echo '> Performing Dynamic Comparability Analysis from driver: testers.SortedListTesterDriver'
-java -cp build/classes/:lib/daikon.jar daikon.DynComp testers.SortedListTesterDriver --output-dir=$SPECFUZZER/daikon-outputs
-echo ''
-
-# Run Chicory on the existing testsuite to create the valid trace 
-echo '> Running Chicory for dtrace generation from driver: testers.SortedListTesterDriver'
-java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=$SPECFUZZER/daikon-outputs/ --comparability-file=$SPECFUZZER/daikon-outputs/SortedListTesterDriver.decls-DynComp --ppt-omit-pattern='SortedListTester.*' testers.SortedListTesterDriver daikon-outputs/SortedListTesterDriver-objects.xml
-echo 'Objects saved in file: '$SPECFUZZER'/daikon-outputs/SortedListTesterDriver-objects.xml'
-echo ''
-
-# Use Major to create the mutated traces
-echo '> Generating mutants with MAJOR'
-#./experiments/setup/gen-mutated-traces.sh DataStructures/korat/singlysortedlist/SortedList.java SortedListTester
-echo ''
-
-echo '> Done!'
