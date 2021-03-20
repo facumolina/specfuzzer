@@ -7,6 +7,7 @@ output_folder=experiments/datastructures/output/
 # Arguments
 technique=$1
 # Common 
+fqname='DataStructures.List'
 class='List'
 method='insert'
 target_name='ListTesterDriver'
@@ -43,8 +44,17 @@ if [ $technique == "gassert" ]
 then
   echo '> GAssert'
   echo '> Go to $GASSERT/scripts and perform: '
-  echo '  ./run_gassert.sh GASSERT DataStructuresList_insert 10 daikon.assertions'
+  echo '  ./run_gassert.sh GASSERT DataStructuresList_insert 90 daikon.assertions'
 fi
+
+# EvoSpex
+if [ $technique == "evospex" ]
+then
+  echo '> EvoSpex'
+  objects_folder='List/insert\(int\)/3/'
+  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder
+fi
+
 
 echo ''
 echo '> Done!'
