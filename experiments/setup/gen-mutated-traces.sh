@@ -11,7 +11,7 @@ build_dir=build/classes
 source_dir=src/examples/
 
 echo '> Generating mutants with Major for file: '$target_file
-$MAJOR_HOME/bin/javac -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $build_dir $source_dir$target_file
+$MAJOR_HOME/bin/javac -cp $build_dir -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $build_dir $source_dir$target_file
 echo '> Mutants generated!'
 mv mutants.log daikon-outputs/mutants/$driver_base'Driver-mutants.log'
 echo ''
@@ -21,7 +21,7 @@ for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
 do
   echo '> Procesing mutant: '$dir$target_file
   echo '> Compiling mutant'
-  javac -g $dir$target_file -d $build_dir
+  javac -cp $build_dir -g $dir$target_file -d $build_dir
   echo '> Mutant compiled'
   echo '' 
   echo '> Generating traces with Chicory from mutant'
