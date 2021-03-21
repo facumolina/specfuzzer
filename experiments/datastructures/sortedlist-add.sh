@@ -11,7 +11,7 @@ output_folder=experiments/datastructures/output/
 # Arguments
 technique=$1
 # Common
-fqname='DataStructures.Lkorat.singlysortedlist.SortedList'
+fqname='DataStructures.korat.singlysortedlist.SortedList'
 class='SortedList'
 method='add'
 target_name='SortedListTesterDriver'
