@@ -19,7 +19,7 @@ target_name='SortedListTesterDriver'
 trace='daikon-outputs/'$target_name'.dtrace.gz'
 inv_file=$target_name'.inv.gz'
 # SpecFuzzer
-invs_to_fuzz=200
+invs_to_fuzz=1000
 grammar='grammars/SortedListGrammar.json'
 
 output_file=$class'-'$method'-'$technique'.assertions'
