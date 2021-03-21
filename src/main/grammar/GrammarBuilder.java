@@ -186,8 +186,6 @@ public class GrammarBuilder {
     extend_grammar(grammar, current_qt_obj_symbol, GrammarSymbols.NULL);
     // Options for the quantified sets
     extend_grammar(grammar, current_qt_obj_set_symbol,
-            GrammarSymbols.QT_VAR_NAME + ".*(" + current_set_labels_symbol + ")");
-    extend_grammar(grammar, current_qt_obj_set_symbol,
             GrammarSymbols.QT_VAR_NAME + ".^(" + current_set_labels_symbol + ")");
   }
 
