@@ -1,0 +1,10 @@
+assert(
+	ExpressionEvaluator.evaluateSetMembership(arg0,"this . header . * previous . element",this) &&
+	old_thisheader.previous.element != this.header.previous.element + 1 + old_thisheader.previous.element - this.header.next.element &&
+	old_thisheader.next.previous != this.header.next.previous &&
+	this.header.next.previous != this.header.previous &&
+	old_thisheader.previous.element != this.header.previous.element + 1 &&
+	this.header.previous.next != null &&
+	ExpressionEvaluator.evaluateQuantifiedExpression("all","this . header . * next + previous","n == n . next . previous",this) &&
+	old_thisheader.element == this.header.element
+);
