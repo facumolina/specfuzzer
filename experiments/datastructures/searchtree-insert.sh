@@ -2,41 +2,64 @@
 
 output_folder=experiments/datastructures/output/
 
-# This script allows to generate invariants for the SearchTree case study by using a given technique: daikon, specfuzzer or gassert
+# This script allows to generate invariants for the SearchTree.insert case study by using one of the following techniques:
+# * daikon
+# * specfuzzer
+# * gassert
+# * evospex
 
+# Arguments
 technique=$1
-invs_to_fuzz=100
+# Common
+fqname='DataStructures.korat.binarysearchtree.SearchTree'
 class='SearchTree'
 method='insert'
+target_name='SearchTreeTesterDriver'
+# Daikon
+trace='daikon-outputs/'$target_name'.dtrace.gz'
+inv_file=$target_name'.inv.gz'
+# SpecFuzzer
+invs_to_fuzz=500
+grammar='grammars/SearchTreeGrammar.json'
+
+output_file=$class'-'$method'-'$technique'.assertions'
+
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 
-# Run the specfuzzer technique
-echo '> Analyzing DataStructures.SearchTree.insert with technique: '$technique
+echo '> Analyzing DataStructures.korat.binarysearchtree.SearchTree.insert with technique: '$technique
 
 # Daikon standalone
 if [ $technique == "daikon" ]
 then
-  output_file=searchtree-insert-daikon.assertions
-  echo '> Inferring with Daikon standalone'
-  ./experiments/datastructures/run-daikon.sh daikon-outputs/SearchTreeTesterDriver.dtrace.gz SearchTreeTesterDriver.inv.gz $class $method $output_folder$output_file
+  echo '> Daikon'
+  ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method $output_folder$output_file
 fi
 
+# SpecFuzzer
 if [ $technique = "specfuzzer" ]
 then
-  output_file=searchtree-insert-specfuzzer.assertions
-  echo '> Inferring with Daikon + SpecFuzzer'
-  ./experiments/datastructures/run-specfuzzer.sh daikon-outputs/SearchTreeTesterDriver.dtrace.gz daikon-outputs/SearchTreeTesterDriver-objects.xml grammars/SearchTreeGrammar.json $invs_to_fuzz SearchTreeTesterDriver.inv.gz $class $method $output_folder$output_file
+  ./experiments/datastructures/run-specfuzzer.sh $target_name $grammar $invs_to_fuzz $class $method $output_folder$output_file
 fi
 
 # GAssert
-if [ $technique == "gassert" ] 
+if [ $technique == "gassert" ]
 then
-  echo '> Inferring with GAssert'
+  echo '> GAssert'
   echo '> Go to $GASSERT/scripts and perform: '
-  echo '  ./run_gassert.sh GASSERT DataStructuresSearchTree_insert 10 daikon.assertions'
+  echo '  ./run_gassert.sh GASSERT DataStructuresSearchTree_insert 90 daikon.assertions'
 fi
+
+# EvoSpex
+if [ $technique == "evospex" ]
+then
+  echo '> EvoSpex'
+  objects_folder='SearchTree/insert\(int\)/3/'
+  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder
+fi
+
 
 echo ''
 echo '> Done!'
+
