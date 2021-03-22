@@ -41,7 +41,7 @@ java -cp $specfuzzer_jar:$evospex_jar main.EvoSpex $model_file $base_folder $num
 done
 
 echo '> Computing final csv with data from all the executions'
-csv_file=output_dir/$target_class_sn-$method-evospex.csv 
+csv_file=$output_dir/$target_class_sn-$method-evospex.csv 
 touch $csv_file
 echo "class,method,exec_number,totaltime,positive_ce,negative_ce,total_assertions" >> $csv_file
 for value in $(eval echo {1..$executions})
