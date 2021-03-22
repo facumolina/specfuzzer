@@ -39,3 +39,18 @@ do
 echo '> Execution number '$value' being sent to '$output_dir/$target_class_sn-$method-evospex-$value.assertions
 java -cp $specfuzzer_jar:$evospex_jar main.EvoSpex $model_file $base_folder $num_args $num_outputs $3 $4 $5 $6 $7 $8 > $output_dir/$target_class_sn-$method-evospex-$value.assertions  
 done
+
+echo '> Computing final csv with data from all the executions'
+csv_file=output_dir/$target_class_sn-$method-evospex.csv 
+touch $csv_file
+echo "class,method,exec_number,totaltime,positive_ce,negative_ce,total_assertions" >> $csv_file
+for value in $(eval echo {1..$executions})
+do
+(echo -n "$target_class_sn,$method,$value," ; tail -1 $output_dir/$target_class_sn-$method-evospex-$value.assertions;) >> $csv_file
+done
+
+echo 'Output csv file: '$csv_file
+echo 'Processing output..'
+python3.7 $EVOSPEX/experiments/process-csv.py $csv_file
+echo ''
+
