@@ -19,7 +19,7 @@ target_name='SortedListTesterDriver'
 trace='daikon-outputs/'$target_name'.dtrace.gz'
 inv_file=$target_name'.inv.gz'
 # SpecFuzzer
-invs_to_fuzz=1000
+invs_to_fuzz=2000
 grammar='grammars/SortedListGrammar.json'
 
 output_file=$class'-'$method'-'$technique'.assertions'
@@ -55,7 +55,7 @@ if [ $technique == "evospex" ]
 then
   echo '> EvoSpex'
   objects_folder='SortedList/add\(int\)/3/'
-  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder
+  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder 10
 fi
 
 
