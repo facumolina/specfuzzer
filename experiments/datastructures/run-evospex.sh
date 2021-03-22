@@ -8,11 +8,13 @@ root_dir=$EVOSPEX;
 fqname=$1
 method=$2
 objs_folder=$3
+executions=$4
 
 evospex_jar=$EVOSPEX/target/evospex-jar-with-dependencies.jar
 specfuzzer_jar=$SPECFUZZER/dest/jar/FuzzSpecs.jar
 
 echo '> Running EvoSpex on subject: '$fqname'.'$method
+echo 'executions: '$executions
 
 # Get required variables
 target_class_sn=$(sed 's/.*\.//' <<< $1)
@@ -29,6 +31,10 @@ echo 'base_folder: '$base_folder
 echo 'num_args: '$num_args
 echo 'num_outputs: '$num_outputs
 
-# Run EvoSpex
-java -cp $specfuzzer_jar:$evospex_jar main.EvoSpex $model_file $base_folder $num_args $num_outputs $3 $4 $5 $6 $7 $8
 
+output_dir=experiments/datastructures/output/evospex
+mkdir -p $output_dir
+for value in $(eval echo {1..$executions})
+do
+java -cp $specfuzzer_jar:$evospex_jar main.EvoSpex $model_file $base_folder $num_args $num_outputs $3 $4 $5 $6 $7 $8 > $output_dir/$target_class_sn-$method-evospex-$value.assertions  
+done
