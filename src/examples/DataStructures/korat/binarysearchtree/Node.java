@@ -58,17 +58,17 @@ public class Node implements Serializable {
       return false;
     Node n = (Node) that;
     // if (this.info.compareTo(n.info) != 0)
-    if (this.info > (n.info))
+    if (this.info != (n.info))
       return false;
     boolean b = true;
     if (left == null)
       b = b && (n.left == null);
     else
-      b = b && (left.equals(n.left));
+      b = b && (left == n.left);
     if (right == null)
       b = b && (n.right == null);
     else
-      b = b && (right.equals(n.right));
+      b = b && (right == n.right);
     return b;
   }
 
