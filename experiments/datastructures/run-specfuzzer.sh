@@ -8,19 +8,27 @@ invs_to_fuzz=$3
 invs_file=$target_name'.inv.gz'
 class=$4
 method=$5
-output_file=$6
+executions=$6
 mutants_dir='daikon-outputs/mutants';
+output_dir=$SPECFUZZER/"experiments/datastructures/output/specfuzzer"
 
 echo '> SpecFuzzer'
 echo 'dtrace: '$dtrace
 echo 'objects: '$objects
+
+for value in $(eval echo {1..$executions})
+do
+echo '> Execution number: '$value
+SECONDS=0
 
 # Clean file for this step to work properly
 cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
 
 # Actual execution of Daikon + Fuzzed specs
+echo '> Inference step'
 java -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects $dtrace
+SECONDS_INFERENCE=$SECONDS
 
 mutations_log=$mutants_dir'/'$target_name'-mutants.log'
 # Now perform the filtering step
@@ -43,19 +51,30 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
     echo '> Ignored mutant: '$curr_mutant
   fi
 done
+SECONDS_FILTERING=$SECONDS
+
+mkdir -p $output_dir
+base_file_name=$class'-'$method'-specfuzzer-'$value
 
 echo '> Mutation killing ability'
 python3 process-final-results.py invs-by-mutants.csv
-mutka_file='experiments/datastructures/output/'$class'-'$method'-specfuzzer-invs-by-mutants.csv'
+mutka_file=$output_dir'/'$base_file_name'-invs-by-mutants.csv'
 echo '> Mutation killing ability results saved in: '$mutka_file
 cp invs-by-mutants.csv $mutka_file
 
-rm -f $output_file
+assertions_file=$output_dir'/'$base_file_name.assertions
 echo ''
-echo '> Writing output to file: '$output_file
-java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' > $output_file
-java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$method'.' >> $output_file
-mv $invs_file 'experiments/datastructures/output/'$class'-'$method'-specfuzzer.inv.gz'
+echo '> Writing assertions to file: '$assertions_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' > $assertions_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$method'.' >> $assertions_file
+mv $invs_file $output_dir'/'$base_file_name.inv.gz
+mv invs_file.xml $output_dir'/'$base_file_name'-filteredinvs.xml'
+stats_file=$output_dir'/'$base_file_name.log
 
-echo '> Output written.'
+echo "Inferece time (sec): $(($SECONDS_INFERENCE))" > $stats_file
+echo "Filtering time (sec): $(($SECONDS_FILTERING))" >> $stats_file
 
+echo '> Finished execution '$value
+echo ''
+
+done # Close executions loop
