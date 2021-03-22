@@ -124,6 +124,9 @@ public class GrammarBuilder {
       for (int j = i+1; j < curr_labels.size(); j++) {
         String snd = curr_labels.get(j);
         extend_grammar(grammar, labels_symbol, fst + " + " + snd);
+        // When creating pairs, single labels are no longer considered.
+        grammar.get(labels_symbol).remove(fst);
+        grammar.get(labels_symbol).remove(snd);
       }
     }
   }
