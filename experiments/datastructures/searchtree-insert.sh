@@ -19,7 +19,7 @@ target_name='SearchTreeTesterDriver'
 trace='daikon-outputs/'$target_name'.dtrace.gz'
 inv_file=$target_name'.inv.gz'
 # SpecFuzzer
-invs_to_fuzz=500
+invs_to_fuzz=2000
 grammar='grammars/SearchTreeGrammar.json'
 
 output_file=$class'-'$method'-'$technique'.assertions'
@@ -56,7 +56,7 @@ if [ $technique == "evospex" ]
 then
   echo '> EvoSpex'
   objects_folder='SearchTree/insert\(int\)/3/'
-  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder
+  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder 10
 fi
 
 
