@@ -96,8 +96,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied FuzzedUnaryInvariant this, OutputFormat format) {
-    if (format == OutputFormat.JAVA)
-      return "FuzzedInvariant:" + fuzzed_spec;
     return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: " + var().name();
   }
 
