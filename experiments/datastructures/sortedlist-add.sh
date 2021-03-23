@@ -39,7 +39,7 @@ fi
 # SpecFuzzer
 if [ $technique = "specfuzzer" ]
 then
-  ./experiments/datastructures/run-specfuzzer.sh $target_name $grammar $invs_to_fuzz $class $method $output_folder$output_file
+  ./experiments/datastructures/run-specfuzzer.sh $target_name $grammar $invs_to_fuzz $class $method 10
 fi
 
 # GAssert
