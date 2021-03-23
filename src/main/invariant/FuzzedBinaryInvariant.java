@@ -98,8 +98,6 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied FuzzedBinaryInvariant this, OutputFormat format) {
-    //if (format == OutputFormat.JAVA)
-    //  return "FuzzedInvariant:" + fuzzed_spec;
     return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: <" + var1().name() + " , " + var2().name() + ">";
   }
 
