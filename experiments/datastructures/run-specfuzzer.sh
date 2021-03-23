@@ -31,7 +31,10 @@ java -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --living-
 SECONDS_INFERENCE=$SECONDS
 
 mutations_log=$mutants_dir'/'$target_name'-mutants.log'
-# Now perform the filtering step
+
+# Now perform the filtering step using a seconds budget. If the budget is passed, then stop. 
+FILTERING_BUDGET=1800
+SECONDS=0
 echo '> Filtering step'
 echo ''
 for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
@@ -49,6 +52,11 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
     echo ''
   else
     echo '> Ignored mutant: '$curr_mutant
+  fi
+  # Check budget
+  if [ "$SECONDS" -gt "$FILTERING_BUDGET" ]; then
+    echo '> Filtering step finished due to timeout: '$SECONDS
+    break
   fi
 done
 SECONDS_FILTERING=$SECONDS
