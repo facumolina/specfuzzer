@@ -2,7 +2,7 @@
 
 output_folder=experiments/datastructures/output/
 
-# This script allows to generate invariants for the List case study by using a given technique: daikon, specfuzzer or gassert
+# This script allows to generate invariants for the List case study by using a given technique: daikon, specfuzzer, gassert or evospex
 
 # Arguments
 technique=$1
@@ -23,7 +23,7 @@ output_file=$class'-'$method'-'$technique'.assertions'
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 
-# Run the specfuzzer technique
+# Run the technique
 echo '> Analyzing DataStructures.List.insert with technique: '$technique
 
 # Daikon standalone
