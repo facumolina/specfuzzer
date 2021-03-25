@@ -322,6 +322,7 @@ public class GrammarBuilder {
    */
   protected static void remove_non_expandable_membership(Map<String, List<String>> grammar) {
     if (grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).isEmpty()) {
+      grammar.remove(GrammarSymbols.MEMBERSHIP_EXPR);
       grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.MEMBERSHIP_EXPR);
     }
   }
