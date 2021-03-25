@@ -1,14 +1,11 @@
 package expression;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 
 import DataStructures.AvlTreeList;
 import DataStructures.CollectionAttribute;
+import DataStructures.daikon.StackAr;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -18,6 +15,8 @@ import DataStructures.List;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import antlr.AlloyExprGrammarParser.ParseContext;
+
+import static org.junit.Assert.*;
 
 /**
  * This class contains tests to ensure that the expression evaluator is working properly
@@ -85,6 +84,19 @@ public class SetExpressionEvaluatorTest {
     assertEquals(collection.size(), 5);
     Collection<Object> nullSet = evaluateSet("CollectionAttribute.nullList", ca);
     assertNull(nullSet);
+  }
+
+  @Test
+  public void setFromArray() {
+    try {
+      StackAr s = new StackAr(10);
+      s.push(1);
+      s.push(2);
+      s.push(3);
+      Collection<Object> array_elems = evaluateSet("StackAr.theArray", s);
+      assertTrue(ExpressionEvaluator.eval("#(StackAr.theArray) > 0", s));
+      assertTrue(array_elems.size()==3);
+    } catch (StackAr.Overflow e) {}
   }
 
 }
