@@ -249,6 +249,8 @@ public class GrammarExtractor {
             } else if (java.util.Collection.class.isAssignableFrom(target_type)) {
               // The target type is a collection so we can create a quantification symbol
               add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
+            } else if (target_type.isArray()) {
+              add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
             }
             traverse_graph(target_type, curr_expr + "." + edge.getLabel(), grammar, k - 1);
           } else {

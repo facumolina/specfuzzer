@@ -2,6 +2,8 @@ package expression;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -63,7 +65,17 @@ public class NameExpressionEvaluator {
       // Get the field and evaluate it, o continue evaluating
       Field field = get_field(o.getClass(), access_field);
       field.setAccessible(true);
-      return field.get(o);
+      Object field_value = field.get(o);
+      if (field_value!=null && field_value instanceof Object[]) {
+        // Arrays are specially treated as sets
+        Object [] array = (Object[]) field_value;
+        HashSet<Object> set = new HashSet<>();
+        for (int i = 0; i < array.length ; i++)
+          if (array[i]!=null)
+            set.add(array[i]);
+        return set;
+      }
+      return field_value;
     } catch (IllegalAccessException e) {
       throw new IllegalStateException("The expression " + access_field
               + " can't be evaluated on object of type " + o.getClass().getSimpleName()
