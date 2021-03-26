@@ -112,7 +112,7 @@ public class StackAr
     }
 
     private Object [ ] theArray;
-    private int        topOfStack;
+    private int topOfStack;
 
     public class Underflow extends Exception
     {
