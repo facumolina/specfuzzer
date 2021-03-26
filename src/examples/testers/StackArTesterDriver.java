@@ -2855,6 +2855,54 @@ public class StackArTesterDriver {
             hadFailure = true;
             e.printStackTrace();
         }
+        try {
+            t0.test476();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test477();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test478();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test479();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test480();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test481();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test482();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
+        try {
+            t0.test483();
+        } catch (Throwable e) {
+            hadFailure = true;
+            e.printStackTrace();
+        }
         if (hadFailure) {
             System.exit(1);
         }
