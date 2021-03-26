@@ -37,8 +37,8 @@ public final class IntTreeSet extends AbstractIntSet implements Cloneable {
    * @invariant all n: tree.nodes | n.max = n.key && n.min <= n.max && all n': tree.nodes - n |
    * n'.max < n.min - 1 || n'.min > n.max + 1
    */
-  public final IntTree<Range> tree;
-  public int size;
+  private final IntTree<Range> tree;
+  private int size;
 
   /**
    * Constructs an empty int set.
