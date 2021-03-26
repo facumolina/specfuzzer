@@ -1,0 +1,24 @@
+===========================================================================
+DataStructures.daikon.StackAr:::OBJECT
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.topOfStack >= -1
+this.topOfStack <= size(this.theArray[])-1
+===========================================================================
+DataStructures.daikon.StackAr.push(java.lang.Object):::ENTER
+size(this.theArray[]) >= 1
+this.theArray.getClass().getName() != x.getClass().getName()
+this.topOfStack < size(this.theArray[])-1
+===========================================================================
+DataStructures.daikon.StackAr.push(java.lang.Object):::EXIT
+this.theArray == orig(this.theArray)
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
+orig(x) == this.theArray[this.topOfStack]
+size(this.theArray[]) == orig(size(this.theArray[]))
+this.topOfStack >= 0
+size(this.theArray[]) >= 1
+orig(this.theArray[post(this.topOfStack)]) == null
+this.theArray.getClass().getName() != orig(x.getClass().getName())
+orig(x.getClass().getName()) in this.theArray[].getClass().getName()
+this.topOfStack - orig(this.topOfStack) - 1 == 0
+orig(this.topOfStack) < size(this.theArray[])-1
