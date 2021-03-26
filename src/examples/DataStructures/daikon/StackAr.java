@@ -15,13 +15,16 @@ package DataStructures.daikon;
 // ******************ERRORS********************************
 // Overflow and Underflow thrown as needed
 
+import java.io.Serializable;
+
 /**
  * Array-based implementation of the stack.
  * @author Mark Allen Weiss
  */
-public class StackAr
+public class StackAr implements Serializable
 {
-
+    static final long serialVersionUID = 20210326L;
+    
     /**
      * Construct the stack.
      * @param capacity the capacity.
