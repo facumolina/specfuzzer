@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
+ * This class implements sorted list of integers using a singly linked list with a sentintel node.
  */
 public class List implements Serializable {
 
@@ -25,6 +26,9 @@ public class List implements Serializable {
     this(SENTINEL, null);
   }
 
+  /**
+   * Inserts the given element in the list
+   */
   public void insert(int data) {
     if (data > this.x) {
       next.insert(data);
@@ -34,6 +38,17 @@ public class List implements Serializable {
     }
   }
 
+  /**
+   * Clear the list
+   */
+  public void clear() {
+    x = SENTINEL;
+    next = null;
+  }
+
+  /**
+   * Representation invariant
+   */
   public boolean repOk() {
     Set<List> visited = new HashSet<List>();
     List curr = this;
