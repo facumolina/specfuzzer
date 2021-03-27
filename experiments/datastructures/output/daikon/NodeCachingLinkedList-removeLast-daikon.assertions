@@ -1,0 +1,48 @@
+===========================================================================
+DataStructures.commonscollections.NodeCachingLinkedList:::OBJECT
+this.header.previous.value.getClass().getName() == this.header.next.value.getClass().getName()
+this.firstCachedNode.previous == null
+this.firstCachedNode.next.previous == null
+this.firstCachedNode.next.value == null
+this.firstCachedNode.value == null
+this.cacheSize >= 0
+this.header != null
+this.header.previous != null
+this.header.previous.value.getClass().getName() == java.lang.String.class
+this.header.next != null
+this.header.next.value.getClass().getName() == java.lang.String.class
+this.header.value == null
+this.size >= 0
+this.modCount >= 0
+===========================================================================
+DataStructures.commonscollections.AbstractLinkedList.removeLast():::ENTER
+this.header == this.header.previous.next
+this.header == this.header.next.previous
+this.header != null
+this.header.previous.previous != null
+this.header.previous.value != null
+this.header.next.next != null
+this.header.next.value != null
+this.size >= 1
+===========================================================================
+DataStructures.commonscollections.AbstractLinkedList.removeLast():::EXIT
+this.header == this.header.previous.next
+this.header == this.header.next.previous
+this.header == orig(this.header)
+this.header == orig(this.header.previous.next)
+this.header == orig(this.header.next.previous)
+this.header.previous == orig(this.header.previous.previous)
+this.header.previous.value.getClass().getName() == return.getClass().getName()
+this.header.value == orig(this.header.value)
+return == orig(this.header.previous.value)
+return.getClass().getName() == orig(this.header.previous.value.getClass().getName())
+return.getClass().getName() == orig(this.header.next.value.getClass().getName())
+this.header != null
+this.header.previous.previous != null
+this.header.next.next != null
+return != null
+return.getClass().getName() == java.lang.String.class
+this.header.previous.value.getClass().getName() != orig(this.getClass().getName())
+this.size - orig(this.size) + 1 == 0
+this.modCount - orig(this.modCount) - 1 == 0
+return.getClass().getName() != orig(this.getClass().getName())
