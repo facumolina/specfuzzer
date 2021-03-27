@@ -37,7 +37,7 @@ mkdir -p $output_dir
 for value in $(eval echo {1..$executions})
 do
 echo '> Execution number '$value' being sent to '$output_dir/$target_class_sn-$method-evospex-$value.assertions
-java -cp $specfuzzer_jar:$evospex_jar main.EvoSpex $model_file $base_folder $num_args $num_outputs $3 $4 $5 $6 $7 $8 > $output_dir/$target_class_sn-$method-evospex-$value.assertions  
+java -cp $specfuzzer_jar:$evospex_jar main.EvoSpex $model_file $base_folder $num_args $num_outputs 'to=5400' $3 $4 $5 $6 $7 > $output_dir/$target_class_sn-$method-evospex-$value.assertions  
 done
 
 echo '> Computing final csv with data from all the executions'
