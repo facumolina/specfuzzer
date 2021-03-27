@@ -41,11 +41,16 @@ public abstract class PointerInvariant extends UnaryInvariant {
     return ((vis.length == 1) && vis[0].file_rep_type.isObject() && vis[0].name()=="this");
   }
 
+
+
   /** Returns whether or not the specified types are valid for unary object. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
-    return valid_types_static(vis);
+    return valid_types_static(vis) && extra_check(vis);
   }
+
+  /** To add extra checking steps for valid types*/
+  public abstract boolean extra_check(VarInfo[] vis);
 
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;

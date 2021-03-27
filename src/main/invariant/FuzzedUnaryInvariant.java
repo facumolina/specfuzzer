@@ -1,5 +1,6 @@
 package invariant;
 
+import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
 import expression.NonEvaluableExpressionException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -53,6 +54,13 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private @Prototype FuzzedUnaryInvariant() {
     super();
     get_fuzzed_spec();
+  }
+
+  @Override
+  public boolean extra_check(VarInfo[] vis) {
+    String type_str = vis[0].type.toString();
+    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    return ExpressionEvaluator.is_valid(fuzzed_spec, class_name);
   }
 
   private @Prototype FuzzedUnaryInvariant(String spec) {
@@ -113,7 +121,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
       if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name))
         return InvariantStatus.FALSIFIED;
-      
       return InvariantStatus.NO_CHANGE;
     }
 
