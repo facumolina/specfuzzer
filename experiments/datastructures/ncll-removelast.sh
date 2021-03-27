@@ -2,33 +2,41 @@
 
 output_folder=experiments/datastructures/output/
 
-# This script allows to generate invariants for the NodeCachingLinkedList.removeLast case study by using a given technique: daikon, specfuzzer or gassert
+# This script allows to generate invariants for the NodeCachingLinkedList.removeLast case study by using a given technique: daikon, specfuzzer, gassert or evospex
 
+# Arguments
 technique=$1
-invs_to_fuzz=500
+# Common
+fqname='DataStructures.commonscollections.NodeCachingLinkedList'
 class='NodeCachingLinkedList'
 method='removeLast'
+target_name='NodeCachingLinkedListTesterDriver'
+# Daikon
+trace='daikon-outputs/'$target_name'.dtrace.gz'
+inv_file=$target_name'.inv.gz'
+# SpecFuzzer
+invs_to_fuzz=2000
+grammar='grammars/NodeCachingLinkedListGrammar.json'
+
+output_file=$class'-'$method'-'$technique'.assertions'
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 
-# Run the specfuzzer technique
-echo '> Analyzing DataStructures.commonscollections.NodeCachingLinkedList.remove with technique: '$technique
+# Run the technique
+echo '> Analyzing DataStructures.commonscollections.NodeCachingLinkedList.removeLast with technique: '$technique
 
 # Daikon standalone
 if [ $technique == "daikon" ]
 then
-  output_file=ncll-removelast-daikon.assertions
-  echo '> Inferring with Daikon standalone'
-  ./experiments/datastructures/run-daikon.sh daikon-outputs/NodeCachingLinkedListTesterDriver.dtrace.gz NodeCachingLinkedListTesterDriver.inv.gz $class $method $output_folder$output_file
+  echo '> Daikon'
+  ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method $output_folder$output_file
 fi
 
-# Daikon with SpecFuzzer
+# SpecFuzzer
 if [ $technique = "specfuzzer" ] 
 then
-  output_file=ncll-removelast-specfuzzer.assertions
-  echo '> Inferring with Daikon + SpecFuzzer'
-  ./experiments/datastructures/run-specfuzzer.sh daikon-outputs/NodeCachingLinkedListTesterDriver.dtrace.gz daikon-outputs/NodeCachingLinkedListTesterDriver-objects.xml grammars/NodeCachingLinkedListGrammar-reduced.json $invs_to_fuzz NodeCachingLinkedListTesterDriver.inv.gz $class $method $output_folder$output_file
+  ./experiments/datastructures/run-specfuzzer.sh $target_name $grammar $invs_to_fuzz $class $method 10
 fi
 
 # GAssert
@@ -36,7 +44,15 @@ if [ $technique == "gassert" ]
 then
   echo '> Inferring with GAssert'
   echo '> Go to $GASSERT/scripts and perform: '
-  echo '  ./run_gassert.sh GASSERT DataStructuresNCLL_removeLast 10 daikon.assertions'
+  echo '  ./run_gassert.sh GASSERT DataStructuresNCLL_removeLast 90 daikon.assertions'
+fi
+
+# EvoSpex
+if [ $technique == "evospex" ]
+then
+  echo '> EvoSpex'
+  objects_folder='NodeCachingLinkedList/removeLast\(\)/3/'
+  ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder 10
 fi
 
 echo ''
