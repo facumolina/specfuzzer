@@ -51,7 +51,7 @@ fi
 if [ $technique == "evospex" ]
 then
   echo '> EvoSpex'
-  objects_folder='NodeCachingLinkedList/addLast\(ava.lang.Object\)/3/'
+  objects_folder='NodeCachingLinkedList/addLast\(java.lang.Object\)/3/'
   ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder 10
 fi
 
