@@ -52,7 +52,7 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
     echo 'Saving mutants results file'
     python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
     echo ''
-  else
+    #else
     #echo '> Ignored mutant: '$curr_mutant
   fi
   # Check budget
