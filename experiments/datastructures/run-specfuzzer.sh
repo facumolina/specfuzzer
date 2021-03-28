@@ -35,7 +35,7 @@ SECONDS_INFERENCE=$SECONDS
 mutations_log=$mutants_dir'/'$target_name'-mutants.log'
 
 # Now perform the filtering step using a seconds budget. If the budget is passed, then stop. 
-FILTERING_BUDGET=1800
+FILTERING_BUDGET=3600
 SECONDS=0
 echo '> Filtering step'
 echo ''
