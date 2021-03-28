@@ -2,14 +2,14 @@
 
 output_folder=experiments/datastructures/output/
 
-# This script allows to generate invariants for the TreeList.clear case study by using a given technique: daikon, specfuzzer, gassert or evospex
+# This script allows to generate invariants for the TreeList.remove case study by using a given technique: daikon, specfuzzer, gassert or evospex
 
 # Arguments
 technique=$1
 # Common
 fqname='DataStructures.commonscollections.TreeList'
 class='TreeList'
-method='clear'
+method='remove'
 target_name='TreeListTesterDriver'
 # Daikon
 trace='daikon-outputs/'$target_name'.dtrace.gz'
@@ -24,7 +24,7 @@ output_file=$class'-'$method'-'$technique'.assertions'
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 
 # Run the technique
-echo '> Analyzing DataStructures.commonscollections.TreeList.clear with technique: '$technique
+echo '> Analyzing DataStructures.commonscollections.TreeList.remove with technique: '$technique
 
 # Daikon standalone
 if [ $technique == "daikon" ]
@@ -44,14 +44,14 @@ if [ $technique == "gassert" ]
 then
   echo '> Inferring with GAssert'
   echo '> Go to $GASSERT/scripts and perform: '
-  echo '  ./run_gassert.sh GASSERT DataStructuresTreeList_clear 90 daikon.assertions'
+  echo '  ./run_gassert.sh GASSERT DataStructuresTreeList_remove 90 daikon.assertions'
 fi
 
 # EvoSpex
 if [ $technique == "evospex" ]
 then
   echo '> EvoSpex'
-  objects_folder='TreeList/clear\(\)/3/'
+  objects_folder='TreeList/remove\(int\)/3/'
   ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder 10
 fi
 
