@@ -1,28 +1,17 @@
 #!/bin/bash
 
-# This script allows to perform valid and invalid trace generation to enable the fuzzing based specification inference technique for the TreeList case study.
+# Setup for DataStructures.commonscollections.TreeList class
  
-# Verify that the required environment variables have been set
-[[ -z "$DAIKONDIR" ]] && { echo "> The environment variable DAIKONDIR is empty" ; exit 1; }
-[[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
+# Define vars
+fqname='DataStructures.commonscollections.TreeList'
+tester_base='TreeListTester'
+omit_pattern=$tester_base'.*'
+driver_name='TreeListTesterDriver'
+driver='testers.TreeListTesterDriver'
+daikon_out=$SPECFUZZER'/daikon-outputs'
+cmp_file=$daikon_out'/TreeListTesterDriver.decls-DynComp'
+objs_file='daikon-outputs/TreeListTesterDriver-objects.xml'
+source_file='DataStructures/commonscollections/TreeList.java'
 
-echo '> Starting experiment for case: DataStructures.commonscollections.TreeList'
-echo ''
+./experiments/setup/common.sh $fqname $tester_base $driver_name $source_file
 
-# Perform the Dynamic Comparability Analysis
-echo '> Performing Dynamic Comparability Analysis from driver: testers.TreeListTesterDriver'
-java -cp build/classes/:lib/daikon.jar daikon.DynComp testers.TreeListTesterDriver --output-dir=$SPECFUZZER/daikon-outputs
-echo ''
-
-# Run Chicory on the existing testsuite to create the valid trace 
-echo '> Running Chicory for dtrace generation from driver: testers.NodeCachingLinkedListTesterDriver'
-java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=$SPECFUZZER/daikon-outputs/ --comparability-file=$SPECFUZZER/daikon-outputs/TreeListTesterDriver.decls-DynComp --ppt-omit-pattern='TreeListTester.*' testers.TreeListTesterDriver daikon-outputs/TreeListTesterDriver-objects.xml
-echo 'Objects saved in file: '$SPECFUZZER'/daikon-outputs/TreeListTesterDriver-objects.xml'
-echo ''
-
-# Use Major to create the mutated traces
-echo '> Generating mutants with MAJOR'
-#./experiments/setup/gen-mutated-traces.sh DataStructures/List.java ListTester
-echo ''
-
-echo '> Done!'
