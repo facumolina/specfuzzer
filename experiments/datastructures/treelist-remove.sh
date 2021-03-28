@@ -15,7 +15,7 @@ target_name='TreeListTesterDriver'
 trace='daikon-outputs/'$target_name'.dtrace.gz'
 inv_file=$target_name'.inv.gz'
 # SpecFuzzer
-invs_to_fuzz=10
+invs_to_fuzz=2000
 grammar='grammars/TreeListGrammar.json'
 
 output_file=$class'-'$method'-'$technique'.assertions'
