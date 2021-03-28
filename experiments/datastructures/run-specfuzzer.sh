@@ -22,6 +22,8 @@ echo '> Execution number: '$value
 SECONDS=0
 
 # Clean file for this step to work properly
+rm invs_file.xml
+rm invs-by-mutants.csv
 cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
 
