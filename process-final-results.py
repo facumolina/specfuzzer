@@ -39,6 +39,7 @@ for ppt in unique_ppt:
     print("Program Point: "+ppt)
     print("     Invariants sorted by mutation killing ability (times that failed in the program point)")
     ka = ppt_df.sort_values(by=['fails'], ascending=False, ignore_index=True)
-    pd.set_option('max_colwidth', 800)
+    pd.set_option('max_colwidth', 1000)
+    pd.set_option("display.max_rows", None)
     print(ka[['invariant','fails']])
     print()
