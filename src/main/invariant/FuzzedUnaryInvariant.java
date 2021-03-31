@@ -18,7 +18,9 @@ import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a candidate invariant over one variable which is obtained by fuzzing a grammar
@@ -43,6 +45,9 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
 
+  // Cache of already evaluated hashcode-ppt pairs.
+  private Map<String, InvariantStatus> cached_evaluations = new HashMap<>();
+
   ///
   /// Required methods
   ///
@@ -54,13 +59,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private @Prototype FuzzedUnaryInvariant() {
     super();
     get_fuzzed_spec();
-  }
-
-  @Override
-  public boolean extra_check(VarInfo[] vis) {
-    String type_str = vis[0].type.toString();
-    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-    return ExpressionEvaluator.is_valid(fuzzed_spec, class_name);
   }
 
   private @Prototype FuzzedUnaryInvariant(String spec) {
@@ -77,6 +75,13 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
     fuzzed_spec = fuzzer.fuzz();
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
+  }
+
+  @Override
+  public boolean extra_check(VarInfo[] vis) {
+    String type_str = vis[0].type.toString();
+    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    return ExpressionEvaluator.is_valid(fuzzed_spec, class_name);
   }
 
   /** Returns the prototype invariant. */
@@ -112,6 +117,12 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     // Recover the object
     int i = (int) v;
     String key = i+"-"+ppt.parent.name;
+
+    // Check if already evaluated
+    if (cached_evaluations.containsKey(key))
+      return cached_evaluations.get(key);
+
+    // Evaluate the key
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null) {
       // First check if the fuzzed spec can be instantiated from the object type
@@ -119,9 +130,14 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       // corresponds to an object of an invalid type for the current fuzzed_spec
       String type_str = var().type.toString();
       String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name))
+
+      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name)) {
+        cached_evaluations.put(key, InvariantStatus.FALSIFIED);
         return InvariantStatus.FALSIFIED;
-      return InvariantStatus.NO_CHANGE;
+      } else {
+        cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
+        return InvariantStatus.NO_CHANGE;
+      }
     }
 
     try {
@@ -129,13 +145,16 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
         // The unary invariant is only evaluated on the this object of the tuple
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
         if (!b) {
+          cached_evaluations.put(key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
       }
     } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified
+      cached_evaluations.put(key, InvariantStatus.FALSIFIED);
       return InvariantStatus.FALSIFIED;
     }
+    cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
     return InvariantStatus.NO_CHANGE;
   }
 

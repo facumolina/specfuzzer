@@ -19,7 +19,9 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a candidate binary invariant which is obtained by fuzzing a grammar
@@ -43,6 +45,9 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
 
   // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
+
+  // Cache of already evaluated hashcode-ppt pairs.
+  private Map<String, InvariantStatus> cached_evaluations = new HashMap<>();
 
   ///
   /// Required methods
@@ -149,9 +154,9 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       return ppt_slice2.var_infos[1];
   }
 
-  // Default status for situations in which the invariant can't evaluated.
-  // Should be FALSIFIED when inferring invariants.
-  // Should be NO_CHANGE when using InvariantChecker
+  // Default status for situations in which the invariant can't be evaluated.
+  // Should be FALSIFIED when inferring invariants, i.e, when using Daikon.
+  // Should be NO_CHANGE when filtering invariants, i.e, when using InvariantChecker
   private InvariantStatus default_status = InvariantStatus.FALSIFIED;
 
   @Override
@@ -159,6 +164,13 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     // Recover the object
     int i = (int) getObject(v1, v2);
     String key = i+"-"+ppt.parent.name;
+    VarInfo curr_var = getVariable((PptSlice2)this.ppt);
+    String cached_key = key+curr_var.name();
+
+    // Check if already evaluated
+    if (cached_evaluations.containsKey(cached_key))
+      return cached_evaluations.get(cached_key);
+
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null) {
       // First check if the fuzzed spec can be instantiated from the object type
@@ -166,26 +178,36 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       // corresponds to an object of an invalid type for the current fuzzed_spec
       String type_str = getClassOfObject();
       String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name))
-        return InvariantStatus.FALSIFIED;
 
-      return InvariantStatus.NO_CHANGE;
+      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name)) {
+        cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+        return InvariantStatus.FALSIFIED;
+      } else {
+        cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
+        return InvariantStatus.NO_CHANGE;
+      }
     }
+
     try {
+      // Evaluate
       for (PptTupleInfo tuple : l) {
-        Object varValue = getValueForVariable(tuple,getVariable((PptSlice2) this.ppt));
+        Object varValue = getValueForVariable(tuple, curr_var);
         if (varValue==null) {
+          cached_evaluations.put(cached_key, getDefault());
           return getDefault();
         }
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
         if (!b) {
+          cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
       }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified
+      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
       return InvariantStatus.FALSIFIED;
     }
+    cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
     return InvariantStatus.NO_CHANGE;
   }
 
