@@ -135,7 +135,8 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     if (var_name.startsWith("this")) {
       // Represents a field that can be obtained from the this object.
       varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
-    } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName())) {
+    } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName()) &&
+              !var_name.contains("$")) {
       // Represents a static field
       varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else {
