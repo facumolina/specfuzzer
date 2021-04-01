@@ -148,7 +148,7 @@ public final class IntTreeSet extends AbstractIntSet implements Cloneable {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see kodkod.util.ints.IntSet#floor(int)
    */
   public int floor(int i) {
@@ -156,7 +156,7 @@ public final class IntTreeSet extends AbstractIntSet implements Cloneable {
     Range r = tree.searchGTE(i);
     if (r == null || r.min > i) {
       r = tree.searchLTE(i);
-      return r == null ? null : r.key;
+      return r == null ? Integer.MIN_VALUE : r.key;
     } else
       return i;
   }
@@ -169,7 +169,7 @@ public final class IntTreeSet extends AbstractIntSet implements Cloneable {
   public int ceil(int i) {
     checkNonEmpty();
     final Range r = tree.searchGTE(i);
-    return r == null ? null : StrictMath.max(i, r.min);
+    return r == null ? Integer.MAX_VALUE : StrictMath.max(i, r.min);
   }
 
   /**
