@@ -107,7 +107,8 @@ public class InvariantChecker {
   static HashSet<Invariant> testedInvariants = new HashSet<>(); // Yoav added
   static HashSet<Invariant> activeInvariants = new HashSet<>(); // Yoav added
   static LinkedHashSet<String> outputComma = new LinkedHashSet<>(); // Yoav added
-  static List<InvFailInfo> failedCounter = new LinkedList<InvFailInfo>(); // fmolina added 
+  static List<InvFailInfo> failedCounter = new LinkedList<InvFailInfo>(); // fmolina added
+  static Set<String> loaded_invs = new HashSet<>(); // fmolina added
 
   public static void main(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -238,6 +239,10 @@ public class InvariantChecker {
         if (inv_file == null) {
           throw new Daikon.UserError("No inv file specified" + Global.lineSep + usage);
         }
+        // Load invariants
+        String file_name = System.getProperty("user.dir") + "/invs_file.xml";
+        loaded_invs = Daikon.load_serialized_invariants(file_name);
+        System.out.println("Loaded invs from previous step: "+loaded_invs.size());
         checkInvariants(inv_file);
         return;
       }
@@ -340,6 +345,13 @@ public class InvariantChecker {
             //                     inv.ppt.name(), inv.format());
             continue;
           }
+
+          String inv_str = inv.format_using(OutputFormat.JAVA);
+          if (loaded_invs.contains(inv_str)) {
+            System.out.println("Inv failed in previous mutant: "+inv_str);
+            continue;
+          }
+
           activeInvariants.add(inv);
 
           // String n = invariant2str(ppt, inv);
@@ -407,8 +419,6 @@ public class InvariantChecker {
     ObjectOutputStream oos = null;
     XStream xstream = new XStream();
 
-    // First load the already serialized invs
-    Set<String> loaded_invs = Daikon.load_serialized_invariants(file_name);
     try {
       // Open the stream
       oos = xstream.createObjectOutputStream(new FileOutputStream(file_name));
@@ -614,11 +624,14 @@ public class InvariantChecker {
           // Store string representation of original invariant for verbose mode
           String invRep = quiet ? null : inv.format();
 
-          InvariantFilters fi = InvariantFilters.defaultFilters();
-          InvariantFilter filter_result = fi.shouldKeep(inv);
-          boolean fi_accepted = (filter_result == null);    
-          if (!(fi_accepted && !inv.isGuardingPredicate) && !inv.format().contains("Fuzzed")) {
-            continue;
+          if (!inv.format().contains("Fuzzed")) {
+            // Only check filters for non-fuzzed invariants
+            InvariantFilters fi = InvariantFilters.defaultFilters();
+            InvariantFilter filter_result = fi.shouldKeep(inv);
+            boolean fi_accepted = (filter_result == null);    
+            if (!(fi_accepted && !inv.isGuardingPredicate)) {
+              continue;
+            }
           }
 
           InvariantStatus status = inv.add_sample(vt, 1);
