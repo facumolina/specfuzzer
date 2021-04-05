@@ -56,6 +56,7 @@ public class GrammarBuilder {
 
     // Numeric
     grammar.put(GrammarSymbols.NUMERIC_CMP_EXPR, GrammarSymbols.NUMERIC_CMP_EXPR_VALUE);
+    grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).add(GrammarSymbols.INTEGER_CMP_EXPR_VALUE);
     grammar.put(GrammarSymbols.NUMERIC_CMP_OP, GrammarSymbols.NUMERIC_CMP_OP_VALUE);
     GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_FIELD);
     GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_FROM_SET_SIZE);
@@ -280,6 +281,14 @@ public class GrammarBuilder {
       grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_SET_SIZE));
     }
 
+    if (grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).isEmpty()) {
+      // Integer from field symbol is empty, to remove it
+      grammar.remove(GrammarSymbols.INTEGER_FROM_FIELD);
+      grammar.get(GrammarSymbols.INTEGER).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
+      grammar.get(GrammarSymbols.INTEGER_EXPR).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
+      grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
+    }
+
     if (!all_arguments_types.contains(JavaTypesUtil.INTEGER)) {
       // There are no arguments of type Integer, so The Integer_Variable option should be removed
       grammar.get(GrammarSymbols.INTEGER).remove(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER));
@@ -330,7 +339,7 @@ public class GrammarBuilder {
   /**
    * Return the number of specifications that can be generated from the given grammar
    */
-  protected static int calculate_potential_specs(Map<String, List<String>> grammar) {
+  public static int calculate_potential_specs(Map<String, List<String>> grammar) {
     return calculate_potential_specs(grammar, GrammarSymbols.START_SYMBOL);
   }
 

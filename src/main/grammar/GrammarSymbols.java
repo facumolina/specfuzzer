@@ -61,9 +61,8 @@ public class GrammarSymbols {
   public static List<String> INTEGER_EXPR_VALUE = new LinkedList<String>();
 
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
-  public static List<String> NUMERIC_CMP_EXPR_VALUE = Arrays
-          .asList(INTEGER_FROM_FIELD + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR);
-
+  public static List<String> NUMERIC_CMP_EXPR_VALUE = new LinkedList<String>();
+  public static final String INTEGER_CMP_EXPR_VALUE = INTEGER_FROM_FIELD + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
   public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<String>();
 
   // Membership expressions
