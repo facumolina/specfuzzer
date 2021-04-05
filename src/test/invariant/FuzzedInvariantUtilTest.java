@@ -32,4 +32,9 @@ public class FuzzedInvariantUtilTest {
     assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) != List.x + Integer_Variable"));
   }
 
+  @Test
+  public void test_binary_3() {
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(Query.criterias) > Integer_Variable"));
+  }
+
 }
