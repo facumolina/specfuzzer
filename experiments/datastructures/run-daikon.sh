@@ -16,6 +16,7 @@ echo ''
 echo '> Writing output to file: '$outputfile
 java -cp lib/daikon.jar daikon.PrintInvariants $invfile --ppt-select '.'$class':::OBJECT' > $outputfile
 java -cp lib/daikon.jar daikon.PrintInvariants $invfile --ppt-select '.'$class'\.'$method'.' >> $outputfile
+mv $invfile experiments/datastructures/output/daikon/$class'-'$method.inv.gz
 
 echo '> Output written.'
 
