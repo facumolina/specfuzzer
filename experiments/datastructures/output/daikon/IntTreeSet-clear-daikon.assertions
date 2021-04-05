@@ -13,18 +13,9 @@ this.tree.root.right.getClass().getName() == DataStructures.kodkod.Range.class
 this.tree.root.color == true
 this.size >= 0
 ===========================================================================
-DataStructures.kodkod.IntTree.clear():::ENTER
-DataStructures.kodkod.IntTree.RED == this.root.right.left
-DataStructures.kodkod.IntTree.RED == this.root.right.right
-this.root.right.left == null
-this.root.right.right == null
-this.root.color == true
-===========================================================================
-DataStructures.kodkod.IntTree.clear():::EXIT
-DataStructures.kodkod.IntTree.RED == this.root
-this.root == null
-===========================================================================
 DataStructures.kodkod.IntTreeSet.clear():::ENTER
+this.tree.root.key one of { 3, 4, 100 }
+this.size one of { 0, 1, 2 }
 ===========================================================================
 DataStructures.kodkod.IntTreeSet.clear():::EXIT
 this.tree == orig(this.tree)
