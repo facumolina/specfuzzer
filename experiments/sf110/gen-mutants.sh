@@ -31,11 +31,15 @@ build_dir=$project_sources/build/classes
 source_dir=$project_sources/src/main/java
 target_file=$(find $SF110SRC/$sf110_project -name $class_name.java)
 
+# Create mutants dir
+mkdir -p $results_dir/mutants/
+
 # Start
 echo '> Generating mutants for SF110 project class'
 echo '> Cleaning previous mutants'
 echo '> Target: '$sf110_project'/'$fqname
 $MAJOR_HOME/bin/javac -cp $SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/ -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $build_dir $target_file
+mv mutants.log $results_dir/mutants/$class_name-$method_name'-mutants.log'
 echo '> Mutants generated!'
 echo ''
 
@@ -48,9 +52,9 @@ do
   echo '> Processing mutant: '$dir$reduced_file
   dir2=${dir%*/}
   number=${dir2##*/}
-  mutant_line=$(sed $number"q;d" mutants.log)
+  mutant_line=$(sed $number"q;d" $results_dir/mutants/$class_name-$method_name'-mutants.log')
   echo 'Mutant line: '$mutant_line
-  if [[ "$mutant_line" == *"$method_name"* || "$mutant_line" == *"$class_name:"* ]]; then  
+  if [[ $mutant_line == *$class_name':'* || $mutant_line == *$class_name*'<init>'* || $mutant_line == *$class_name*$method_name* ]]; then
     echo '> Compiling mutant'
     javac -cp $cp_for_tests_compilation -g $dir$reduced_file -d $build_dir
     #javac -cp $SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/* -g $dir$reduced_file -d $build_dir
