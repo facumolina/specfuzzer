@@ -27,7 +27,7 @@ mutants_dir=$results_dir/mutants
 target_name=$class_name-$method_name
 
 # Fuzzing vars
-invs_to_fuzz=100;
+invs_to_fuzz=2000;
 
 # Start
 echo '> SpecFuzzer'
@@ -42,20 +42,24 @@ cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
 
 # Run the SpecFuzzer
-java -cp $cp_for_daikon daikon.Daikon --user-defined-invariant invariant.FuzzedUnaryInvariant --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file
+java -cp $cp_for_daikon daikon.Daikon --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file
 
+mutations_log=$mutants_dir'/'$class_name-$method_name'-mutants.log'
 invs_file=$target_name'.inv.gz'
 
 echo '> Checking invariants on Mutants'
 for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
   base_name=${mutant_dtrace/%$".dtrace.gz"}
   mutant_objects_file=$base_name"-objects.xml"
-  echo '> Checking on mutant: '$mutant_dtrace
-  java -cp $cp_for_daikon daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
-  echo ''
-  echo '> Saving mutants results file'
-  python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
-
+  mutant_number=${base_name#$mutants_dir'/'$target_name'-m'}
+  curr_mutant=$(sed -n $mutant_number'p' $mutations_log)
+  if [[ $curr_mutant == *$class_name':'* || $curr_mutant == *$class_name*'<init>'* || $curr_mutant == *$class_name*$method_name* ]]; then
+    echo '> Checking on mutant: '$mutant_dtrace
+    java -cp $cp_for_daikon daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
+    echo ''
+    echo '> Saving mutants results file'
+    python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
+  fi
 done
 echo ''
 
