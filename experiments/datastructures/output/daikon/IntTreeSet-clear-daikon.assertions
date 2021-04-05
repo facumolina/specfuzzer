@@ -1,0 +1,39 @@
+===========================================================================
+DataStructures.kodkod.IntTreeSet:::OBJECT
+DataStructures.kodkod.IntTree.RED == this.tree.root.parent
+this.tree.root.getClass().getName() == this.tree.root.left.getClass().getName()
+this.tree.root.getClass().getName() == this.tree.root.right.getClass().getName()
+this.tree.root.parent == DataStructures.kodkod.IntTreeSet.$assertionsDisabled
+this.tree.root.left.getClass().getName() == this.tree.root.right.getClass().getName()
+this.tree != null
+this.tree.root.getClass().getName() == DataStructures.kodkod.Range.class
+this.tree.root.parent == null
+this.tree.root.left.getClass().getName() == DataStructures.kodkod.Range.class
+this.tree.root.right.getClass().getName() == DataStructures.kodkod.Range.class
+this.tree.root.color == true
+this.size >= 0
+===========================================================================
+DataStructures.kodkod.IntTree.clear():::ENTER
+DataStructures.kodkod.IntTree.RED == this.root.right.left
+DataStructures.kodkod.IntTree.RED == this.root.right.right
+this.root.right.left == null
+this.root.right.right == null
+this.root.color == true
+===========================================================================
+DataStructures.kodkod.IntTree.clear():::EXIT
+DataStructures.kodkod.IntTree.RED == this.root
+this.root == null
+===========================================================================
+DataStructures.kodkod.IntTreeSet.clear():::ENTER
+===========================================================================
+DataStructures.kodkod.IntTreeSet.clear():::EXIT
+this.tree == orig(this.tree)
+DataStructures.kodkod.IntTree.RED == this.tree.root
+this.tree.root == this.size
+this.tree.root == DataStructures.kodkod.IntTreeSet.$assertionsDisabled
+this.size == orig(this.tree.root.parent)
+DataStructures.kodkod.IntTreeSet.$assertionsDisabled == orig(this.tree.root.parent)
+DataStructures.kodkod.IntTreeSet.$assertionsDisabled == orig(DataStructures.kodkod.IntTreeSet.$assertionsDisabled)
+this.tree.root == null
+this.size == 0
+this.size <= orig(this.size)
