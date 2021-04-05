@@ -1,1 +1,0 @@
-assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),((this.x - (old_data - this.x)) <= old_this_x)));
