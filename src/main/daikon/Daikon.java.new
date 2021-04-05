@@ -172,6 +172,7 @@ import java.io.LineNumberReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.Math;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1756,6 +1757,7 @@ public final class Daikon {
     }
 
     // Fuzzed invariants
+    int potential_specs = 0;
     if (grammar_to_fuzz != null) {
       // Load the fuzzer class
       Class<?> fuzzer_class;
@@ -1772,8 +1774,10 @@ public final class Daikon {
       
       // Get the fuzz method
       Method fuzz_method;
+      Method potential_exprs_method;
       try {
         fuzz_method = fuzzer_class.getMethod("fuzz");
+        potential_exprs_method = fuzzer_class.getMethod("potential_expressions");
       } catch (NoSuchMethodException e) {
         throw new Daikon.UserError(
             "No fuzz() method in fuzzer class " + "fuzzer.BasicFuzzer");
@@ -1784,10 +1788,11 @@ public final class Daikon {
       }
       System.out.println("Fuzzing specs:");
       try {
+        potential_specs = (int)potential_exprs_method.invoke(fuzzer);
         int unique_fuzzed_invs = 0;
         int unary_invs = 0;
         int binary_invs = 0;
-        for (int i = 0; i < fuzzed_invariants; i++){
+        for (int i = 0; i < Math.min(potential_specs,fuzzed_invariants); i++){
           String fuzzed_spec = (String)fuzz_method.invoke(fuzzer);
           Class<?> fuzzed_inv_util_class;
           Class<?> inv_class;
@@ -1838,7 +1843,7 @@ public final class Daikon {
     for (String invariantClassName : userDefinedInvariants) {
       System.out.println("Fuzzing specs:");
       int unique_fuzzed_invs = 0;
-      for (int i = 0; i < fuzzed_invariants; i++){
+      for (int i = 0; i < Math.min(potential_specs,fuzzed_invariants); i++){
       Class<?> invClass;
       try {
         invClass = Class.forName(invariantClassName);

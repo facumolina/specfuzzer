@@ -1,5 +1,6 @@
 package fuzzer;
 
+import grammar.GrammarBuilder;
 import org.json.simple.JSONObject;
 
 /**
@@ -10,4 +11,14 @@ public abstract class GrammarBasedFuzzer extends Fuzzer {
 
   protected JSONObject grammar; // Grammar to fuzz
 
+  /**
+   * Returns the number of potential expressions that could be built
+   * by fuzzing the current grammar
+   */
+  public int potential_expressions() {
+    if (grammar!=null) {
+      return GrammarBuilder.calculate_potential_specs(grammar);
+    }
+    return 0;
+  }
 }
