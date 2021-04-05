@@ -1,1 +1,0 @@
-assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),(((old_this_size + (old_value - -1)) - value) == this.size)));

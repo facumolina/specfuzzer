@@ -1,1 +1,0 @@
-assert(ch.usi.gassert.util.Implies.implies(((!(this == null))),(((this.size != 0) && (old_value == value)))));
