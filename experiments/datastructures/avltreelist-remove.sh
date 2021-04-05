@@ -1,6 +1,5 @@
 #!/bin/bash
 
-output_folder=experiments/datastructures/output/
 
 # This script allows to generate invariants for the AvlTreeList.remove case study by using a given technique: daikon, specfuzzer, gassert or evospex
 
@@ -18,8 +17,6 @@ inv_file=$target_name'.inv.gz'
 invs_to_fuzz=2000
 grammar='grammars/AvlTreeListGrammar.json'
 
-output_file=$class'-'$method'-'$technique'.assertions'
-
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 
@@ -30,7 +27,7 @@ echo '> Analyzing DataStructures.AvlTreeList.remove with technique: '$technique
 if [ $technique == "daikon" ]
 then
   echo '> Daikon'
-  ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method $output_folder$output_file
+  ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method
 fi
 
 # SpecFuzzer

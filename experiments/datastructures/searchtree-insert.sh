@@ -1,7 +1,5 @@
 #!/bin/bash
 
-output_folder=experiments/datastructures/output/
-
 # This script allows to generate invariants for the SearchTree.insert case study by using one of the following techniques:
 # * daikon
 # * specfuzzer
@@ -22,8 +20,6 @@ inv_file=$target_name'.inv.gz'
 invs_to_fuzz=2000
 grammar='grammars/SearchTreeGrammar.json'
 
-output_file=$class'-'$method'-'$technique'.assertions'
-
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
@@ -34,7 +30,7 @@ echo '> Analyzing DataStructures.korat.binarysearchtree.SearchTree.insert with t
 if [ $technique == "daikon" ]
 then
   echo '> Daikon'
-  ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method $output_folder$output_file
+  ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method 
 fi
 
 # SpecFuzzer
