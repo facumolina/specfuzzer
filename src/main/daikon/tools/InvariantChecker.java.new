@@ -346,11 +346,11 @@ public class InvariantChecker {
             continue;
           }
 
-          String inv_str = inv.format_using(OutputFormat.JAVA);
-          if (loaded_invs.contains(inv_str)) {
-            System.out.println("Inv failed in previous mutant: "+inv_str);
-            continue;
-          }
+          //String inv_str = inv.format_using(OutputFormat.JAVA);
+          //if (loaded_invs.contains(inv_str)) {
+          //  System.out.println("Inv failed in previous mutant: "+inv_str);
+          //  continue;
+          //}
 
           activeInvariants.add(inv);
 
