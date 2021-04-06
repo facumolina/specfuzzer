@@ -75,8 +75,8 @@ cp invs-by-mutants.csv $mutka_file
 assertions_file=$output_dir'/'$base_file_name.assertions
 echo ''
 echo '> Writing assertions to file: '$assertions_file
-java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' > $assertions_file
-java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$method'.' >> $assertions_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' --format java > $assertions_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class'\.'$method'.' --format java >> $assertions_file
 mv $invs_file $output_dir'/'$base_file_name.inv.gz
 mv invs_file.xml $output_dir'/'$base_file_name'-filteredinvs.xml'
 stats_file=$output_dir'/'$base_file_name.log
