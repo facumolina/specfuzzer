@@ -40,9 +40,17 @@ assertions = load_specs_from_assertion_file(assertion_file)
 #print("Assertions without filtering: "+str(len(assertions)))
 
 unique_assertions=set()
+visited=set()
 for idx in df.index:
     curr_inv = df['invariant'][idx]
-    if (curr_inv in assertions):
-        unique_assertions.add(curr_inv)
+    if (curr_inv in visited):
+        continue
+    visited.add(curr_inv)
+    if (curr_inv.startswith("FuzzedInvariant:")):
+        curr_inv = curr_inv.replace("FuzzedInvariant:","")
+    for inv in assertions:
+        if (curr_inv in inv):
+            unique_assertions.add(curr_inv)
+            break
 
 print(len(unique_assertions))
