@@ -1,0 +1,413 @@
+invariant,ppt,iteration,mutant
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+this.x == 0 || this.x == 2147483647,DataStructures.List.List():::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > List.x - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x >= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x != List.x + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x >= #(List.*(next)) - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) <= List.x - 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x = 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) <= List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x != List.x - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x != #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)) - 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > List.x + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)) - #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)) - 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x != 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) < List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x >= #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.^(next)) < List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x > #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != #(List.*(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x >= #(List.*(next)) + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.^(next)) > #(List.^(next)) - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)) + 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x >= List.x + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) < List.x - 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.^(next)) < #(List.^(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.^(next)) < List.x - 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != List.x + 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != #(List.*(next)) - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)) + #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != List.x + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x <= 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x <= #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x >= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:#(List.*(next)) < #(List.^(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x <= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x < 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x > #(List.^(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) < #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) <= Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) >= #(List.*(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x > #(List.*(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x != List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) < Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) > List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) != #(List.*(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) < Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x != #(List.^(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != #(List.^(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x > List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) < #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.*(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.*(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x = Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x = #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) > List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) > List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( no n : List.*(next) : n.x < Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x > List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) >= List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) <= List.x - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x = Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+this.x == 0 || this.x == 2147483647,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x < n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x > #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x != 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.^(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x = Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m1.dtrace.gz
+this.x == \old(x),"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.x == 0 || this.x == 2147483647,DataStructures.List.List():::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > List.x - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x >= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x != List.x + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x >= #(List.*(next)) - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) <= List.x - 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x = 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) <= List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x != List.x - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x != #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)) - 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > List.x + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)) - #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.*(next)) - 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x != 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) < List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x >= #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.^(next)) < List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x > #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != #(List.*(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x >= #(List.*(next)) + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.^(next)) > #(List.^(next)) - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)) + 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x >= List.x + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) < List.x - 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.^(next)) < #(List.^(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.^(next)) < List.x - 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != List.x + 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != #(List.*(next)) - List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:List.x > #(List.^(next)) + #(List.^(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != List.x + 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x <= 0,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x <= #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x >= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:#(List.*(next)) < #(List.^(next)) + List.x,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x <= 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x < 1,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x > #(List.^(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) < #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) <= Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) >= #(List.*(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x > #(List.*(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x != List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) < Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) > List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) != #(List.*(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) < Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x != #(List.^(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != #(List.^(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x > List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != List.x + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) < #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.*(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) != #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.*(next)) - Integer_Variable ) holds for: <this , this.x>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x = Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x = #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) > List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) > List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( no n : List.*(next) : n.x < Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x > List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) >= List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) <= List.x - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x = Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.x == 0 || this.x == 2147483647,DataStructures.List.List():::EXIT26,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x < n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x > #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x != 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.^(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x = Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x <= n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x <= n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x > n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x > n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x <= n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x <= n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x > n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x > n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.^(next) : n.x >= Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.x <= next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x <= n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x > n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x < List.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x >= List.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.^(next) : n.x >= Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( no n : List.*(next) : n.x < Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.next.x <= \old(this.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+x <= next.x,"DataStructures.List.List(int, DataStructures.List):::ENTER",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x < List.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x >= List.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.next.next.x >= \old(this.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.x <= \old(this.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x < List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x >= List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.^(next) : n.x >= Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( no n : List.*(next) : n.x < Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x >= Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.next.x <= \old(this.next.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.next.next.x <= \old(this.next.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x <= n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x > n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+next.x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::ENTER",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+next.x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+this.x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m2.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x > #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x != 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.^(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x = Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+this.next == \old(next),"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x < n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x != 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m3.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x <= n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x <= n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x > n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x > n.next.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x < List.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x >= List.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x <= n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x <= n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x > n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x > n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x < List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x >= List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( List.x <= Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( all n : List.^(next) : n.x >= Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( all n : List.^(next) : n.x >= Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( no n : List.*(next) : n.x < Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x >= Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.x <= \old(this.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+x <= next.x,"DataStructures.List.List(int, DataStructures.List):::ENTER",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.x <= next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.*(next) : n.x <= n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.*(next) : n.x > n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x < List.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x >= List.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( all n : List.^(next) : n.x >= Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( no n : List.*(next) : n.x < Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( all n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.next.next.x >= \old(this.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.next.x <= \old(this.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+next.x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::ENTER",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+next.x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:all n : List.^(next) : n.x <= n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:no n : List.^(next) : n.x > n.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.next.next.x <= \old(this.next.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.x <= \old(this.next.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.x <= \old(this.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::ENTER",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.x <= next.next.x,"DataStructures.List.List(int, DataStructures.List):::EXIT",1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+this.next.x <= \old(this.next.next.x),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+"FuzzedInvariant ( #(List.*(next)) != List.x - Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m6.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+this.next != null,DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x < n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n not in n.^(next),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x <= n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:#(List.*(next)) != 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n != null,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != #(List.^(next)) - #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != List.x - List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:#(List.^(next)) != 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:#(List.*(next)) > 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:#(List.^(next)) > 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n != n.next.next,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:List.x < List.x + #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x != 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n != n.next,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:List.x != #(List.^(next)) + List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x > #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.^(next) : n.x != 0,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x >= #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.^(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x >= Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x = Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x <= Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( #(List.^(next)) >= #(List.^(next)) + Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( List.x > #(List.^(next)) + Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( List.x >= #(List.^(next)) + Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( List.x < #(List.^(next)) + Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this , data>",DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m8.dtrace.gz
+FuzzedInvariant:List.x <= List.x + #(List.^(next)),DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= #(List.^(next)) + List.x,DataStructures.List.insert(int):::ENTER,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+this.x <= \old(data),DataStructures.List.insert(int):::EXIT,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x < n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= List.x + #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != n.next.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= List.x + 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x < List.x + 1,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:some n : List.*(next) : n.x != List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= List.x + #(List.*(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x < List.x + #(List.^(next)),DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= #(List.^(next)) + List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= #(List.*(next)) + List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x < #(List.*(next)) + List.x,DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.next.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x != Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x < Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x < Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x <= #(List.*(next)) + Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x <= #(List.^(next)) + Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x < #(List.^(next)) + Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.*(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( some n : List.^(next) : n.x > Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x < #(List.*(next)) + Integer_Variable ) holds for: <this.x , orig(this)>",DataStructures.List.insert(int):::EXIT35,1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= List.x + #(List.^(next)),"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+FuzzedInvariant:List.x <= #(List.^(next)) + List.x,"DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz
+"FuzzedInvariant ( List.x <= #(List.^(next)) + Integer_Variable ) holds for: <this , this.x>","DataStructures.List.List(int, DataStructures.List):::EXIT22",1,daikon-outputs/mutants/ListTesterDriver-m9.dtrace.gz

@@ -1,0 +1,152 @@
+<object-stream>
+  <set>
+    <string>FuzzedInvariant:#(List.^(next)) != List.x + 0</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n.x &lt; n.next.x</string>
+    <string>FuzzedInvariant ( all n : List.^(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:#(List.*(next)) &lt; #(List.^(next)) + List.x</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n != n.next.next</string>
+    <string>FuzzedInvariant:List.x != #(List.^(next))</string>
+    <string>FuzzedInvariant ( List.x &lt; #(List.*(next)) + Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x != 0</string>
+    <string>FuzzedInvariant ( List.x = #(List.^(next)) + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x != 1</string>
+    <string>FuzzedInvariant ( List.x &gt; List.x + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( all n : List.^(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this.next.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n.x &gt;= 1</string>
+    <string>FuzzedInvariant ( List.x &gt; #(List.*(next)) - Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:List.x &gt; List.x - List.x</string>
+    <string>FuzzedInvariant ( #(List.*(next)) &lt; #(List.^(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( List.x &lt;= Integer_Variable ) holds for: &lt;this.next.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( #(List.*(next)) != List.x - Integer_Variable ) holds for: &lt;this.next.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( no n : List.*(next) : n.x &lt; Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( List.x &lt; Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( List.x != List.x + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:List.x &gt; 0</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &gt;= #(List.*(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:List.x &gt; 1</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.^(next)) + 0</string>
+    <string>FuzzedInvariant ( some n : List.^(next) : n.x &gt; Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n.x &lt;= n.next.x</string>
+    <string>FuzzedInvariant ( List.x &gt;= Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( List.x != Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant:List.x &gt;= List.x + 1</string>
+    <string>FuzzedInvariant:#(List.*(next)) != 1</string>
+    <string>FuzzedInvariant ( #(List.^(next)) != #(List.^(next)) - Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n.x != List.x</string>
+    <string>FuzzedInvariant:all n : List.^(next) : n.x &gt;= List.x</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x &gt; Integer_Variable ) holds for: &lt;this , data&gt;</string>
+    <string>FuzzedInvariant:all n : List.*(next) : n.x &lt;= n.next.x</string>
+    <string>FuzzedInvariant ( List.x &lt;= #(List.^(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:#(List.*(next)) &lt;= List.x</string>
+    <string>FuzzedInvariant:#(List.*(next)) &lt; List.x</string>
+    <string>FuzzedInvariant ( List.x &gt;= List.x + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( List.x &gt;= #(List.^(next)) + Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x &gt;= 0</string>
+    <string>FuzzedInvariant:all n : List.*(next) : n.x &gt; #(List.^(next))</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x &gt;= 1</string>
+    <string>FuzzedInvariant:#(List.^(next)) != #(List.^(next)) - #(List.^(next))</string>
+    <string>FuzzedInvariant:List.x &lt; List.x + #(List.^(next))</string>
+    <string>FuzzedInvariant:#(List.*(next)) &gt; 1</string>
+    <string>FuzzedInvariant ( #(List.*(next)) &lt; Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( List.x &gt;= #(List.*(next)) - Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( Integer_Variable in List.*(next).x ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n != null</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.*(next))</string>
+    <string>FuzzedInvariant:List.x &gt; List.x + 1</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: &lt;this , data&gt;</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.*(next)) + List.x</string>
+    <string>FuzzedInvariant:#(List.^(next)) &lt; #(List.^(next)) + List.x</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.^(next))</string>
+    <string>FuzzedInvariant:List.x &gt;= #(List.*(next)) + 1</string>
+    <string>FuzzedInvariant:all n : List.*(next) : n.x &gt;= 1</string>
+    <string>FuzzedInvariant:List.x != List.x - List.x</string>
+    <string>FuzzedInvariant:#(List.*(next)) &lt; List.x - 0</string>
+    <string>FuzzedInvariant:#(List.^(next)) != List.x - List.x</string>
+    <string>FuzzedInvariant:List.x &lt; #(List.*(next)) + List.x</string>
+    <string>FuzzedInvariant ( #(List.*(next)) &lt;= Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &lt;= List.x - Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( Integer_Variable in List.^(next).x ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( List.x &gt; #(List.^(next)) - Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( some n : List.^(next) : n.x = Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant:#(List.^(next)) != 0</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.^(next)) + #(List.^(next))</string>
+    <string>FuzzedInvariant:List.x &lt;= List.x + #(List.^(next))</string>
+    <string>FuzzedInvariant:List.x != List.x + List.x</string>
+    <string>FuzzedInvariant ( List.x != #(List.^(next)) - Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( all n : List.*(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &gt; List.x + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant:no n : List.^(next) : n.x &gt; n.next.x</string>
+    <string>FuzzedInvariant:#(List.^(next)) != List.x</string>
+    <string>FuzzedInvariant:#(List.*(next)) != #(List.*(next)) - List.x</string>
+    <string>FuzzedInvariant ( no n : List.*(next) : n.x &lt; Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:#(List.*(next)) != #(List.*(next)) + List.x</string>
+    <string>FuzzedInvariant:no n : List.*(next) : n.x &gt; n.next.x</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &lt; #(List.^(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:List.x &gt;= #(List.*(next))</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x &gt;= Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( List.x = Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x &gt; #(List.^(next))</string>
+    <string>FuzzedInvariant ( List.x &lt;= #(List.^(next)) + Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( all n : List.*(next) : n.x = Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: &lt;this.next.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:#(List.^(next)) &lt; List.x</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n != n.next</string>
+    <string>FuzzedInvariant ( #(List.^(next)) != List.x + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( all n : List.^(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( List.x &lt; #(List.^(next)) + Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:List.x &lt; List.x + 1</string>
+    <string>FuzzedInvariant ( some n : List.^(next) : n.x &lt;= Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( all n : List.*(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:no n : List.*(next) : n.x &lt;= #(List.*(next))</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &gt;= List.x + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x != Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n.x != n.next.x</string>
+    <string>FuzzedInvariant:no n : List.*(next) : n.x &lt;= 1</string>
+    <string>FuzzedInvariant:no n : List.*(next) : n.x &lt;= 0</string>
+    <string>FuzzedInvariant:List.x &lt;= #(List.*(next)) + List.x</string>
+    <string>FuzzedInvariant:all n : List.^(next) : n.x &lt;= n.next.x</string>
+    <string>FuzzedInvariant ( List.x &gt; #(List.^(next)) + Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &lt; Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:#(List.^(next)) &gt; 0</string>
+    <string>FuzzedInvariant:no n : List.*(next) : n.x = 0</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &gt; List.x + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( all n : List.*(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( List.x &gt; List.x + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x &gt;= #(List.*(next))</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x &gt; Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( #(List.^(next)) != #(List.^(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:some n : List.*(next) : n.x &gt;= #(List.*(next))</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n not in n.^(next)</string>
+    <string>FuzzedInvariant ( List.x &gt;= #(List.^(next)) + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant:#(List.^(next)) &gt; #(List.^(next)) - List.x</string>
+    <string>FuzzedInvariant:#(List.^(next)) &lt; List.x - 1</string>
+    <string>FuzzedInvariant ( #(List.*(next)) &gt; List.x + Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x &lt; Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant:List.x &lt;= List.x + 1</string>
+    <string>FuzzedInvariant:some n : List.^(next) : n.x &gt;= #(List.^(next))</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.^(next)) - #(List.^(next))</string>
+    <string>FuzzedInvariant ( #(List.^(next)) &gt;= #(List.^(next)) + Integer_Variable ) holds for: &lt;DataStructures.List.SENTINEL , orig(this)&gt;</string>
+    <string>FuzzedInvariant ( #(List.^(next)) != Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:List.x &gt;= #(List.*(next)) - List.x</string>
+    <string>FuzzedInvariant:List.x &gt;= 1</string>
+    <string>FuzzedInvariant ( #(List.*(next)) != #(List.*(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant ( no n : List.*(next) : n.x &lt; Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this , DataStructures.List.SENTINEL&gt;</string>
+    <string>FuzzedInvariant ( List.x &lt;= #(List.*(next)) + Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:#(List.*(next)) != List.x + 1</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.*(next)) - 0</string>
+    <string>FuzzedInvariant:no n : List.^(next) : n.x &lt; List.x</string>
+    <string>FuzzedInvariant:List.x &lt;= #(List.^(next)) + List.x</string>
+    <string>FuzzedInvariant ( some n : List.^(next) : n.x != Integer_Variable ) holds for: &lt;this.x , orig(this)&gt;</string>
+    <string>FuzzedInvariant:List.x &gt; #(List.*(next)) - 1</string>
+    <string>FuzzedInvariant:List.x != 0</string>
+    <string>FuzzedInvariant:List.x &lt;= List.x + #(List.*(next))</string>
+    <string>FuzzedInvariant:#(List.*(next)) &lt;= List.x - 1</string>
+    <string>FuzzedInvariant ( some n : List.*(next) : n.x &gt;= Integer_Variable ) holds for: &lt;this , data&gt;</string>
+    <string>FuzzedInvariant:no n : List.*(next) : n.x &lt; 1</string>
+    <string>FuzzedInvariant ( List.x &gt;= #(List.*(next)) + Integer_Variable ) holds for: &lt;this , this.x&gt;</string>
+    <string>FuzzedInvariant:List.x != #(List.^(next)) + List.x</string>
+  </set>
+</object-stream>
