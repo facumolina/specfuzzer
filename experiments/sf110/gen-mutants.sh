@@ -9,21 +9,19 @@
 
 # Read arguments
 sf110_project=$1
-class_name=$2
+fqname=$2
 method_name=$3
 
 # Some useful variables
-project_dir=$EVOSPEX/src/test/resources/sf110/$sf110_project
 project_sources=$SF110SRC/$sf110_project
-class_dir=$project_dir/$class_name
-fqname=$(cat $project_dir/target-classes.txt | grep "\.$class_name")
 class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
-method_dir=$class_dir/$method_name
-tests_dir=$method_dir/2/tests
+class_name=${fqname##*.}
+tests_dir=experiments/sf110/$sf110_project/tests
 results_dir=experiments/sf110/$sf110_project
 decls_file=$results_dir/$class_name-$method_name.decls
 objects_file=$results_dir/$class_name-$method_name-objects.xml
 dtrace_file=$results_dir/$class_name-$method_name.dtrace.gz
+driver='testers.'$class_name'TesterDriver'
 
 # Major vars
 MAJOR_HOME=../major/
@@ -49,20 +47,19 @@ cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:
 cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
 for dir in mutants/*/
 do
-  echo '> Processing mutant: '$dir$reduced_file
   dir2=${dir%*/}
   number=${dir2##*/}
   mutant_line=$(sed $number"q;d" $results_dir/mutants/$class_name-$method_name'-mutants.log')
-  echo 'Mutant line: '$mutant_line
-  if [[ $mutant_line == *$class_name':'* || $mutant_line == *$class_name*'<init>'* || $mutant_line == *$class_name*$method_name* ]]; then
+  if [[ $mutant_line == *$class_name':'* || $mutant_line == *$class_name*'<init>'* || $mutant_line == *$class_name*$method_name'('* ]]; then
+    echo '> Processing mutant: '$dir$reduced_file
+    echo 'Mutant line: '$mutant_line
     echo '> Compiling mutant'
     javac -cp $cp_for_tests_compilation -g $dir$reduced_file -d $build_dir
-    #javac -cp $SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/* -g $dir$reduced_file -d $build_dir
     echo '> Mutant compiled'
     echo '> Generating traces with Chicory from mutant'
-    java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir/mutants --comparability-file=$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name-m$number.dtrace.gz $class_package.RegressionTestDriver $results_dir/mutants/$class_name-$method_name-m$number-objects.xml
-  else
-    echo '> Mutant not processed since it does not include current method or is not over an attribute'
+    java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir/mutants --comparability-file=$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name-m$number.dtrace.gz $driver $results_dir/mutants/$class_name-$method_name-m$number-objects.xml
+    #else
+    #echo '> Mutant not processed since it does not include current method or is not over an attribute'
   fi
 done
 echo '> All mutated traces generated!'
