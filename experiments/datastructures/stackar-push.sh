@@ -27,7 +27,6 @@ if [ $technique == "daikon" ]
 then
   echo '> Daikon'
   ./experiments/datastructures/run-daikon.sh $trace $inv_file $class $method 
-if
 fi
 
 # SpecFuzzer
@@ -48,7 +47,7 @@ fi
 if [ $technique == "evospex" ]
 then
   echo '> EvoSpex'
-  objects_folder='StackAr/push\(java.lang.Object\)/3/'
+  objects_folder='StackAr/push/3/'
   ./experiments/datastructures/run-evospex.sh $fqname $method $objects_folder 10
 fi
 
