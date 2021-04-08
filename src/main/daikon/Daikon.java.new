@@ -1798,7 +1798,13 @@ public final class Daikon {
           Class<?> inv_class;
           try {
             fuzzed_inv_util_class = Class.forName("invariant.FuzzedInvariantUtil");
+            Method discard_method = fuzzed_inv_util_class.getMethod("discard", String.class);
             Method get_amount_of_vars = fuzzed_inv_util_class.getMethod("get_amount_of_vars", String.class);
+            boolean discard = (Boolean)discard_method.invoke(null, fuzzed_spec);
+            if (discard) {
+              System.out.println("Discard: "+fuzzed_spec);
+              continue;
+            }
             int total_vars = (Integer)get_amount_of_vars.invoke(null, fuzzed_spec);
             boolean unary = true;
             if (total_vars == 1) {
