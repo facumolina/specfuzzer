@@ -1,7 +1,14 @@
 package invariant;
 
+import antlr.AlloyExprGrammarLexer;
+import antlr.AlloyExprGrammarParser;
 import grammar.GrammarSymbols;
 import grammar.JavaTypesUtil;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -9,6 +16,18 @@ import java.util.*;
  * Class that contains utils for fuzzed invariants
  */
 public class FuzzedInvariantUtil {
+
+  /**
+   * Parse the given fuzzed spec
+   */
+  private static AlloyExprGrammarParser.ExprContext parse_expr(String fuzzed_spec) {
+    AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(fuzzed_spec));
+    CommonTokenStream tokens = new CommonTokenStream(lexer);
+    AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
+    ParseTree tree = parser.parse();
+    AlloyExprGrammarParser.ParseContext ctx = (AlloyExprGrammarParser.ParseContext) tree;
+    return ctx.expr();
+  }
 
   /**
    * Return the list of class names
@@ -86,6 +105,53 @@ public class FuzzedInvariantUtil {
       return new Object();
 
     throw new IllegalStateException("Variable type "+var_type+" not supported");
+  }
+
+  /**
+   * Returns the amount of Software components of the given spec
+   */
+  public static int number_of_software_components(String fuzzed_spec) {
+    AlloyExprGrammarParser.ExprContext exprContext = parse_expr(fuzzed_spec);
+    Set<String> terminals = new HashSet<>();
+    find_terminals(exprContext, terminals);
+    return terminals.size();
+  }
+
+  /**
+   * Returns true if the given fuzzed spec must be discarded
+   * A spec is discarded if:
+   * 1. It contains only one terminal symbol and it's not a set
+   * 2. It contains only one terminal set symbol that occurs more than once.
+   */
+  public static boolean discard(String fuzzed_spec) {
+    AlloyExprGrammarParser.ExprContext exprContext = parse_expr(fuzzed_spec);
+    Set<String> terminals = new HashSet<>();
+    find_terminals(exprContext, terminals);
+    if (terminals.size()==1) {
+      String term = terminals.iterator().next();
+      if (term.contains("*")||term.contains("^")) {
+        int occurrences = StringUtils.countMatches(fuzzed_spec, term);
+        return occurrences > 1;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Recursively visit the tree obtaining the terminals
+   */
+  private static void find_terminals(ParseTree tree, Set<String> terminals) {
+    for (int i=0; i < tree.getChildCount(); i++) {
+      ParseTree child = tree.getChild(i);
+      if (child instanceof AlloyExprGrammarParser.NameContext)
+        terminals.add(child.getText());
+      else
+        if (child instanceof AlloyExprGrammarParser.Set_exprContext)
+          terminals.add(child.getText());
+        else
+          find_terminals(child, terminals);
+    }
   }
 
 }
