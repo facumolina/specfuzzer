@@ -94,15 +94,63 @@ def count_ocurrences(inv):
     num = len(rows[rows == True].index)
     return num
 
-print("Starting to choose one spec for each bit vector")
+print("Building buckets")
 visited=set()
-invs_killer_set=set()
+buckets={}
 for spec, vector in spec_vectors.items():
+    #print(spec," -> ",str(vector))
     if str(vector) in visited:
+        buckets[str(vector)].add(spec)
         continue
     else:
         visited.add(str(vector))
-        invs_killer_set.add(spec)
+        buckets[str(vector)]=set()
+        buckets[str(vector)].add(spec)
+
+def print_mutants(vector):
+    keys=list(mutants_ids.keys())
+    vals=list(mutants_ids.values())
+    convertible=vector.replace("[","").replace("]","").replace(".","")
+    array = numpy.fromstring(convertible, sep=" ")
+    print("Mutants:")
+    for idx in range(array.shape[0]):
+        if array[idx]==1:
+            position=vals.index(idx)
+            print("\t"+keys[position])
+
+
+"""
+Determine the total amount of failures of the given inv
+"""
+def all_amount_of_fails(inv):
+    kl = df[df['invariant']==inv]
+    return len(kl)
+
+"""
+Determine the quality of a spec considering: amount of fails + involving vars
+"""
+def quality(spec):
+    fails=all_amount_of_fails(spec)
+    variables=spec.count("_Variable")
+    return fails + variables
+
+
+print("=====================================")
+print("Buckets: "+str(len(buckets)))
+invs_killer_set=set()
+for vector, specs_set in buckets.items():
+    print("Vector: "+vector)
+    print_mutants(vector)
+    print("Specs:")
+    sorted_set = sorted(specs_set, key=quality ,reverse=True)
+    for spec in sorted_set:
+        fails = all_amount_of_fails(spec)
+        print("\t"+spec+" l: ",len(spec)," - Fails: ",fails, "Quality: ", quality(spec))
+    print("Picked:")
+    picked = next(iter(sorted_set))
+    print("\t"+picked)
+    invs_killer_set.add(picked)
+    print()
 
 unique_obj_assertions=set()
 unique_pc_assertions=set()
