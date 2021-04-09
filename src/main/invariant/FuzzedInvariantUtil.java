@@ -130,12 +130,27 @@ public class FuzzedInvariantUtil {
     if (terminals.size()==1) {
       String term = terminals.iterator().next();
       if (term.contains("*")||term.contains("^")) {
-        int occurrences = StringUtils.countMatches(fuzzed_spec, term);
+        term = term.replace(" ", "");
+        String spec = fuzzed_spec.replace(" ","");
+        int occurrences = count_occurrences(term, spec);
         return occurrences > 1;
       }
       return true;
     }
     return false;
+  }
+
+  private static int count_occurrences(String findStr, String str) {
+    int lastIndex = 0;
+    int count = 0;
+    while(lastIndex != -1){
+      lastIndex = str.indexOf(findStr,lastIndex);
+      if(lastIndex != -1){
+        count ++;
+        lastIndex += findStr.length();
+      }
+    }
+    return count;
   }
 
   /**

@@ -68,6 +68,7 @@ public class FuzzedInvariantUtilTest {
     assertFalse(FuzzedInvariantUtil.discard("#(List.*(next)) != #(List.^(next))"));
     assertFalse(FuzzedInvariantUtil.discard("#(List.*(next)) != 0"));
     assertTrue(FuzzedInvariantUtil.discard("#(List.*(next)) >= #(List.*(next)) + 0"));
+    assertTrue(FuzzedInvariantUtil.discard("#(SearchTree.root.^(left + right)) = #(SearchTree.root.^(left + right))"));
   }
 
 }
