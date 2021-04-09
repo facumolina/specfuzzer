@@ -149,7 +149,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     }
 
     try {
-      boolean qt_discard_anyways = true;
+      boolean qt_discard_anyways = false;
       for (PptTupleInfo tuple : l) {
         // The unary invariant is only evaluated on the this object of the tuple
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
@@ -157,9 +157,9 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
           cached_evaluations.put(key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
-        if (represents_quantified && qt_discard_anyways) {
-          qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
-        }
+        //if (represents_quantified && qt_discard_anyways) {
+        //qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
+        //}
       }
       if (represents_quantified && qt_discard_anyways) {
         // Quantified and the set was never evaluated to a non-empty set, should be discarded.

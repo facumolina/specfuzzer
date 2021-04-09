@@ -198,7 +198,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
 
     try {
       // Evaluate
-      boolean qt_discard_anyways = true;
+      boolean qt_discard_anyways = false;
       for (PptTupleInfo tuple : l) {
         Object varValue = getValueForVariable(tuple, curr_var);
         if (varValue==null) {
@@ -210,9 +210,9 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
           cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
-        if (represents_quantified && qt_discard_anyways) {
-          qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
-        }
+        //if (represents_quantified && qt_discard_anyways) {
+        //  qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
+        //}
       }
       if (represents_quantified && qt_discard_anyways) {
         // Quantified and the set was never evaluated to a non-empty set, should be discarded.
