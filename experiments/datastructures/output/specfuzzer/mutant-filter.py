@@ -2,6 +2,7 @@ import pandas as pd
 import os.path
 import sys
 from re import search
+import numpy
 
 # Load file and arguments
 csv_file=sys.argv[1]
@@ -12,84 +13,127 @@ print ("> Mutant filter from file: "+csv_file)
 df = pd.read_csv(csv_file)
 unique_mut = df.mutant.unique()
 print("Unique mutants: "+str(len(unique_mut)))
-
-# Build a dict with mutants and the list of invariants the killed them
-mutants_and_killers={}
+mutants_ids={}
+mid=0
 for mutant in unique_mut:
-    kl = df[df['mutant']==mutant]
-    killers = kl.invariant.unique()
-    mutants_and_killers[mutant]=set(killers)
-
-l = [ len(killers) for killers in mutants_and_killers.values()]
-print("Number of killers by mutant: "+str(l))
+    mutants_ids[mutant]=mid
+    mid=mid+1
 
 # Load seet of assertions of interest
 assertion_file = csv_file.replace('-invs-by-mutants.csv','.assertions')
-
 postcondition_delimiter=clazz+"."+method+"\("
 
 def is_non_inv_line(curr_line):
     return search(":::OBJECT", curr_line) or search("==============", curr_line) or search(":::EXIT", curr_line) or search(":::ENTER", curr_line)
 
+object_assertions=set()
+postcondition_assertions=set()
 def load_specs_from_assertion_file(assert_file):
     all_assertions=set()
-    #print("Loading assertions from: "+assert_file)
+    print("Loading assertions from: "+assert_file)
     with open(assert_file) as f:
         count = 0
         count_enabled = True
+        is_object_prop = False
         for line in f:
             curr_line = line.strip()
             if (is_non_inv_line(curr_line)):
-                if (search(":::OBJECT", curr_line) or (search(postcondition_delimiter, curr_line) and search(":::EXIT", curr_line))):
+                obj_line = search(":::OBJECT", curr_line)
+                if (obj_line or (search(postcondition_delimiter, curr_line) and search(":::EXIT", curr_line))):
+                    if (obj_line):
+                        is_object_prop = True
+                    else:
+                        is_object_prop = False
                     count_enabled = True
                 else:
                     count_enabled = False
                 continue
             if (count_enabled):
+                if (is_object_prop):
+                    object_assertions.add(curr_line)
+                else:
+                    postcondition_assertions.add(curr_line)
                 all_assertions.add(curr_line)
 
     return all_assertions
 
 assertions = load_specs_from_assertion_file(assertion_file)
 
-# Keep in mutants only the assertions of interes (i.e., they are part of the OBJECT pp or the POSTCONDTION)
-for mutant, killers in mutants_and_killers.items():
-    new_killers=set()
-    for killer in killers:
-        curr_killer = killer
-        if (curr_killer.startswith("FuzzedInvariant:")):
-            curr_killer = curr_killer.replace("FuzzedInvariant:","")
-        for inv in assertions:
-            if (curr_killer in inv):
-                new_killers.add(killer)
-                break
-    mutants_and_killers[mutant]=new_killers
-                
+# Build a dict with only the specs of interes, i.e., those specs that are part of the OBJECT pp or the POSTCONDTION
+def is_of_interest(spec):
+    curr_spec = spec
+    if (curr_spec.startswith("FuzzedInvariant:")):
+        curr_spec = curr_spec.replace("FuzzedInvariant:","")
+    for inv in assertions:
+        if (curr_spec in inv):
+            return True
+    return False
 
-# Determine a set of invariants that would kill all the mutants
+killers_and_mutants={}
+unique_inv = df.invariant.unique()
+for invariant in unique_inv:
+    if is_of_interest(invariant):
+        kl = df[df['invariant']==invariant]
+        killed = kl.mutant.unique()
+        killers_and_mutants[invariant]=(killed)
+
+print("Specs killing mutants: "+str(len(killers_and_mutants)))
+
+print()
+print("> Minimizing by exploring the bit vector of each spec")
+print("Building bit vectors of size: "+str(len(unique_mut)))
+spec_vectors={}
+for spec, mutants in killers_and_mutants.items():
+    bit_vector = numpy.zeros(len(unique_mut))
+    for mutant in mutants:
+        bit_vector[mutants_ids[mutant]]=1
+    spec_vectors[spec]=bit_vector
+
+def count_ocurrences(inv):
+    rows = df.apply(lambda x: True if x['invariant'] == inv else False , axis=1)
+    num = len(rows[rows == True].index)
+    return num
+
+print("Starting to choose one spec for each bit vector")
+visited=set()
 invs_killer_set=set()
-killed=set()
+for spec, vector in spec_vectors.items():
+    if str(vector) in visited:
+        continue
+    else:
+        visited.add(str(vector))
+        invs_killer_set.add(spec)
 
-def determine_by_intersection():
-    res=set()
-    for mutant1 in mutants_and_killers:
-        if mutant1 not in killed:
-            killers1 = mutants_and_killers[mutant1]
-            if (len(res.intersection(killers1))>0):
-                killed.add(mutant1)
-                continue
-            for mutant2 in mutants_and_killers:
-                if mutant2 not in killed and mutant1 != mutant2:
-                    killers2 = mutants_and_killers[mutant2]
-                    if (len(res.intersection(killers2))>0):
-                        killed.add(mutant2)
-                        continue
-                    both = killers1.intersection(killers2)
-                    if (len(both)>0):
-                        killed.add(mutant1)
-                        killed.add(mutant2)
-                        res = res.union(both)
-    return res
+unique_obj_assertions=set()
+unique_pc_assertions=set()
+visited=set()
+for curr_inv in invs_killer_set:
+    if (curr_inv in visited):
+        continue
+    visited.add(curr_inv)
+    if (curr_inv.startswith("FuzzedInvariant:")):
+        curr_inv = curr_inv.replace("FuzzedInvariant:","")
+    is_obj_inv = False
+    for inv in object_assertions:
+        if (curr_inv in inv):
+            unique_obj_assertions.add(curr_inv)
+            is_obj_inv = True
+            break
+    if (not is_obj_inv):
+        for inv in postcondition_assertions:
+            if (curr_inv in inv):
+                unique_pc_assertions.add(curr_inv)
+
+all_assertions=len(unique_obj_assertions)+len(unique_pc_assertions)
+print("Specs: "+str(all_assertions))
+print("=====================================")
+print(":::OBJECT")
+for unique in unique_obj_assertions:
+    print(unique)
+print("=====================================")
+print(":::POSTCONDITION")
+for unique in unique_pc_assertions:
+    print(unique)
 
 
 """
@@ -98,29 +142,4 @@ Determine the amounf of fails of the given inv on the given mutant
 def amount_of_fails(inv, mutant):
     kl = df[df['mutant']==mutant]
     return len(kl[kl['invariant']==inv])
-
-"""
-For each mutant get the killers with an amount of fails less than or equal to nfails
-"""
-def determine_by_number_of_fails(nfails,max_samples):
-    res=set()
-    for mutant in mutants_and_killers:
-        killers = mutants_and_killers[mutant]
-        filtered_killers=set()
-        for inv in killers:
-            if (amount_of_fails(inv, mutant)<=nfails):
-                filtered_killers.add(inv)
-                if (len(filtered_killers)>=max_samples):
-                    break
-        res = res.union(filtered_killers)
-        killed.add(mutant)
-    return res
-
-invs_killer_set = determine_by_number_of_fails(1,1)
-#invs_killer_set = determine_by_intersection()
-
-print("Killed: "+str(len(killed)))
-print("Invariants: "+str(len(invs_killer_set)))
-for inv in invs_killer_set:
-    print(inv)
 
