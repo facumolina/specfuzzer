@@ -216,7 +216,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       }
       if (represents_quantified && qt_discard_anyways) {
         // Quantified and the set was never evaluated to a non-empty set, should be discarded.
-        cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+        cached_evaluations.put(cached_key, getDefault());
         return getDefault();
       }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {

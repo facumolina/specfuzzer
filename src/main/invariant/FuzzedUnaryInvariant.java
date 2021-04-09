@@ -163,7 +163,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       }
       if (represents_quantified && qt_discard_anyways) {
         // Quantified and the set was never evaluated to a non-empty set, should be discarded.
-        cached_evaluations.put(key, InvariantStatus.FALSIFIED);
+        cached_evaluations.put(key, getDefault());
         return getDefault();
       }
     } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
