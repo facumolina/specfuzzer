@@ -2,6 +2,7 @@ package invariant;
 
 import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
+import daikon.tools.InvariantChecker;
 import expression.NonEvaluableExpressionException;
 import expression.QuantifiedExpressionEvaluator;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -163,7 +164,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       if (represents_quantified && qt_discard_anyways) {
         // Quantified and the set was never evaluated to a non-empty set, should be discarded.
         cached_evaluations.put(key, InvariantStatus.FALSIFIED);
-        return InvariantStatus.FALSIFIED;
+        return getDefault();
       }
     } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified
@@ -172,6 +173,13 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     }
     cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
     return InvariantStatus.NO_CHANGE;
+  }
+
+  private InvariantStatus getDefault() {
+    if (InvariantChecker.serialiazed_objects_file_name!=null)
+      return InvariantStatus.NO_CHANGE;
+    else
+      return InvariantStatus.FALSIFIED;
   }
 
   @Override
