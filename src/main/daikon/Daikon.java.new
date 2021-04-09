@@ -1792,6 +1792,7 @@ public final class Daikon {
         int unique_fuzzed_invs = 0;
         int unary_invs = 0;
         int binary_invs = 0;
+        int discarded = 0;
         for (int i = 0; i < Math.min(potential_specs,fuzzed_invariants); i++){
           String fuzzed_spec = (String)fuzz_method.invoke(fuzzer);
           Class<?> fuzzed_inv_util_class;
@@ -1802,7 +1803,7 @@ public final class Daikon {
             Method get_amount_of_vars = fuzzed_inv_util_class.getMethod("get_amount_of_vars", String.class);
             boolean discard = (Boolean)discard_method.invoke(null, fuzzed_spec);
             if (discard) {
-              System.out.println("Discard: "+fuzzed_spec);
+              discarded++;
               continue;
             }
             int total_vars = (Integer)get_amount_of_vars.invoke(null, fuzzed_spec);
@@ -1839,7 +1840,7 @@ public final class Daikon {
           }
         }
         System.out.println("Unique fuzzed invariants: "+unique_fuzzed_invs+" ("+fuzzed_invariants+")");
-        System.out.println("Unary: "+unary_invs+" - Binary: "+binary_invs);
+        System.out.println("Unary: "+unary_invs+" - Binary: "+binary_invs+" - Discarded: "+discarded);
       } catch (Exception e) {
         throw new Daikon.UserError("Exception while invoking fuzz method");
       }
