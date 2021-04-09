@@ -12,6 +12,7 @@ import daikon.tools.InvariantChecker;
 import expression.ExpressionEvaluator;
 import expression.NonApplicableExpressionException;
 import expression.NonEvaluableExpressionException;
+import expression.QuantifiedExpressionEvaluator;
 import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -43,6 +44,9 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
+  // Represents quantified expr
+  private boolean represents_quantified = false;
+
   // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
 
@@ -55,6 +59,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   private FuzzedBinaryInvariant(PptSlice ppt, String spec) {
     super(ppt);
     fuzzed_spec = spec;
+    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
   }
 
   private @Prototype FuzzedBinaryInvariant() {
@@ -65,6 +70,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   private @Prototype FuzzedBinaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
+    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec: " + fuzzed_spec);
   }
 
@@ -75,6 +81,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     if (fuzzer == null)
       fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
     fuzzed_spec = fuzzer.fuzz();
+    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
@@ -191,6 +198,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
 
     try {
       // Evaluate
+      boolean qt_discard_anyways = true;
       for (PptTupleInfo tuple : l) {
         Object varValue = getValueForVariable(tuple, curr_var);
         if (varValue==null) {
@@ -202,6 +210,14 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
           cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
+        if (represents_quantified && qt_discard_anyways) {
+          qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
+        }
+      }
+      if (represents_quantified && qt_discard_anyways) {
+        // Quantified and the set was never evaluated to a non-empty set, should be discarded.
+        cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+        return InvariantStatus.FALSIFIED;
       }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified

@@ -154,4 +154,11 @@ public class FuzzedInvariantUtil {
     }
   }
 
+  /**
+   * Returns true if the given spec is quantified
+   */
+  public static boolean is_quantified(String fuzzed_spec) {
+    return fuzzed_spec.startsWith("all ")||fuzzed_spec.startsWith("some ")||fuzzed_spec.startsWith("no ");
+  }
+
 }

@@ -3,6 +3,7 @@ package invariant;
 import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
 import expression.NonEvaluableExpressionException;
+import expression.QuantifiedExpressionEvaluator;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -42,6 +43,9 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
+  // Represents quantified expr
+  private boolean represents_quantified = false;
+
   // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
 
@@ -54,6 +58,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private FuzzedUnaryInvariant(PptSlice ppt, String spec) {
     super(ppt);
     fuzzed_spec = spec;
+    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
   }
 
   private @Prototype FuzzedUnaryInvariant() {
@@ -64,6 +69,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private @Prototype FuzzedUnaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
+    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec: " + fuzzed_spec);
   }
 
@@ -74,6 +80,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     if (fuzzer == null)
       fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
     fuzzed_spec = fuzzer.fuzz();
+    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
@@ -141,6 +148,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     }
 
     try {
+      boolean qt_discard_anyways = true;
       for (PptTupleInfo tuple : l) {
         // The unary invariant is only evaluated on the this object of the tuple
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
@@ -148,6 +156,14 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
           cached_evaluations.put(key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
+        if (represents_quantified && qt_discard_anyways) {
+          qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
+        }
+      }
+      if (represents_quantified && qt_discard_anyways) {
+        // Quantified and the set was never evaluated to a non-empty set, should be discarded.
+        cached_evaluations.put(key, InvariantStatus.FALSIFIED);
+        return InvariantStatus.FALSIFIED;
       }
     } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified

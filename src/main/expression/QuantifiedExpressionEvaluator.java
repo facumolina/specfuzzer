@@ -23,6 +23,8 @@ public class QuantifiedExpressionEvaluator {
 
   public static final String QT_VAR_NAME = "n";
 
+  public static int last_set_size = 0;
+
   /**
    * Evaluate the given quantified expression on the given java Object
    */
@@ -31,6 +33,7 @@ public class QuantifiedExpressionEvaluator {
         ? SetExpressionEvaluator.eval(qt_expr.set_expr())
         : SetExpressionEvaluator.eval(qt_expr.collection());
     QuantifierContext qt = qt_expr.quantifier();
+    last_set_size = set.size();
     switch (qt.getText()) {
     case ALL:
       return computeAll(set, qt_expr.expr());
