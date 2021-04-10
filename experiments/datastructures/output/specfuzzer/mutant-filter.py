@@ -64,6 +64,8 @@ def is_of_interest(spec):
     curr_spec = spec
     if (curr_spec.startswith("FuzzedInvariant:")):
         curr_spec = curr_spec.replace("FuzzedInvariant:","")
+    if ("daikon.Quant.memberOf" in spec):
+        return True
     for inv in assertions:
         if (curr_spec in inv):
             return True
@@ -135,6 +137,10 @@ def quality(spec):
     return fails + variables
 
 
+def get_members_of(some_set):
+    members = [x for x in some_set if "daikon.Quant.memberOf" in x]
+    return set(members)
+
 print("=====================================")
 print("Buckets: "+str(len(buckets)))
 invs_killer_set=set()
@@ -147,15 +153,20 @@ for vector, specs_set in buckets.items():
         fails = all_amount_of_fails(spec)
         print("\t"+spec+" l: ",len(spec)," - Fails: ",fails, "Quality: ", quality(spec))
     print("Picked:")
-    picked = next(iter(sorted_set))
-    print("\t"+picked)
-    invs_killer_set.add(picked)
+    picked_set=set()
+    picked_set.add(next(iter(sorted_set)))
+    picked_set = picked_set.union(get_members_of(sorted_set))
+    for picked in picked_set:
+        print("\t"+picked)
+    invs_killer_set = invs_killer_set.union(picked_set)
     print()
 
 unique_obj_assertions=set()
 unique_pc_assertions=set()
 visited=set()
 for curr_inv in invs_killer_set:
+    if ("memberOf" in curr_inv):
+        print(curr_inv)
     if (curr_inv in visited):
         continue
     visited.add(curr_inv)
@@ -168,9 +179,18 @@ for curr_inv in invs_killer_set:
             is_obj_inv = True
             break
     if (not is_obj_inv):
+        added = False
         for inv in postcondition_assertions:
             if (curr_inv in inv):
                 unique_pc_assertions.add(curr_inv)
+                added = True
+        if (not added):
+            index = df.index
+            condition = df['invariant']==curr_inv
+            indices = index[condition]
+            if (search(postcondition_delimiter, df['ppt'][indices[0]])):
+                unique_pc_assertions.add(curr_inv)
+
 
 all_assertions=len(unique_obj_assertions)+len(unique_pc_assertions)
 print("Specs: "+str(all_assertions))
