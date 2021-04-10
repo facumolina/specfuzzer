@@ -68,9 +68,14 @@ for idx in df.index:
             is_obj_inv = True
             break
     if (not is_obj_inv):
-        for inv in postcondition_assertions:
-            if (curr_inv in inv):
-                unique_pc_assertions.add(curr_inv)
+        if (search(postcondition_delimiter, df['ppt'][idx])):
+            unique_pc_assertions.add(curr_inv)
+        else:
+            for inv in postcondition_assertions:
+                if (curr_inv in inv):
+                    unique_pc_assertions.add(curr_inv)
+                    break
+
 all_assertions=len(unique_obj_assertions)+len(unique_pc_assertions)
 print("Unique: "+str(all_assertions))
 print("=====================================")
