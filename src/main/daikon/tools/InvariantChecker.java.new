@@ -624,22 +624,22 @@ public class InvariantChecker {
           // Store string representation of original invariant for verbose mode
           String invRep = quiet ? null : inv.format();
 
-          if (!inv.format().contains("Fuzzed")) {
+          //if (!inv.format().contains("Fuzzed")) {
             // Only check filters for non-fuzzed invariants
-            InvariantFilters fi = InvariantFilters.defaultFilters();
-            InvariantFilter filter_result = fi.shouldKeep(inv);
-            boolean fi_accepted = (filter_result == null);    
-            if (!(fi_accepted && !inv.isGuardingPredicate)) {
-              continue;
-            }
-          }
+          //  InvariantFilters fi = InvariantFilters.defaultFilters();
+          //  InvariantFilter filter_result = fi.shouldKeep(inv);
+          //  boolean fi_accepted = (filter_result == null);    
+          //  if (!(fi_accepted && !inv.isGuardingPredicate)) {
+          //    continue;
+          //  }
+          //}
 
           InvariantStatus status = inv.add_sample(vt, 1);
           sample_cnt++;
 
-          if (status != InvariantStatus.NO_CHANGE) {
+          if (status == InvariantStatus.FALSIFIED) {
             if (!quiet) {
-              output_stream.println(
+              System.out.println(
                   "At ppt "
                       + ppt.name
                       + ", Invariant '"
@@ -650,9 +650,10 @@ public class InvariantChecker {
                       + FileIO.get_linenum()
                       + " in file "
                       + FileIO.data_trace_state.filename);
+              System.out.println("Status: "+status);
             }
             failedInvariants.add(inv);
-            activeInvariants.remove(inv);
+            //activeInvariants.remove(inv);
             String inv_formatted = inv.format_using(OutputFormat.JAVA);
             InvFailInfo ifi = new InvFailInfo(inv_formatted,ppt.name);
             failedCounter.add(ifi);
