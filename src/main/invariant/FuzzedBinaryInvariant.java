@@ -147,6 +147,10 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       // Represents a static field
       varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else {
+      if (var.isDerivedParam() && var_name.contains("orig")) {
+        var_name = var_name.replace("orig(",""); // Remove orig(
+        var_name  = var_name.substring(0, var_name.length() - 1); // Remove )
+      }
       varValue = tuple.getVariableValue(var_name);
     }
     return varValue;
