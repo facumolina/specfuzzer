@@ -207,13 +207,6 @@ public abstract class AbstractLinkedList<E> implements List<E> {
   }
 
   // -----------------------------------------------------------------------
-
-  @Override
-  public boolean add(final E value) {
-    addLast(value);
-    return true;
-  }
-
   @Override
   public void add(final int index, final E value) {
     final Node<E> node = getNode(index, true);
@@ -335,23 +328,8 @@ public abstract class AbstractLinkedList<E> implements List<E> {
     return true;
   }
 
-  public boolean addLast(final E o) {
-    addNodeBefore(header, o);
-    return true;
-  }
-
   public E removeFirst() {
     final Node<E> node = header.next;
-    if (node == header) {
-      throw new NoSuchElementException();
-    }
-    final E oldValue = node.getValue();
-    removeNode(node);
-    return oldValue;
-  }
-
-  public E removeLast() {
-    final Node<E> node = header.previous;
     if (node == header) {
       throw new NoSuchElementException();
     }

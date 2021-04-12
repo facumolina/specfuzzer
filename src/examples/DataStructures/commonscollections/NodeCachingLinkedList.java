@@ -94,12 +94,16 @@ public class NodeCachingLinkedList<E> extends AbstractLinkedList<E> implements S
 
   // -----------------------------------------------------------------------
   @Override
+  public boolean add(final E value) {
+    addLast(value);
+    return true;
+  }
+
   public boolean addLast(final E o) {
     addNodeBefore(header, o);
     return true;
   }
 
-  @Override
   public E removeLast() {
     final Node<E> node = header.previous;
     if (node == header) {
