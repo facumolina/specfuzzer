@@ -29,13 +29,13 @@ cp base-invs-by-mutants.csv invs-by-mutants.csv
 
 # Actual execution of Daikon + Fuzzed specs
 echo '> Inference step'
-java -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects $dtrace
+java -Xmx8g -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects $dtrace
 SECONDS_INFERENCE=$SECONDS
 
 mutations_log=$mutants_dir'/'$target_name'-mutants.log'
 
 # Now perform the filtering step using a seconds budget. If the budget is passed, then stop. 
-FILTERING_BUDGET=3600
+FILTERING_BUDGET=5400
 SECONDS=0
 echo '> Filtering step'
 echo ''
@@ -44,11 +44,11 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
   mutant_objects_file=$base_name"-objects.xml"
   mutant_number=${base_name#$mutants_dir'/'$target_name'-m'}
   curr_mutant=$(sed -n $mutant_number'p' $mutations_log)
-  if [[ $curr_mutant == *$class':'* || $curr_mutant == *$class*'<init>'* || $curr_mutant == *$class*$method* ]]; then
+  if [[ $curr_mutant == *$class':'* || $curr_mutant == *$class'@<init>'* || $curr_mutant == *$class*$method* ]]; then
     # The mutant is in a static method OR in a constructor OR in the current method
     echo '> Mutation is: '$curr_mutant
     echo 'Checking invs on mutant: '$mutant_dtrace
-    java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
+    java -Xmx8g -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
     echo 'Saving mutants results file'
     python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
     echo ''
@@ -66,8 +66,8 @@ SECONDS_FILTERING=$SECONDS
 mkdir -p $output_dir
 base_file_name=$class'-'$method'-specfuzzer-'$value
 
-echo '> Mutation killing ability'
-python3 process-final-results.py invs-by-mutants.csv
+#echo '> Mutation killing ability'
+#python3 process-final-results.py invs-by-mutants.csv
 mutka_file=$output_dir'/'$base_file_name'-invs-by-mutants.csv'
 echo '> Mutation killing ability results saved in: '$mutka_file
 cp invs-by-mutants.csv $mutka_file
