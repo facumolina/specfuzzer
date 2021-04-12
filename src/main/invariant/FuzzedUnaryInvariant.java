@@ -120,11 +120,22 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: " + var().name();
   }
 
+  /**
+   * Ignore conditions when using ppt as keys
+   */
+  private String get_ppt_key(String ppt_name) {
+    String res = ppt_name;
+    if (res.contains(";condition")) {
+      return res.split(";condition")[0];
+    }
+    return res;
+  }
+
   @Override
   public InvariantStatus check_modified(long v, int count) {
     // Recover the object
     int i = (int) v;
-    String key = i+"-"+ppt.parent.name;
+    String key = i+"-"+get_ppt_key(ppt.parent.name);
 
     // Check if already evaluated
     if (cached_evaluations.containsKey(key))

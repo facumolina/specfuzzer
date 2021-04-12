@@ -167,11 +167,22 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
   // Should be NO_CHANGE when filtering invariants, i.e, when using InvariantChecker
   private InvariantStatus default_status = InvariantStatus.FALSIFIED;
 
+  /**
+   * Ignore conditions when using ppt as keys
+   */
+  private String get_ppt_key(String ppt_name) {
+    String res = ppt_name;
+    if (res.contains(";condition")) {
+      return res.split(";condition")[0];
+    }
+    return res;
+  }
+
   @Override
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // Recover the object
     int i = (int) getObject(v1, v2);
-    String key = i+"-"+ppt.parent.name;
+    String key = i+"-"+get_ppt_key(ppt.parent.name);
     VarInfo curr_var = getVariable((PptSlice2)this.ppt);
     String cached_key = key+curr_var.name();
 
