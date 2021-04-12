@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
+import DataStructures.daikon.StackAr;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -71,6 +72,15 @@ public class UnaryExpressionEvaluatorTest {
     assert (o instanceof Integer);
     Integer i = (Integer) o;
     assertTrue(i == 1);
+  }
+
+  @Test
+  public void card() {
+    StackAr s = new StackAr(1);
+    Object o = evaluateUnary("#(StackAr.theArray)", s);
+    assert (o instanceof Integer);
+    Integer i = (Integer) o;
+    assertTrue(i == 0);
   }
 
   @Test
