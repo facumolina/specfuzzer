@@ -1,0 +1,10 @@
+Specs: 5
+=====================================
+:::OBJECT
+this.topOfStack <= daikon.Quant.size(this.theArray)-1
+this.theArray != null
+=====================================
+:::POSTCONDITION
+daikon.Quant.memberOf(\old(x.getClass().getName()) , daikon.Quant.typeArray(this.theArray) )
+this.topOfStack - \old(this.topOfStack) - 1 == 0
+daikon.Quant.memberOf(\old(x) , this.theArray )
