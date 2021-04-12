@@ -18,6 +18,7 @@ package DataStructures.commonscollections;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 /**
  * A <code>List</code> implementation that stores a cache of internal Node objects in an effort to
@@ -92,6 +93,23 @@ public class NodeCachingLinkedList<E> extends AbstractLinkedList<E> implements S
   }
 
   // -----------------------------------------------------------------------
+  @Override
+  public boolean addLast(final E o) {
+    addNodeBefore(header, o);
+    return true;
+  }
+
+  @Override
+  public E removeLast() {
+    final Node<E> node = header.previous;
+    if (node == header) {
+      throw new NoSuchElementException();
+    }
+    final E oldValue = node.getValue();
+    removeNode(node);
+    return oldValue;
+  }
+
   /**
    * Gets the maximum size of the cache.
    *
