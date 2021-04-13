@@ -1,5 +1,6 @@
 package expression;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -124,4 +125,12 @@ public class UnaryExpressionEvaluatorTest {
     assertTrue(i == i1);
     assertTrue(i == i2);
   }
+
+  @Test
+  public void cardinality8() {
+    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<Integer>();
+    System.out.println(ncll.toString());
+    assertFalse(ExpressionEvaluator.eval("#(NodeCachingLinkedList.header.*(previous + next)) != 1", ncll));
+  }
+
 }
