@@ -33,6 +33,9 @@ collection:
 num_binary_op:
   '+'
   | '-'
+  | '*'
+  | '/'
+  | '%'
   ;
 
 binary_op:

@@ -21,7 +21,8 @@ public class AlloyExprGrammarParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, ID=35, ID_START=36, ID_CHAR=37, WS=38;
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, ID=37, ID_START=38, 
+		ID_CHAR=39, WS=40;
 	public static final int
 		RULE_parse = 0, RULE_expr = 1, RULE_qt_expr = 2, RULE_set_expr = 3, RULE_collection = 4, 
 		RULE_num_binary_op = 5, RULE_binary_op = 6, RULE_compare_op = 7, RULE_unary_op = 8, 
@@ -34,16 +35,17 @@ public class AlloyExprGrammarParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'('", "')'", "':'", "'.'", "').'", "'+'", "'-'", "'||'", "'or'", 
-		"'&&'", "'and'", "'implies'", "'=>'", "'iff'", "'='", "'!='", "'in'", 
-		"'not in'", "'<'", "'>'", "'<='", "'>='", "'!'", "'not'", "'no'", "'#'", 
-		"'*'", "'^'", "'all'", "'some'", "'lone'", "'one'", "'0'", "'1'"
+		null, "'('", "')'", "':'", "'.'", "').'", "'+'", "'-'", "'*'", "'/'", 
+		"'%'", "'||'", "'or'", "'&&'", "'and'", "'implies'", "'=>'", "'iff'", 
+		"'='", "'!='", "'in'", "'not in'", "'<'", "'>'", "'<='", "'>='", "'!'", 
+		"'not'", "'no'", "'#'", "'^'", "'all'", "'some'", "'lone'", "'one'", "'0'", 
+		"'1'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, "ID", 
-		"ID_START", "ID_CHAR", "WS"
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, "ID", "ID_START", "ID_CHAR", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -540,7 +542,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(99);
 			_la = _input.LA(1);
-			if ( !(_la==T__5 || _la==T__6) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -585,7 +587,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(101);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -630,7 +632,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(103);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -675,7 +677,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(105);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -720,7 +722,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(107);
 			_la = _input.LA(1);
-			if ( !(_la==T__26 || _la==T__27) ) {
+			if ( !(_la==T__7 || _la==T__29) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -765,7 +767,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(109);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__24) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__27) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -924,7 +926,7 @@ public class AlloyExprGrammarParser extends Parser {
 			{
 			setState(123);
 			_la = _input.LA(1);
-			if ( !(_la==T__32 || _la==T__33) ) {
+			if ( !(_la==T__34 || _la==T__35) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -963,7 +965,7 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3(\u0080\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\u0080\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\64\n\3\3\3"+
@@ -972,11 +974,11 @@ public class AlloyExprGrammarParser extends Parser {
 		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5b\n\5\3\6\3\6\3\7\3\7\3\b\3"+
 		"\b\3\t\3\t\3\n\3\n\3\13\3\13\3\f\3\f\3\r\3\r\3\r\3\r\5\rv\n\r\3\16\3\16"+
 		"\3\16\3\16\5\16|\n\16\3\17\3\17\3\17\2\3\4\20\2\4\6\b\n\f\16\20\22\24"+
-		"\26\30\32\34\2\t\3\2\b\t\3\2\n\20\3\2\21\30\3\2\31\34\3\2\35\36\4\2\33"+
-		"\33\37\"\3\2#$\2|\2\36\3\2\2\2\4\63\3\2\2\2\6P\3\2\2\2\ba\3\2\2\2\nc\3"+
-		"\2\2\2\fe\3\2\2\2\16g\3\2\2\2\20i\3\2\2\2\22k\3\2\2\2\24m\3\2\2\2\26o"+
-		"\3\2\2\2\30u\3\2\2\2\32{\3\2\2\2\34}\3\2\2\2\36\37\5\4\3\2\37 \7\2\2\3"+
-		" \3\3\2\2\2!\"\b\3\1\2\"\64\5\6\4\2#$\7\3\2\2$%\5\4\3\2%&\7\4\2\2&\'\5"+
+		"\26\30\32\34\2\t\3\2\b\f\3\2\r\23\3\2\24\33\3\2\34\37\4\2\n\n  \4\2\36"+
+		"\36!$\3\2%&\2|\2\36\3\2\2\2\4\63\3\2\2\2\6P\3\2\2\2\ba\3\2\2\2\nc\3\2"+
+		"\2\2\fe\3\2\2\2\16g\3\2\2\2\20i\3\2\2\2\22k\3\2\2\2\24m\3\2\2\2\26o\3"+
+		"\2\2\2\30u\3\2\2\2\32{\3\2\2\2\34}\3\2\2\2\36\37\5\4\3\2\37 \7\2\2\3 "+
+		"\3\3\2\2\2!\"\b\3\1\2\"\64\5\6\4\2#$\7\3\2\2$%\5\4\3\2%&\7\4\2\2&\'\5"+
 		"\16\b\2\'(\7\3\2\2()\5\4\3\2)*\7\4\2\2*\64\3\2\2\2+,\5\22\n\2,-\7\3\2"+
 		"\2-.\5\4\3\2./\7\4\2\2/\64\3\2\2\2\60\64\5\b\5\2\61\64\5\30\r\2\62\64"+
 		"\5\34\17\2\63!\3\2\2\2\63#\3\2\2\2\63+\3\2\2\2\63\60\3\2\2\2\63\61\3\2"+
@@ -990,9 +992,9 @@ public class AlloyExprGrammarParser extends Parser {
 		"]^\5\32\16\2^_\7\7\2\2_`\5\30\r\2`b\3\2\2\2aR\3\2\2\2aY\3\2\2\2b\t\3\2"+
 		"\2\2cd\5\30\r\2d\13\3\2\2\2ef\t\2\2\2f\r\3\2\2\2gh\t\3\2\2h\17\3\2\2\2"+
 		"ij\t\4\2\2j\21\3\2\2\2kl\t\5\2\2l\23\3\2\2\2mn\t\6\2\2n\25\3\2\2\2op\t"+
-		"\7\2\2p\27\3\2\2\2qv\7%\2\2rs\7%\2\2st\7\6\2\2tv\5\30\r\2uq\3\2\2\2ur"+
-		"\3\2\2\2v\31\3\2\2\2w|\7%\2\2xy\7%\2\2yz\7\b\2\2z|\5\32\16\2{w\3\2\2\2"+
-		"{x\3\2\2\2|\33\3\2\2\2}~\t\b\2\2~\35\3\2\2\2\t\63=?Pau{";
+		"\7\2\2p\27\3\2\2\2qv\7\'\2\2rs\7\'\2\2st\7\6\2\2tv\5\30\r\2uq\3\2\2\2"+
+		"ur\3\2\2\2v\31\3\2\2\2w|\7\'\2\2xy\7\'\2\2yz\7\b\2\2z|\5\32\16\2{w\3\2"+
+		"\2\2{x\3\2\2\2|\33\3\2\2\2}~\t\b\2\2~\35\3\2\2\2\t\63=?Pau{";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
