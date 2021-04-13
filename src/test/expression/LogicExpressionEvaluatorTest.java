@@ -107,4 +107,14 @@ public class LogicExpressionEvaluatorTest {
         assertTrue(evaluateLogicCmp("(#(List.*(next)) > 0) iff (#(List.*(next)) >= 1)", l));
     }
 
+    @Test
+    public void xor_test() {
+        List l = new List();
+        l.insert(1);
+        assertFalse(evaluateLogicCmp("(List.x != 1) xor (List.x > 1)", l));
+        assertTrue(evaluateLogicCmp("(List.x != 1) xor (List.x >= 1)", l));
+        assertTrue(evaluateLogicCmp("(List.x = 1) xor (List.x > 1)", l));
+        assertFalse(evaluateLogicCmp("(List.x = 1) xor (List.x >= 1)", l));
+    }
+
 }
