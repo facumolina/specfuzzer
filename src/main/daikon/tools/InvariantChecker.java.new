@@ -637,6 +637,8 @@ public class InvariantChecker {
           InvariantStatus status = inv.add_sample(vt, 1);
           sample_cnt++;
 
+          
+
           if (status == InvariantStatus.FALSIFIED) {
             if (!quiet) {
               System.out.println(
