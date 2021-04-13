@@ -46,7 +46,7 @@ public class GrammarSymbols {
 
   // Binary numeric operators
   public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
-  public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-");
+  public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-", "*", "/", "%");
 
   // Numeric expressions
   public static final String INTEGER = "<Integer>";
