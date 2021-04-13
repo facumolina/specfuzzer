@@ -46,6 +46,7 @@ binary_op:
   | 'implies'
   | '=>'
   | 'iff'
+  | 'xor'
   ;
 
 compare_op:
