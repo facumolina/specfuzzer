@@ -5,26 +5,24 @@
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 [[ -z "$SF110SRC" ]] && { echo "> The environment variable SF110SRC is empty" ; exit 1; }
-[[ -z "$EVOSPEX" ]] && { echo "> The environment variable EVOSPEX is empty" ; exit 1; }
 
 # Read arguments
 sf110_project=$1
-class_name=$2
-grammar_to_fuzz=$3
-method_name=$4
+fqname=$2
+method_name=$3
 
 # Some useful variables
-project_dir=$EVOSPEX/src/test/resources/sf110/$sf110_project
 project_sources=$SF110SRC/$sf110_project
-class_dir=$project_dir/$class_name
-fqname=$(cat $project_dir/target-classes.txt | grep "\.$class_name")
-method_dir=$class_dir/$method_name
-tests_dir=$method_dir/2/tests
+tests_dir=experiments/sf110/$sf110_project/tests
+class_name=${fqname##*.}
+grammar_to_fuzz=grammars/$class_name'Grammar.json'
 results_dir=experiments/sf110/$sf110_project
 objects_file=$results_dir/$class_name-$method_name-objects.xml
 dtrace_file=$results_dir/$class_name-$method_name.dtrace.gz
 mutants_dir=$results_dir/mutants
 target_name=$class_name-$method_name
+invs_file=$target_name'.inv.gz'
+output_dir=experiments/sf110/$sf110_project/output
 
 # Fuzzing vars
 invs_to_fuzz=2000;
@@ -32,12 +30,16 @@ invs_to_fuzz=2000;
 # Start
 echo '> SpecFuzzer'
 echo '> Target: '$sf110_project'/'$fqname$'.'$method_name
+echo '> Grammar: '$grammar_to_fuzz
 
 # Build classpath
-cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$EVOSPEX/lib/hamcrest-core-1.3.jar:$EVOSPEX/lib/junit-4.12.jar
+cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$SPECFUZZER/lib/hamcrest-core-1.3.jar:$SPECFUZZER/lib/junit-4.12.jar
 cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
 
 # Clean file for this step to work properly
+# Clean file for this step to work properly
+rm invs_file.xml
+rm invs-by-mutants.csv
 cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
 
@@ -63,9 +65,21 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
 done
 echo ''
 
-echo '> Rating living invariants by mutation killing ability'
-python3 process-final-results.py invs-by-mutants.csv
+mkdir -p $output_dir
+base_file_name=$class_name'-'$method_name'-specfuzzer'
 
-echo '> Results saved in '$results_dir
+echo '> Mutation killing ability'
+python3 process-final-results.py invs-by-mutants.csv
+mutka_file=$output_dir'/'$base_file_name'-invs-by-mutants.csv'
+echo '> Mutation killing ability results saved in: '$mutka_file
+cp invs-by-mutants.csv $mutka_file
+
+assertions_file=$output_dir'/'$base_file_name.assertions
+echo ''
+echo '> Writing assertions to file: '$assertions_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class_name':::OBJECT' --format java > $assertions_file
+java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class_name'\.'$method'.' --format java >> $assertions_file
+mv $invs_file $output_dir'/'$base_file_name.inv.gz
+mv invs_file.xml $output_dir'/'$base_file_name'-filteredinvs.xml'
 
 echo '> Done!'
