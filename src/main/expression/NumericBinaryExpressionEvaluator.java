@@ -12,6 +12,9 @@ public class NumericBinaryExpressionEvaluator {
 
   private static final String PLUS = "+";
   private static final String MINUS = "-";
+  private static final String MULTIPLY = "*";
+  private static final String DIVIDE = "/";
+  private static final String MODULO = "%";
 
   /**
    * Evaluate the given comparison
@@ -31,9 +34,15 @@ public class NumericBinaryExpressionEvaluator {
     Number n2 = (Number) o2;
     switch (op) {
     case PLUS:
-      return evalAdd(n1, n2);
+      return evalPlus(n1, n2);
     case MINUS:
       return evalMinus(n1, n2);
+    case MULTIPLY:
+      return evalMultiply(n1, n2);
+    case DIVIDE:
+      return evalDivide(n1, n2);
+    case MODULO:
+      return evalModulo(n1 , n2);
     }
     throw new IllegalArgumentException("Binary operator " + op + " still not implemented");
   }
@@ -41,15 +50,14 @@ public class NumericBinaryExpressionEvaluator {
   /**
    * Evaluate addition
    */
-  private static Number evalAdd(Number n1, Number n2) {
+  private static Number evalPlus(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 + (Integer) n2;
     if (n1 instanceof Float)
       return (Float) n1 + (Float) n2;
     if (n1 instanceof Double)
       return (Double) n1 + (Double) n2;
-    throw new IllegalArgumentException(
-        "Objects must be of the same type when performing numeric comparison");
+    throw new IllegalArgumentException("Unsupported numeric type");
   }
 
   /**
@@ -62,7 +70,63 @@ public class NumericBinaryExpressionEvaluator {
       return (Float) n1 - (Float) n2;
     if (n1 instanceof Double)
       return (Double) n1 - (Double) n2;
-    throw new IllegalArgumentException(
-        "Objects must be of the same type when performing numeric comparison");
+    throw new IllegalArgumentException("Unsupported numeric type");
   }
+
+  /**
+   * Evaluate multiplication
+   */
+  private static Number evalMultiply(Number n1, Number n2) {
+    if (n1 instanceof Integer)
+      return (Integer) n1 * (Integer) n2;
+    if (n1 instanceof Float)
+      return (Float) n1 * (Float) n2;
+    if (n1 instanceof Double)
+      return (Double) n1 * (Double) n2;
+    throw new IllegalArgumentException("Unsupported numeric type");
+  }
+
+  /**
+   * Evaluate division
+   */
+  private static Number evalDivide(Number n1, Number n2) {
+    if (isZero(n2))
+      throw new NonEvaluableExpressionException("Division by Zero");
+    if (n1 instanceof Integer)
+      return (Integer) n1 / (Integer) n2;
+    if (n1 instanceof Float)
+      return (Float) n1 / (Float) n2;
+    if (n1 instanceof Double)
+      return (Double) n1 / (Double) n2;
+    throw new IllegalArgumentException("Unsupported numeric type");
+  }
+
+  /**
+   * Evaluate modulo
+   */
+  private static Number evalModulo(Number n1, Number n2) {
+    if (isZero(n2))
+      throw new NonEvaluableExpressionException("Division by Zero");
+    if (n1 instanceof Integer)
+      return (Integer) n1 % (Integer) n2;
+    if (n1 instanceof Float)
+      return (Float) n1 % (Float) n2;
+    if (n1 instanceof Double)
+      return (Double) n1 % (Double) n2;
+    throw new IllegalArgumentException("Unsupported numeric type");
+  }
+
+  /**
+   * Returns true iff the given number is zero
+   */
+  private static boolean isZero(Number n) {
+    if (n instanceof Integer && (Integer)n==0)
+      return true;
+    if (n instanceof Float && (Float)n==0)
+      return true;
+    if (n instanceof Double && (Double)n==0)
+      return true;
+    return false;
+  }
+
 }
