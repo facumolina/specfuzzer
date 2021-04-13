@@ -29,7 +29,7 @@ public class GrammarSymbols {
 
   // Logic comparison operators
   public static final String LOGIC_OP = "<Logic_Op>";
-  public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "implies", "iff");
+  public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "xor", "implies", "iff");
 
   // Logic expressions
   public static final String BOOLEAN_FIELD = "<Boolean_Field>";
