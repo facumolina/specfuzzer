@@ -17,7 +17,6 @@ public class GrammarSymbols {
   public static final String QT_EXPR = "<Quantified_Expr>";
   public static final String QUANTIFIER = "<Quantifier>";
   public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no");
-  //public static final List<String> QUANTIFIER_VALUE = Arrays.asList("all", "some", "no", "one", "lone");
 
   // Reference comparisons
   public static final String REF_OP = "<Reference_Op>";
@@ -41,8 +40,7 @@ public class GrammarSymbols {
 
   // Numeric comparison operators
   public static final String NUMERIC_CMP_OP = "<Num_Cmp_Op>";
-  public static final List<String> NUMERIC_CMP_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=",
-          "<=");
+  public static final List<String> NUMERIC_CMP_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=", "<=");
 
   // Binary numeric operators
   public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
