@@ -1,0 +1,27 @@
+FuzzedInvariant ( List.x <= #(List.^(next)) + List.x ) holds for: this
+FuzzedInvariant ( List.x <= List.x + #(List.^(next)) ) holds for: this
+FuzzedInvariant ( some n : List.*(next) : n.x > #(List.*(next)) ) holds for: this
+FuzzedInvariant ( #(List.*(next)) != Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( #(List.*(next)) < Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( #(List.^(next)) != Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( #(List.^(next)) != List.x + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( #(List.^(next)) < Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x != #(List.*(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x != #(List.*(next)) - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x != #(List.^(next)) - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x > #(List.*(next)) + Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x > #(List.*(next)) - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x > #(List.^(next)) - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( List.x >= #(List.*(next)) - Integer_Variable ) holds for: <this , DataStructures.List.SENTINEL>
+FuzzedInvariant ( some n : List.^(next) : n.x > #(List.^(next)) ) holds for: orig(this)
+FuzzedInvariant ( List.x < #(List.*(next)) + Integer_Variable ) holds for: <this.x , orig(this)>
+FuzzedInvariant ( List.x < #(List.^(next)) + Integer_Variable ) holds for: <this.x , orig(this)>
+FuzzedInvariant ( List.x <= #(List.*(next)) + Integer_Variable ) holds for: <this.x , orig(this)>
+FuzzedInvariant ( List.x <= #(List.^(next)) + Integer_Variable ) holds for: <this.x , orig(this)>
+FuzzedInvariant ( #(List.^(next)) != List.x - Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>
+FuzzedInvariant ( List.x != #(List.^(next)) + Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>
+FuzzedInvariant ( List.x > #(List.^(next)) + Integer_Variable ) holds for: <DataStructures.List.SENTINEL , orig(this)>
+FuzzedInvariant ( List.x < #(List.*(next)) + Integer_Variable ) holds for: <orig(this) , orig(data)>
+FuzzedInvariant ( List.x < #(List.^(next)) + Integer_Variable ) holds for: <orig(this) , orig(data)>
+FuzzedInvariant ( List.x <= #(List.*(next)) + Integer_Variable ) holds for: <orig(this) , orig(data)>
+FuzzedInvariant ( List.x <= #(List.^(next)) + Integer_Variable ) holds for: <orig(this) , orig(data)>
