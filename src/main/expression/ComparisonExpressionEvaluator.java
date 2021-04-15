@@ -44,11 +44,17 @@ public class ComparisonExpressionEvaluator {
     case IN:
       assert o2 instanceof Set<?> : "When evaluating IN the second object should be a set";
       Set<Object> set_o2_in = (Set<Object>) o2;
-      return set_o2_in.contains(o1);
+      if (o1 instanceof java.util.Collection)
+        return set_o2_in.containsAll((java.util.Collection)o1);
+      else
+        return set_o2_in.contains(o1);
     case NOT_IN:
       assert o2 instanceof Set<?> : "When evaluating NOT IN the second object should be a set";
       Set<Object> set_o2_not_in = (Set<Object>) o2;
-      return !set_o2_not_in.contains(o1);
+      if (o1 instanceof java.util.Collection)
+        return !set_o2_not_in.containsAll((java.util.Collection)o1);
+      else
+        return !set_o2_not_in.contains(o1);
     case LT:
       assert isNumber(o1);
       assert isNumber(o2);
