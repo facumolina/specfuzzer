@@ -6,6 +6,7 @@ import java.util.HashMap;
 import DataStructures.AvlTreeList;
 import DataStructures.CollectionAttribute;
 import DataStructures.daikon.StackAr;
+import DataStructures.korat.binarysearchtree.SearchTree;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -27,14 +28,7 @@ import static org.junit.Assert.*;
 public class SetExpressionEvaluatorTest {
 
   private Collection<Object> evaluateSet(String alloy_expr, Object o) {
-    AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
-    CommonTokenStream tokens = new CommonTokenStream(lexer);
-    AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
-    ParseTree tree = parser.parse();
-    ParseContext ctx = (ParseContext) tree;
-    ExpressionEvaluator.vars = new HashMap<String, Object>();
-    ExpressionEvaluator.vars.put(o.getClass().getSimpleName(), o);
-    return (Collection<Object>) ExpressionEvaluator.eval(ctx.expr());
+    return (Collection<Object>) ExpressionEvaluator.evalAnyExpr(alloy_expr, o);
   }
 
   @Test
@@ -99,4 +93,19 @@ public class SetExpressionEvaluatorTest {
     } catch (StackAr.Overflow e) {}
   }
 
+  @Test
+  public void intersection() {
+    SearchTree st = new SearchTree();
+    st.insert(1);
+    st.insert(0);
+    st.insert(3);
+    Collection<Object> st_left_subtree = evaluateSet("SearchTree.root.left.*(left+right)", st);
+    assertTrue(st_left_subtree.size()==1);
+    Collection<Object> st_right_subtree = evaluateSet("SearchTree.root.right.*(left+right)", st);
+    assertTrue(st_right_subtree.size()==1);
+    Collection<Object> intersection = evaluateSet(
+            "(SearchTree.root.left.*(left+right)) & (SearchTree.root.right.*(left+right))", st
+    );
+    assertTrue(intersection.size()==0 );
+  }
 }
