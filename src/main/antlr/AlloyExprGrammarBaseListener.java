@@ -100,6 +100,18 @@ public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSet_binary_op(AlloyExprGrammarParser.Set_binary_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSet_binary_op(AlloyExprGrammarParser.Set_binary_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCompare_op(AlloyExprGrammarParser.Compare_opContext ctx) { }
 	/**
 	 * {@inheritDoc}

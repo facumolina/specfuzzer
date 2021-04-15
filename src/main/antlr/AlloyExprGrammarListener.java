@@ -78,6 +78,16 @@ public interface AlloyExprGrammarListener extends ParseTreeListener {
 	 */
 	void exitBinary_op(AlloyExprGrammarParser.Binary_opContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#set_binary_op}.
+	 * @param ctx the parse tree
+	 */
+	void enterSet_binary_op(AlloyExprGrammarParser.Set_binary_opContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyExprGrammarParser#set_binary_op}.
+	 * @param ctx the parse tree
+	 */
+	void exitSet_binary_op(AlloyExprGrammarParser.Set_binary_opContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AlloyExprGrammarParser#compare_op}.
 	 * @param ctx the parse tree
 	 */
