@@ -115,7 +115,7 @@ public class GrammarExtractor {
       if (!cut.equals(target_type)) {
         String dest_label = edge.getLabel();
         String final_type = JavaTypesUtil.format_type(target_type.getSimpleName());
-        if (!final_type.equals(JavaTypesUtil.OBJECT))
+        if (!JavaTypesUtil.is_reference(target_type.getSimpleName()))
           GrammarBuilder.add_membership_symbol(grammar, cut.getSimpleName(), curr_expr, dest_label, final_type);
       }
     }
