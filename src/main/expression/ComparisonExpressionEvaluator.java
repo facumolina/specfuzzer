@@ -42,7 +42,7 @@ public class ComparisonExpressionEvaluator {
         return o2 != null;
       return !o1.equals(o2);
     case IN:
-      assert o2 instanceof Set<?> : "When evaluating NOT IN the second object should be a set";
+      assert o2 instanceof Set<?> : "When evaluating IN the second object should be a set";
       Set<Object> set_o2_in = (Set<Object>) o2;
       return set_o2_in.contains(o1);
     case NOT_IN:
