@@ -26,6 +26,10 @@ public class GrammarSymbols {
   public static final String VAR_SET_CMP_OP = "<Var_Set_Cmp_Op>";
   public static final List<String> VAR_SET_CMP_OP_VALUE = Arrays.asList("in", "not in");
 
+  // Set comparison operator
+  public static final String SET_BIN_OP = "<Set_Set_Cmp_Op>";
+  public static final List<String> SET_BIN_OP_VALUE = Arrays.asList("&");
+
   // Logic comparison operators
   public static final String LOGIC_OP = "<Logic_Op>";
   public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "xor", "implies", "iff");
@@ -110,6 +114,13 @@ public class GrammarSymbols {
    */
   public static String get_qt_obj_set_symbol(String type_name) {
     return "<" + type_name + "_Set_Qt_Expr>";
+  }
+
+  /**
+   * Return the non-terminal symbol denoting a quantified set of the given type computed from applying a variable
+   */
+  public static String get_qt_var_obj_set_symbol(String type_name) {
+    return "<" + type_name + "_Var_Set_Qt_Expr>";
   }
 
   /**

@@ -41,6 +41,7 @@ public class GrammarBuilder {
     grammar.put(GrammarSymbols.QUANTIFIER, GrammarSymbols.QUANTIFIER_VALUE);
     grammar.put(GrammarSymbols.REF_OP, GrammarSymbols.REF_OP_VALUE);
     grammar.put(GrammarSymbols.VAR_SET_CMP_OP, GrammarSymbols.VAR_SET_CMP_OP_VALUE);
+    grammar.put(GrammarSymbols.SET_BIN_OP, GrammarSymbols.SET_BIN_OP_VALUE);
     quantified_sets = new HashSet<String>();
 
     // Logic
@@ -183,6 +184,10 @@ public class GrammarBuilder {
     String qt_var_set_cmp_option = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.VAR_SET_CMP_OP + " "
         + current_qt_obj_set_symbol;
     extend_grammar(grammar, current_obj_cmp_symbol, qt_var_set_cmp_option);
+    String current_qt_var_obj_set_symbol = GrammarSymbols.get_qt_var_obj_set_symbol(type_name);
+    String qt_set_set_cmp_option = "(" + current_qt_var_obj_set_symbol + ") " + GrammarSymbols.SET_BIN_OP + " ("
+        + current_qt_var_obj_set_symbol + ") " + GrammarSymbols.VAR_SET_CMP_OP + " empty";
+    extend_grammar(grammar, current_obj_cmp_symbol, qt_set_set_cmp_option);
     // Options for the quantified objects
     extend_grammar(grammar, current_qt_obj_symbol, GrammarSymbols.QT_VAR_NAME + "." + current_set_label_symbol);
     extend_grammar(grammar, current_qt_obj_symbol,
@@ -191,6 +196,8 @@ public class GrammarBuilder {
     // Options for the quantified sets
     extend_grammar(grammar, current_qt_obj_set_symbol,
             GrammarSymbols.QT_VAR_NAME + ".^(" + current_set_labels_symbol + ")");
+    extend_grammar(grammar, current_qt_var_obj_set_symbol,
+            GrammarSymbols.QT_VAR_NAME + "." + current_set_label_symbol + ".*(" + current_set_labels_symbol + ")");
   }
 
   /**
