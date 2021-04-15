@@ -188,7 +188,7 @@ public class ExpressionEvaluator {
       // The expression is a comparison between two sets
       List<Set_exprContext> set_exprs = ectx.set_expr();
       assert(set_exprs.size() == 2);
-      BinarySetExpressionEvaluator.eval(set_exprs.get(0), set_binary_op, set_exprs.get(1));
+      return BinarySetExpressionEvaluator.eval(set_exprs.get(0), set_binary_op, set_exprs.get(1));
     }
 
     Compare_opContext cmp_op = ectx.compare_op();
