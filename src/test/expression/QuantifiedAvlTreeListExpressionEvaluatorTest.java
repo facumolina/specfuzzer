@@ -61,7 +61,10 @@ public class QuantifiedAvlTreeListExpressionEvaluatorTest {
         { "some n : AvlTreeList.root.^(right + right) : (n != n.left) implies (n.value != n.left.value)",
             true },
         { "(all n : AvlTreeList.root.^(left) : n != null) implies (some n : AvlTreeList.root.*(left + left) : n.value != n.right.value)", true},
-        { "#(AvlTreeList.root.^(left)) > #(AvlTreeList.root.^(right + right)) - 1", true}
+        { "#(AvlTreeList.root.^(left)) > #(AvlTreeList.root.^(right + right)) - 1", true},
+        {"all n : AvlTreeList.root.*(left + right) : (n.right.*(left + right)) & (n.left.*(left + right)) in empty", false},
+        {"no n : AvlTreeList.root.*(left + right) : (n.right.*(left + right)) & (n.left.*(left + right)) in empty", true},
+        {"all n : AvlTreeList.root.*(left + right) : (n.right.*(left + right)) & (n.left.*(left + right)) not in empty", true}
     });
   }
 

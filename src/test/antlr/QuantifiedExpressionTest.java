@@ -88,4 +88,12 @@ public class QuantifiedExpressionTest {
     assertTrue(parser.getNumberOfSyntaxErrors() > 0);
   }
 
+  @Test
+  public void test_qt_avl_2() {
+    String qt_expr = "all n : AvlTreeList.root.*(left + right) : (n.right.*(left + right)) & (n.left.*(left + right)) in empty";
+    initialize(qt_expr);
+    ParseTree tree = parser.parse();
+    assertTrue(parser.getNumberOfSyntaxErrors()==0);
+  }
+
 }

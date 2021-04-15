@@ -12,6 +12,8 @@ import DataStructures.List;
 import DataStructures.MapWrapper;
 import expression.ExpressionEvaluator;
 
+import java.util.Collection;
+
 /**
  * This class contains tests to ensure that the BasicFuzzer is creating expressions that are
  * evaluated without unexpected errors.
@@ -36,10 +38,12 @@ public class BasicFuzzerTest {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
       java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, List.class);
-      if (vars.size()==1)
-        ExpressionEvaluator.eval(fuzzed_spec, l);
-      if (vars.size()==2)
-        ExpressionEvaluator.eval(fuzzed_spec, l, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      try {
+        if (vars.size() == 1)
+          ExpressionEvaluator.eval(fuzzed_spec, l);
+        if (vars.size() == 2)
+          ExpressionEvaluator.eval(fuzzed_spec, l, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      } catch (expression.NonEvaluableExpressionException e) { continue; }
     }
   }
 
@@ -56,11 +60,13 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, List.class);
-      if (vars.size()==1)
-        ExpressionEvaluator.eval(fuzzed_spec, avl);
-      if (vars.size()==2)
-        ExpressionEvaluator.eval(fuzzed_spec, avl, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, AvlTreeList.class);
+      try {
+        if (vars.size() == 1)
+          ExpressionEvaluator.eval(fuzzed_spec, avl);
+        if (vars.size() == 2)
+          ExpressionEvaluator.eval(fuzzed_spec, avl, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      } catch (expression.NonEvaluableExpressionException e) { continue; }
     }
   }
 
@@ -78,7 +84,13 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      ExpressionEvaluator.eval(fuzzed_spec, wrapper);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, MapWrapper.class);
+      try {
+        if (vars.size() == 1)
+          ExpressionEvaluator.eval(fuzzed_spec, wrapper);
+        if (vars.size() == 2)
+          ExpressionEvaluator.eval(fuzzed_spec, wrapper, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      } catch (expression.NonEvaluableExpressionException e) { continue; }
     }
   }
 
@@ -95,7 +107,13 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      ExpressionEvaluator.eval(fuzzed_spec, composite);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Composite.class);
+      try {
+        if (vars.size() == 1)
+          ExpressionEvaluator.eval(fuzzed_spec, composite);
+        if (vars.size() == 2)
+          ExpressionEvaluator.eval(fuzzed_spec, composite, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      } catch (expression.NonEvaluableExpressionException e) { continue; }
     }
   }
 
@@ -108,7 +126,13 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      ExpressionEvaluator.eval(fuzzed_spec, collectionAttribute);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, CollectionAttribute.class);
+      try {
+        if (vars.size() == 1)
+          ExpressionEvaluator.eval(fuzzed_spec, collectionAttribute);
+        if (vars.size() == 2)
+          ExpressionEvaluator.eval(fuzzed_spec, collectionAttribute, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
+      } catch (expression.NonEvaluableExpressionException e) { continue; }
     }
   }
 

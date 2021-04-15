@@ -28,7 +28,6 @@ public class QuantifiedCompositeExpressionEvaluatorTest {
   public QuantifiedCompositeExpressionEvaluatorTest(String alloy_expr, Boolean expected_result) {
     this.alloy_expr = alloy_expr;
     this.expected_result = expected_result;
-    // List object
     composite = new Composite(4);
     Composite c1 = new Composite(1);
     Composite c2 = new Composite(2);
@@ -38,10 +37,14 @@ public class QuantifiedCompositeExpressionEvaluatorTest {
 
   @Parameterized.Parameters
   public static Collection alloyExpressions() {
-    return Arrays.asList(new Object[][] { { "all n : Composite.children : n.value > 0", true }, {
-        "some n : Composite.ancestors : (n.children = n.parent.children) implies (n.value != n.max_child.value)",
-        false }, { "all n : Composite.children : n.max_child = null", true },
-        { "all n : Composite.children : n.parent != null", true } });
+    return Arrays.asList(new Object[][] {
+            { "all n : Composite.children : n.value > 0", true },
+            {"some n : Composite.ancestors : (n.children = n.parent.children) implies (n.value != n.max_child.value)", false },
+            { "all n : Composite.children : n.max_child = null", true },
+            { "all n : Composite.children : n.parent != null", true },
+            { "1 in Composite.children.init_value", true},
+            { "0 in Composite.children.init_value", false}
+    });
   }
 
   @Test
