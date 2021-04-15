@@ -20,8 +20,7 @@ public class BinaryExpressionEvaluator {
   private static final String XOR = "xor";
 
   /**
-   * Evaluate the given comparison
-   * 
+   * Evaluate the given operation
    */
   public static boolean eval(ExprContext expr1, Binary_opContext binary_op, ExprContext expr2) {
     Object o1 = ExpressionEvaluator.eval(expr1);
