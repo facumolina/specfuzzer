@@ -2,7 +2,7 @@ package expression;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.Set;
 import java.util.HashSet;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -53,14 +53,17 @@ public class NameExpressionEvaluator {
     }
     if (ExpressionEvaluator.vars.containsKey(access_field))
       return ExpressionEvaluator.vars.get(access_field);
+    if (access_field.equals(QuantifiedExpressionEvaluator.EMPTY_SET))
+      return new HashSet<Object>();
     if (access_field.equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
-      return o;
+      return ExpressionEvaluator.vars.get(QuantifiedExpressionEvaluator.QT_VAR_NAME);
     if (access_field.equals(Constants.NULL))
       return null;
     if (access_field.equals(Constants.MAP_KEY_SET) && o instanceof java.util.Map)
       return eval_method(access_field, o);
     if (access_field.equals(Constants.MAP_VALUES) && o instanceof java.util.Map)
       return eval_method(access_field, o);
+
     try {
       // Get the field and evaluate it, o continue evaluating
       Field field = get_field(o.getClass(), access_field);
@@ -77,10 +80,34 @@ public class NameExpressionEvaluator {
       }
       return field_value;
     } catch (IllegalAccessException e) {
-      throw new IllegalStateException("The expression " + access_field
-              + " can't be evaluated on object of type " + o.getClass().getSimpleName()
-              + "due to a IllegalAccessException: " + e.getMessage());
+
+        throw new IllegalStateException("The expression " + access_field
+                + " can't be evaluated on object of type " + o.getClass().getSimpleName()
+                + "due to a IllegalAccessException: " + e.getMessage());
+
+    } catch (java.lang.RuntimeException re) {
+      if (o instanceof java.util.Collection)
+        // We were tying to access a field of a collection. It means then that we want to compute the set
+        // obtained by applying the field access_field to every element in the collection
+        return get_collection((java.util.Collection)o, access_field);
+      else
+        throw re;
     }
+  }
+
+  /**
+   * Compute the set obtained by applying the given field to every element in the collection
+   */
+  private static Set<Object> get_collection(java.util.Collection collection, String field_to_apply) {
+    Set<Object> mapping = new HashSet<Object>();
+    collection.forEach(elem -> {
+      try {
+        Field field = get_field(elem.getClass(), field_to_apply);
+        field.setAccessible(true);
+        mapping.add(field.get(elem));
+      } catch (IllegalAccessException e) {}
+    });
+    return mapping;
   }
 
   /**

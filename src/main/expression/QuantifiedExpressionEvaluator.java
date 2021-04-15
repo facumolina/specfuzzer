@@ -22,6 +22,7 @@ public class QuantifiedExpressionEvaluator {
   private static final String ONE = "one";
 
   public static final String QT_VAR_NAME = "n";
+  public static final String EMPTY_SET = "empty";
 
   public static int last_set_size = 0;
 

@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import antlr.AlloyExprGrammarParser.Binary_opContext;
+import antlr.AlloyExprGrammarParser.Set_binary_opContext;
 import antlr.AlloyExprGrammarParser.Compare_opContext;
 import antlr.AlloyExprGrammarParser.ExprContext;
 import antlr.AlloyExprGrammarParser.NameContext;
@@ -182,6 +183,14 @@ public class ExpressionEvaluator {
       return BinaryExpressionEvaluator.eval(exprs.get(0), binary_op, exprs.get(1));
     }
 
+    Set_binary_opContext set_binary_op = ectx.set_binary_op();
+    if (set_binary_op != null) {
+      // The expression is a comparison between two sets
+      List<Set_exprContext> set_exprs = ectx.set_expr();
+      assert(set_exprs.size() == 2);
+      BinarySetExpressionEvaluator.eval(set_exprs.get(0), set_binary_op, set_exprs.get(1));
+    }
+
     Compare_opContext cmp_op = ectx.compare_op();
     if (cmp_op != null) {
       // The expression is a comparison
@@ -204,10 +213,10 @@ public class ExpressionEvaluator {
       return NameExpressionEvaluator.eval(name_ctx, null);
     }
 
-    Set_exprContext set_expr = ectx.set_expr();
-    if (set_expr != null) {
+    List<Set_exprContext> set_exprs = ectx.set_expr();
+    if (set_exprs != null && set_exprs.size()>0) {
       // The expression is a set
-      return SetExpressionEvaluator.eval(set_expr);
+      return SetExpressionEvaluator.eval(set_exprs.get(0));
     }
 
     try {
