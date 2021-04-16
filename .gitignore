@@ -1,7 +1,6 @@
 # Dirs
 /build/
 /bin/
-/dest/
 /out/
 /daikon-outputs/
 /mutants/
