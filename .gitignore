@@ -7,10 +7,11 @@
 
 # Files
 invs*
+lib/FuzzSpecs.jar
 
 # IDE related files
 .classpath
 .project
 .idea
 .settings
-src/fuzzing-specs.iml
+fuzzing-specs.iml
