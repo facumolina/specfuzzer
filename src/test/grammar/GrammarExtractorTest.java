@@ -1,6 +1,7 @@
 package grammar;
 
 import org.jgrapht.graph.DirectedPseudograph;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -15,11 +16,15 @@ import java.util.Map;
  */
 public class GrammarExtractorTest {
 
+  @Before
+  public void setupGrammarExtractor() {
+    GrammarExtractor.type_graph = new DirectedPseudograph<>(LabeledEdge.class);
+  }
+
   @Test
   public void regionGrammarTest() throws ClassNotFoundException, NoSuchFieldException {
     // Initialize
     Class<?> cut = Class.forName("DataStructures.sf110.Region");
-    GrammarExtractor.type_graph = new DirectedPseudograph<Class<?>, LabeledEdge>(LabeledEdge.class);
     GrammarExtractor.build_type_graph(cut, new HashSet<String>());
     // Grammar extraction steps
     Map<String, List<String>> grammar = GrammarBuilder.create(cut);
@@ -33,7 +38,6 @@ public class GrammarExtractorTest {
   public void listGrammarTest() throws ClassNotFoundException, NoSuchFieldException{
     // Initialize
     Class<?> cut = Class.forName("DataStructures.List");
-    GrammarExtractor.type_graph = new DirectedPseudograph<Class<?>, LabeledEdge>(LabeledEdge.class);
     GrammarExtractor.build_type_graph(cut, new HashSet<String>());
     // Grammar extraction steps
     Map<String, List<String>> grammar = GrammarBuilder.create(cut);
