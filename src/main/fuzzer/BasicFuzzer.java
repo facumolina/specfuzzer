@@ -26,7 +26,7 @@ public class BasicFuzzer extends GrammarBasedFuzzer {
   private static final int max_nonterminals = 5;
   private static final int max_expansion_trials = 100;
 
-  private static String re_nonterminal = "(<[^<> ]*>)";
+  private static final String re_nonterminal = "(<[^<> ]*>)";
 
   public BasicFuzzer(String grammar_file_name) {
     try {
