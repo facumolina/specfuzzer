@@ -21,6 +21,7 @@ public class GrammarBuilder {
   // Keep track of the quantified sets
   private static Set<String> quantified_sets;
   private static Set<String> all_arguments_types;
+
   /**
    * Create a Grammar with the initial state
    */
@@ -63,20 +64,25 @@ public class GrammarBuilder {
     GrammarSymbols.INTEGER_FROM_FIELD_VALUE.add(GrammarSymbols.INTEGER_FROM_SET_SIZE);
     grammar.put(GrammarSymbols.INTEGER_FROM_FIELD, GrammarSymbols.INTEGER_FROM_FIELD_VALUE);
     grammar.put(GrammarSymbols.NUMERIC_BIN_OP, GrammarSymbols.NUMERIC_BIN_OP_VALUE);
-    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER);
-    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD + " " + GrammarSymbols.NUMERIC_BIN_OP + " " + GrammarSymbols.INTEGER);
+    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
+    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
+    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 1));
+    GrammarSymbols.INTEGER_EXPR_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 1) + " " + GrammarSymbols.NUMERIC_BIN_OP + " " + GrammarSymbols.INTEGER_TWO);
     grammar.put(GrammarSymbols.INTEGER_EXPR, GrammarSymbols.INTEGER_EXPR_VALUE);
-    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
-    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
-    GrammarSymbols.INTEGER_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER));
-    grammar.put(GrammarSymbols.INTEGER, GrammarSymbols.INTEGER_VALUE);
+    GrammarSymbols.INTEGER_ZERO_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
+    GrammarSymbols.INTEGER_ZERO_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
+    GrammarSymbols.INTEGER_ZERO_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0));
+    grammar.put(GrammarSymbols.INTEGER_ZERO, GrammarSymbols.INTEGER_ZERO_VALUE);
+    GrammarSymbols.INTEGER_TWO_VALUE.add(GrammarSymbols.INTEGER_CONSTANT);
+    GrammarSymbols.INTEGER_TWO_VALUE.add(GrammarSymbols.INTEGER_FROM_FIELD);
+    GrammarSymbols.INTEGER_TWO_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 2));
+    grammar.put(GrammarSymbols.INTEGER_TWO, GrammarSymbols.INTEGER_TWO_VALUE);
     grammar.put(GrammarSymbols.INTEGER_CONSTANT, GrammarSymbols.INTEGER_CONSTANT_VALUE);
     grammar.put(GrammarSymbols.INTEGER_FIELD, new LinkedList<String>());
     grammar.put(GrammarSymbols.INTEGER_FROM_SET_SIZE, new LinkedList<String>());
 
     // Membership
     grammar.put(GrammarSymbols.MEMBERSHIP_EXPR, new LinkedList<String>());
-
 
     return grammar;
   }
@@ -150,7 +156,7 @@ public class GrammarBuilder {
       String curr_expr, String final_label, String final_set_type) {
     String current_set_symbol = GrammarSymbols.get_set_symbol(type_name);
     String membership_expr_symbol = GrammarSymbols.get_membership_symbol(final_set_type);
-    String var = GrammarSymbols.get_special_identifier(final_set_type);
+    String var = GrammarSymbols.get_special_identifier(final_set_type, 0);
     String membership_expr_value = var + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + current_set_symbol + "." + final_label;
     extend_grammar(grammar, membership_expr_symbol, membership_expr_value);
     extend_grammar(grammar, GrammarSymbols.MEMBERSHIP_EXPR, membership_expr_symbol);
@@ -247,16 +253,9 @@ public class GrammarBuilder {
     }
     if (JavaTypesUtil.INTEGER.equals(formatted_dest_type)) {
       // The expression n.field is an integer, so allow the comparison with any given integer
-      String integer_cmp_symbol = GrammarSymbols.QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " " + GrammarSymbols.INTEGER;
+      String integer_cmp_symbol = GrammarSymbols.QT_VAR_NAME + "." + dest_label + " " + cmp_symbol + " " + GrammarSymbols.INTEGER_ZERO;
       extend_grammar(grammar, current_obj_dest_cmp_symbol, integer_cmp_symbol);
     }
-  }
-
-  /**
-   * Add the given option to the integer symbol
-   */
-  public static void add_integer_option(Map<String, List<String>> grammar, String option) {
-    extend_grammar(grammar, GrammarSymbols.INTEGER, option);
   }
 
   /**
@@ -279,7 +278,6 @@ public class GrammarBuilder {
       grammar.remove(GrammarSymbols.INTEGER_FIELD);
       grammar.get(GrammarSymbols.INTEGER_EXPR).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
       grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
-      grammar.get(GrammarSymbols.INTEGER).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FIELD));
     }
 
     if (grammar.get(GrammarSymbols.INTEGER_FROM_SET_SIZE).isEmpty()) {
@@ -291,14 +289,13 @@ public class GrammarBuilder {
     if (grammar.get(GrammarSymbols.INTEGER_FROM_FIELD).isEmpty()) {
       // Integer from field symbol is empty, to remove it
       grammar.remove(GrammarSymbols.INTEGER_FROM_FIELD);
-      grammar.get(GrammarSymbols.INTEGER).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
+      grammar.get(GrammarSymbols.INTEGER_TWO).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
       grammar.get(GrammarSymbols.INTEGER_EXPR).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
       grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(GrammarSymbols.INTEGER_FROM_FIELD));
     }
 
     if (!all_arguments_types.contains(JavaTypesUtil.INTEGER)) {
-      // There are no arguments of type Integer, so The Integer_Variable option should be removed
-      grammar.get(GrammarSymbols.INTEGER).remove(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER));
+      // There are no arguments of type Integer, so the Integer_Variable option should be removed
     }
   }
 

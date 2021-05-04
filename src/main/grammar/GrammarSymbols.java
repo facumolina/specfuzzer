@@ -51,21 +51,23 @@ public class GrammarSymbols {
   public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-", "*", "/", "%");
 
   // Numeric expressions
-  public static final String INTEGER = "<Integer>";
+  public static final String INTEGER_ZERO = "<Integer_0>";
+  public static final String INTEGER_TWO = "<Integer_2>";
   public static final String INTEGER_CONSTANT = "<Integer_Constant>";
   public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
   public static final String INTEGER_FROM_FIELD = "<Integer_From_Field>";
   public static final String INTEGER_SET = "<Integer_Set>";
   public static final String INTEGER_FIELD = "<Integer_Field>";
   public static final String INTEGER_FROM_SET_SIZE = "<Integer_From_Set_Size>";
-  public static List<String> INTEGER_VALUE = new LinkedList<String>();
+  public static List<String> INTEGER_ZERO_VALUE = new LinkedList<>();
+  public static List<String> INTEGER_TWO_VALUE = new LinkedList<>();
   public static final String INTEGER_EXPR = "<Integer_Expr>";
-  public static List<String> INTEGER_EXPR_VALUE = new LinkedList<String>();
+  public static List<String> INTEGER_EXPR_VALUE = new LinkedList<>();
 
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
-  public static List<String> NUMERIC_CMP_EXPR_VALUE = new LinkedList<String>();
-  public static final String INTEGER_CMP_EXPR_VALUE = INTEGER_FROM_FIELD + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
-  public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<String>();
+  public static List<String> NUMERIC_CMP_EXPR_VALUE = new LinkedList<>();
+  public static final String INTEGER_CMP_EXPR_VALUE = get_special_identifier(JavaTypesUtil.INTEGER, 0) + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
+  public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<>();
 
   // Membership expressions
   public static final String MEMBERSHIP_EXPR = "<Membership_Expr>";
@@ -152,9 +154,11 @@ public class GrammarSymbols {
   /**
    * Return the special identifier for a variable of the given type, for instance, Integer_Variable
    */
-  public static String get_special_identifier(String type_name) {
+  public static String get_special_identifier(String type_name, int n) {
     if (type_name==null)
       throw new IllegalArgumentException("The type name can't be null");
+    if (n>0)
+      return type_name + "_Variable_" + n;
     return type_name + "_Variable";
   }
 
