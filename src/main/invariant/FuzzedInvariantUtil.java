@@ -61,18 +61,24 @@ public class FuzzedInvariantUtil {
     List<String> vars = new ArrayList<>();
     vars.add(cut_name);
 
-    // Check for the integer var
-    String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER);
+    // Check for the integer vars
+    String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 1);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 2);
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
     // Check for the boolean var
-    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 0);
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
     // Check for the object var
-    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0);
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
@@ -98,10 +104,10 @@ public class FuzzedInvariantUtil {
     if (var_type==null)
       throw new IllegalArgumentException("The variable type can't be null");
 
-    if (var_type.equals(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER)))
+    if (var_type.equals(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0)))
       return new Random().nextInt(10);
 
-    if (var_type.equals(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT)))
+    if (var_type.equals(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0)))
       return new Object();
 
     throw new IllegalStateException("Variable type "+var_type+" not supported");
