@@ -66,7 +66,7 @@ public class QuantifiedExpressionTest {
 
   @Test
   public void test_qt_list_binary_1() {
-    String qt_expr = "no n : List.*(next) : n.x < Integer_Variable";
+    String qt_expr = "no n : List.*(next) : n.x < Integer_Variable_0";
     initialize(qt_expr);
     ParseTree tree = parser.parse();
     assertTrue(parser.getNumberOfSyntaxErrors()==0);

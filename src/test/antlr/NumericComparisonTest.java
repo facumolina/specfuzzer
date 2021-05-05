@@ -26,7 +26,7 @@ public class NumericComparisonTest {
 
   @Test
   public void test_binary_cmp() {
-    String logic_expr = "List.x <= Integer_Variable";
+    String logic_expr = "List.x <= Integer_Variable_0";
     initialize(logic_expr);
     ParseTree tree = parser.parse();
     assertTrue(parser.getNumberOfSyntaxErrors()==0);
@@ -34,7 +34,7 @@ public class NumericComparisonTest {
 
   @Test
   public void test_binary_cmp_2() {
-    String logic_expr = "#(List.^(next)) <= Integer_Variable";
+    String logic_expr = "#(List.^(next)) <= Integer_Variable_0";
     initialize(logic_expr);
     ParseTree tree = parser.parse();
     assertTrue(parser.getNumberOfSyntaxErrors()==0);

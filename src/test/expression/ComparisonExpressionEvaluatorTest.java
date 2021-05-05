@@ -104,7 +104,7 @@ public class ComparisonExpressionEvaluatorTest {
     List l = new List();
     l.insert(2);
     l.insert(3);
-    assertTrue(evaluateCmpBinary("#(List.*(next)) = Integer_Variable", l, 3));
+    assertTrue(evaluateCmpBinary("#(List.*(next)) = Integer_Variable_0", l, 3));
   }
 
   @Test
@@ -112,7 +112,7 @@ public class ComparisonExpressionEvaluatorTest {
     List l = new List();
     l.insert(2);
     l.insert(3);
-    assertFalse(evaluateCmpBinary("List.x = Integer_Variable", l, 10));
+    assertFalse(evaluateCmpBinary("List.x = Integer_Variable_0", l, 10));
   }
 
 
@@ -188,4 +188,11 @@ public class ComparisonExpressionEvaluatorTest {
     assertTrue(evaluateCmp("SearchTree.size > 0", stree));
     assertTrue(evaluateCmp("SearchTree.size = #(SearchTree.root.*(left + right))",stree));
   }
+
+  @Test
+  public void test_bin_numeric_cmp() {
+    assertTrue(evaluateCmpBinary("Integer_Variable_0 > Integer_Variable_1", 1, 0));
+    assertTrue(evaluateCmpBinary("Integer_Variable_0 = Integer_Variable_1", 1, 1));
+  }
+
 }

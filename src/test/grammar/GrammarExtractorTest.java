@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class contains tests to ensure that the GrammarExctractor is extracting grammars without unexpected errors.
+ * This class contains tests to ensure that the GrammarExtractor is extracting grammars without unexpected errors.
  *
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  *
@@ -45,6 +45,19 @@ public class GrammarExtractorTest {
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
     assert(grammar.get(GrammarSymbols.INTEGER_FIELD).size()==1);
+  }
+
+  @Test
+  public void staticClassGrammarTest() throws ClassNotFoundException, NoSuchFieldException{
+    // Initialize
+    Class<?> cut = Class.forName("gassert.SimpleMethods");
+    GrammarExtractor.build_type_graph(cut, new HashSet<String>());
+    // Grammar extraction steps
+    Map<String, List<String>> grammar = GrammarBuilder.create(cut);
+    GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
+    GrammarBuilder.remove_non_expandable(grammar);
+    // Assertions about the obtained grammar
+    assert(grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).size()>0);
   }
 
 }

@@ -26,10 +26,10 @@ public class MembershipExpressionEvaluatorTest {
     List l = new List();
     l.insert(3);
     l.insert(2);
-    assertTrue(evaluateMembershipBinary("Integer_Variable not in List.*(next).x", l, 5));
-    assertTrue(evaluateMembershipBinary("Integer_Variable in List.*(next).x", l, 2));
-    assertFalse(evaluateMembershipBinary("Integer_Variable in List.*(next).x", l, 10));
-    assertFalse(evaluateMembershipBinary("Integer_Variable in List.^(next).x", l, 2));
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 not in List.*(next).x", l, 5));
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 in List.*(next).x", l, 2));
+    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in List.*(next).x", l, 10));
+    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in List.^(next).x", l, 2));
   }
 
   @Test
@@ -38,9 +38,9 @@ public class MembershipExpressionEvaluatorTest {
     avl.add(1);
     avl.add(2);
     avl.add(3);
-    assertTrue(evaluateMembershipBinary("Integer_Variable in AvlTreeList.root.*(left + right).height", avl, 1));
-    assertTrue(evaluateMembershipBinary("Object_Variable in AvlTreeList.root.*(left + right).value", avl, 3));
-    assertTrue(evaluateMembershipBinary("Object_Variable not in AvlTreeList.root.*(left + right).value", avl, 20));
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 in AvlTreeList.root.*(left + right).height", avl, 1));
+    assertTrue(evaluateMembershipBinary("Object_Variable_0 in AvlTreeList.root.*(left + right).value", avl, 3));
+    assertTrue(evaluateMembershipBinary("Object_Variable_0 not in AvlTreeList.root.*(left + right).value", avl, 20));
   }
 
   @Test
@@ -50,7 +50,7 @@ public class MembershipExpressionEvaluatorTest {
     st.insert(9);
     st.insert(-1);
     st.insert(8);
-    assertTrue(evaluateMembershipBinary("Integer_Variable in SearchTree.root.*(left + right).info", st, 8));
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 in SearchTree.root.*(left + right).info", st, 8));
   }
 
   @Test
@@ -60,7 +60,7 @@ public class MembershipExpressionEvaluatorTest {
     tl.add(9);
     tl.add(-1);
     tl.add(8);
-    assertTrue(evaluateMembershipBinary("Boolean_Variable in TreeList.root.*(right).leftIsPrevious", tl, true));
+    assertTrue(evaluateMembershipBinary("Boolean_Variable_0 in TreeList.root.*(right).leftIsPrevious", tl, true));
   }
 
 }

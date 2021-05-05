@@ -1,6 +1,5 @@
 package invariant;
 
-import DataStructures.List;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -25,17 +24,24 @@ public class FuzzedInvariantUtilTest {
 
   @Test
   public void test_binary_1() {
-    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) = Integer_Variable"));
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) = Integer_Variable_0"));
   }
 
   @Test
   public void test_binary_2() {
-    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) != List.x + Integer_Variable"));
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(List.^(next)) != List.x + Integer_Variable_0"));
   }
 
   @Test
   public void test_binary_3() {
-    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(Query.criterias) > Integer_Variable"));
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("#(Query.criterias) > Integer_Variable_0"));
+  }
+
+  @Test
+  public void test_numeric_binary() {
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("Integer_Variable_0 > Integer_Variable_1"));
+    assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("Integer_Variable_0 > Integer_Variable_1 + 1"));
+    assertTrue(3==FuzzedInvariantUtil.get_amount_of_vars("Integer_Variable_0 > Integer_Variable_1 + Integer_Variable_2"));
   }
 
   @Test
@@ -69,6 +75,15 @@ public class FuzzedInvariantUtilTest {
     assertFalse(FuzzedInvariantUtil.discard("#(List.*(next)) != 0"));
     assertTrue(FuzzedInvariantUtil.discard("#(List.*(next)) >= #(List.*(next)) + 0"));
     assertTrue(FuzzedInvariantUtil.discard("#(SearchTree.root.^(left + right)) = #(SearchTree.root.^(left + right))"));
+  }
+
+  @Test
+  public void discard_numeric_binary() {
+    assertFalse(FuzzedInvariantUtil.discard("Integer_Variable_0 != 0"));
+    assertFalse(FuzzedInvariantUtil.discard("Integer_Variable_0 >= 1"));
+    assertFalse(FuzzedInvariantUtil.discard("Integer_Variable_0 >= Integer_Variable_1"));
+    assertFalse(FuzzedInvariantUtil.discard("Integer_Variable_0 > Integer_Variable_1 + 1"));
+    assertFalse(FuzzedInvariantUtil.discard("Integer_Variable_0 > Integer_Variable_1 + Integer_Variable_2"));
   }
 
 }
