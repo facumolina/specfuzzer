@@ -155,11 +155,9 @@ public class GrammarSymbols {
    * Return the special identifier for a variable of the given type, for instance, Integer_Variable
    */
   public static String get_special_identifier(String type_name, int n) {
-    if (type_name==null)
-      throw new IllegalArgumentException("The type name can't be null");
-    if (n>0)
-      return type_name + "_Variable_" + n;
-    return type_name + "_Variable";
+    if (type_name==null || n < 0)
+      throw new IllegalArgumentException("The type name can't be null and n can't be less than zero");
+    return type_name + "_Variable_" + n;
   }
 
   /**
