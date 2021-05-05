@@ -55,8 +55,6 @@ public class FuzzedInvariantUtil {
    */
   public static List<String> get_vars(String fuzzed_spec, Class<?> base_cut) {
     String cut_name = base_cut.getSimpleName();
-    if (!fuzzed_spec.contains(cut_name))
-      throw new IllegalArgumentException(fuzzed_spec+ "can't be a spec for class "+cut_name);
 
     List<String> vars = new ArrayList<>();
     vars.add(cut_name);
@@ -126,7 +124,7 @@ public class FuzzedInvariantUtil {
   /**
    * Returns true if the given fuzzed spec must be discarded
    * A spec is discarded if:
-   * 1. It contains only one terminal symbol and it's not a set
+   * 1. It contains only one terminal symbol and it's not a set nor a variable
    * 2. It contains only one terminal set symbol that occurs more than once.
    */
   public static boolean discard(String fuzzed_spec) {
@@ -140,8 +138,9 @@ public class FuzzedInvariantUtil {
         String spec = fuzzed_spec.replace(" ","");
         int occurrences = count_occurrences(term, spec);
         return occurrences > 1;
+      } else {
+        return !term.contains("_Variable");
       }
-      return true;
     }
     return false;
   }
