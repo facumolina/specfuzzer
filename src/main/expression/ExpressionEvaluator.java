@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import grammar.GrammarSymbols;
-import grammar.JavaTypesUtil;
-import invariant.FuzzedInvariantUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -50,22 +48,32 @@ public class ExpressionEvaluator {
    * Validate that the given expression is applicable to the given object class
    */
   private static void validate(String alloy_expr, Class<?> cl, Class<?> cl2) {
-    String class_name = cl.getSimpleName();
-    if (!alloy_expr.contains(class_name+"."))
-      throw new NonApplicableExpressionException(
-              "The expression " + alloy_expr + " is not applicable to class: " + class_name);
-    int idx = alloy_expr.indexOf(class_name);
-    while (idx >= 0) {
-      if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
-      idx = alloy_expr.indexOf(class_name,idx+1);
-    }
-    if (cl2 != null) {
-      // Either cl2.getSimpleName()_Variable string should exist or Object_Variable
-      String var_name = cl2.getSimpleName()+"_Variable";
-      if (!alloy_expr.contains(var_name) && !alloy_expr.contains("Object_Variable")) {
+    if ((Number.class.isAssignableFrom(cl)) && (Number.class.isAssignableFrom(cl2))) {
+      // Both are numbers, thus just check the presence of both variables
+      String var_one = GrammarSymbols.get_special_identifier(cl.getSimpleName(), 0);
+      String var_two = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1);
+      if (!(alloy_expr.contains(var_one) && alloy_expr.contains(var_two)))
+        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to classes: " + cl.getSimpleName() + " and " + cl2.getSimpleName());
+
+    } else {
+      // There is at least one class that is not a number, so the first should be the target class
+      String class_name = cl.getSimpleName();
+      if (!alloy_expr.contains(class_name + "."))
         throw new NonApplicableExpressionException(
-                "The expression " + alloy_expr + " is not applicable to var: " + var_name);
+                "The expression " + alloy_expr + " is not applicable to class: " + class_name);
+      int idx = alloy_expr.indexOf(class_name);
+      while (idx >= 0) {
+        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
+          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
+        idx = alloy_expr.indexOf(class_name, idx + 1);
+      }
+      if (cl2 != null) {
+        // Either cl2.getSimpleName()_Variable string should exist or Object_Variable
+        String var_name = cl2.getSimpleName() + "_Variable";
+        if (!alloy_expr.contains(var_name) && !alloy_expr.contains("Object_Variable")) {
+          throw new NonApplicableExpressionException(
+                  "The expression " + alloy_expr + " is not applicable to var: " + var_name);
+        }
       }
     }
   }
@@ -104,7 +112,7 @@ public class ExpressionEvaluator {
 
     // Evaluate the expression on the object
     ParseContext ctx = (ParseContext) tree;
-    vars.put(o.getClass().getSimpleName(), o);
+    set_vars(alloy_expr, o, null);
     return (Boolean) eval(ctx.expr());
   }
 
@@ -128,11 +136,31 @@ public class ExpressionEvaluator {
 
     // Evaluate the expression on the object
     ParseContext ctx = (ParseContext) tree;
-    vars.put(o1.getClass().getSimpleName(), o1);
-    String var_name = FuzzedInvariantUtil.get_vars(alloy_expr, o1.getClass()).get(1);
-    vars.put(var_name, o2);
+    set_vars(alloy_expr, o1, o2);
     return (Boolean) eval(ctx.expr());
+  }
 
+  /**
+   * Set the variable values in the map
+   */
+  private static void set_vars(String alloy_expr, Object o1, Object o2) {
+    boolean is_var = false;
+    if (Number.class.isAssignableFrom(o1.getClass()) || Boolean.class.isAssignableFrom(o1.getClass())) {
+      vars.put(GrammarSymbols.get_special_identifier(o1.getClass().getSimpleName(),0), o1);
+      is_var = true;
+    } else {
+      vars.put(o1.getClass().getSimpleName(), o1);
+    }
+    int n = is_var?1:0;
+    if (o2 != null) {
+      if (alloy_expr.contains("Object_Variable_0"))
+        vars.put("Object_Variable_0", o2);
+      else {
+        if (Number.class.isAssignableFrom(o2.getClass()) || Boolean.class.isAssignableFrom(o2.getClass())) {
+          vars.put(GrammarSymbols.get_special_identifier(o2.getClass().getSimpleName(), n), o2);
+        }
+      }
+    }
   }
 
   /**
