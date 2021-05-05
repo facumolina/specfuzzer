@@ -57,7 +57,8 @@ public class FuzzedInvariantUtil {
     String cut_name = base_cut.getSimpleName();
 
     List<String> vars = new ArrayList<>();
-    vars.add(cut_name);
+    if (fuzzed_spec.contains(cut_name + "."))
+      vars.add(cut_name);
 
     // Check for the integer vars
     String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0);
