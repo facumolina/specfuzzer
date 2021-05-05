@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import grammar.GrammarSymbols;
+import invariant.FuzzedInvariantUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -58,9 +59,15 @@ public class ExpressionEvaluator {
     } else {
       // There is at least one class that is not a number, so the first should be the target class
       String class_name = cl.getSimpleName();
-      if (!alloy_expr.contains(class_name + "."))
-        throw new NonApplicableExpressionException(
-                "The expression " + alloy_expr + " is not applicable to class: " + class_name);
+      if (!alloy_expr.contains(class_name + ".")) {
+        // Class name is not present, then ensure that all tokens are variables
+        List<String> all_vars = FuzzedInvariantUtil.get_vars(alloy_expr, cl);
+        for (String var : all_vars) {
+          if (!var.contains("_Variable_"))
+            throw new NonApplicableExpressionException(
+                    "The expression " + alloy_expr + " is not applicable to class: " + class_name + ". Failing var: "+var);
+        }
+      }
       int idx = alloy_expr.indexOf(class_name);
       while (idx >= 0) {
         if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
