@@ -27,9 +27,11 @@ public class UnaryExpressionEvaluator {
   private static Object eval(String op, Object o) {
     switch (op) {
     case CARDINALITY:
+      if (o == null)
+        return 0;
       assert (o instanceof Collection);
       Collection<Object> set = (Collection<Object>) o;
-      return set==null ? 0 : set.size();
+      return set.size();
     }
     throw new IllegalArgumentException(
         "Operator " + op + " is not supported for unary expressions");
