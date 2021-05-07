@@ -62,6 +62,8 @@ public class ExpressionEvaluator {
       if (!alloy_expr.contains(class_name + ".")) {
         // Class name is not present, then ensure that all tokens are variables
         List<String> all_vars = FuzzedInvariantUtil.get_vars(alloy_expr, cl);
+        if (all_vars.isEmpty())
+          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
         for (String var : all_vars) {
           if (!var.contains("_Variable_"))
             throw new NonApplicableExpressionException(
