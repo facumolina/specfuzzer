@@ -6,17 +6,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.antlr.v4.tool.Grammar;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedPseudograph;
-import org.json.simple.JSONObject;
 
 public class GrammarExtractor {
 
@@ -267,10 +262,10 @@ public class GrammarExtractor {
   /**
    * Save the given JSONObject Grammar to a file using the given name
    */
-  private static void save_to_file(JSONObject json_grammar, String file_name) {
+  private static void save_to_file(String json_grammar, String file_name) {
     System.out.println("Saving grammar to file:" + GRAMMARS_DIR + file_name);
     try (FileWriter file = new FileWriter(GRAMMARS_DIR + file_name)) {
-      file.write(json_grammar.toJSONString());
+      file.write(json_grammar);
       file.flush();
     } catch (IOException e) {
       e.printStackTrace();
@@ -304,11 +299,20 @@ public class GrammarExtractor {
     traverse_graph(cut, cut.getSimpleName(), grammar, bound);
     GrammarBuilder.remove_non_expandable(grammar);
     System.out.println();
-    JSONObject json_grammar = new JSONObject(grammar);
-    System.out.println(json_grammar.toJSONString());
+    String json_grammar = get_as_json_string(new TreeMap<>(grammar));
+    System.out.println(json_grammar);
     System.out.println();
     show_report(grammar);
     save_to_file(json_grammar, cut.getSimpleName() + "Grammar.json");
+  }
+
+  /**
+   * Get the grammar as a JSON string
+   */
+  private static String get_as_json_string(Map<String, List<String>> grammar) {
+    Gson gson = new GsonBuilder().create();
+    String json = gson.toJson(grammar);
+    return json;
   }
 
 }
