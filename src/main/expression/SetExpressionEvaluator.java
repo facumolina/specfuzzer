@@ -64,10 +64,10 @@ public class SetExpressionEvaluator {
     // Get the name
     NameContext set_expr = collection_ctx.name();
     Object set_field_res = NameExpressionEvaluator.eval(set_expr, null);
+    if (set_field_res==null)
+      return new HashSet<>();
     assert (set_field_res instanceof Collection);
     Collection<?> col = (Collection<?>) set_field_res;
-    if (col==null)
-      return new HashSet<>();
     return new HashSet<>(col);
   }
 
