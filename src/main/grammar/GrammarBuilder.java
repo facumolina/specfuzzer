@@ -219,7 +219,7 @@ public class GrammarBuilder {
     extend_grammar(grammar, current_set_symbol, curr_expr);
     extend_grammar(grammar, GrammarSymbols.INTEGER_FROM_SET_SIZE, "#(" + current_set_symbol + ")");
     if (JavaTypesUtil.is_integer(type_name)) {
-      String numeric_cmp_symbol = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.NUMERIC_CMP_OP + " " + GrammarSymbols.INTEGER_EXPR;
+      String numeric_cmp_symbol = GrammarSymbols.QT_VAR_NAME + " " + GrammarSymbols.NUMERIC_CMP_OP + " " + GrammarSymbols.INTEGER_ZERO;
       extend_grammar(grammar, current_obj_body_symbol, numeric_cmp_symbol);
     } else {
       String current_obj_cmp_symbol = GrammarSymbols.get_qt_obj_cmp_symbol(type_name);
