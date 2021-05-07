@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import grammar.GrammarSymbols;
+import grammar.JavaTypesUtil;
 import invariant.FuzzedInvariantUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -49,15 +50,18 @@ public class ExpressionEvaluator {
    * Validate that the given expression is applicable to the given object class
    */
   private static void validate(String alloy_expr, Class<?> cl, Class<?> cl2) {
-    if ((Number.class.isAssignableFrom(cl)) && (Number.class.isAssignableFrom(cl2))) {
+    if (Number.class.isAssignableFrom(cl)) {
       // Both are numbers, thus just check the presence of both variables
       String var_one = GrammarSymbols.get_special_identifier(cl.getSimpleName(), 0);
-      String var_two = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1);
-      if (!(alloy_expr.contains(var_one) && alloy_expr.contains(var_two)))
-        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to classes: " + cl.getSimpleName() + " and " + cl2.getSimpleName());
-
+      if (!(alloy_expr.contains(var_one)))
+        throw new NonApplicableExpressionException("The expression " + alloy_expr + " does not contains variable of class: " + cl.getSimpleName());
+      if (cl2!=null && (Number.class.isAssignableFrom(cl2))) {
+        String var_two = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1);
+        if (!(alloy_expr.contains(var_two)))
+          throw new NonApplicableExpressionException("The expression " + alloy_expr + " does not contains variable of class: " + cl2.getSimpleName());
+      }
     } else {
-      // There is at least one class that is not a number, so the first should be the target class
+      // First class is not a number, so it should be the target class
       String class_name = cl.getSimpleName();
       if (!alloy_expr.contains(class_name + ".")) {
         // Class name is not present, then ensure that all tokens are variables
@@ -78,10 +82,9 @@ public class ExpressionEvaluator {
       }
       if (cl2 != null) {
         // Either cl2.getSimpleName()_Variable string should exist or Object_Variable
-        String var_name = cl2.getSimpleName() + "_Variable";
-        if (!alloy_expr.contains(var_name) && !alloy_expr.contains("Object_Variable")) {
-          throw new NonApplicableExpressionException(
-                  "The expression " + alloy_expr + " is not applicable to var: " + var_name);
+        String var_name = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 0);
+        if (!alloy_expr.contains(var_name) && !alloy_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0))) {
+          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to var: " + var_name);
         }
       }
     }
