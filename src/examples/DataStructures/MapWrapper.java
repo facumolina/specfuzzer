@@ -8,7 +8,7 @@ public class MapWrapper {
   private Map<Integer, Integer> map;
 
   public MapWrapper() {
-    map = new HashMap<Integer, Integer>();
+    map = new HashMap<>();
   }
 
   public void add(Integer key, Integer value) {
