@@ -157,7 +157,14 @@ public class GrammarSymbols {
   public static String get_special_identifier(String type_name, int n) {
     if (type_name==null || n < 0)
       throw new IllegalArgumentException("The type name can't be null and n can't be less than zero");
-    return type_name + "_Variable_" + n;
+    return get_special_identifier_prefix(type_name) + "_" + n;
+  }
+
+  /**
+   * Returns the prefix for the special identifiers for variables of the given type
+   */
+  public static String get_special_identifier_prefix(String type_name) {
+    return type_name + "_Variable";
   }
 
   /**
