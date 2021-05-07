@@ -85,6 +85,13 @@ public class FuzzedInvariantUtil {
   }
 
   /**
+   * Returns true iff the given name represents a variable name
+   */
+  public static boolean is_var(String name) {
+    return name!=null && name.contains("_Variable_");
+  }
+
+  /**
    * Returns the Invariant class that needs to be used to encapsulate the given fuzzed spec
    */
   public static Class<?> get_invariant_for_spec(String fuzzed_spec) {
@@ -103,10 +110,10 @@ public class FuzzedInvariantUtil {
     if (var_type==null)
       throw new IllegalArgumentException("The variable type can't be null");
 
-    if (var_type.equals(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0)))
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return new Random().nextInt(10);
 
-    if (var_type.equals(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0)))
+    if (var_type.equals(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
       return new Object();
 
     throw new IllegalStateException("Variable type "+var_type+" not supported");
