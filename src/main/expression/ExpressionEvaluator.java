@@ -47,50 +47,6 @@ public class ExpressionEvaluator {
   }
 
   /**
-   * Validate that the given expression is applicable to the given object class
-   */
-  private static void validate(String alloy_expr, Class<?> cl, Class<?> cl2) {
-    if (Number.class.isAssignableFrom(cl)) {
-      // Both are numbers, thus just check the presence of both variables
-      String var_one = GrammarSymbols.get_special_identifier(cl.getSimpleName(), 0);
-      if (!(alloy_expr.contains(var_one)))
-        throw new NonApplicableExpressionException("The expression " + alloy_expr + " does not contains variable of class: " + cl.getSimpleName());
-      if (cl2!=null && (Number.class.isAssignableFrom(cl2))) {
-        String var_two = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1);
-        if (!(alloy_expr.contains(var_two)))
-          throw new NonApplicableExpressionException("The expression " + alloy_expr + " does not contains variable of class: " + cl2.getSimpleName());
-      }
-    } else {
-      // First class is not a number, so it should be the target class
-      String class_name = cl.getSimpleName();
-      if (!alloy_expr.contains(class_name + ".")) {
-        // Class name is not present, then ensure that all tokens are variables
-        List<String> all_vars = FuzzedInvariantUtil.get_vars(alloy_expr, cl);
-        if (all_vars.isEmpty())
-          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
-        for (String var : all_vars) {
-          if (!var.contains("_Variable_"))
-            throw new NonApplicableExpressionException(
-                    "The expression " + alloy_expr + " is not applicable to class: " + class_name + ". Failing var: "+var);
-        }
-      }
-      int idx = alloy_expr.indexOf(class_name);
-      while (idx >= 0) {
-        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
-        idx = alloy_expr.indexOf(class_name, idx + 1);
-      }
-      if (cl2 != null) {
-        // Either cl2.getSimpleName()_Variable string should exist or Object_Variable
-        String var_name = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 0);
-        if (!alloy_expr.contains(var_name) && !alloy_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0))) {
-          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to var: " + var_name);
-        }
-      }
-    }
-  }
-
-  /**
    * Returns true if the given expression is applicable to an object of the given class name
    */
   public static boolean is_valid(String alloy_expr, String class_name) {
@@ -106,38 +62,34 @@ public class ExpressionEvaluator {
   }
 
   /**
-   * Evaluate the given unary Alloy expression on the given object
+   * Check the arguments for evaluation
+   */
+  private static void check_eval_args(String alloy_expr, Object base) {
+    if (alloy_expr == null || base == null)
+      throw new IllegalArgumentException("Neither the expression nor the object can be null.");
+  }
+
+  /**
+   * Evaluate the given unary expression with the given object
    */
   public static boolean eval(String alloy_expr, Object o) {
-    if (alloy_expr == null || o == null)
-      throw new IllegalArgumentException("Neither the expression nor the object can be null.");
-
-    validate(alloy_expr, o.getClass(), null);
-
-    setup(alloy_expr);
-
-    // Parse the expression and get the tree
-    ParseTree tree = parser.parse();
-
-    if (parser.getNumberOfSyntaxErrors() > 0)
-      throw new IllegalArgumentException("The given expression contains syntax errors");
-
-    // Evaluate the expression on the object
-    ParseContext ctx = (ParseContext) tree;
-    set_vars(alloy_expr, o, null);
-    return (Boolean) eval(ctx.expr());
+    return eval(alloy_expr, o, null, null);
   }
 
 
   /**
-   * Evaluate the given binary Alloy expression on the given objects
+   * Evaluate the given binary expression with the given objects
    */
   public static boolean eval(String alloy_expr, Object o1, Object o2) {
-    if (alloy_expr == null || o1 == null)
-      throw new IllegalArgumentException("Neither the expression nor the object can be null.");
+    return eval(alloy_expr, o1, o2, null);
+  }
 
-    validate(alloy_expr, o1.getClass(), o2.getClass());
-
+  /**
+   * Evaluate the given ternary expression with the given objects
+   */
+  public static boolean eval(String alloy_expr, Object o1, Object o2, Object o3) {
+    check_eval_args(alloy_expr, o1);
+    ExpressionValidator.validate(alloy_expr, o1.getClass(), o2!=null?o2.getClass():null, o3!=null?o3.getClass():null);
     setup(alloy_expr);
 
     // Parse the expression and get the tree
@@ -148,14 +100,14 @@ public class ExpressionEvaluator {
 
     // Evaluate the expression on the object
     ParseContext ctx = (ParseContext) tree;
-    set_vars(alloy_expr, o1, o2);
+    set_vars(alloy_expr, o1, o2, o3);
     return (Boolean) eval(ctx.expr());
   }
 
   /**
    * Set the variable values in the map
    */
-  private static void set_vars(String alloy_expr, Object o1, Object o2) {
+  private static void set_vars(String alloy_expr, Object o1, Object o2, Object o3) {
     boolean is_var = false;
     if (Number.class.isAssignableFrom(o1.getClass()) || Boolean.class.isAssignableFrom(o1.getClass())) {
       vars.put(GrammarSymbols.get_special_identifier(o1.getClass().getSimpleName(),0), o1);
@@ -182,7 +134,7 @@ public class ExpressionEvaluator {
     if (alloy_expr == null || o == null)
       throw new IllegalArgumentException("Neither the expression nor the object can be null.");
 
-    validate(alloy_expr, o.getClass(), null);
+    ExpressionValidator.validate(alloy_expr, o.getClass(), null, null);
 
     setup(alloy_expr);
 
