@@ -125,6 +125,15 @@ public class ExpressionEvaluator {
         }
       }
     }
+    if (o3 != null) {
+      if (alloy_expr.contains("Object_Variable_1"))
+        vars.put("Object_Variable_1", o3);
+      else {
+        if (Number.class.isAssignableFrom(o3.getClass()) || Boolean.class.isAssignableFrom(o3.getClass())) {
+          vars.put(GrammarSymbols.get_special_identifier(o3.getClass().getSimpleName(), n+1), o3);
+        }
+      }
+    }
   }
 
   /**
