@@ -30,12 +30,17 @@ public class ComparisonExpressionEvaluatorTest {
     return ExpressionEvaluator.eval(alloy_expr, o1, o2);
   }
 
+  private Boolean evaluateCmpTernary(String alloy_expr, Object o1, Object o2, Object o3) {
+    return ExpressionEvaluator.eval(alloy_expr, o1, o2, o3);
+  }
+
   @Test
   public void not_equals() {
     List l = new List();
     assertFalse(evaluateCmp("List.x != List.x", l));
     assertTrue(evaluateCmp("#(List.^(next)) != List.x - 1", l));
     assertTrue(evaluateCmp("List.x > 0", l));
+    assertTrue(evaluateCmpTernary("#(List.*(next)) != Integer_Variable_0 + Integer_Variable_1", l, 1, 1));
   }
 
   @Test
@@ -48,6 +53,7 @@ public class ComparisonExpressionEvaluatorTest {
   public void eq() {
     List l = new List();
     assertTrue(evaluateCmp("List.x = List.x", l));
+    assertTrue(evaluateCmpTernary("#(List.*(next)) = Integer_Variable_0 + Integer_Variable_1", l, 1, 0));
   }
 
   @Test
@@ -193,6 +199,12 @@ public class ComparisonExpressionEvaluatorTest {
   public void test_bin_numeric_cmp() {
     assertTrue(evaluateCmpBinary("Integer_Variable_0 > Integer_Variable_1", 1, 0));
     assertTrue(evaluateCmpBinary("Integer_Variable_0 = Integer_Variable_1", 1, 1));
+  }
+
+  @Test
+  public void test_ternary_numeric_cmp() {
+    assertTrue(evaluateCmpTernary("Integer_Variable_0 != Integer_Variable_1 + Integer_Variable_2", 0, 1, 1));
+    assertTrue(evaluateCmpTernary("Integer_Variable_0 = Integer_Variable_1 + Integer_Variable_2", 2, 1, 1));
   }
 
 }
