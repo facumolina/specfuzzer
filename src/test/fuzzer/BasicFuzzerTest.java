@@ -33,8 +33,8 @@ public class BasicFuzzerTest {
     if (vars.size() == 2)
       ExpressionEvaluator.eval(fuzzed_spec, o1, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)));
 
-    //if (vars.size() == 3)
-    //  throw new IllegalStateException("Still don't know how to eval this!");
+    if (vars.size() == 3)
+      ExpressionEvaluator.eval(fuzzed_spec, o1, FuzzedInvariantUtil.get_random_value_for_variable(vars.get(1)), FuzzedInvariantUtil.get_random_value_for_variable(vars.get(2)));
   }
 
   @Test
