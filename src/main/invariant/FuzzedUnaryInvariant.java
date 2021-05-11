@@ -17,7 +17,6 @@ import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
 
-import javax.annotation.processing.SupportedSourceVersion;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +41,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
-  // Represents quantified expr
-  private boolean represents_quantified = false;
-
   // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
 
@@ -57,7 +53,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private FuzzedUnaryInvariant(PptSlice ppt, String spec) {
     super(ppt);
     fuzzed_spec = spec;
-    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
   }
 
   private @Prototype FuzzedUnaryInvariant() {
@@ -68,7 +63,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   private @Prototype FuzzedUnaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
-    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec: " + fuzzed_spec);
   }
 
@@ -79,7 +73,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     if (fuzzer == null)
       fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
     fuzzed_spec = fuzzer.fuzz();
-    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
