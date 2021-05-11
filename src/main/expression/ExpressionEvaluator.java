@@ -47,21 +47,6 @@ public class ExpressionEvaluator {
   }
 
   /**
-   * Returns true if the given expression is applicable to an object of the given class name
-   */
-  public static boolean is_valid(String alloy_expr, String class_name) {
-    if (!alloy_expr.contains(class_name+"."))
-      return false;
-    int idx = alloy_expr.indexOf(class_name);
-    while (idx >= 0) {
-      if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-        return false;
-      idx = alloy_expr.indexOf(class_name,idx+1);
-    }
-    return true;
-  }
-
-  /**
    * Check the arguments for evaluation
    */
   private static void check_eval_args(String alloy_expr, Object base) {

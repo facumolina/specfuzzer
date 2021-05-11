@@ -14,6 +14,26 @@ import java.util.List;
 public class ExpressionValidator {
 
   /**
+   * Returns true if the given expression is applicable to an object of the given class name
+   */
+  public static boolean is_valid(String alloy_expr, String class_name) {
+    if (!alloy_expr.contains(class_name+".")) {
+      // Should be a number
+      String formatted = JavaTypesUtil.format_type(class_name);
+      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+      return alloy_expr.contains(var_name);
+    } else {
+      int idx = alloy_expr.indexOf(class_name);
+      while (idx >= 0) {
+        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
+          return false;
+        idx = alloy_expr.indexOf(class_name,idx+1);
+      }
+      return true;
+    }
+  }
+
+  /**
    * Validate the presence of a variable
    */
   private static void validate_var(String alloy_expr, Class<?> var_type, String var_name) {
@@ -36,17 +56,10 @@ public class ExpressionValidator {
     } else {
       // First class is not a number, so it should be the target class
       String class_name = cl.getSimpleName();
-      if (!alloy_expr.contains(class_name + ".")) {
-        // Class name is not present, then ensure that all tokens are variables
-        List<String> all_vars = FuzzedInvariantUtil.get_vars(alloy_expr, cl);
-        if (all_vars.isEmpty())
-          throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
-        for (String var : all_vars) {
-          if (!var.contains("_Variable_"))
-            throw new NonApplicableExpressionException(
-                    "The expression " + alloy_expr + " is not applicable to class: " + class_name + ". Failing var: "+var);
-        }
-      }
+      if (!alloy_expr.contains(class_name + "."))
+        // Class name is not present, then ensure that all tokens are variable
+        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
+
       int idx = alloy_expr.indexOf(class_name);
       while (idx >= 0) {
         if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
