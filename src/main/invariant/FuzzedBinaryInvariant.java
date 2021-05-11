@@ -82,6 +82,15 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
+  @Override
+  public boolean extra_check(VarInfo[] vis) {
+    String type_str = vis[0].type.toString();
+    String class_name_one = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    type_str = vis[1].type.toString();
+    String class_name_two = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    return ExpressionValidator.is_valid(fuzzed_spec, class_name_one, class_name_two);
+  }
+
   /** Returns the prototype invariant. */
   public static @Prototype FuzzedBinaryInvariant get_proto() {
     return new @Prototype FuzzedBinaryInvariant();
@@ -179,8 +188,34 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     return res;
   }
 
+  /**
+   * Returns true iff one of the current variables is the this object
+   */
+  private boolean object_present() {
+    return "this".equals(var1().name()) || "this".equals(var2().name());
+  }
+
+  /**
+   * Get the variable value in the type expected by the expression
+   */
+  private Object get_var_value(long v, int n) {
+    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
+    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
+    if (Integer.class.isAssignableFrom(clazz))
+      return (int)v;
+    throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
+  }
+
   @Override
   public InvariantStatus check_modified(long v1, long v2, int count) {
+    // If there is no object among variables, evaluate directly on v1 and v2
+    if (!object_present()) {
+      if (!ExpressionEvaluator.eval(fuzzed_spec, get_var_value(v1, 0), get_var_value(v2, 1)))
+        return InvariantStatus.FALSIFIED;
+      else
+        return InvariantStatus.NO_CHANGE;
+    }
+
     // Recover the object
     int i = (int) getObject(v1, v2);
     String key = i+"-"+get_ppt_key(ppt.parent.name);

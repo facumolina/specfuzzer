@@ -18,7 +18,7 @@ public class ExpressionValidator {
    */
   public static boolean is_valid(String alloy_expr, String class_name) {
     if (!alloy_expr.contains(class_name+".")) {
-      // Should be a number
+      // Should be a number variable
       String formatted = JavaTypesUtil.format_type(class_name);
       String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
       return alloy_expr.contains(var_name);
@@ -30,6 +30,32 @@ public class ExpressionValidator {
         idx = alloy_expr.indexOf(class_name,idx+1);
       }
       return true;
+    }
+  }
+
+  /**
+   * Returns true if the given expression is applicable to objects of the given classes
+   */
+  public static boolean is_valid(String alloy_expr, String class_name_one, String class_name_two) {
+    if (!alloy_expr.contains(class_name_one+".") && !alloy_expr.contains(class_name_two+".")) {
+      // Both should be variables
+      String formatted = JavaTypesUtil.format_type(class_name_one);
+      String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
+      String formatted_two = JavaTypesUtil.format_type(class_name_two);
+      String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
+      return alloy_expr.contains(var_name_one) && alloy_expr.contains(var_name_two);
+    } else {
+      String obj_class = alloy_expr.contains(class_name_one+".")?class_name_one:class_name_two;
+      String var_class = alloy_expr.contains(class_name_one+".")?class_name_two:class_name_one;
+      int idx = alloy_expr.indexOf(obj_class);
+      while (idx >= 0) {
+        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
+          return false;
+        idx = alloy_expr.indexOf(obj_class,idx+1);
+      }
+      String formatted = JavaTypesUtil.format_type(var_class);
+      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+      return alloy_expr.contains(var_name);
     }
   }
 

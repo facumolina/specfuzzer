@@ -23,24 +23,32 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
 
   protected @Prototype VarPointerInvariant() { super(); }
 
-  /**
-   * Returns whether or not the specified types are valid. One must have a primitive type and the other object type.
-   */
-  @Override
-  public boolean valid_types(VarInfo[] vis) {
-    if (vis.length != 2) {
+  public boolean valid_types_static(VarInfo[] vis) {
+    if (vis.length != 2)
       return false;
-    }
+
     // Discard serial field
     if (vis[0].name().contains("serialVersionUID") || vis[1].name().contains("serialVersionUID"))
       return false;
 
-    // The variable represented the object must be the this object
-    boolean res = ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[0].name()=="this")
-      || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[1].name()=="this"));
-
-    return res;
+    if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
+      // At least one var is an object
+      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && "this".equals(vis[0].name()))
+              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && "this".equals(vis[1].name())));
+    } else {
+      // Both vars must be primitive
+      return vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive();
+    }
   }
+
+  /** Returns whether or not the specified types are valid for unary object. */
+  @Override
+  public final boolean valid_types(VarInfo[] vis) {
+    return valid_types_static(vis) && extra_check(vis);
+  }
+
+  /** To add extra checking steps for valid types*/
+  public abstract boolean extra_check(VarInfo[] vis);
 
   /** Returns whether or not the variable order is currently swapped for this invariant. */
   @Override
@@ -70,8 +78,6 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
     assert (mod_index >= 0) && (mod_index < 4);
     if (val1 instanceof  Long && val2 instanceof Long) {
       // Both values have to be instance of Long
-      // val1 is going to be the scalar
-      // val2 is going to be the object
       long v1 = ((Long) val1);
       long v2 = ((Long) val2);
       if (mod_index == 0) {
@@ -90,10 +96,8 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
     assert (mod_index >= 0) && (mod_index < 4);
     if (val1 instanceof  Long && val2 instanceof Long) {
       // Both values have to be instance of Long
-      // val1 is going to be the scalar
-      // val2 is going to be the object
-      long v1 = ((Long) val1).longValue();
-      long v2 = ((Long) val2).longValue();
+      long v1 = ((Long) val1);
+      long v2 = ((Long) val2);
       if (mod_index == 0) {
         return add_unmodified(v1, v2, count);
       } else {
