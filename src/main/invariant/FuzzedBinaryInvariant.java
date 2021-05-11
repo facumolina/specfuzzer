@@ -9,10 +9,7 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.tools.InvariantChecker;
-import expression.ExpressionEvaluator;
-import expression.NonApplicableExpressionException;
-import expression.NonEvaluableExpressionException;
-import expression.QuantifiedExpressionEvaluator;
+import expression.*;
 import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -202,7 +199,7 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
       String type_str = getClassOfObject();
       String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
 
-      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name)) {
+      if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
         cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
         return InvariantStatus.FALSIFIED;
       } else {
@@ -213,7 +210,8 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
 
     try {
       // Evaluate
-      boolean qt_discard_anyways = false;
+      //System.out.println("Evaluating spec: "+fuzzed_spec);
+      //System.out.println("Vars: "+var1().name()+" - "+var2().name());
       for (PptTupleInfo tuple : l) {
         Object varValue = getValueForVariable(tuple, curr_var);
         if (varValue==null) {
@@ -225,14 +223,6 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
           cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
-        //if (represents_quantified && qt_discard_anyways) {
-        //  qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
-        //}
-      }
-      if (represents_quantified && qt_discard_anyways) {
-        // Quantified and the set was never evaluated to a non-empty set, should be discarded.
-        cached_evaluations.put(cached_key, getDefault());
-        return getDefault();
       }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified

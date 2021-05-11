@@ -7,8 +7,6 @@ import grammar.JavaTypesUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -92,18 +90,6 @@ public class FuzzedInvariantUtil {
   }
 
   /**
-   * Returns the Invariant class that needs to be used to encapsulate the given fuzzed spec
-   */
-  public static Class<?> get_invariant_for_spec(String fuzzed_spec) {
-      int arity = get_amount_of_vars(fuzzed_spec);
-      if (arity==1)
-        return FuzzedUnaryInvariant.class;
-      if (arity==2)
-        return FuzzedBinaryInvariant.class;
-      return null;
-  }
-
-  /**
    * Returns a random type for the given variable type (only used for tests purposes)
    */
   public static Object get_random_value_for_variable(String var_type) {
@@ -115,6 +101,22 @@ public class FuzzedInvariantUtil {
 
     if (var_type.equals(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
       return new Object();
+
+    throw new IllegalStateException("Variable type "+var_type+" not supported");
+  }
+
+  /**
+   * Get the class of a variable type
+   */
+  public static Class<?> get_class_for_variable(String var_type) {
+    if (var_type==null)
+      throw new IllegalArgumentException("The variable type can't be null");
+
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
+      return Integer.class;
+
+    if (var_type.equals(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
+      return Object.class;
 
     throw new IllegalStateException("Variable type "+var_type+" not supported");
   }

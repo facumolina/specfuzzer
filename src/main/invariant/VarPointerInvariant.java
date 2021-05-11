@@ -72,8 +72,8 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
       // Both values have to be instance of Long
       // val1 is going to be the scalar
       // val2 is going to be the object
-      long v1 = ((Long) val1).longValue();
-      long v2 = ((Long) val2).longValue();
+      long v1 = ((Long) val1);
+      long v2 = ((Long) val2);
       if (mod_index == 0) {
         return check_unmodified(v1, v2, count);
       } else {

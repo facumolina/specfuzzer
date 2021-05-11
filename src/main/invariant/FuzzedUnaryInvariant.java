@@ -3,8 +3,7 @@ package invariant;
 import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
 import daikon.tools.InvariantChecker;
-import expression.NonEvaluableExpressionException;
-import expression.QuantifiedExpressionEvaluator;
+import expression.*;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -14,12 +13,11 @@ import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
-import expression.ExpressionEvaluator;
-import expression.NonApplicableExpressionException;
 import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +87,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
   public boolean extra_check(VarInfo[] vis) {
     String type_str = vis[0].type.toString();
     String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-    return ExpressionEvaluator.is_valid(fuzzed_spec, class_name);
+    return ExpressionValidator.is_valid(fuzzed_spec, class_name);
   }
 
   /** Returns the prototype invariant. */
@@ -131,8 +129,35 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     return res;
   }
 
+  /**
+   * Returns true iff the current variable is the this object
+   */
+  private boolean var_is_object() {
+    return "this".equals(var().name());
+  }
+
+  /**
+   * Get the variable value in the type expected by the expression
+   */
+  private Object get_var_value(long v) {
+    Object value = null;
+    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
+    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(0));
+    if (Integer.class.isAssignableFrom(clazz))
+      return (int)v;
+    throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
+  }
+
   @Override
   public InvariantStatus check_modified(long v, int count) {
+    // When the var is not an object, it can be evaluated directly on v
+    if (!var_is_object()) {
+      if (!ExpressionEvaluator.eval(fuzzed_spec, get_var_value(v)))
+        return InvariantStatus.FALSIFIED;
+      else
+        return InvariantStatus.NO_CHANGE;
+    }
+
     // Recover the object
     int i = (int) v;
     String key = i+"-"+get_ppt_key(ppt.parent.name);
@@ -150,7 +175,8 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
       String type_str = var().type.toString();
       String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
 
-      if (!ExpressionEvaluator.is_valid(fuzzed_spec,class_name)) {
+      if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
+        System.out.println("WE ARE NOT SUPPOSED TO BE HERE!!!!!");
         cached_evaluations.put(key, InvariantStatus.FALSIFIED);
         return InvariantStatus.FALSIFIED;
       } else {
@@ -158,9 +184,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
         return InvariantStatus.NO_CHANGE;
       }
     }
-
     try {
-      boolean qt_discard_anyways = false;
       for (PptTupleInfo tuple : l) {
         // The unary invariant is only evaluated on the this object of the tuple
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
@@ -168,14 +192,7 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
           cached_evaluations.put(key, InvariantStatus.FALSIFIED);
           return InvariantStatus.FALSIFIED;
         }
-        //if (represents_quantified && qt_discard_anyways) {
-        //qt_discard_anyways = QuantifiedExpressionEvaluator.last_set_size==0;
-        //}
-      }
-      if (represents_quantified && qt_discard_anyways) {
-        // Quantified and the set was never evaluated to a non-empty set, should be discarded.
-        cached_evaluations.put(key, getDefault());
-        return getDefault();
+
       }
     } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
       // The fuzzed spec can't be applied to the type of o, assume that is falsified

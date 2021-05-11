@@ -36,12 +36,16 @@ public abstract class PointerInvariant extends UnaryInvariant {
    * Returns whether or not the specified types are valid for unary object. (Static version of
    * method.)
    */
-  public static final boolean valid_types_static(VarInfo[] vis) {
-    // Unary pointer invariants are only supposed to be checked on the this object.
-    return ((vis.length == 1) && vis[0].file_rep_type.isObject() && vis[0].name()=="this");
+  public static boolean valid_types_static(VarInfo[] vis) {
+    // Unary pointer invariants must the this object or a primitive supported type
+    if (vis.length!=1)
+      return false;
+
+    if (vis[0].file_rep_type.isObject())
+      return "this".equals(vis[0].name());
+
+    return vis[0].file_rep_type.isPrimitive();
   }
-
-
 
   /** Returns whether or not the specified types are valid for unary object. */
   @Override
@@ -59,9 +63,10 @@ public abstract class PointerInvariant extends UnaryInvariant {
   public InvariantStatus add(@Interned Object val, int mod_index, int count) {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
+
     if (val instanceof Long) {
       // Long values represents object hashcodes
-      long value = ((Long) val).longValue();
+      long value = ((Long) val);
       if (mod_index == 0) {
         return add_unmodified(value, count);
       } else {
@@ -77,7 +82,7 @@ public abstract class PointerInvariant extends UnaryInvariant {
     assert (mod_index >= 0) && (mod_index < 2);
     if (val instanceof Long) {
       // Long values represents object hashcodes
-      long value = ((Long) val).longValue();
+      long value = ((Long) val);
       if (mod_index == 0) {
         return check_unmodified(value, count);
       } else {
