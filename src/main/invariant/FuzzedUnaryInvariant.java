@@ -140,7 +140,6 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
    * Get the variable value in the type expected by the expression
    */
   private Object get_var_value(long v) {
-    Object value = null;
     List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(0));
     if (Integer.class.isAssignableFrom(clazz))
