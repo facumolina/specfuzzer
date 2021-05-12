@@ -181,11 +181,10 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
    * Ignore conditions when using ppt as keys
    */
   private String get_ppt_key(String ppt_name) {
-    String res = ppt_name;
-    if (res.contains(";condition")) {
-      return res.split(";condition")[0];
+    if (ppt_name.contains(";condition")) {
+      return ppt_name.split(";condition")[0];
     }
-    return res;
+    return ppt_name;
   }
 
   /**
@@ -206,48 +205,46 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
   }
 
-  @Override
-  public InvariantStatus check_modified(long v1, long v2, int count) {
-    // If there is no object among variables, evaluate directly on v1 and v2
-    if (!object_present()) {
-      if (!ExpressionEvaluator.eval(fuzzed_spec, get_var_value(v1, 0), get_var_value(v2, 1)))
+  /**
+   * Evaluate the current fuzzed spec on the given variable values
+   */
+  private InvariantStatus check_modified_on_vars(Object value1,Object value2) {
+    try {
+      if (!ExpressionEvaluator.eval(fuzzed_spec, value1, value2))
         return InvariantStatus.FALSIFIED;
       else
         return InvariantStatus.NO_CHANGE;
+    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
+      return InvariantStatus.FALSIFIED;
     }
+  }
 
-    // Recover the object
-    int i = (int) getObject(v1, v2);
-    String key = i+"-"+get_ppt_key(ppt.parent.name);
-    VarInfo curr_var = getVariable((PptSlice2)this.ppt);
-    String cached_key = key+curr_var.name();
+  /**
+   * Handle missing key
+   */
+  private InvariantStatus handle_missing_key(String cached_key) {
+    // First check if the fuzzed spec can be instantiated from the object type
+    // This check is done here since it may be the case that the given hashcode i
+    // corresponds to an object of an invalid type for the current fuzzed_spec
+    String type_str = getClassOfObject();
+    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
 
-    // Check if already evaluated
-    if (cached_evaluations.containsKey(cached_key))
-      return cached_evaluations.get(cached_key);
-
-    List<PptTupleInfo> l = ObjectsLoader.get_object(key);
-    if (l == null) {
-      // First check if the fuzzed spec can be instantiated from the object type
-      // This check is done here since it may be the case that the given hashcode i
-      // corresponds to an object of an invalid type for the current fuzzed_spec
-      String type_str = getClassOfObject();
-      String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-
-      if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
-        cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
-        return InvariantStatus.FALSIFIED;
-      } else {
-        cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
-        return InvariantStatus.NO_CHANGE;
-      }
+    if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
+      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
+    } else {
+      cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
+      return InvariantStatus.NO_CHANGE;
     }
+  }
 
+  /**
+   * Evaluate the fuzzed spec on the given tuples list
+   */
+  private InvariantStatus check_modified_on_tuples(List<PptTupleInfo> list,VarInfo curr_var, String cached_key) {
     try {
       // Evaluate
-      //System.out.println("Evaluating spec: "+fuzzed_spec);
-      //System.out.println("Vars: "+var1().name()+" - "+var2().name());
-      for (PptTupleInfo tuple : l) {
+      for (PptTupleInfo tuple : list) {
         Object varValue = getValueForVariable(tuple, curr_var);
         if (varValue==null) {
           cached_evaluations.put(cached_key, getDefault());
@@ -266,6 +263,29 @@ public class FuzzedBinaryInvariant extends VarPointerInvariant {
     }
     cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
     return InvariantStatus.NO_CHANGE;
+  }
+
+  @Override
+  public InvariantStatus check_modified(long v1, long v2, int count) {
+    // If there is no object among variables, evaluate directly on v1 and v2
+    if (!object_present())
+      return check_modified_on_vars(get_var_value(v1, 0), get_var_value(v2, 1));
+
+    // Recover the object and build keys
+    int i = (int) getObject(v1, v2);
+    String key = i+"-"+get_ppt_key(ppt.parent.name);
+    VarInfo curr_var = getVariable((PptSlice2)this.ppt);
+    String cached_key = key+curr_var.name();
+
+    // Check if already evaluated
+    if (cached_evaluations.containsKey(cached_key))
+      return cached_evaluations.get(cached_key);
+
+    List<PptTupleInfo> l = ObjectsLoader.get_object(key);
+    if (l == null)
+      return handle_missing_key(cached_key);
+
+    return check_modified_on_tuples(l, curr_var, cached_key);
   }
 
   private InvariantStatus getDefault() {
