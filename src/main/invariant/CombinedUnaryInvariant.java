@@ -10,25 +10,28 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Abstract base class for invariants over one object (pointer) variable, such as {@code x != null}.
+ * Abstract base class for combined unary invariants. A CombinedUnaryInvariant may represent:
+ * - a unary invariant over one object (pointer) variable, such as {@code x != null}.
+ * - a unary invariant over a primitive variable, suche as {int > 0}
+ *
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public abstract class PointerInvariant extends UnaryInvariant {
+public abstract class CombinedUnaryInvariant extends UnaryInvariant {
   
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20200612L;
 
-  protected PointerInvariant(PptSlice ppt) {
+  protected CombinedUnaryInvariant(PptSlice ppt) {
     super(ppt);
   }
 
-  protected @Prototype PointerInvariant() {
+  protected @Prototype CombinedUnaryInvariant() {
     super();
   }
 
-  public VarInfo var(@GuardSatisfied @UnknownInitialization(PointerInvariant.class) PointerInvariant this) {
+  public VarInfo var(@GuardSatisfied @UnknownInitialization(CombinedUnaryInvariant.class)CombinedUnaryInvariant this) {
     return ppt.var_infos[0];
   }
 

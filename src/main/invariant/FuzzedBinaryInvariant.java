@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public class FuzzedBinaryInvariant extends VarPointerInvariant {
+public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization. If you add or

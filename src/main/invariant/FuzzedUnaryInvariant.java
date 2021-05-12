@@ -26,7 +26,7 @@ import java.util.Map;
  * 
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public class FuzzedUnaryInvariant extends PointerInvariant {
+public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization. If you add or

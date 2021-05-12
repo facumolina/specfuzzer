@@ -9,19 +9,22 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Abstract base class for invariants over one variable of a basic type (boolean, float, int) and one object (pointer) variable, such as {@code x.value != i}.
+ * Abstract base class for combined binary invariants. A CombinedBinaryInvariant may represnet:
+ * - a binary invariant over an object and a variable of a basic type (boolean, float, int), such as {@code x.value > i}
+ * - a binary invariant over two variables of a basic type, such as {@code i > j}
+ *
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
-public abstract class VarPointerInvariant extends BinaryInvariant {
+public abstract class CombinedBinaryInvariant extends BinaryInvariant {
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20210124L;
 
-  protected VarPointerInvariant(PptSlice ppt) { super(ppt); }
+  protected CombinedBinaryInvariant(PptSlice ppt) { super(ppt); }
 
-  protected @Prototype VarPointerInvariant() { super(); }
+  protected @Prototype CombinedBinaryInvariant() { super(); }
 
   public boolean valid_types_static(VarInfo[] vis) {
     if (vis.length != 2)
@@ -60,7 +63,7 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
    * Returns the first variable. This is the only mechanism by which subclasses should access
    * variables.
    */
-  public VarInfo var1(@GuardSatisfied VarPointerInvariant this) {
+  public VarInfo var1(@GuardSatisfied CombinedBinaryInvariant this) {
     return ppt.var_infos[0];
   }
 
@@ -68,7 +71,7 @@ public abstract class VarPointerInvariant extends BinaryInvariant {
    * Returns the first variable. This is the only mechanism by which subclasses should access
    * variables.
    */
-  public VarInfo var2(@GuardSatisfied VarPointerInvariant this) {
+  public VarInfo var2(@GuardSatisfied CombinedBinaryInvariant this) {
     return ppt.var_infos[1];
   }
 
