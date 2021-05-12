@@ -140,17 +140,69 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
     throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
   }
 
-  @Override
-  public InvariantStatus check_modified(long v, int count) {
-    // When the var is not an object, it can be evaluated directly on v
-    if (!var_is_object()) {
-      if (!ExpressionEvaluator.eval(fuzzed_spec, get_var_value(v)))
+  /**
+   * Evaluate the current fuzzed spec on the given variable value
+   */
+  private InvariantStatus check_modified_on_vars(Object value1) {
+    try {
+      if (!ExpressionEvaluator.eval(fuzzed_spec, value1))
         return InvariantStatus.FALSIFIED;
       else
         return InvariantStatus.NO_CHANGE;
+    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
+      return InvariantStatus.FALSIFIED;
     }
+  }
 
-    // Recover the object
+  /**
+   * Handle missing key
+   */
+  private InvariantStatus handle_missing_key(String key) {
+    // First check if the fuzzed spec can be instantiated from the object type
+    // This check is done here since it may be the case that the given hashcode i
+    // corresponds to an object of an invalid type for the current fuzzed_spec
+    String type_str = var().type.toString();
+    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+
+    if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
+      System.out.println("WE ARE NOT SUPPOSED TO BE HERE!!!!!");
+      cached_evaluations.put(key, InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
+    } else {
+      cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
+      return InvariantStatus.NO_CHANGE;
+    }
+  }
+
+  /**
+   * Evaluate the fuzzed spec on the given tuples list
+   */
+  private InvariantStatus check_modified_on_tuples(List<PptTupleInfo> list, String key) {
+    try {
+      for (PptTupleInfo tuple : list) {
+        // The unary invariant is only evaluated on the this object of the tuple
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
+        if (!b) {
+          cached_evaluations.put(key, InvariantStatus.FALSIFIED);
+          return InvariantStatus.FALSIFIED;
+        }
+      }
+    } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
+      // The fuzzed spec can't be applied to the type of o, assume that is falsified
+      cached_evaluations.put(key, InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
+    }
+    cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
+    return InvariantStatus.NO_CHANGE;
+  }
+
+  @Override
+  public InvariantStatus check_modified(long v, int count) {
+    // When the var is not an object, it can be evaluated directly on v
+    if (!var_is_object())
+      return check_modified_on_vars(get_var_value(v));
+
+    // Recover the object and build key
     int i = (int) v;
     String key = i+"-"+get_ppt_key(ppt.parent.name);
 
@@ -160,39 +212,10 @@ public class FuzzedUnaryInvariant extends PointerInvariant {
 
     // Evaluate the key
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
-    if (l == null) {
-      // First check if the fuzzed spec can be instantiated from the object type
-      // This check is done here since it may be the case that the given hashcode i
-      // corresponds to an object of an invalid type for the current fuzzed_spec
-      String type_str = var().type.toString();
-      String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    if (l == null)
+      return handle_missing_key(key);
 
-      if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
-        System.out.println("WE ARE NOT SUPPOSED TO BE HERE!!!!!");
-        cached_evaluations.put(key, InvariantStatus.FALSIFIED);
-        return InvariantStatus.FALSIFIED;
-      } else {
-        cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
-        return InvariantStatus.NO_CHANGE;
-      }
-    }
-    try {
-      for (PptTupleInfo tuple : l) {
-        // The unary invariant is only evaluated on the this object of the tuple
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
-        if (!b) {
-          cached_evaluations.put(key, InvariantStatus.FALSIFIED);
-          return InvariantStatus.FALSIFIED;
-        }
-
-      }
-    } catch (NonApplicableExpressionException| NonEvaluableExpressionException ex) {
-      // The fuzzed spec can't be applied to the type of o, assume that is falsified
-      cached_evaluations.put(key, InvariantStatus.FALSIFIED);
-      return InvariantStatus.FALSIFIED;
-    }
-    cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
-    return InvariantStatus.NO_CHANGE;
+    return check_modified_on_tuples(l, key);
   }
 
   private InvariantStatus getDefault() {
