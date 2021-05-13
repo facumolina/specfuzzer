@@ -1,6 +1,5 @@
 package invariant;
 
-import daikon.Daikon;
 import daikon.PptSlice;
 import daikon.PptSlice2;
 import daikon.VarInfo;
@@ -10,7 +9,6 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.tools.InvariantChecker;
 import expression.*;
-import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
@@ -41,9 +39,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
-  // Represents quantified expr
-  private boolean represents_quantified = false;
-
   // Grammar-Based Fuzzer
   private GrammarBasedFuzzer fuzzer;
 
@@ -56,30 +51,16 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   private FuzzedBinaryInvariant(PptSlice ppt, String spec) {
     super(ppt);
     fuzzed_spec = spec;
-    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
   }
 
   private @Prototype FuzzedBinaryInvariant() {
     super();
-    get_fuzzed_spec();
   }
 
   private @Prototype FuzzedBinaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
-    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
     System.out.println("Fuzzed spec: " + fuzzed_spec);
-  }
-
-  /** Fuzz the spec represented by this invariant */
-  private void get_fuzzed_spec() {
-    if (Daikon.grammar_to_fuzz == null)
-      throw new Daikon.UserError("When using FuzzedInvariant, the grammar must be specified");
-    if (fuzzer == null)
-      fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
-    fuzzed_spec = fuzzer.fuzz();
-    represents_quantified = FuzzedInvariantUtil.is_quantified(fuzzed_spec);
-    System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
   @Override

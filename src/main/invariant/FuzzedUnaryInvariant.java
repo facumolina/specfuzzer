@@ -8,12 +8,10 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
-import daikon.Daikon;
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
-import fuzzer.BasicFuzzer;
 import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
 
@@ -57,23 +55,12 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
 
   private @Prototype FuzzedUnaryInvariant() {
     super();
-    get_fuzzed_spec();
   }
 
   private @Prototype FuzzedUnaryInvariant(String spec) {
     super();
     fuzzed_spec = spec;
     System.out.println("Fuzzed spec: " + fuzzed_spec);
-  }
-
-  /** Fuzz the spec represented by this invariant */
-  private void get_fuzzed_spec() {
-    if (Daikon.grammar_to_fuzz == null)
-      throw new Daikon.UserError("When using FuzzedInvariant, the grammar must be specified");
-    if (fuzzer == null)
-      fuzzer = new BasicFuzzer(Daikon.grammar_to_fuzz);
-    fuzzed_spec = fuzzer.fuzz();
-    System.out.println("Fuzzed spec is: " + fuzzed_spec);
   }
 
   @Override
