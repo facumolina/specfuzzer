@@ -9,7 +9,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Abstract base class for combined binary invariants. A CombinedBinaryInvariant may represnet:
+ * Abstract base class for combined binary invariants. A CombinedBinaryInvariant may represent:
  * - a binary invariant over an object and a variable of a basic type (boolean, float, int), such as {@code x.value > i}
  * - a binary invariant over two variables of a basic type, such as {@code i > j}
  *
@@ -44,7 +44,6 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     }
   }
 
-  /** Returns whether or not the specified types are valid for unary object. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis) && extra_check(vis);
