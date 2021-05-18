@@ -319,7 +319,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     try {
       for (PptTupleInfo tuple : tuples) {
-        // The unary invariant is only evaluated on the this object of the tuple
         Object varValue = getValueForVariable(tuple,getVariable((PptSlice2) ppt));
         if (varValue==null)
           return false;
