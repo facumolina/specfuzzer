@@ -75,13 +75,39 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
   }
 
   @Override
-  public InvariantStatus add(@Interned Object o, @Interned Object o1, @Interned Object o2, int i, int i1) {
-    return null;
+  public InvariantStatus add(@Interned Object val1, @Interned Object val2, @Interned Object val3, int mod_index, int count) {
+    assert !falsified;
+    assert (mod_index >= 0) && (mod_index < 8);
+    if (val1 instanceof  Long && val2 instanceof Long && val3 instanceof Long) {
+      // All values have to be instance of Long
+      long v1 = ((Long) val1);
+      long v2 = ((Long) val2);
+      long v3 = ((Long) val3);
+      if (mod_index == 0) {
+        return add_unmodified(v1, v2, v3, count);
+      } else {
+        return add_modified(v1, v2, v3, count);
+      }
+    }
+    return InvariantStatus.FALSIFIED;
   }
 
   @Override
-  public InvariantStatus check(@Interned Object o, @Interned Object o1, @Interned Object o2, int i, int i1) {
-    return null;
+  public InvariantStatus check(@Interned Object val1, @Interned Object val2, @Interned Object val3, int mod_index, int count) {
+    assert !falsified;
+    assert (mod_index >= 0) && (mod_index < 8);
+    if (val1 instanceof  Long && val2 instanceof Long) {
+      // All values have to be instance of Long
+      long v1 = ((Long) val1);
+      long v2 = ((Long) val2);
+      long v3 = ((Long) val3);
+      if (mod_index == 0) {
+        return check_unmodified(v1, v2, v3, count);
+      } else {
+        return check_modified(v1, v2, v3, count);
+      }
+    }
+    return InvariantStatus.FALSIFIED;
   }
 
   /**
