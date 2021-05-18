@@ -60,6 +60,56 @@ public class ExpressionValidator {
   }
 
   /**
+   * Get object class
+   */
+  private static String object_class(String alloy_expr, String class_one, String class_two, String class_three) {
+    if (alloy_expr.contains(class_one+"."))
+      return class_one;
+    if (alloy_expr.contains(class_two+"."))
+      return class_two;
+    return class_three;
+  }
+
+  /**
+   * Get var class
+   */
+  private static String var_class(String alloy_expr, String class_one, String class_two) {
+    if (alloy_expr.contains(class_one+"."))
+      return class_two;
+    return class_one;
+  }
+
+  /**
+   * Returns true if the given expression is applicable to objects of the given classes
+   */
+  public static boolean is_valid(String alloy_expr, String class_name_one, String class_name_two, String class_name_three) {
+    if (!alloy_expr.contains(class_name_one+".") && !alloy_expr.contains(class_name_two+".") && !alloy_expr.contains(class_name_three+".")) {
+      // All should be variables
+      String formatted = JavaTypesUtil.format_type(class_name_one);
+      String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
+      String formatted_two = JavaTypesUtil.format_type(class_name_two);
+      String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
+      String formatted_three = JavaTypesUtil.format_type(class_name_three);
+      String var_name_three = GrammarSymbols.get_special_identifier(formatted_three, 2);
+      return alloy_expr.contains(var_name_one) && alloy_expr.contains(var_name_two) && alloy_expr.contains(var_name_three);
+    } else {
+      String obj_class = object_class(alloy_expr, class_name_one, class_name_two, class_name_three);
+      String var_class = var_class(alloy_expr, class_name_one, class_name_two);
+      int idx = alloy_expr.indexOf(obj_class);
+      while (idx >= 0) {
+        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
+          return false;
+        idx = alloy_expr.indexOf(obj_class,idx+1);
+      }
+      String formatted = JavaTypesUtil.format_type(var_class);
+      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+      String formatted_one = JavaTypesUtil.format_type(var_class);
+      String var_name_one = GrammarSymbols.get_special_identifier(formatted, 1);
+      return alloy_expr.contains(var_name) && alloy_expr.contains(var_name_one);
+    }
+  }
+
+  /**
    * Validate the presence of a variable
    */
   private static void validate_var(String alloy_expr, Class<?> var_type, String var_name) {
