@@ -1792,6 +1792,7 @@ public final class Daikon {
         int unique_fuzzed_invs = 0;
         int unary_invs = 0;
         int binary_invs = 0;
+        int ternary_invs = 0;
         int discarded = 0;
         for (int i = 0; i < Math.min(potential_specs,fuzzed_invariants); i++){
           String fuzzed_spec = (String)fuzz_method.invoke(fuzzer);
@@ -1806,20 +1807,20 @@ public final class Daikon {
               discarded++;
               continue;
             }
-            int total_vars = (Integer)get_amount_of_vars.invoke(null, fuzzed_spec);
-            boolean unary = true;
-            if (total_vars == 1) {
+            int arity = (Integer)get_amount_of_vars.invoke(null, fuzzed_spec);
+            if (arity == 1) {
               // The fuzzed spec is unary
               inv_class = Class.forName("invariant.FuzzedUnaryInvariant");
-            } else if (total_vars == 2) {
+            } else if (arity == 2) {
               // The fuzzed spec is binary
               inv_class = Class.forName("invariant.FuzzedBinaryInvariant");
-              unary = false;
+            } else if (arity == 3) {
+              // The fuzzed spec is ternary
+              inv_class = Class.forName("invariant.FuzzedTernaryInvariant");
             } else {
-              unary = false;
               // Arity not supported
               throw new Daikon.UserError(
-                "Fuzzed invariant class for arity not supported: "+total_vars
+                "Fuzzed invariant class for arity not supported: "+arity
               );
             }
             Method get_proto_from_spec_method = inv_class.getMethod("get_proto_from_spec", String.class);
@@ -1828,20 +1829,21 @@ public final class Daikon {
             if (!proto_invs.contains(inv)) {
               proto_invs.add(inv);
               unique_fuzzed_invs++;
-              if (unary)
+              if (arity==1)
                 unary_invs++;
-              else
+              if (arity==2)
                 binary_invs++;
+              if (arity==3)
+                ternary_invs++;
             }
           } catch(Exception e) {
-            throw new Daikon.UserError(
-              "Cannot load class invariant.FuzzedInvariantUtil or build instance. Is it on the classpath?"
-            );
+            throw new Daikon.UserError(e.getMessage());
           }
         }
         System.out.println("Unique fuzzed invariants: "+unique_fuzzed_invs+" ("+fuzzed_invariants+")");
-        System.out.println("Unary: "+unary_invs+" - Binary: "+binary_invs+" - Discarded: "+discarded);
+        System.out.println("Unary: "+unary_invs+" - Binary: "+binary_invs+" - Ternary: " + ternary_invs + " - Discarded: "+discarded);
       } catch (Exception e) {
+        e.printStackTrace();
         throw new Daikon.UserError("Exception while invoking fuzz method");
       }
     }
