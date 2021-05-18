@@ -287,7 +287,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
 
   @Override
   public InvariantStatus add_modified(long v1, long v2, long v3, int count) {
-    return null;
+    return check_modified(v1, v2, v3, count);
   }
 
   @Override
@@ -330,7 +330,23 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    * Eval this invariant on every instance saved for the given ppt
    */
   public boolean eval_on_all_instances_ppt(PptSlice ppt) {
-    // TODO Do not forget this
+    assert ppt.name().contains(":::ENTER");
+    String ppt_name = ppt.name().split(":::ENTER")[0];
+    List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
+    try {
+      for (PptTupleInfo tuple : tuples) {
+        VarInfo[] curr_vars = getVariables((PptSlice2)this.ppt);
+        Object var_value_one = getValueForVariable(tuple, curr_vars[0]);
+        Object var_value_two = getValueForVariable(tuple, curr_vars[1]);
+        if (var_value_one==null || var_value_two==null)
+          return false;
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), var_value_one, var_value_two);
+        if (!b)
+          return false;
+      }
+    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
+      return false;
+    }
     return true;
   }
 
