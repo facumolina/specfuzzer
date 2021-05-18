@@ -1,6 +1,5 @@
 package invariant;
 
-import com.google.errorprone.annotations.Var;
 import daikon.PptSlice;
 import daikon.PptSlice2;
 import daikon.VarInfo;
@@ -17,7 +16,6 @@ import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 import java.util.HashMap;
