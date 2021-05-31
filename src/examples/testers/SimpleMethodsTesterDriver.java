@@ -1433,36 +1433,6 @@ public class SimpleMethodsTesterDriver {
             hadFailure = true;
             e.printStackTrace();
         }
-        try {
-            t0.test239();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
-        try {
-            t0.test240();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
-        try {
-            t0.test241();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
-        try {
-            t0.test242();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
-        try {
-            t0.test243();
-        } catch (Throwable e) {
-            hadFailure = true;
-            e.printStackTrace();
-        }
         if (hadFailure) {
             System.exit(1);
         }
