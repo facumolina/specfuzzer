@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import grammar.symbols.ConstantSymbols;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedPseudograph;
 
@@ -197,9 +198,9 @@ public class GrammarExtractor {
       } catch (ClassNotFoundException e) {
       }
       GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_one,
-              curr_expr + "." + label + "." + Constants.MAP_KEY_SET);
+              curr_expr + "." + label + "." + ConstantSymbols.MAP_KEY_SET);
       GrammarBuilder.add_special_quantification_symbols(grammar, collection_type_two,
-              curr_expr + "." + label + "." + Constants.MAP_VALUES);
+              curr_expr + "." + label + "." + ConstantSymbols.MAP_VALUES);
     } else {
       System.out.println("Can't add special quantification symbol from map for field type: "+type.getTypeName());
       System.out.println("Label: "+label);

@@ -34,14 +34,6 @@ public class GrammarSymbols {
   public static final String LOGIC_OP = "<Logic_Op>";
   public static final List<String> LOGIC_OP_VALUE = Arrays.asList("or", "xor", "implies", "iff");
 
-  // Logic expressions
-  public static final String BOOLEAN_FIELD = "<Boolean_Field>";
-  public static final String LOGIC_FROM_FIELD = "<Logic_From_Field>";
-  public static final String LOGIC_EXPR = "<Logic_Expr>";
-  public static final String LOGIC_CMP_EXPR = "<Logic_Cmp_Expr>";
-  public static List<String> LOGIC_CMP_EXPR_VALUE = Arrays
-          .asList("("+ LOGIC_FROM_FIELD + ") " + LOGIC_OP + " (" + LOGIC_EXPR + ")");
-
   // Numeric comparison operators
   public static final String NUMERIC_CMP_OP = "<Num_Cmp_Op>";
   public static final List<String> NUMERIC_CMP_OP_VALUE = Arrays.asList("=", "!=", ">", "<", ">=", "<=");
@@ -50,31 +42,15 @@ public class GrammarSymbols {
   public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
   public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-", "*", "/", "%");
 
-  // Numeric expressions
-  public static final String INTEGER_ZERO = "<Integer_0>";
-  public static final String INTEGER_TWO = "<Integer_2>";
-  public static final String INTEGER_CONSTANT = "<Integer_Constant>";
-  public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
-  public static final String INTEGER_FROM_FIELD = "<Integer_From_Field>";
-  public static final String INTEGER_SET = "<Integer_Set>";
-  public static final String INTEGER_FIELD = "<Integer_Field>";
-  public static final String INTEGER_FROM_SET_SIZE = "<Integer_From_Set_Size>";
-  public static List<String> INTEGER_ZERO_VALUE = new LinkedList<>();
-  public static List<String> INTEGER_TWO_VALUE = new LinkedList<>();
-  public static final String INTEGER_EXPR = "<Integer_Expr>";
-  public static List<String> INTEGER_EXPR_VALUE = new LinkedList<>();
-
+  // Logic expressions
+  public static final String BOOLEAN_FIELD = "<Boolean_Field>";
+  public static final String LOGIC_FROM_FIELD = "<Logic_From_Field>";
+  public static final String LOGIC_EXPR = "<Logic_Expr>";
+  public static final String LOGIC_CMP_EXPR = "<Logic_Cmp_Expr>";
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
-  public static List<String> NUMERIC_CMP_EXPR_VALUE = new LinkedList<>();
-  public static final String INTEGER_CMP_EXPR_VALUE = get_special_identifier(JavaTypesUtil.INTEGER, 0) + " " + NUMERIC_CMP_OP + " " + INTEGER_EXPR;
-  public static List<String> INTEGER_FROM_FIELD_VALUE = new LinkedList<>();
 
   // Membership expressions
   public static final String MEMBERSHIP_EXPR = "<Membership_Expr>";
-
-  // Other constants
-  public static final String QT_VAR_NAME = "n";
-  public static final String NULL = "null";
 
   /**
    * Return the non-terminal symbol denoting a set of the given type
