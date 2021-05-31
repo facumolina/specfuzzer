@@ -8,7 +8,7 @@ import java.util.HashSet;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import antlr.AlloyExprGrammarParser.NameContext;
-import grammar.Constants;
+import grammar.symbols.ConstantSymbols;
 
 /**
  * This class provides methods to evaluate name expressions (name).
@@ -57,11 +57,11 @@ public class NameExpressionEvaluator {
       return new HashSet<Object>();
     if (access_field.equals(QuantifiedExpressionEvaluator.QT_VAR_NAME))
       return ExpressionEvaluator.vars.get(QuantifiedExpressionEvaluator.QT_VAR_NAME);
-    if (access_field.equals(Constants.NULL))
+    if (access_field.equals(ConstantSymbols.NULL))
       return null;
-    if (access_field.equals(Constants.MAP_KEY_SET) && o instanceof java.util.Map)
+    if (access_field.equals(ConstantSymbols.MAP_KEY_SET) && o instanceof java.util.Map)
       return eval_method(access_field, o);
-    if (access_field.equals(Constants.MAP_VALUES) && o instanceof java.util.Map)
+    if (access_field.equals(ConstantSymbols.MAP_VALUES) && o instanceof java.util.Map)
       return eval_method(access_field, o);
 
     try {

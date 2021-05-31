@@ -5,8 +5,7 @@ import java.util.Set;
 import antlr.AlloyExprGrammarParser.ExprContext;
 import antlr.AlloyExprGrammarParser.Qt_exprContext;
 import antlr.AlloyExprGrammarParser.QuantifierContext;
-import grammar.GrammarSymbols;
-import org.antlr.v4.tool.Grammar;
+import grammar.symbols.ConstantSymbols;
 
 /**
  * This class provides methods to evaluate quantified expressions.
@@ -56,7 +55,7 @@ public class QuantifiedExpressionEvaluator {
    */
   private static boolean computeAll(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
-      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
+      ExpressionEvaluator.vars.put(ConstantSymbols.QT_VAR_NAME, o);
       try {
         if (!(Boolean) ExpressionEvaluator.eval(expr))
           return false;
@@ -75,7 +74,7 @@ public class QuantifiedExpressionEvaluator {
   private static boolean computeSome(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
       try {
-        ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
+        ExpressionEvaluator.vars.put(ConstantSymbols.QT_VAR_NAME, o);
         if ((Boolean) ExpressionEvaluator.eval(expr))
           return true;
       } catch (NonEvaluableExpressionException e) {
@@ -92,7 +91,7 @@ public class QuantifiedExpressionEvaluator {
    */
   private static boolean computeNo(Set<Object> set, ExprContext expr) {
     for (Object o : set) {
-      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
+      ExpressionEvaluator.vars.put(ConstantSymbols.QT_VAR_NAME, o);
       try {
         if ((Boolean) ExpressionEvaluator.eval(expr))
           return false;
@@ -111,7 +110,7 @@ public class QuantifiedExpressionEvaluator {
   private static boolean computeLone(Set<Object> set, ExprContext expr) {
     int satisfying = 0;
     for (Object o : set) {
-      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
+      ExpressionEvaluator.vars.put(ConstantSymbols.QT_VAR_NAME, o);
       try {
         if ((Boolean) ExpressionEvaluator.eval(expr))
           satisfying++;
@@ -132,7 +131,7 @@ public class QuantifiedExpressionEvaluator {
   private static boolean computeOne(Set<Object> set, ExprContext expr) {
     int satisfying = 0;
     for (Object o : set) {
-      ExpressionEvaluator.vars.put(GrammarSymbols.QT_VAR_NAME, o);
+      ExpressionEvaluator.vars.put(ConstantSymbols.QT_VAR_NAME, o);
       try {
         if ((Boolean) ExpressionEvaluator.eval(expr))
           satisfying++;
