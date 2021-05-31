@@ -23,7 +23,7 @@ import org.json.simple.parser.ParseException;
  */
 public class BasicFuzzer extends GrammarBasedFuzzer {
 
-  private static final int max_nonterminals = 5;
+  private static final int max_nonterminals = 6;
   private static final int max_expansion_trials = 100;
 
   private static final String re_nonterminal = "(<[^<> ]*>)";
