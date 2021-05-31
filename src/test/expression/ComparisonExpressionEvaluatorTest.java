@@ -205,6 +205,7 @@ public class ComparisonExpressionEvaluatorTest {
   public void test_ternary_numeric_cmp() {
     assertTrue(evaluateCmpTernary("Integer_Variable_0 != Integer_Variable_1 + Integer_Variable_2", 0, 1, 1));
     assertTrue(evaluateCmpTernary("Integer_Variable_0 = Integer_Variable_1 + Integer_Variable_2", 2, 1, 1));
+    assertTrue(evaluateCmpTernary("(Integer_Variable_0 = Integer_Variable_1) or (Integer_Variable_1 = Integer_Variable_2)", 1,1,2));
   }
 
 }

@@ -1,5 +1,6 @@
 package grammar;
 
+import grammar.symbols.IntegerSymbols;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class GrammarExtractorTest {
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
-    assert(grammar.get(GrammarSymbols.INTEGER_FIELD).size()==4);
+    assert(grammar.get(IntegerSymbols.INTEGER_FIELD).size()==4);
   }
 
   @Test
@@ -44,7 +45,7 @@ public class GrammarExtractorTest {
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
-    assert(grammar.get(GrammarSymbols.INTEGER_FIELD).size()==1);
+    assert(grammar.get(IntegerSymbols.INTEGER_FIELD).size()==1);
   }
 
   @Test
