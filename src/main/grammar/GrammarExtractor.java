@@ -148,15 +148,9 @@ public class GrammarExtractor {
     Type type = f.getGenericType();
     if (type instanceof ParameterizedType) {
       ParameterizedType pt = (ParameterizedType) type;
-      Class<?> collection_class = null;
-      for (Type t : pt.getActualTypeArguments()) {
-        String collection_class_name = t.getTypeName();
-        try {
-          collection_class = Class.forName(t.getTypeName());
-          collection_class_name = collection_class.getSimpleName();
-        } catch (ClassNotFoundException e) {
-        }
-        GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
+      Set<Class<?>> types = JavaTypesUtil.get_types_of_parameterized_type((ParameterizedType)type);
+      for (Class<?> c : types) {
+        GrammarBuilder.add_special_quantification_symbols(grammar, c.getSimpleName(),
                 curr_expr + "." + label);
       }
     } else {
@@ -222,9 +216,9 @@ public class GrammarExtractor {
   /**
    * Traverse the type graph from the given type and extend the given grammar
    * 
-   * @throws SecurityException
-   * @throws NoSuchFieldException
-   * @throws ClassNotFoundException
+   * @throws SecurityException when there is no permission to access cut component.
+   * @throws NoSuchFieldException when there is a field of the cut that can't be accessed.
+   * @throws ClassNotFoundException when there is a class referenced by the cut that can't be loaded.
    */
   protected static void traverse_graph(Class<?> cut, String curr_expr,
       Map<String, List<String>> grammar, int k)
@@ -241,13 +235,14 @@ public class GrammarExtractor {
           // This is not a closure case, continue exploring only non primitive types
           if (!target_type.isPrimitive()) {
             if (java.util.Map.class.isAssignableFrom(target_type)) {
-              // The target type is a map, so we can create quantifications symbol for
+              // The target type is a map, so we can create quantification symbol for
               // the keys and values sets
               add_special_quantification_symbols_from_map(grammar, cut, curr_expr, edge.getLabel());
             } else if (java.util.Collection.class.isAssignableFrom(target_type)) {
               // The target type is a collection so we can create a quantification symbol
               add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
             } else if (target_type.isArray()) {
+              // The target type is an array, so also use it as it were a collection
               add_special_quantification_symbols(grammar, cut, curr_expr, edge.getLabel());
             }
             traverse_graph(target_type, curr_expr + "." + edge.getLabel(), grammar, k - 1);
@@ -288,10 +283,10 @@ public class GrammarExtractor {
 
   /**
    * Extract the grammar from the obtained type graph
-   * 
-   * @throws SecurityException
-   * @throws NoSuchFieldException
-   * @throws ClassNotFoundException
+   *
+   * @throws SecurityException when there is no permission to access cut component.
+   * @throws NoSuchFieldException when there is a field of the cut that can't be accessed.
+   * @throws ClassNotFoundException when there is a class referenced by the cut that can't be loaded.
    */
   private static void extract_grammar(Class<?> cut)
       throws NoSuchFieldException, SecurityException, ClassNotFoundException {
@@ -312,8 +307,7 @@ public class GrammarExtractor {
    */
   private static String get_as_json_string(Map<String, List<String>> grammar) {
     Gson gson = new GsonBuilder().create();
-    String json = gson.toJson(grammar);
-    return json;
+    return gson.toJson(grammar);
   }
 
 }
