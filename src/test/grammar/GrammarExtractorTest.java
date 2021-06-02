@@ -26,7 +26,7 @@ public class GrammarExtractorTest {
   public void regionGrammarTest() throws ClassNotFoundException, NoSuchFieldException {
     // Initialize
     Class<?> cut = Class.forName("DataStructures.sf110.Region");
-    GrammarExtractor.build_type_graph(cut, new HashSet<String>());
+    GrammarExtractor.build_type_graph(cut, new HashSet<>());
     // Grammar extraction steps
     Map<String, List<String>> grammar = GrammarBuilder.create(cut);
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
@@ -39,7 +39,20 @@ public class GrammarExtractorTest {
   public void listGrammarTest() throws ClassNotFoundException, NoSuchFieldException{
     // Initialize
     Class<?> cut = Class.forName("DataStructures.List");
-    GrammarExtractor.build_type_graph(cut, new HashSet<String>());
+    GrammarExtractor.build_type_graph(cut, new HashSet<>());
+    // Grammar extraction steps
+    Map<String, List<String>> grammar = GrammarBuilder.create(cut);
+    GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
+    GrammarBuilder.remove_non_expandable(grammar);
+    // Assertions about the obtained grammar
+    assert(grammar.get(IntegerSymbols.INTEGER_FIELD).size()==1);
+  }
+
+  @Test
+  public void avlTreeListGrammarTest() throws ClassNotFoundException, NoSuchFieldException{
+    // Initialize
+    Class<?> cut = Class.forName("DataStructures.AvlTreeList");
+    GrammarExtractor.build_type_graph(cut, new HashSet<>());
     // Grammar extraction steps
     Map<String, List<String>> grammar = GrammarBuilder.create(cut);
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
