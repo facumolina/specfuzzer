@@ -1,5 +1,6 @@
 package expression;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,9 @@ public class ExpressionEvaluator {
       vars.put(GrammarSymbols.get_special_identifier(o1.getClass().getSimpleName(),0), o1);
       is_var = true;
     } else {
+      if (Collection.class.isAssignableFrom(o1.getClass())) {
+        set_collection_var(o1);
+      }
       vars.put(o1.getClass().getSimpleName(), o1);
     }
     int n = is_var?1:0;
@@ -119,6 +123,14 @@ public class ExpressionEvaluator {
         }
       }
     }
+  }
+
+  /**
+   * Set the collection var
+   */
+  private static void set_collection_var(Object o) {
+    vars.put("Integer_Set_Variable_0", o);
+    vars.put("Object_Set_Variable_0", o);
   }
 
   /**
