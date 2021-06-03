@@ -4,10 +4,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class that contains utilities for Java types
@@ -82,14 +79,8 @@ public class JavaTypesUtil {
       for (Parameter p : params) {
         if (java.util.Collection.class.isAssignableFrom(p.getType())) {
           // For Collection<C> types, the type is considered as C_Set or Object_Set
-          Type t = p.getParameterizedType();
-          if (t instanceof ParameterizedType) {
-            Set<Class<?>> types = get_types_of_parameterized_type((ParameterizedType)t);
-            for (Class<?> c : types)
-              arg_types.add(format_set_of_type(c.getSimpleName()));
-          } else {
-            arg_types.add(format_set_of_type(Object.class.getSimpleName()));
-          }
+          Class<?> c = get_parameterized_class(p.getParameterizedType());
+          arg_types.add(format_set_of_type(c.getSimpleName()));
         } else {
           // Non Collection types, just format the simple name
           arg_types.add(format_type(p.getType().getSimpleName()));
@@ -100,19 +91,39 @@ public class JavaTypesUtil {
   }
 
   /**
-   * Returns the set of classes that are part of parameterized type
+   * Returns the parameterized class of the given type. For instance, if for a collection type si C<K>, then returns K.
    */
-  public static Set<Class<?>> get_types_of_parameterized_type(ParameterizedType pt) {
-    Set<Class<?>> types = new HashSet<>();
-    Class<?> collection_class = null;
-    for (Type t : pt.getActualTypeArguments()) {
+  public static Class<?> get_parameterized_class(Type type) {
+    Class<?> cl;
+    if (type instanceof ParameterizedType) {
+      ParameterizedType pt = (ParameterizedType)type;
+      Type[] types = pt.getActualTypeArguments();
+      assert types.length==1;
       try {
-        collection_class = Class.forName(t.getTypeName());
+        cl = Class.forName(types[0].getTypeName());
       } catch (ClassNotFoundException e) { // We should be never be here
-        throw new RuntimeException("Unable to load class: "+t.getTypeName()+". Is it in the classpath?");
+        throw new RuntimeException("Unable to load class: "+types[0].getTypeName()+". Is it in the classpath?");
       }
-      types.add(collection_class);
+      return cl;
+    } else {
+      // Use object as the collection class, since it hasn't been specified
+      return Object.class;
     }
-    return types;
   }
+
+  /**
+   * Returns the set classes that is part of a parameterized type
+   */
+  public static Class<?> get_types_of_parameterized_type(ParameterizedType pt) {
+    Class<?> collection_class;
+    Type[] types = pt.getActualTypeArguments();
+    assert types.length==1;
+    try {
+        collection_class = Class.forName(types[0].getTypeName());
+    } catch (ClassNotFoundException e) { // We should be never be here
+      throw new RuntimeException("Unable to load class: "+types[0].getTypeName()+". Is it in the classpath?");
+    }
+    return collection_class;
+  }
+
 }
