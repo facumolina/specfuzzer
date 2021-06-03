@@ -137,10 +137,26 @@ public class GrammarSymbols {
   }
 
   /**
+   * Return the special identifier for a variable representing a set of the given type, for instance, Integer_Set_Variable
+   */
+  public static String get_special_identifier_set(String type_name, int n) {
+    if (type_name==null || n < 0)
+      throw new IllegalArgumentException("The type name can't be null and n can't be less than zero");
+    return get_special_identifier_prefix_set(type_name) + "_" + n;
+  }
+
+  /**
    * Returns the prefix for the special identifiers for variables of the given type
    */
   public static String get_special_identifier_prefix(String type_name) {
     return type_name + "_Variable";
+  }
+
+  /**
+   * Returns the prefix for the special identifiers for variables of sets of the given type
+   */
+  public static String get_special_identifier_prefix_set(String type_name) {
+    return type_name + "_Set_Variable";
   }
 
   /**
