@@ -114,8 +114,15 @@ public class GrammarBuilder {
     String current_set_symbol = GrammarSymbols.get_set_symbol(type_name);
     String membership_expr_symbol = GrammarSymbols.get_membership_symbol(final_set_type);
     String var = GrammarSymbols.get_special_identifier(final_set_type, 0);
-    String membership_expr_value = var + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + current_set_symbol + "." + final_label;
-    extend_grammar(grammar, membership_expr_symbol, membership_expr_value);
+    if (JavaTypesUtil.INTEGER.equals(final_set_type)) {
+      String int_set_symbol = GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER);
+      String membership_expr_value = var + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + int_set_symbol;
+      extend_grammar(grammar, membership_expr_symbol, membership_expr_value);
+      extend_grammar(grammar, int_set_symbol, current_set_symbol + "." + final_label);
+    } else {
+      String membership_expr_value = var + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + current_set_symbol + "." + final_label;
+      extend_grammar(grammar, membership_expr_symbol, membership_expr_value);
+    }
     extend_grammar(grammar, GrammarSymbols.MEMBERSHIP_EXPR, membership_expr_symbol);
   }
 

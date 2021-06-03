@@ -143,32 +143,20 @@ public class GrammarExtractor {
    */
   private static void add_special_quantification_symbols(Map<String, List<String>> grammar,
       Class<?> cut, String curr_expr, String label)
-      throws NoSuchFieldException, SecurityException, ClassNotFoundException {
+      throws NoSuchFieldException, SecurityException {
     Field f = cut.getDeclaredField(label);
     Type type = f.getGenericType();
-    if (type instanceof ParameterizedType) {
-      ParameterizedType pt = (ParameterizedType) type;
-      Set<Class<?>> types = JavaTypesUtil.get_types_of_parameterized_type((ParameterizedType)type);
-      for (Class<?> c : types) {
-        GrammarBuilder.add_special_quantification_symbols(grammar, c.getSimpleName(),
-                curr_expr + "." + label);
-      }
-    } else {
-      // Use object as the collection class, since it hasn't been specified
-      String collection_class_name = Object.class.getSimpleName();
-      GrammarBuilder.add_special_quantification_symbols(grammar, collection_class_name,
-              curr_expr + "." + label);
-    }
-
+    Class<?> c = JavaTypesUtil.get_parameterized_class(type);
+    GrammarBuilder.add_special_quantification_symbols(grammar, c.getSimpleName(),
+            curr_expr + "." + label);
   }
 
   /**
    * Create the special quantification related symbols from label that leads to a Collection
-   *
    */
   private static void add_special_quantification_symbols_from_map(Map<String, List<String>> grammar,
       Class<?> cut, String curr_expr, String label)
-      throws NoSuchFieldException, SecurityException, ClassNotFoundException {
+      throws NoSuchFieldException, SecurityException {
     Field f = cut.getDeclaredField(label);
     Type type = f.getGenericType();
     if (type instanceof ParameterizedType) {
