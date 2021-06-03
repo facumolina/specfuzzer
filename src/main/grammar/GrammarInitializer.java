@@ -82,6 +82,7 @@ public class GrammarInitializer {
     grammar.put(IntegerSymbols.INTEGER_CONSTANT, IntegerSymbols.INTEGER_CONSTANT_VALUE);
     grammar.put(IntegerSymbols.INTEGER_FIELD, new LinkedList<>());
     grammar.put(IntegerSymbols.INTEGER_FROM_SET_SIZE, new LinkedList<>());
+    grammar.get(IntegerSymbols.INTEGER_FROM_SET_SIZE).add("#(" + GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER) + ")");
   }
 
   /**
@@ -92,8 +93,10 @@ public class GrammarInitializer {
     // Base integer membership
     String integer_membership = GrammarSymbols.get_membership_symbol(JavaTypesUtil.INTEGER);
     grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).add(integer_membership);
-    String integer_membership_value = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0) + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + GrammarSymbols.get_special_identifier_set(JavaTypesUtil.INTEGER, 0);
+    String set_symbol = GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER);
+    String integer_membership_value = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0) + " " + GrammarSymbols.VAR_SET_CMP_OP + " " + set_symbol;
     GrammarBuilder.extend_grammar(grammar, integer_membership, integer_membership_value);
+    GrammarBuilder.extend_grammar(grammar, set_symbol, GrammarSymbols.get_special_identifier_set(JavaTypesUtil.INTEGER, 0));
   }
 
 }
