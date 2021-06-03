@@ -25,7 +25,7 @@ public class GrammarBuilder {
    */
   public static Map<String, List<String>> create(Class<?> cut) {
     // Start
-    Map<String, List<String>> grammar = new HashMap<String, List<String>>();
+    Map<String, List<String>> grammar = new HashMap<>();
     grammar.put(GrammarSymbols.START_SYMBOL, new LinkedList<>());
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.QT_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.NUMERIC_CMP_EXPR);
@@ -108,7 +108,7 @@ public class GrammarBuilder {
    */
   public static void extend_grammar(Map<String, List<String>> grammar, String symbol,
       String value) {
-    List<String> l = new LinkedList<String>();
+    List<String> l = new LinkedList<>();
     l.add(value);
     if (!grammar.containsKey(symbol)) {
       grammar.put(symbol, l);
@@ -125,9 +125,7 @@ public class GrammarBuilder {
       String labels_symbol) {
     // Add single labels
     List<String> curr_labels = grammar.get(label_symbol);
-    curr_labels.forEach(label -> {
-      extend_grammar(grammar, labels_symbol, label);
-    });
+    curr_labels.forEach(label -> extend_grammar(grammar, labels_symbol, label));
     // Add pairs of labels
     for (int i=0; i < curr_labels.size() - 1; i++) {
       String fst = curr_labels.get(i);
