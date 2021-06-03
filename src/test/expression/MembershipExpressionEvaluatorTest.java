@@ -6,6 +6,9 @@ import DataStructures.commonscollections.TreeList;
 import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -61,6 +64,15 @@ public class MembershipExpressionEvaluatorTest {
     tl.add(-1);
     tl.add(8);
     assertTrue(evaluateMembershipBinary("Boolean_Variable_0 in TreeList.root.*(right).leftIsPrevious", tl, true));
+  }
+
+  @Test
+  public void membership_with_var_set() {
+    Set<Integer> s = new HashSet<>();
+    s.add(1);
+    s.add(4);
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 in Integer_Set_Variable_0", s, 4));
+    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in Integer_Set_Variable_0", s, 2));
   }
 
 }
