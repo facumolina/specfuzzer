@@ -229,6 +229,7 @@ public class GrammarBuilder {
     remove_non_expandable_from_integer(grammar);
     remove_non_expandable_from_logic(grammar);
     remove_non_expandable_from_quantification(grammar);
+    remove_non_expandable_collection_vars(grammar);
     remove_non_expandable_membership(grammar);
   }
 
@@ -260,6 +261,15 @@ public class GrammarBuilder {
 
     if (!all_arguments_types.contains(JavaTypesUtil.INTEGER)) {
       // There are no arguments of type Integer, so the Integer_Variable option should be removed
+      grammar.get(IntegerSymbols.INTEGER_ZERO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
+      grammar.remove(IntegerSymbols.INTEGER_ONE).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
+      grammar.remove(IntegerSymbols.INTEGER_TWO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
+      grammar.remove(IntegerSymbols.INTEGER_CMP_EXPR);
+      grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(IntegerSymbols.INTEGER_CMP_EXPR));
+      if (grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).isEmpty()) {
+        grammar.remove(GrammarSymbols.NUMERIC_CMP_EXPR);
+        grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(GrammarSymbols.NUMERIC_CMP_EXPR));
+      }
     }
   }
 
@@ -303,6 +313,28 @@ public class GrammarBuilder {
     if (grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).isEmpty()) {
       grammar.remove(GrammarSymbols.MEMBERSHIP_EXPR);
       grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.MEMBERSHIP_EXPR);
+    }
+  }
+
+  /**
+   * Remove non-expandable symbols involving collection variables
+   */
+  protected static void remove_non_expandable_collection_vars(Map<String, List<String>> grammar) {
+    String integer_set_type = JavaTypesUtil.format_set_of_type(JavaTypesUtil.INTEGER);
+    if (!all_arguments_types.contains(integer_set_type)) {
+      // There are no arguments of type Integer, so collections integers should not be considered
+      String integer_set_symbol = GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER);
+      String symbol_to_remove = GrammarSymbols.get_special_identifier_set(JavaTypesUtil.INTEGER, 0);
+      grammar.get(integer_set_symbol).removeIf(x -> x.contains(symbol_to_remove));
+      if (grammar.get(integer_set_symbol).isEmpty()) {
+        grammar.remove(integer_set_symbol);
+        String integer_membership_symbol = GrammarSymbols.get_membership_symbol(JavaTypesUtil.INTEGER);
+        grammar.get(integer_membership_symbol).removeIf(x -> x.contains(integer_set_symbol));
+        if (grammar.get(integer_membership_symbol).isEmpty()) {
+          grammar.remove(integer_membership_symbol);
+          grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).removeIf(x -> x.contains(integer_membership_symbol));
+        }
+      }
     }
   }
 
