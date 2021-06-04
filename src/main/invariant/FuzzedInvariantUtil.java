@@ -79,6 +79,14 @@ public class FuzzedInvariantUtil {
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
+    // Check for collection vars
+    var_name = GrammarSymbols.get_special_identifier_set(JavaTypesUtil.INTEGER, 0);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier_set(JavaTypesUtil.OBJECT, 0);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+
     return vars;
   }
 
@@ -99,8 +107,11 @@ public class FuzzedInvariantUtil {
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return new Random().nextInt(10);
 
-    if (var_type.equals(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
       return new Object();
+
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix_set(JavaTypesUtil.INTEGER)))
+      return new HashSet<>(Arrays.asList(1,2,3));
 
     throw new IllegalStateException("Variable type "+var_type+" not supported");
   }

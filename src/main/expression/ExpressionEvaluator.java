@@ -112,6 +112,9 @@ public class ExpressionEvaluator {
         if (Number.class.isAssignableFrom(o2.getClass()) || Boolean.class.isAssignableFrom(o2.getClass())) {
           vars.put(GrammarSymbols.get_special_identifier(o2.getClass().getSimpleName(), n), o2);
         }
+        if (Collection.class.isAssignableFrom(o2.getClass())) {
+          set_collection_var(o2);
+        }
       }
     }
     if (o3 != null) {
@@ -121,6 +124,9 @@ public class ExpressionEvaluator {
         if (Number.class.isAssignableFrom(o3.getClass()) || Boolean.class.isAssignableFrom(o3.getClass())) {
           vars.put(GrammarSymbols.get_special_identifier(o3.getClass().getSimpleName(), n+1), o3);
         }
+        if (Collection.class.isAssignableFrom(o3.getClass())) {
+          set_collection_var(o3);
+        }
       }
     }
   }
@@ -129,6 +135,8 @@ public class ExpressionEvaluator {
    * Set the collection var
    */
   private static void set_collection_var(Object o) {
+    if (vars.containsKey("Integer_Set_Variable_0"))
+      throw new IllegalStateException("Variable value for collection class already inserted!");
     vars.put("Integer_Set_Variable_0", o);
     vars.put("Object_Set_Variable_0", o);
   }
