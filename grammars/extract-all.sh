@@ -7,3 +7,4 @@ java -cp "lib/*" grammar.GrammarExtractor DataStructures.AvlTreeList
 java -cp "lib/*" grammar.GrammarExtractor DataStructures.CollectionAttribute
 java -cp "lib/*" grammar.GrammarExtractor DataStructures.MapWrapper
 java -cp "lib/*" grammar.GrammarExtractor DataStructures.eiffel.Composite
+java -cp "lib/*" grammar.GrammarExtractor DataStructures.sf110.Region
