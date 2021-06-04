@@ -32,7 +32,8 @@ public class GrammarExtractorTest {
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
-    assert(grammar.get(IntegerSymbols.INTEGER_FIELD).size()==4);
+    assert(!grammar.containsKey(GrammarSymbols.MEMBERSHIP_EXPR));
+    assert(grammar.containsKey(IntegerSymbols.INTEGER_CMP_EXPR));
   }
 
   @Test
@@ -45,7 +46,8 @@ public class GrammarExtractorTest {
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
-    assert(grammar.get(IntegerSymbols.INTEGER_FIELD).size()==1);
+    assert(grammar.containsKey(IntegerSymbols.INTEGER_CMP_EXPR));
+    assert(grammar.get(IntegerSymbols.INTEGER_CMP_EXPR).size()==3);
   }
 
   @Test
@@ -58,7 +60,8 @@ public class GrammarExtractorTest {
     GrammarExtractor.traverse_graph(cut, cut.getSimpleName(), grammar, GrammarExtractor.bound);
     GrammarBuilder.remove_non_expandable(grammar);
     // Assertions about the obtained grammar
-    assert(grammar.get(IntegerSymbols.INTEGER_FIELD).size()==1);
+    assert(grammar.containsKey(IntegerSymbols.INTEGER_CMP_EXPR));
+    assert(grammar.get(IntegerSymbols.INTEGER_CMP_EXPR).size()==3);
   }
 
   @Test
