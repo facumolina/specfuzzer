@@ -1,6 +1,6 @@
 package expression;
 
-import java.util.Set;
+import java.util.Collection;
 
 import antlr.AlloyExprGrammarParser.Compare_opContext;
 import antlr.AlloyExprGrammarParser.ExprContext;
@@ -42,16 +42,16 @@ public class ComparisonExpressionEvaluator {
         return o2 != null;
       return !o1.equals(o2);
     case IN:
-      assert o2 instanceof Set<?> : "When evaluating IN the second object should be a set";
-      Set<Object> set_o2_in = (Set<Object>) o2;
+      assert o2 instanceof Collection<?> : "When evaluating IN the second object should be a collection";
+      Collection<Object> set_o2_in = (Collection<Object>) o2;
       if (o1 instanceof java.util.Collection)
         return set_o2_in.containsAll((java.util.Collection)o1);
       else
         return set_o2_in.contains(o1);
     case NOT_IN:
-      assert o2 instanceof Set<?> : "When evaluating NOT IN the second object should be a set";
-      Set<Object> set_o2_not_in = (Set<Object>) o2;
-      if (o1 instanceof java.util.Collection)
+      assert o2 instanceof Collection<?> : "When evaluating NOT IN the second object should be a collection";
+      Collection<Object> set_o2_not_in = (Collection<Object>) o2;
+      if (o1 instanceof Collection)
         return !set_o2_not_in.containsAll((java.util.Collection)o1);
       else
         return !set_o2_not_in.contains(o1);
