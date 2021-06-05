@@ -196,6 +196,7 @@ public class GrammarExtractor {
   private static void add_symbol_for_type(String type_name, String curr_expr,
       Map<String, List<String>> grammar) {
     String type_symbol = GrammarSymbols.get_symbol_for_type(type_name);
+    GrammarBuilder.add_field_type(type_name);
     if (!type_symbol.equals("<"+JavaTypesUtil.INTEGER+"_Field>")) {
       GrammarBuilder.extend_grammar(grammar, type_symbol, curr_expr);
     }
