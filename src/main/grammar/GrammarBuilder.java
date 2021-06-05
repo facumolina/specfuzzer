@@ -18,6 +18,7 @@ public class GrammarBuilder {
   // Keep track of the quantified sets
   private static Set<String> quantified_sets;
   private static Set<String> all_arguments_types;
+  private static Set<String> all_fields_types;
 
   /**
    * Create a Grammar with the initial state
@@ -26,6 +27,7 @@ public class GrammarBuilder {
     // Start
     Map<String, List<String>> grammar = new HashMap<>();
     GrammarInitializer.initialize_main_symbols(grammar);
+    all_fields_types = new HashSet<>();
 
     // Obtain all arguments types
     all_arguments_types = JavaTypesUtil.all_arguments_types(cut);
@@ -44,6 +46,15 @@ public class GrammarBuilder {
     GrammarInitializer.initialize_membership_expressions(grammar);
 
     return grammar;
+  }
+
+  /**
+   * Add field type
+   */
+  public static void add_field_type(String type) {
+    if (type==null)
+      throw new IllegalArgumentException("Type can't be null");
+    all_fields_types.add(JavaTypesUtil.format_type(type));
   }
 
   /**
@@ -226,10 +237,10 @@ public class GrammarBuilder {
    * Remove non expandable symbols
    */
   public static void remove_non_expandable(Map<String, List<String>> grammar) {
+    remove_non_expandable_collection_vars(grammar);
     remove_non_expandable_from_integer(grammar);
     remove_non_expandable_from_logic(grammar);
     remove_non_expandable_from_quantification(grammar);
-    remove_non_expandable_collection_vars(grammar);
     remove_non_expandable_membership(grammar);
   }
 
@@ -259,8 +270,8 @@ public class GrammarBuilder {
       grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(IntegerSymbols.INTEGER_FROM_FIELD));
     }
 
-    if (!all_arguments_types.contains(JavaTypesUtil.INTEGER)) {
-      // There are no arguments of type Integer, so the Integer_Variable option should be removed
+    if (!all_arguments_types.contains(JavaTypesUtil.INTEGER) && !all_fields_types.contains(JavaTypesUtil.INTEGER)) {
+      // There are no arguments nor fields of type Integer, so the Integer_Variable option should be removed
       grammar.get(IntegerSymbols.INTEGER_ZERO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
       grammar.remove(IntegerSymbols.INTEGER_ONE).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
       grammar.remove(IntegerSymbols.INTEGER_TWO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
@@ -321,9 +332,9 @@ public class GrammarBuilder {
    */
   protected static void remove_non_expandable_collection_vars(Map<String, List<String>> grammar) {
     String integer_set_type = JavaTypesUtil.format_set_of_type(JavaTypesUtil.INTEGER);
+    String integer_set_symbol = GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER);
     if (!all_arguments_types.contains(integer_set_type)) {
       // There are no arguments of type Integer, so collections integers should not be considered
-      String integer_set_symbol = GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER);
       String symbol_to_remove = GrammarSymbols.get_special_identifier_set(JavaTypesUtil.INTEGER, 0);
       grammar.get(integer_set_symbol).removeIf(x -> x.contains(symbol_to_remove));
       if (grammar.get(integer_set_symbol).isEmpty()) {
@@ -335,6 +346,9 @@ public class GrammarBuilder {
           grammar.get(GrammarSymbols.MEMBERSHIP_EXPR).removeIf(x -> x.contains(integer_membership_symbol));
         }
       }
+    }
+    if (!grammar.containsKey(integer_set_symbol)) {
+      grammar.get(IntegerSymbols.INTEGER_FROM_SET_SIZE).removeIf(x -> x.contains(integer_set_symbol));
     }
   }
 
