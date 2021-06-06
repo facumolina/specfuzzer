@@ -1818,10 +1818,13 @@ public final class Daikon {
               // The fuzzed spec is ternary
               inv_class = Class.forName("invariant.FuzzedTernaryInvariant");
             } else {
-              // Arity not supported
-              throw new Daikon.UserError(
-                "Fuzzed invariant class for arity not supported: "+arity
-              );
+              // Arity not supported, discard spec
+              discarded++;
+              System.out.println("Discarded due to arity: "+arity+ " - " + fuzzed_spec);
+              continue;
+              //throw new Daikon.UserError(
+              //  "Fuzzed invariant class for arity not supported: "+arity+ " - " + fuzzed_spec
+              //);
             }
             Method get_proto_from_spec_method = inv_class.getMethod("get_proto_from_spec", String.class);
             @SuppressWarnings("nullness")
