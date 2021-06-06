@@ -31,7 +31,7 @@ public class FuzzedInvariantUtil {
    * Return the list of class names
    */
   public static int get_amount_of_vars(String fuzzed_spec) {
-    Set<String> class_names = new HashSet<String>();
+    Set<String> class_names = new HashSet<>();
     int vars = 0;
     for (int i=0 ; i < fuzzed_spec.length(); i++) {
       if (Character.isUpperCase(fuzzed_spec.charAt(i))) {

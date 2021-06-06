@@ -38,6 +38,11 @@ public class FuzzedInvariantUtilTest {
   }
 
   @Test
+  public void test_ternary_1() {
+    assertTrue(3 == FuzzedInvariantUtil.get_amount_of_vars("(Integer_Variable_0 <= Integer_Variable_1) iff (Integer_Variable_1 > Integer_Variable_2)"));
+  }
+
+  @Test
   public void test_numeric_binary() {
     assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("Integer_Variable_0 > Integer_Variable_1"));
     assertTrue(2==FuzzedInvariantUtil.get_amount_of_vars("Integer_Variable_0 > Integer_Variable_1 + 1"));
