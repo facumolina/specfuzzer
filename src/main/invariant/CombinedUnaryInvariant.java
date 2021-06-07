@@ -12,7 +12,7 @@ import typequals.prototype.qual.Prototype;
 /**
  * Abstract base class for combined unary invariants. A CombinedUnaryInvariant may represent:
  * - a unary invariant over one object (pointer) variable, such as {@code x != null}.
- * - a unary invariant over a primitive variable, suche as {int > 0}
+ * - a unary invariant over a primitive variable, such as {@code i > 0}
  *
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
  */
