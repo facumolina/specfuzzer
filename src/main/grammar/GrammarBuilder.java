@@ -66,8 +66,8 @@ public class GrammarBuilder {
       // First time, create the proper quantification options
       grammar.get(GrammarSymbols.QT_EXPR)
           .add(GrammarSymbols.QUANTIFIER + " " + ConstantSymbols.QT_VAR_NAME + " : " + set_symbol + " : " + body_symbol);
-      grammar.get(GrammarSymbols.QT_EXPR).add(GrammarSymbols.QUANTIFIER + " " + ConstantSymbols.QT_VAR_NAME + " : " + set_symbol + " : ("
-          + body_symbol + ") " + GrammarSymbols.LOGIC_OP + " (" + body_symbol + ")");
+      //grammar.get(GrammarSymbols.QT_EXPR).add(GrammarSymbols.QUANTIFIER + " " + ConstantSymbols.QT_VAR_NAME + " : " + set_symbol + " : ("
+      //    + body_symbol + ") " + GrammarSymbols.LOGIC_OP + " (" + body_symbol + ")");
     }
   }
 
