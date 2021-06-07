@@ -110,9 +110,16 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   }
 
   /**
-   * Returns true iff the current variable is the this object
+   * Returns true iff the current variable is an object
    */
   private boolean var_is_object() {
+    return var().file_rep_type.isObject();
+  }
+
+  /**
+   * Returns true iff the current variable is the this object
+   */
+  private boolean var_is_expected_object() {
     return "this".equals(var().name());
   }
 
@@ -123,8 +130,8 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
     List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(0));
     if (Integer.class.isAssignableFrom(clazz))
-      return (int)v;
-    throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
+      return (int) v;
+    throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
   /**
@@ -138,26 +145,6 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
         return InvariantStatus.NO_CHANGE;
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       return InvariantStatus.FALSIFIED;
-    }
-  }
-
-  /**
-   * Handle missing key
-   */
-  private InvariantStatus handle_missing_key(String key) {
-    // First check if the fuzzed spec can be instantiated from the object type
-    // This check is done here since it may be the case that the given hashcode i
-    // corresponds to an object of an invalid type for the current fuzzed_spec
-    String type_str = var().type.toString();
-    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-
-    if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
-      System.out.println("WE ARE NOT SUPPOSED TO BE HERE!!!!!");
-      cached_evaluations.put(key, InvariantStatus.FALSIFIED);
-      return InvariantStatus.FALSIFIED;
-    } else {
-      cached_evaluations.put(key, InvariantStatus.NO_CHANGE);
-      return InvariantStatus.NO_CHANGE;
     }
   }
 
@@ -200,7 +187,7 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
     // Evaluate the key
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
-      return handle_missing_key(key);
+      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, key, var().type.toString());
 
     return check_modified_on_tuples(l, key);
   }

@@ -169,9 +169,16 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   }
 
   /**
-   * Returns true iff one of the current variables is the this object
+   * Returns true iff one of the current variables is an object
    */
   private boolean object_present() {
+    return var1().file_rep_type.isObject() || var2().file_rep_type.isObject();
+  }
+
+  /**
+   * Returns true iff the current variable is the this object
+   */
+  private boolean object_present_is_the_expected() {
     return "this".equals(var1().name()) || "this".equals(var2().name());
   }
 
@@ -182,8 +189,8 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
     if (Integer.class.isAssignableFrom(clazz))
-      return (int)v;
-    throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
+      return (int) v;
+    throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
   /**
@@ -197,25 +204,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
         return InvariantStatus.NO_CHANGE;
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       return InvariantStatus.FALSIFIED;
-    }
-  }
-
-  /**
-   * Handle missing key
-   */
-  private InvariantStatus handle_missing_key(String cached_key) {
-    // First check if the fuzzed spec can be instantiated from the object type
-    // This check is done here since it may be the case that the given hashcode i
-    // corresponds to an object of an invalid type for the current fuzzed_spec
-    String type_str = getClassOfObject();
-    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-
-    if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
-      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
-      return InvariantStatus.FALSIFIED;
-    } else {
-      cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
-      return InvariantStatus.NO_CHANGE;
     }
   }
 
@@ -264,7 +252,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
 
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
-      return handle_missing_key(cached_key);
+      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, getClassOfObject());
 
     return check_modified_on_tuples(l, curr_var, cached_key);
   }

@@ -116,10 +116,10 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   }
 
   /**
-   * Returns true iff one of the current variables is the this object
+   * Returns true iff one of the current variables is an object
    */
   private boolean object_present() {
-    return "this".equals(var1().name()) || "this".equals(var2().name()) || "this".equals(var3().name());
+    return var1().file_rep_type.isObject() || var2().file_rep_type.isObject() || var3().file_rep_type.isObject();
   }
 
   /**
@@ -214,25 +214,6 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   }
 
   /**
-   * Handle missing key
-   */
-  private InvariantStatus handle_missing_key(String cached_key) {
-    // First check if the fuzzed spec can be instantiated from the object type
-    // This check is done here since it may be the case that the given hashcode i
-    // corresponds to an object of an invalid type for the current fuzzed_spec
-    String type_str = getClassOfObject();
-    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
-
-    if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
-      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
-      return InvariantStatus.FALSIFIED;
-    } else {
-      cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
-      return InvariantStatus.NO_CHANGE;
-    }
-  }
-
-  /**
    * Evaluate the fuzzed spec on the given tuples list
    */
   private InvariantStatus check_modified_on_tuples(List<PptTupleInfo> list,VarInfo[] curr_vars, String cached_key) {
@@ -278,7 +259,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
 
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
-      return handle_missing_key(cached_key);
+      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, getClassOfObject());
 
     return check_modified_on_tuples(l, curr_vars, cached_key);
   }

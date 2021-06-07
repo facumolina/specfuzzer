@@ -2,6 +2,8 @@ package invariant;
 
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
+import daikon.inv.InvariantStatus;
+import expression.ExpressionValidator;
 import grammar.GrammarSymbols;
 import grammar.JavaTypesUtil;
 import org.antlr.v4.runtime.CharStreams;
@@ -200,6 +202,23 @@ public class FuzzedInvariantUtil {
    */
   public static boolean is_quantified(String fuzzed_spec) {
     return fuzzed_spec.startsWith("all ")||fuzzed_spec.startsWith("some ")||fuzzed_spec.startsWith("no ");
+  }
+
+  /**
+   * Handle missing key
+   */
+  public static InvariantStatus handle_missing_key(Map<String, InvariantStatus> cache,String fuzzed_spec,String cached_key, String type_str) {
+    // First check if the fuzzed spec can be instantiated from the object type
+    // This check is done here since it may be the case that the given hashcode i
+    // corresponds to an object of an invalid type for the current fuzzed_spec
+    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    if (!ExpressionValidator.is_valid(fuzzed_spec,class_name)) {
+      cache.put(cached_key, InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
+    } else {
+      cache.put(cached_key, InvariantStatus.NO_CHANGE);
+      return InvariantStatus.NO_CHANGE;
+    }
   }
 
 }
