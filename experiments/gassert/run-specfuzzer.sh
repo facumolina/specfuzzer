@@ -60,7 +60,7 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
     java -cp $cp_for_daikon daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
     echo ''
     echo '> Saving mutants results file'
-    python3 single-mutant-result.py invs.csv 1 $mutant_dtrace
+    python3 scripts/single-mutant-result.py invs.csv 1 $mutant_dtrace
   fi
 done
 echo ''
@@ -69,7 +69,7 @@ mkdir -p $output_dir
 base_file_name=$class_name'-'$method_name'-specfuzzer'
 
 echo '> Mutation killing ability'
-python3 process-final-results.py invs-by-mutants.csv
+python3 scripts/process-final-results.py invs-by-mutants.csv
 mutka_file=$output_dir'/'$base_file_name'-invs-by-mutants.csv'
 echo '> Mutation killing ability results saved in: '$mutka_file
 cp invs-by-mutants.csv $mutka_file
