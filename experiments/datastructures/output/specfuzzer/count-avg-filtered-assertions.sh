@@ -7,9 +7,9 @@ count_total=0
 count_obj_total=0
 count_pc_total=0
 for file in $class'-'$method*.csv; do
-  count=$(python filtered-unique.py $file $class $method)
-  count_obj=$(python filtered-unique-obj.py $file $class $method)
-  count_pc=$(python filtered-unique-pc.py $file $class $method)
+  count=$(python3 filtered-unique.py $file $class $method)
+  count_obj=$(python3 filtered-unique-obj.py $file $class $method)
+  count_pc=$(python3 filtered-unique-pc.py $file $class $method)
   echo 'Count in file '$file': '$count' - Obj: '$count_obj' - Pc: '$count_pc
   count_total=$((count_total+count))
   count_obj_total=$((count_obj_total+count_obj))
