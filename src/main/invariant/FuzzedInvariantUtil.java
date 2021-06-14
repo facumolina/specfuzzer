@@ -5,7 +5,7 @@ import antlr.AlloyExprGrammarParser;
 import daikon.inv.InvariantStatus;
 import expression.ExpressionValidator;
 import grammar.GrammarSymbols;
-import grammar.JavaTypesUtil;
+import utils.JavaTypesUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;

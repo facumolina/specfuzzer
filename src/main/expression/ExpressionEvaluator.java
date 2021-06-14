@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import grammar.GrammarSymbols;
-import grammar.JavaTypesUtil;
-import invariant.FuzzedInvariantUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;

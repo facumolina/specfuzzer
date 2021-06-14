@@ -1,7 +1,7 @@
 package grammar.symbols;
 
 import grammar.GrammarSymbols;
-import grammar.JavaTypesUtil;
+import utils.JavaTypesUtil;
 
 import java.util.Arrays;
 import java.util.LinkedList;

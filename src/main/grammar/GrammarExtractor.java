@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import grammar.symbols.ConstantSymbols;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DirectedPseudograph;
+import utils.JavaTypesUtil;
 
 public class GrammarExtractor {
 

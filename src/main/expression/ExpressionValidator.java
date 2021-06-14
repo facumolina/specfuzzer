@@ -1,7 +1,7 @@
 package expression;
 
 import grammar.GrammarSymbols;
-import grammar.JavaTypesUtil;
+import utils.JavaTypesUtil;
 
 import java.util.Collection;
 
