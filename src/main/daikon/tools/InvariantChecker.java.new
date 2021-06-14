@@ -407,7 +407,7 @@ public class InvariantChecker {
 
     Set<String> to_preserve = new HashSet<String>();
     for (InvFailInfo ifi : failedCounter) {
-      System.out.printf("Inv: %s - Ppt: %s%n",ifi.getInvStr(),ifi.getPptName());
+      //System.out.printf("Inv: %s - Ppt: %s%n",ifi.getInvStr(),ifi.getPptName());
       if (ifi.getInvStr().contains("FuzzedInvariant"))
         to_preserve.add(ifi.getInvStr());
     }
