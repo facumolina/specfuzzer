@@ -29,12 +29,11 @@ public final class ObjectsLoader {
   private static Map<String, List<PptTupleInfo>> objects;
 
   /** The file from which the hashmap must be loaded */
-  private static final String serialiazed_file_dir = System.getProperty("user.dir") + "/";
+  private static final String serialized_file_dir = System.getProperty("user.dir") + "/";
 
   public static List<PptTupleInfo> get_object(String key) {
     if (objects == null) {
       load_objects();
-      System.out.println("Total loaded objects: " + objects.size());
     }
     return objects.get(key);
   }
@@ -43,6 +42,8 @@ public final class ObjectsLoader {
    * Returns all PptTupleInfo that belongs to a key that is associated with the given ppt name.
    */
   public static List<PptTupleInfo> get_tuples_that_match_ppt(String ppt_name) {
+    if (objects==null)
+      load_objects();
     List<PptTupleInfo> list = new LinkedList<>();
     objects.keySet().forEach(key -> {
       if (key.contains(ppt_name))
@@ -77,6 +78,7 @@ public final class ObjectsLoader {
         objects.putAll((Map<String, List<PptTupleInfo>>) map_obj);
       System.out.println("Loaded objects from file: " + final_serialized_files[i]);
     }
+    System.out.println("Total loaded objects: " + objects.size());
   }
 
   /**
@@ -93,7 +95,7 @@ public final class ObjectsLoader {
     String[] splitted = supplied_files.split(";");
     String[] all_files = new String[splitted.length];
     for (int i = 0; i < all_files.length; i++) {
-      all_files[i] = serialiazed_file_dir + splitted[i];
+      all_files[i] = serialized_file_dir + splitted[i];
     }
     return all_files;
   }
