@@ -1,4 +1,4 @@
-package grammar;
+package utils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -124,6 +124,21 @@ public class JavaTypesUtil {
       throw new RuntimeException("Unable to load class: "+types[0].getTypeName()+". Is it in the classpath?");
     }
     return collection_class;
+  }
+
+  /**
+   * Returns true iff the given String corresponds to the name of a class that implements java.util.Collection
+   */
+  public static boolean is_collection(String class_name) {
+    if (class_name==null)
+      throw new IllegalArgumentException("Class name can't be null");
+    if (class_name.startsWith("java.util")) {
+      try {
+        Class<?> cl = Class.forName(class_name);
+        return (Collection.class.isAssignableFrom(cl));
+      } catch (ClassNotFoundException e) {}
+    }
+    return false;
   }
 
 }

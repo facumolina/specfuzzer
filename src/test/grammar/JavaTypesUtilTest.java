@@ -3,6 +3,8 @@ package grammar;
 import DataStructures.AvlTreeList;
 import DataStructures.List;
 import org.junit.Test;
+import utils.JavaTypesUtil;
+
 import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
@@ -25,4 +27,10 @@ public class JavaTypesUtilTest {
     assertTrue(avltree_arg_types.contains(JavaTypesUtil.OBJECT));
   }
 
+  @Test
+  public void is_collection() {
+    assertTrue(!JavaTypesUtil.is_collection("java.util.Random"));
+    assertTrue(JavaTypesUtil.is_collection("java.util.LinkedList"));
+    assertTrue(JavaTypesUtil.is_collection("java.util.HashSet"));
+  }
 }
