@@ -14,7 +14,9 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
+import utils.JavaTypesUtil;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +40,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
 
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
-
-  // Grammar-Based Fuzzer
-  private GrammarBasedFuzzer fuzzer;
 
   // Cache of already evaluated hashcode-ppt pairs.
   private Map<String, InvariantStatus> cached_evaluations = new HashMap<>();
@@ -66,11 +65,14 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   @Override
   public boolean extra_check(VarInfo[] vis) {
     String type_str = vis[0].type.toString();
-    String class_name_one = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    String class_name_one = type_str;
+    if (!JavaTypesUtil.is_collection(type_str))
+      class_name_one = JavaTypesUtil.get_simple_name(type_str);
     type_str = vis[1].type.toString();
-    String class_name_two = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    String class_name_two = JavaTypesUtil.get_simple_name(type_str);
     return ExpressionValidator.is_valid(fuzzed_spec, class_name_one, class_name_two);
   }
+
 
   /** Returns the prototype invariant. */
   public static @Prototype FuzzedBinaryInvariant get_proto() {
@@ -178,7 +180,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   /**
    * Returns true iff the current variable is the this object
    */
-  private boolean object_present_is_the_expected() {
+  private boolean object_present_is_this() {
     return "this".equals(var1().name()) || "this".equals(var2().name());
   }
 
@@ -190,6 +192,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
     if (Integer.class.isAssignableFrom(clazz))
       return (int) v;
+
     throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
@@ -205,6 +208,50 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       return InvariantStatus.FALSIFIED;
     }
+  }
+
+  /**
+   * Evaluate the current fuzzed spec on the given vars where one of them represents a collection
+   */
+  private InvariantStatus check_modified_on_collection_and_var() {
+    VarInfo collection_var = var1().file_rep_type.isObject()?var1():var2();
+    VarInfo primitive_var = var1().file_rep_type.isObject()?var2():var1();
+    String ppt_key = get_ppt_key(ppt.parent.name);
+    String cached_key = "collection-"+ppt_key;
+
+    // Check if already evaluated
+    if (cached_evaluations.containsKey(cached_key))
+      return cached_evaluations.get(cached_key);
+
+    List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_key);
+    try {
+      // Evaluate
+      boolean at_least_one_eval=false;
+      for (PptTupleInfo tuple : tuples) {
+        Object primitive_var_value = getValueForVariable(tuple, primitive_var);
+        Object collection_var_value = getValueForVariable(tuple, collection_var);
+        if (primitive_var_value!=null && collection_var_value!=null) {
+          // Both vars are not null
+          at_least_one_eval = true;
+          boolean b = ExpressionEvaluator.eval(fuzzed_spec, collection_var_value, primitive_var_value);
+          if (!b) {
+            cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+            return InvariantStatus.FALSIFIED;
+          }
+        }
+      }
+      if (!at_least_one_eval) {
+        // Never evaluated, thus it should be falsified
+        cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+        return InvariantStatus.FALSIFIED;
+      }
+    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
+      // The fuzzed spec can't be applied to the type of o, assume that is falsified
+      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
+    }
+    cached_evaluations.put(cached_key, InvariantStatus.NO_CHANGE);
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**
@@ -239,6 +286,10 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     // If there is no object among variables, evaluate directly on v1 and v2
     if (!object_present())
       return check_modified_on_vars(get_var_value(v1, 0), get_var_value(v2, 1));
+
+    // If the object present is not the this object, one of v1 and v2 must represent a collection
+    if (!object_present_is_this())
+      return check_modified_on_collection_and_var();
 
     // Recover the object and build keys
     int i = (int) getObject(v1, v2);
