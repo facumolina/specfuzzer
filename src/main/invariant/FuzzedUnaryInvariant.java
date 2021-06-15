@@ -119,7 +119,7 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   /**
    * Returns true iff the current variable is the this object
    */
-  private boolean var_is_expected_object() {
+  private boolean var_is_this_object() {
     return "this".equals(var().name());
   }
 
@@ -175,6 +175,9 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
     // When the var is not an object, it can be evaluated directly on v
     if (!var_is_object())
       return check_modified_on_vars(get_var_value(v));
+
+    if (!var_is_this_object())
+      throw new IllegalStateException("Need to implement single collection evaluation");
 
     // Recover the object and build key
     int i = (int) v;
