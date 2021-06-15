@@ -125,7 +125,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   /**
    * Return the value being compared with the object
    */
-  private Object getValueForVariable(PptTupleInfo tuple, VarInfo var) {
+  private Object get_value_for_variable(PptTupleInfo tuple, VarInfo var) {
     String var_name = var.name();
     Object varValue;
     if (var_name.startsWith("this")) {
@@ -146,9 +146,9 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   }
 
   /**
-   * Return the VarInfo corresponding to the variable  being compared with the object
+   * Return the VarInfo corresponding to the variable being compared with the object
    */
-  private VarInfo getVariable(PptSlice2 ppt_slice2) {
+  private VarInfo get_variable(PptSlice2 ppt_slice2) {
     if (ppt_slice2.var_infos[0].file_rep_type.isPrimitive())
       return ppt_slice2.var_infos[0];
     else
@@ -228,8 +228,8 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
       // Evaluate
       boolean at_least_one_eval=false;
       for (PptTupleInfo tuple : tuples) {
-        Object primitive_var_value = getValueForVariable(tuple, primitive_var);
-        Object collection_var_value = getValueForVariable(tuple, collection_var);
+        Object primitive_var_value = get_value_for_variable(tuple, primitive_var);
+        Object collection_var_value = get_value_for_variable(tuple, collection_var);
         if (primitive_var_value!=null && collection_var_value!=null) {
           // Both vars are not null
           at_least_one_eval = true;
@@ -261,7 +261,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     try {
       // Evaluate
       for (PptTupleInfo tuple : list) {
-        Object varValue = getValueForVariable(tuple, curr_var);
+        Object varValue = get_value_for_variable(tuple, curr_var);
         if (varValue==null) {
           cached_evaluations.put(cached_key, getDefault());
           return getDefault();
@@ -294,7 +294,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     // Recover the object and build keys
     int i = (int) getObject(v1, v2);
     String key = i+"-"+get_ppt_key(ppt.parent.name);
-    VarInfo curr_var = getVariable((PptSlice2)this.ppt);
+    VarInfo curr_var = get_variable((PptSlice2)this.ppt);
     String cached_key = key+curr_var.name();
 
     // Check if already evaluated
@@ -357,11 +357,27 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     String ppt_name = ppt.name().split(":::ENTER")[0];
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     try {
+
       for (PptTupleInfo tuple : tuples) {
-        Object varValue = getValueForVariable(tuple,getVariable((PptSlice2) ppt));
-        if (varValue==null)
-          return false;
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), varValue);
+        Object o1;
+        Object o2;
+        if (object_present() && object_present_is_this()) {
+          // The first must be the this object, and the second the variable
+          o1 = tuple.getThisObject();
+          o2 = get_value_for_variable(tuple, get_variable((PptSlice2) ppt));
+          if (o2==null) return false;
+        } else {
+          // Both are vars
+          o1 = get_value_for_variable(tuple,var1());
+          o2 = get_value_for_variable(tuple,var2());
+          if (object_present()) {
+            // o1 is a collection, null is allowed for o1
+            if (o1 == null) continue;
+            if (o2 == null) return false;
+          }  else // Both are vars, none of them should be null
+            if (o1==null || o2 == null) return false;
+        }
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1, o2);
         if (!b)
           return false;
       }
