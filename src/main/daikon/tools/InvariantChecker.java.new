@@ -390,8 +390,6 @@ public class InvariantChecker {
             + percent
             + ".");
 
-    System.out.println();
-    System.out.println("Failing invs:");
     if (false) {
     for (Invariant inv : failedInvariants) {
       System.out.printf("+%s failing at ppt %s%n", inv.format(), inv.ppt.name());
