@@ -13,58 +13,12 @@ import java.util.Collection;
 public class ExpressionValidator {
 
   /**
-   * Returns true if the given expression is applicable to an object of the given class name
-   */
-  public static boolean is_valid(String alloy_expr, String class_name) {
-    if (!alloy_expr.contains(class_name+".")) {
-      // Should be a number variable
-      String formatted = JavaTypesUtil.format_type(class_name);
-      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
-      return alloy_expr.contains(var_name);
-    } else {
-      int idx = alloy_expr.indexOf(class_name);
-      while (idx >= 0) {
-        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-          return false;
-        idx = alloy_expr.indexOf(class_name,idx+1);
-      }
-      return true;
-    }
-  }
-
-  /**
-   * Returns true if the given expression is applicable to objects of the given classes
-   */
-  public static boolean is_valid(String alloy_expr, String class_name_one, String class_name_two) {
-    if (!alloy_expr.contains(class_name_one+".") && !alloy_expr.contains(class_name_two+".")) {
-      // Both should be variables
-      String formatted = JavaTypesUtil.format_type(class_name_one);
-      String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
-      String formatted_two = JavaTypesUtil.format_type(class_name_two);
-      String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
-      return alloy_expr.contains(var_name_one) && alloy_expr.contains(var_name_two);
-    } else {
-      String obj_class = alloy_expr.contains(class_name_one+".")?class_name_one:class_name_two;
-      String var_class = alloy_expr.contains(class_name_one+".")?class_name_two:class_name_one;
-      int idx = alloy_expr.indexOf(obj_class);
-      while (idx >= 0) {
-        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-          return false;
-        idx = alloy_expr.indexOf(obj_class,idx+1);
-      }
-      String formatted = JavaTypesUtil.format_type(var_class);
-      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
-      return alloy_expr.contains(var_name);
-    }
-  }
-
-  /**
    * Get object class
    */
-  private static String object_class(String alloy_expr, String class_one, String class_two, String class_three) {
-    if (alloy_expr.contains(class_one+"."))
+  private static String object_class(String str_expr, String class_one, String class_two, String class_three) {
+    if (str_expr.contains(class_one+"."))
       return class_one;
-    if (alloy_expr.contains(class_two+"."))
+    if (str_expr.contains(class_two+"."))
       return class_two;
     return class_three;
   }
@@ -72,61 +26,128 @@ public class ExpressionValidator {
   /**
    * Get var class
    */
-  private static String var_class(String alloy_expr, String class_one, String class_two) {
-    if (alloy_expr.contains(class_one+"."))
+  private static String var_class(String str_expr, String class_one, String class_two) {
+    if (str_expr.contains(class_one+"."))
       return class_two;
     return class_one;
   }
 
   /**
+   * Returns true iff the given expression allows to receive an object of the given class
+   */
+  private static boolean expr_allows_class(String str_expr, String class_name) {
+    int idx = str_expr.indexOf(class_name);
+    while (idx >= 0) {
+      if (!(idx == 0 || str_expr.charAt(idx - 1) == ' ' || str_expr.charAt(idx - 1) == '('))
+        return false;
+      idx = str_expr.indexOf(class_name,idx+1);
+    }
+    return true;
+  }
+
+  /**
+   * Returns true if the given expression is applicable to an object of the given class name
+   */
+  public static boolean is_valid(String str_expr, String class_name) {
+    if (!str_expr.contains(class_name+".")) {
+      // The expression does not contains the class, so it must be a number variable
+      String formatted = JavaTypesUtil.format_type(class_name);
+      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+      return str_expr.contains(var_name);
+    } else {
+      return expr_allows_class(str_expr, class_name);
+    }
+  }
+
+  /**
+   * Returns true iff the given expression has two vars
+   */
+  private static boolean expr_has_two_vars(String str_expr, String class_name_one, String class_name_two) {
+    String formatted = JavaTypesUtil.format_type(class_name_one);
+    String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
+    String formatted_two = JavaTypesUtil.format_type(class_name_two);
+    String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
+    return str_expr.contains(var_name_one) && str_expr.contains(var_name_two);
+  }
+
+  /**
+   * Returns true iff the given expression as a set var and a class var
+   * Notice that we only check that the suffix for a set variable is present, since we don't
+   * have a way of determining the type of the elements of a collection from its class name.
+   */
+  private static boolean expr_has_set_and_var(String str_expr, String var_class) {
+    String formatted = JavaTypesUtil.format_type(var_class);
+    String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+    return str_expr.contains("_Set_Variable_0") && str_expr.contains(var_name);
+  }
+
+  /**
+   * Returns true iff the given expression is applicable to objects of the given classes
+   */
+  public static boolean is_valid(String str_expr, String class_name_one, String class_name_two) {
+    if (!str_expr.contains(class_name_one+".") && !str_expr.contains(class_name_two+".")) {
+      // Either the first is a collection and the second a variable, or both are variables
+      if (JavaTypesUtil.is_collection(class_name_one))
+        return expr_has_set_and_var(str_expr, class_name_two);
+      else
+        return expr_has_two_vars(str_expr, class_name_one, class_name_two);
+
+    } else {
+      // Check that the expression allows the object class
+      String obj_class = str_expr.contains(class_name_one+".")?class_name_one:class_name_two;
+      if (!expr_allows_class(str_expr, obj_class))
+        return false;
+      // Check that the expression contains a variable of the second class
+      String var_class = str_expr.contains(class_name_one+".")?class_name_two:class_name_one;
+      String formatted = JavaTypesUtil.format_type(var_class);
+      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+      return str_expr.contains(var_name);
+    }
+  }
+
+  /**
    * Returns true if the given expression is applicable to objects of the given classes
    */
-  public static boolean is_valid(String alloy_expr, String class_name_one, String class_name_two, String class_name_three) {
-    if (!alloy_expr.contains(class_name_one+".") && !alloy_expr.contains(class_name_two+".") && !alloy_expr.contains(class_name_three+".")) {
-      // All should be variables
+  public static boolean is_valid(String str_expr, String class_name_one, String class_name_two, String class_name_three) {
+    if (!str_expr.contains(class_name_one+".") && !str_expr.contains(class_name_two+".") && !str_expr.contains(class_name_three+".")) {
+      // All must be variables
       String formatted = JavaTypesUtil.format_type(class_name_one);
       String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
       String formatted_two = JavaTypesUtil.format_type(class_name_two);
       String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
       String formatted_three = JavaTypesUtil.format_type(class_name_three);
       String var_name_three = GrammarSymbols.get_special_identifier(formatted_three, 2);
-      return alloy_expr.contains(var_name_one) && alloy_expr.contains(var_name_two) && alloy_expr.contains(var_name_three);
+      return str_expr.contains(var_name_one) && str_expr.contains(var_name_two) && str_expr.contains(var_name_three);
     } else {
-      String obj_class = object_class(alloy_expr, class_name_one, class_name_two, class_name_three);
-      String var_class = var_class(alloy_expr, class_name_one, class_name_two);
-      int idx = alloy_expr.indexOf(obj_class);
-      while (idx >= 0) {
-        if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-          return false;
-        idx = alloy_expr.indexOf(obj_class,idx+1);
-      }
-      String formatted = JavaTypesUtil.format_type(var_class);
-      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
-      String formatted_one = JavaTypesUtil.format_type(var_class);
-      String var_name_one = GrammarSymbols.get_special_identifier(formatted, 1);
-      return alloy_expr.contains(var_name) && alloy_expr.contains(var_name_one);
+      // Check that the expression allows the object class
+      String obj_class = object_class(str_expr, class_name_one, class_name_two, class_name_three);
+      if (!expr_allows_class(str_expr, obj_class))
+        return false;
+      // Check that the expression contains variables of the remaining classes
+      String var_class = var_class(str_expr, class_name_one, class_name_two);
+      return expr_has_two_vars(str_expr, var_class, var_class);
     }
   }
 
   /**
    * Validate the presence of a variable
    */
-  private static void validate_var(String alloy_expr, Class<?> var_type, String var_name) {
-    if (!(alloy_expr.contains(var_name)))
-      throw new NonApplicableExpressionException("The expression " + alloy_expr + " does not contains variable " + var_name + " of class " + var_type.getSimpleName());
+  private static void validate_var(String str_expr, Class<?> var_type, String var_name) {
+    if (!(str_expr.contains(var_name)))
+      throw new NonApplicableExpressionException("The expression " + str_expr + " does not contains variable " + var_name + " of class " + var_type.getSimpleName());
   }
   
   /**
    * Validate that the given expression is applicable to the given object class
    */
-  public static void validate(String alloy_expr, Class<?> cl, Class<?> cl2, Class<?> cl3) {
+  public static void validate(String str_expr, Class<?> cl, Class<?> cl2, Class<?> cl3) {
     if (Number.class.isAssignableFrom(cl)) {
       // All are numbers, thus just check the presence of all variables
-      validate_var(alloy_expr, cl, GrammarSymbols.get_special_identifier(cl.getSimpleName(), 0));
+      validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl.getSimpleName(), 0));
       if (cl2!=null && (Number.class.isAssignableFrom(cl2)))
-        validate_var(alloy_expr, cl2, GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1));
+        validate_var(str_expr, cl2, GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1));
       if (cl3!=null && (Number.class.isAssignableFrom(cl3)))
-        validate_var(alloy_expr, cl3, GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 2));
+        validate_var(str_expr, cl3, GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 2));
       return;
     }
 
@@ -138,28 +159,28 @@ public class ExpressionValidator {
 
     // First class is not a collection, so it should be the target class
     String class_name = cl.getSimpleName();
-    if (!alloy_expr.contains(class_name + "."))
+    if (!str_expr.contains(class_name + "."))
       // Class name is not present, then ensure that all tokens are variable
-      throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
+      throw new NonApplicableExpressionException("The expression " + str_expr + " is not applicable to class: " + class_name);
 
-    int idx = alloy_expr.indexOf(class_name);
+    int idx = str_expr.indexOf(class_name);
     while (idx >= 0) {
-      if (!(idx == 0 || alloy_expr.charAt(idx - 1) == ' ' || alloy_expr.charAt(idx - 1) == '('))
-        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to class: " + class_name);
-      idx = alloy_expr.indexOf(class_name, idx + 1);
+      if (!(idx == 0 || str_expr.charAt(idx - 1) == ' ' || str_expr.charAt(idx - 1) == '('))
+        throw new NonApplicableExpressionException("The expression " + str_expr + " is not applicable to class: " + class_name);
+      idx = str_expr.indexOf(class_name, idx + 1);
     }
     if (cl2 != null) {
       // Either cl2.getSimpleName()_Variable string should exist or Object_Variable_0
       String var_name = GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 0);
-      if (!alloy_expr.contains(var_name) && !alloy_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0))) {
-        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to var: " + var_name);
+      if (!str_expr.contains(var_name) && !str_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0))) {
+        throw new NonApplicableExpressionException("The expression " + str_expr + " is not applicable to var: " + var_name);
       }
     }
     if (cl3 != null) {
       // Either cl3.getSimpleName()_Variable string should exist or Object_Variable_1
       String var_name = GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 1);
-      if (!alloy_expr.contains(var_name) && !alloy_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 1))) {
-        throw new NonApplicableExpressionException("The expression " + alloy_expr + " is not applicable to var: " + var_name);
+      if (!str_expr.contains(var_name) && !str_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 1))) {
+        throw new NonApplicableExpressionException("The expression " + str_expr + " is not applicable to var: " + var_name);
       }
     }
 
