@@ -168,6 +168,9 @@ public class FuzzedInvariantUtil {
     return false;
   }
 
+  /**
+   * Count the occurrences of findStr in str
+   */
   private static int count_occurrences(String findStr, String str) {
     int lastIndex = 0;
     int count = 0;
