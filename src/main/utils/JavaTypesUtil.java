@@ -141,4 +141,11 @@ public class JavaTypesUtil {
     return false;
   }
 
+  /**
+   * Returns the simple name from a fully qualified name string
+   */
+  public static String get_simple_name(String fqname) {
+    return fqname.substring(fqname.lastIndexOf('.') + 1).trim();
+  }
+
 }
