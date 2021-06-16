@@ -9,14 +9,12 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.tools.InvariantChecker;
 import expression.*;
-import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,34 +113,11 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   /**
    * Return the class name that represents the object
    */
-  private String getClassOfObject() {
+  private String get_class_of_object() {
     if (var1().file_rep_type.isObject())
       return var1().type.toString();
     else
       return var2().type.toString();
-  }
-
-  /**
-   * Return the value being compared with the object
-   */
-  private Object get_value_for_variable(PptTupleInfo tuple, VarInfo var) {
-    String var_name = var.name();
-    Object varValue;
-    if (var_name.startsWith("this")) {
-      // Represents a field that can be obtained from the this object.
-      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
-    } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName()) &&
-              !var_name.contains("$")) {
-      // Represents a static field
-      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
-    } else {
-      if (var.isDerivedParam() && var_name.contains("orig")) {
-        var_name = var_name.replace("orig(",""); // Remove orig(
-        var_name  = var_name.substring(0, var_name.length() - 1); // Remove )
-      }
-      varValue = tuple.getVariableValue(var_name);
-    }
-    return varValue;
   }
 
   /**
@@ -185,18 +160,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   }
 
   /**
-   * Get the variable value in the type expected by the expression
-   */
-  private Object get_var_value(long v, int n) {
-    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
-    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
-    if (Integer.class.isAssignableFrom(clazz))
-      return (int) v;
-
-    throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
-  }
-
-  /**
    * Evaluate the current fuzzed spec on the given variable values
    */
   private InvariantStatus check_modified_on_vars(Object value1,Object value2) {
@@ -228,8 +191,8 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
       // Evaluate
       boolean at_least_one_eval=false;
       for (PptTupleInfo tuple : tuples) {
-        Object primitive_var_value = get_value_for_variable(tuple, primitive_var);
-        Object collection_var_value = get_value_for_variable(tuple, collection_var);
+        Object primitive_var_value = FuzzedInvariantUtil.get_value_for_variable(tuple, primitive_var);
+        Object collection_var_value = FuzzedInvariantUtil.get_value_for_variable(tuple, collection_var);
         if (primitive_var_value!=null && collection_var_value!=null) {
           // Both vars are not null
           at_least_one_eval = true;
@@ -261,7 +224,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     try {
       // Evaluate
       for (PptTupleInfo tuple : list) {
-        Object varValue = get_value_for_variable(tuple, curr_var);
+        Object varValue = FuzzedInvariantUtil.get_value_for_variable(tuple, curr_var);
         if (varValue==null) {
           cached_evaluations.put(cached_key, getDefault());
           return getDefault();
@@ -285,7 +248,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
     if (!object_present())
-      return check_modified_on_vars(get_var_value(v1, 0), get_var_value(v2, 1));
+      return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1));
 
     // If the object present is not the this object, one of v1 and v2 must represent a collection
     if (!object_present_is_this())
@@ -303,7 +266,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
 
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
-      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, getClassOfObject());
+      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, get_class_of_object());
 
     return check_modified_on_tuples(l, curr_var, cached_key);
   }
@@ -364,12 +327,12 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
         if (object_present() && object_present_is_this()) {
           // The first must be the this object, and the second the variable
           o1 = tuple.getThisObject();
-          o2 = get_value_for_variable(tuple, get_variable((PptSlice2) ppt));
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, get_variable((PptSlice2) ppt));
           if (o2==null) return false;
         } else {
           // Both are vars
-          o1 = get_value_for_variable(tuple,var1());
-          o2 = get_value_for_variable(tuple,var2());
+          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,var1());
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,var2());
           if (object_present()) {
             // o1 is a collection, null is allowed for o1
             if (o1 == null) continue;

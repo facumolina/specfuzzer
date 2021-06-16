@@ -2,7 +2,10 @@ package invariant;
 
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
+import daikon.VarInfo;
+import daikon.chicory.PptTupleInfo;
 import daikon.inv.InvariantStatus;
+import expression.ExpressionEvaluator;
 import expression.ExpressionValidator;
 import grammar.GrammarSymbols;
 import utils.JavaTypesUtil;
@@ -90,6 +93,18 @@ public class FuzzedInvariantUtil {
       vars.add(var_name);
 
     return vars;
+  }
+
+  /**
+   * Get the value of the nth variable in the type expected by the expression
+   */
+  public static Object get_var_value(String fuzzed_spec,long v, int n) {
+    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
+    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
+    if (Integer.class.isAssignableFrom(clazz))
+      return (int) v;
+
+    throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
   /**
@@ -222,6 +237,29 @@ public class FuzzedInvariantUtil {
       cache.put(cached_key, InvariantStatus.NO_CHANGE);
       return InvariantStatus.NO_CHANGE;
     }
+  }
+
+  /**
+   * Return the value being compared with the object
+   */
+  public static Object get_value_for_variable(PptTupleInfo tuple, VarInfo var) {
+    String var_name = var.name();
+    Object varValue;
+    if (var_name.startsWith("this")) {
+      // Represents a field that can be obtained from the this object.
+      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
+    } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName()) &&
+            !var_name.contains("$")) {
+      // Represents a static field
+      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
+    } else {
+      if (var.isDerivedParam() && var_name.contains("orig")) {
+        var_name = var_name.replace("orig(",""); // Remove orig(
+        var_name  = var_name.substring(0, var_name.length() - 1); // Remove )
+      }
+      varValue = tuple.getVariableValue(var_name);
+    }
+    return varValue;
   }
 
 }

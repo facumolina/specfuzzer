@@ -1,7 +1,6 @@
 package invariant;
 
 import daikon.PptSlice;
-import daikon.PptSlice2;
 import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
 import daikon.inv.Invariant;
@@ -12,11 +11,11 @@ import expression.ExpressionEvaluator;
 import expression.ExpressionValidator;
 import expression.NonApplicableExpressionException;
 import expression.NonEvaluableExpressionException;
-import fuzzer.GrammarBasedFuzzer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
+import utils.JavaTypesUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +40,6 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
 
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
-
-  // Grammar-Based Fuzzer
-  private GrammarBasedFuzzer fuzzer;
 
   // Cache of already evaluated hashcode-ppt pairs.
   private Map<String, InvariantStatus> cached_evaluations = new HashMap<>();
@@ -97,11 +93,13 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   @Override
   public boolean extra_check(VarInfo[] vis) {
     String type_str = vis[0].type.toString();
-    String class_name_one = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    String class_name_one = type_str;
+    if (!JavaTypesUtil.is_collection(type_str))
+      class_name_one = JavaTypesUtil.get_simple_name(type_str);
     type_str = vis[1].type.toString();
-    String class_name_two = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    String class_name_two = JavaTypesUtil.get_simple_name(type_str);
     type_str = vis[2].type.toString();
-    String class_name_three = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    String class_name_three = JavaTypesUtil.get_simple_name(type_str);
     return ExpressionValidator.is_valid(fuzzed_spec, class_name_one, class_name_two, class_name_three);
   }
 
@@ -123,14 +121,10 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   }
 
   /**
-   * Get the variable value in the type expected by the expression
+   * Returns true iff the current variable is the this object
    */
-  private Object get_var_value(long v, int n) {
-    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
-    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
-    if (Integer.class.isAssignableFrom(clazz))
-      return (int)v;
-    throw new IllegalArgumentException("Unexpected variable type: "+clazz.getSimpleName()+" with value "+v);
+  private boolean object_present_is_this() {
+    return "this".equals(var1().name()) || "this".equals(var2().name()) || "this".equals(var3().name());
   }
 
   /**
@@ -149,7 +143,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   /**
    * Return the VarInfo corresponding to the variable  being compared with the object
    */
-  private VarInfo[] getVariables(PptSlice2 ppt_slice2) {
+  private VarInfo[] get_variables() {
     VarInfo[] vars = new VarInfo[2];
     if (var1().file_rep_type.isObject()) {
       vars[0] = var2();
@@ -162,29 +156,6 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
       vars[1] = var2();
     }
     return vars;
-  }
-
-  /**
-   * Return the value being compared with the object
-   */
-  private Object getValueForVariable(PptTupleInfo tuple, VarInfo var) {
-    String var_name = var.name();
-    Object varValue;
-    if (var_name.startsWith("this")) {
-      // Represents a field that can be obtained from the this object.
-      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace("this", tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
-    } else if (var_name.startsWith(tuple.getThisObject().getClass().getCanonicalName()) &&
-            !var_name.contains("$")) {
-      // Represents a static field
-      varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
-    } else {
-      if (var.isDerivedParam() && var_name.contains("orig")) {
-        var_name = var_name.replace("orig(",""); // Remove orig(
-        var_name  = var_name.substring(0, var_name.length() - 1); // Remove )
-      }
-      varValue = tuple.getVariableValue(var_name);
-    }
-    return varValue;
   }
 
   /**
@@ -220,8 +191,8 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
     try {
       // Evaluate
       for (PptTupleInfo tuple : list) {
-        Object var_value_one = getValueForVariable(tuple, curr_vars[0]);
-        Object var_value_two = getValueForVariable(tuple, curr_vars[1]);
+        Object var_value_one = FuzzedInvariantUtil.get_value_for_variable(tuple, curr_vars[0]);
+        Object var_value_two = FuzzedInvariantUtil.get_value_for_variable(tuple, curr_vars[1]);
         if (var_value_one == null || var_value_two == null) {
           cached_evaluations.put(cached_key, getDefault());
           return getDefault();
@@ -245,12 +216,16 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   public InvariantStatus check_modified(long v1, long v2, long v3, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
     if (!object_present())
-      return check_modified_on_vars(get_var_value(v1, 0), get_var_value(v2, 1), get_var_value(v3, 2));
+      return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v3, 2));
+
+    // If the object present is not the this object, one of the inputs must represent a collection
+    if (!object_present_is_this())
+      throw new IllegalArgumentException("Dont know how to evaluate this yet");
 
     // Recover the object and build keys
     int i = (int) getObject(v1, v2, v3);
     String key = i+"-"+get_ppt_key(ppt.parent.name);
-    VarInfo[] curr_vars = getVariables((PptSlice2)this.ppt);
+    VarInfo[] curr_vars = get_variables();
     String cached_key = key+curr_vars[0].name()+curr_vars[1].name();
 
     // Check if already evaluated
@@ -314,12 +289,29 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     try {
       for (PptTupleInfo tuple : tuples) {
-        VarInfo[] curr_vars = getVariables((PptSlice2)this.ppt);
-        Object var_value_one = getValueForVariable(tuple, curr_vars[0]);
-        Object var_value_two = getValueForVariable(tuple, curr_vars[1]);
-        if (var_value_one==null || var_value_two==null)
-          return false;
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject(), var_value_one, var_value_two);
+        Object o1;
+        Object o2;
+        Object o3;
+        if (object_present() && object_present_is_this()) {
+          // The first must be the this object, and the rest variables
+          o1 = tuple.getThisObject();
+          VarInfo[] curr_vars = get_variables();
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, curr_vars[0]);
+          o3 = FuzzedInvariantUtil.get_value_for_variable(tuple, curr_vars[1]);
+          if (o2==null || o3==null) return false;
+        } else {
+          // All are vars
+          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,var1());
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,var2());
+          o3 = FuzzedInvariantUtil.get_value_for_variable(tuple,var3());
+          if (object_present()) {
+            // o1 is a collection, null is allowed for o1
+            if (o1 == null) continue;
+            if (o2 == null || o3==null) return false;
+          }  else // All are vars, none of them should be null
+            if (o1==null || o2 == null || o3==null) return false;
+        }
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1, o2, o3);
         if (!b)
           return false;
       }
