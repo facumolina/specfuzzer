@@ -12,8 +12,8 @@ import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
-import fuzzer.GrammarBasedFuzzer;
 import typequals.prototype.qual.Prototype;
+import utils.JavaTypesUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,9 +39,6 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
-  // Grammar-Based Fuzzer
-  private GrammarBasedFuzzer fuzzer;
-
   // Cache of already evaluated hashcode-ppt pairs.
   private Map<String, InvariantStatus> cached_evaluations = new HashMap<>();
 
@@ -66,7 +63,7 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   @Override
   public boolean extra_check(VarInfo[] vis) {
     String type_str = vis[0].type.toString();
-    String class_name = type_str.substring(type_str.lastIndexOf('.') + 1).trim();
+    String class_name = JavaTypesUtil.get_simple_name(type_str);
     return ExpressionValidator.is_valid(fuzzed_spec, class_name);
   }
 
@@ -102,11 +99,10 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
    * Ignore conditions when using ppt as keys
    */
   private String get_ppt_key(String ppt_name) {
-    String res = ppt_name;
-    if (res.contains(";condition")) {
-      return res.split(";condition")[0];
+    if (ppt_name.contains(";condition")) {
+      return ppt_name.split(";condition")[0];
     }
-    return res;
+    return ppt_name;
   }
 
   /**
@@ -239,7 +235,11 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
     for (PptTupleInfo tuple : tuples) {
       // The unary invariant is only evaluated on the this object of the tuple
       try {
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, tuple.getThisObject());
+        Object o1;
+        if (var_is_object()) o1 = tuple.getThisObject();
+        else o1 = tuple.getVariableValue(var().name());
+        if (o1 == null) continue;
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1);
         if (!b) {
           return false;
         }
