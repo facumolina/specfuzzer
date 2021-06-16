@@ -71,6 +71,15 @@ public class ExpressionValidator {
   }
 
   /**
+   * Returns true iff the given expression has two vars
+   */
+  private static boolean expr_has_three_vars(String str_expr, String class_name_one, String class_name_two, String class_name_three) {
+    String formatted = JavaTypesUtil.format_type(class_name_three);
+    String var_name_three = GrammarSymbols.get_special_identifier(formatted, 2);
+    return expr_has_two_vars(str_expr, class_name_one, class_name_two) && str_expr.contains(var_name_three);
+  }
+
+  /**
    * Returns true iff the given expression as a set var and a class var
    * Notice that we only check that the suffix for a set variable is present, since we don't
    * have a way of determining the type of the elements of a collection from its class name.
@@ -79,6 +88,17 @@ public class ExpressionValidator {
     String formatted = JavaTypesUtil.format_type(var_class);
     String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
     return str_expr.contains("_Set_Variable_0") && str_expr.contains(var_name);
+  }
+
+  /**
+   * Returns true iff the given expression as a set var and a class var
+   * Notice that we only check that the suffix for a set variable is present, since we don't
+   * have a way of determining the type of the elements of a collection from its class name.
+   */
+  private static boolean expr_has_set_and_two_vars(String str_expr, String var_class) {
+    String formatted = JavaTypesUtil.format_type(var_class);
+    String var_name_two = GrammarSymbols.get_special_identifier(formatted, 1);
+    return expr_has_set_and_var(str_expr, var_class) && str_expr.contains(var_name_two);
   }
 
   /**
@@ -110,14 +130,11 @@ public class ExpressionValidator {
    */
   public static boolean is_valid(String str_expr, String class_name_one, String class_name_two, String class_name_three) {
     if (!str_expr.contains(class_name_one+".") && !str_expr.contains(class_name_two+".") && !str_expr.contains(class_name_three+".")) {
-      // All must be variables
-      String formatted = JavaTypesUtil.format_type(class_name_one);
-      String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
-      String formatted_two = JavaTypesUtil.format_type(class_name_two);
-      String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
-      String formatted_three = JavaTypesUtil.format_type(class_name_three);
-      String var_name_three = GrammarSymbols.get_special_identifier(formatted_three, 2);
-      return str_expr.contains(var_name_one) && str_expr.contains(var_name_two) && str_expr.contains(var_name_three);
+      // Either the first is a collection and the second a variable, or all are variables
+      if (JavaTypesUtil.is_collection(class_name_one))
+        return expr_has_set_and_two_vars(str_expr, class_name_two);
+      else
+        return expr_has_three_vars(str_expr, class_name_one, class_name_two, class_name_three);
     } else {
       // Check that the expression allows the object class
       String obj_class = object_class(str_expr, class_name_one, class_name_two, class_name_three);
