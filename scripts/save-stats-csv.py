@@ -16,8 +16,7 @@ filtering_time=sys.argv[7] # Filtering time (Step 2.1) in seconds
 buckets_time=sys.argv[8] # Buckets-based Filtering time (Step 2.2) in seconds
 assertions_file=sys.argv[9] # Csv file containing all the assertions inferred (Step 1)
 invs_by_mutants_file=sys.argv[10] # File containing specs with the mutants they kill (Step 2.1)
-invs_by_buckets_file=sys.argv[11] # File containing specs filtered with buckets (Step 2.2)
-output_file=sys.argv[12] # Output csv file
+output_file=sys.argv[11] # Output csv file
 
 # Define functions and utilities
 postcondition_delimiter=target_class+"."+target_method+"\("
@@ -60,10 +59,21 @@ def all_mutant_killing_assertions(mka_file, all_assertions):
 				break
 	return unique_assertions
 
+def buckets_report(buckets_file):
+	f = open(buckets_file, 'r')
+	fst_line = f.readline()
+	snd_line = f.readline()
+	f.close()
+	buckets_nr=fst_line.replace("buckets=","").replace("\n","")
+	specs_nr=snd_line.replace("specs=","").replace("\n","")
+	return buckets_nr, specs_nr
+
 # Load output file and stuff
 output_df = pd.read_csv(output_file)
 assertions = all_inferred_assertions(assertions_file)
 filtered_assertions = all_mutant_killing_assertions(invs_by_mutants_file, assertions)
+buckets_file=assertions_file.replace('.assertion','-buckets.assertion')
+buckets_nr, filtered_buckets = buckets_report(buckets_file)
 
 # Build the new row
 row_to_add = {
@@ -76,7 +86,9 @@ row_to_add = {
 "mutants_nr":[mutants_nr],
 "filtering_time":[filtering_time],
 "filtered_ma":[len(filtered_assertions)],
-"buckets_time":[buckets_time]
+"buckets_time":[buckets_time],
+"buckets_nr":[buckets_nr],
+"filtered_buckets":[filtered_buckets]
 }
 
 # Append the new row to the output data frame
