@@ -195,16 +195,24 @@ for curr_inv in invs_killer_set:
 
 
 all_assertions=len(unique_obj_assertions)+len(unique_pc_assertions)
-print("Specs: "+str(all_assertions))
-print("=====================================")
-print(":::OBJECT")
-for unique in unique_obj_assertions:
-    print(unique)
-print("=====================================")
-print(":::POSTCONDITION")
-for unique in unique_pc_assertions:
-    print(unique)
 
+print("Buckets: "+str(len(buckets)))
+print("Specs: "+str(all_assertions))
+
+buckets_file=assertion_file.replace('.assertion','-buckets.assertion')
+print("Saved in file: "+buckets_file)
+f=open(buckets_file,"w+")
+f.write("buckets=%d\n" % len(buckets))
+f.write("specs=%d\n" % all_assertions)
+f.write("=====================================\n")
+f.write(":::OBJECT\n")
+for unique in unique_obj_assertions:
+    f.write(unique+"\n")
+f.write("=====================================\n")
+f.write(":::POSTCONDITION\n")
+for unique in unique_pc_assertions:
+    f.write(unique+"\n")
+f.close()
 
 """
 Determine the amounf of fails of the given inv on the given mutant
