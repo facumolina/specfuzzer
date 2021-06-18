@@ -153,10 +153,10 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   }
 
   /**
-   * Returns true iff the current variable is the this object
+   * Returns true iff one of the current variables is the this object
    */
   private boolean object_present_is_this() {
-    return "this".equals(var1().name()) || "this".equals(var2().name());
+    return "this".equals(var1().name()) || "this".equals(var2().name()) || "orig(this)".equals(var1().name()) || "orig(this)".equals(var2().name());
   }
 
   /**
