@@ -8,6 +8,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
+import utils.JavaTypesUtil;
 
 /**
  * Abstract base class for combined unary invariants. A CombinedUnaryInvariant may represent:
@@ -39,15 +40,24 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
    * Returns whether or not the specified types are valid for unary object. (Static version of
    * method.)
    */
-  public static boolean valid_types_static(VarInfo[] vis) {
+  public boolean valid_types_static(VarInfo[] vis) {
     // Unary pointer invariants must the this object or a primitive supported type
     if (vis.length!=1)
       return false;
 
+    // Discard serial field
+    if (vis[0].name().contains("serialVersionUID"))
+      return false;
+
     if (vis[0].file_rep_type.isObject())
-      return "this".equals(vis[0].name());
+      return is_this_or_collection(vis[0]);
 
     return vis[0].file_rep_type.isPrimitive();
+  }
+
+  /** Returns true iff the given VarInfo is either the this object or a collection object */
+  private boolean is_this_or_collection(VarInfo vi) {
+    return "this".equals(vi.name()) || JavaTypesUtil.is_collection(vi.type.toString());
   }
 
   /** Returns whether or not the specified types are valid for unary object. */

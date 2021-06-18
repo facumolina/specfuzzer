@@ -63,7 +63,9 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   @Override
   public boolean extra_check(VarInfo[] vis) {
     String type_str = vis[0].type.toString();
-    String class_name = JavaTypesUtil.get_simple_name(type_str);
+    String class_name = type_str;
+    if (!JavaTypesUtil.is_collection(type_str))
+      class_name = JavaTypesUtil.get_simple_name(type_str);
     return ExpressionValidator.is_valid(fuzzed_spec, class_name);
   }
 
@@ -116,7 +118,7 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
    * Returns true iff the current variable is the this object
    */
   private boolean var_is_this_object() {
-    return "this".equals(var().name());
+    return "this".equals(var().name()) || "orig(this)".equals(var().name());
   }
 
   /**
@@ -173,7 +175,7 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
       return check_modified_on_vars(get_var_value(v));
 
     if (!var_is_this_object())
-      throw new IllegalStateException("Need to implement single collection evaluation");
+      throw new IllegalStateException("Need to implement single collection evaluation, spec: " + format());
 
     // Recover the object and build key
     int i = (int) v;
