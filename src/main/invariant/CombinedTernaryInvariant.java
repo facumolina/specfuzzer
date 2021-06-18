@@ -7,6 +7,7 @@ import daikon.inv.ternary.TernaryInvariant;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
+import utils.JavaTypesUtil;
 
 /**
  * Abstract base class for combined ternary invariants. A CombinedTernaryInvariant may represent:
@@ -26,7 +27,7 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
 
   protected @Prototype CombinedTernaryInvariant() { super(); }
 
-  public static boolean valid_types_static(VarInfo[] vis) {
+  public boolean valid_types_static(VarInfo[] vis) {
     if (vis.length != 3)
       return false;
 
@@ -36,9 +37,9 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject() || vis[2].file_rep_type.isObject()) {
       // At least one var is an object or a collection
-      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive())
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[2].file_rep_type.isPrimitive())
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isObject()));
+      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive() && is_this_or_collection(vis[0]))
+              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[2].file_rep_type.isPrimitive() && is_this_or_collection(vis[1]))
+              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isObject() && is_this_or_collection(vis[2])));
     } else {
       // All vars must be primitive
       return vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive();
@@ -52,6 +53,11 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
 
   /** To add extra checking steps for valid types*/
   public abstract boolean extra_check(VarInfo[] vis);
+
+  /** Returns true iff the given VarInfo is either the this object or a collection object */
+  private boolean is_this_or_collection(VarInfo vi) {
+    return "this".equals(vi.name()) || JavaTypesUtil.is_collection(vi.type.toString());
+  }
 
   /**
    * Returns the first variable.
