@@ -50,10 +50,14 @@ public class ExpressionValidator {
    */
   public static boolean is_valid(String str_expr, String class_name) {
     if (!str_expr.contains(class_name+".")) {
-      // The expression does not contains the class, so it must be a number variable
-      String formatted = JavaTypesUtil.format_type(class_name);
-      String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
-      return str_expr.contains(var_name);
+      // The expression does not contains the class, so it must be a variable or a set
+      if (JavaTypesUtil.is_collection(class_name))
+        return str_expr.contains("_Set_Variable_0");
+      else {
+        String formatted = JavaTypesUtil.format_type(class_name);
+        String var_name = GrammarSymbols.get_special_identifier(formatted, 0);
+        return str_expr.contains(var_name);
+      }
     } else {
       return expr_allows_class(str_expr, class_name);
     }
