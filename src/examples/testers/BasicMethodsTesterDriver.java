@@ -1,10 +1,10 @@
 package testers;
 
-public class SimpleMethodsTesterDriver {
+public class BasicMethodsTesterDriver {
 
     public static void main(String... args) {
         boolean hadFailure = false;
-        SimpleMethodsTester0 t0 = new SimpleMethodsTester0();
+        BasicMethodsTester0 t0 = new BasicMethodsTester0();
         try {
             t0.test001();
         } catch (Throwable e) {

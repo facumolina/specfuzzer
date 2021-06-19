@@ -2,7 +2,7 @@ package gassert;
 
 import java.util.HashSet;
 
-public class SimpleMethods {
+public class BasicMethods {
 
   /**
    * Compute the minimum of two values

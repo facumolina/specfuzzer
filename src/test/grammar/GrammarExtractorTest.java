@@ -67,7 +67,7 @@ public class GrammarExtractorTest {
   @Test
   public void staticClassGrammarTest() throws ClassNotFoundException, NoSuchFieldException{
     // Initialize
-    Class<?> cut = Class.forName("gassert.SimpleMethods");
+    Class<?> cut = Class.forName("gassert.BasicMethods");
     GrammarExtractor.build_type_graph(cut, new HashSet<String>());
     // Grammar extraction steps
     Map<String, List<String>> grammar = GrammarBuilder.create(cut);
