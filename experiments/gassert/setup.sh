@@ -5,7 +5,6 @@
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 [[ -z "$GASSERTDIR" ]] && { echo "> The environment variable GASSERTDIR is empty" ; exit 1; }
-[[ -z "$DAIKONDIR" ]] && { echo "> The environment variable DAIKONDIR is empty" ; exit 1; }
 
 # Read arguments
 gassert_subject=$1
@@ -21,16 +20,46 @@ tests_dir=experiments/gassert/$gassert_subject/tests
 results_dir=experiments/gassert/$gassert_subject
 specfuzzer_cp=lib/*
 
+# Compile project
 echo ""
 echo "> Compiling GAssert subject: $gassert_subject"
 pushd $subject_sources > /dev/null
 ./gradlew -q -Dskip.tests jar
 popd > /dev/null
 subject_cp=$subject_sources/build/libs/*
+echo ''
+
+# Test generation
+echo '> Test Generation'
+outdir_tests=$subject_sources/src/test/java
+echo "going to generate JUnit tests in: $outdir_tests"
+echo "cleaning up old tests: $outdir_tests"
+rm -r $outdir_tests/*
+mkdir -p $outdir_tests
+classes_flags="--testclass=$fqname"
+echo 'classes: '$classes_flags
+# Ignore all methods from javax.swing.* package to avoid breaking randoop
+omitmethods="toString|hashCode|equals|clone|compareTo|javax.swing.*|ASTNode.dump|ASTNode.getTree|ASTNode.display|ASTNode.createTree|dk.statsbiblioteket.summa.common.util.PriorityQueue.getComparator|java.lang.Iterable.forEach|java.lang.Iterable.spliterator|java.util.List.spliterator|java.util.Collection.stream|java.util.AbstractList.subList|java.util.List.sort|jahuwaldt.plot.LinearAxisScale.findGoodLimits"
+test_class_name=$class_name'Tester'
+echo 'test class: '$test_class_name
+echo ''
+echo "Executing Randoop"
+java -cp lib/randoop-all-4.2.4.jar:$subject_cp randoop.main.Main gentests $classes_flags --output-limit=500 --literals-level=ALL --literals-file=$SPECFUZZER/literals/lits.txt --omitmethods=$omitmethods --only-test-public-members=true --usethreads=false --junit-package-name='testers' --junit-output-dir=$outdir_tests --junit-reflection-allowed=false --regression-test-basename=$test_class_name --no-regression-assertions=true --randomseed=0
+echo "Finished!"
+echo ''
+
+# Compile again
+echo "> Compiling GAssert subject again: $gassert_subject"
+pushd $subject_sources > /dev/null
+./gradlew -q -Dskip.tests jar
+popd > /dev/null
+echo ''
+
+# Collect state objects and mutants
+echo '> Running DynComp, Chicory and Mutation Analysis with Major'
+echo ''
 
 # Grammar Extraction
 echo '> Grammar Extraction'
 java -cp $specfuzzer_cp:$subject_cp grammar.GrammarExtractor $fqname
 echo ''
-
-echo '> Done!'
