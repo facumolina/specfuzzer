@@ -1,26 +1,26 @@
 #!/bin/bash
 
-# This script allows to generate invariants for the SimpleMethods.getMin case study by using a given technique: daikon, specfuzzer, gassert or evospex
+# This script allows to generate invariants for the BasicMethods.getMin case study by using a given technique: daikon, specfuzzer, gassert or evospex
 
 # Arguments
 technique=$1
 # Common 
-fqname='gassert.SimpleMethods'
-class='SimpleMethods'
+fqname='gassert.BasicMethods'
+class='BasicMethods'
 method='getMin'
-target_name='SimpleMethodsTesterDriver'
+target_name='BasicMethodsTesterDriver'
 # Daikon
 trace='daikon-outputs/'$target_name'.dtrace.gz'
 inv_file=$target_name'.inv.gz'
 # SpecFuzzer
 invs_to_fuzz=2000
-grammar='grammars/SimpleMethodsGrammar.json'
+grammar='grammars/BasicMethodsGrammar.json'
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
 
 # Run the technique
-echo '> Analyzing gassert.SimpleMethods.getMin with technique: '$technique
+echo '> Analyzing gassert.BasicMethods.getMin with technique: '$technique
 
 # Daikon standalone
 if [ $technique == "daikon" ]
