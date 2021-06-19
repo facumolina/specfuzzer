@@ -2,6 +2,11 @@ package gassert;
 
 import java.util.HashSet;
 
+/**
+ * Class with basic static methods (based on class SimpleMethods from GAssert case studies)
+ *
+ * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
+ */
 public class BasicMethods {
 
   /**
