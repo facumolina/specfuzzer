@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Extract all the grammars that are used to test the system
-java -cp "lib/*" grammar.GrammarExtractor gassert.SimpleMethods
+java -cp "lib/*" grammar.GrammarExtractor gassert.BasicMethods
 java -cp "lib/*" grammar.GrammarExtractor DataStructures.List
 java -cp "lib/*" grammar.GrammarExtractor DataStructures.AvlTreeList
 java -cp "lib/*" grammar.GrammarExtractor DataStructures.CollectionAttribute
