@@ -18,19 +18,21 @@ echo '> Mutants generated!'
 mv mutants.log daikon-outputs/mutants/$driver_base'Driver-mutants.log'
 echo ''
 
-#echo '> Processing mutants'
-#for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
-#do
-#  echo '> Procesing mutant: '$dir$target_file
-#  echo '> Compiling mutant'
-#  javac -cp $build_dir -g $dir$target_file -d $build_dir
-#  echo '> Mutant compiled'
-#  echo '' 
-#  echo '> Generating traces with Chicory from mutant'
-#  dir2=${dir%*/}
-#  number=${dir2##*/}
-#  java -cp $build_dir:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/mutants --comparability-file=daikon-outputs/$driver_base'Driver.decls-DynComp' --ppt-omit-pattern=$driver_base'.*' --ppt-omit-pattern='org.junit.*' --dtrace-file=$driver_base'Driver-m'$number'.dtrace.gz' testers.$driver_base'Driver' daikon-outputs/mutants/$driver_base'Driver-m'$number'-objects.xml'
-#done
+cp_with_tests=$build_dir:$subject_sources/build/classes/java/test
 
-#echo '> Done!'
+echo '> Processing mutants'
+for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
+do
+  echo '> Procesing mutant: '$dir$target_file
+  echo '> Compiling mutant'
+  javac -cp $build_dir -g $dir$target_file -d $build_dir
+  echo '> Mutant compiled'
+  echo '' 
+  echo '> Generating traces with Chicory from mutant'
+  dir2=${dir%*/}
+  number=${dir2##*/}
+  java -cp $cp_with_tests:lib/daikon.jar daikon.Chicory --output-dir=daikon-outputs/mutants --comparability-file=daikon-outputs/$driver_base'Driver.decls-DynComp' --ppt-omit-pattern=$driver_base'.*' --ppt-omit-pattern='org.junit.*' --dtrace-file=$driver_base'Driver-m'$number'.dtrace.gz' testers.$driver_base'Driver' daikon-outputs/mutants/$driver_base'Driver-m'$number'-objects.xml'
+done
+
+echo '> Done!'
 
