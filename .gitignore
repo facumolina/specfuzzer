@@ -4,6 +4,7 @@
 /out/
 /daikon-outputs/
 /mutants/
+/experiments/gassert/**
 
 # Files
 invs*
