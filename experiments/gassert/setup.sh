@@ -57,6 +57,18 @@ echo ''
 
 # Collect state objects and mutants
 echo '> Running DynComp, Chicory and Mutation Analysis with Major'
+driver_name=$test_class_name'Driver'
+driver_fqname='testers.'$driver_name
+daikon_out=$SPECFUZZER'/daikon-outputs'
+echo 'Running DynComp from driver: '$driver_fqname
+java -cp lib/daikon.jar:$subject_cp daikon.DynComp $driver_fqname --output-dir=$daikon_out
+echo ''
+cmp_file=$daikon_out'/'$driver_name'.decls-DynComp'
+omit_pattern=$test_class_name'.*'
+objs_file='daikon-outputs/'$driver_name'-objects.xml'
+echo 'Running Chicory for dtrace generation from driver: '$driver_fqname
+java -cp lib/daikon.jar:$subject_cp daikon.Chicory --output-dir=$daikon_out --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $driver_fqname $objs_file
+echo 'Objects saved in file: '$objs_file
 echo ''
 
 # Grammar Extraction
