@@ -16,8 +16,6 @@ gassert_dir=$GASSERTDIR
 subject_sources=$gassert_dir/subjects/$gassert_subject
 class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
 class_name=${fqname##*.}
-tests_dir=experiments/gassert/$gassert_subject/tests
-results_dir=experiments/gassert/$gassert_subject
 specfuzzer_cp=lib/*
 
 # Compile project
@@ -59,21 +57,22 @@ echo ''
 echo '> Running DynComp, Chicory and Mutation Analysis with MAJOR'
 driver_name=$test_class_name'Driver'
 driver_fqname='testers.'$driver_name
-daikon_out=$SPECFUZZER'/daikon-outputs'
+setup_output_dir=experiments/gassert/$gassert_subject/setup-files
 echo 'Running DynComp from driver: '$driver_fqname
-java -cp lib/daikon.jar:$subject_cp daikon.DynComp $driver_fqname --output-dir=$daikon_out
+mkdir -p $setup_output_dir
+java -cp lib/daikon.jar:$subject_cp daikon.DynComp $driver_fqname --output-dir=$setup_output_dir
 echo ''
-cmp_file=$daikon_out'/'$driver_name'.decls-DynComp'
+cmp_file=$setup_output_dir'/'$driver_name'.decls-DynComp'
 omit_pattern=$test_class_name'.*'
-objs_file='daikon-outputs/'$driver_name'-objects.xml'
+objs_file=$setup_output_dir'/'$driver_name'-objects.xml'
 echo 'Running Chicory for dtrace generation from driver: '$driver_fqname
-java -cp lib/daikon.jar:$subject_cp daikon.Chicory --output-dir=$daikon_out --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $driver_fqname $objs_file
+java -cp lib/daikon.jar:$subject_cp daikon.Chicory --output-dir=$setup_output_dir --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $driver_fqname $objs_file
 echo 'Objects saved in file: '$objs_file
 echo ''
 # Use Major to create the mutated traces
 echo '> Generating mutants with MAJOR'
 target_file="${fqname//.//}".java
-./experiments/gassert/gen-mutated-traces.sh $subject_sources $target_file $test_class_name
+./experiments/gassert/gen-mutated-traces.sh $gassert_subject $subject_sources $target_file $test_class_name
 echo ''
 
 # Grammar Extraction
