@@ -25,12 +25,14 @@ public class GrammarExtractor {
   public static void main(String[] args)
       throws ClassNotFoundException, NoSuchFieldException, SecurityException {
 
-    if (args.length != 1) {
-      System.out.println("Only the fully qualified name of the CUT is expected");
+    if (args.length > 2) {
+      System.out.println("Only the fully qualified name of the CUT is expected and the grammar output dir.");
     }
 
-    // Get the class
+    // Get the class and the grammar output dir if provided
     String qualified_name = args[0];
+    if (args.length==2)
+      GRAMMARS_DIR = args[1];
 
     Class<?> cut = Class.forName(qualified_name);
 
