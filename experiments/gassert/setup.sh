@@ -56,7 +56,7 @@ popd > /dev/null
 echo ''
 
 # Collect state objects and mutants
-echo '> Running DynComp, Chicory and Mutation Analysis with Major'
+echo '> Running DynComp, Chicory and Mutation Analysis with MAJOR'
 driver_name=$test_class_name'Driver'
 driver_fqname='testers.'$driver_name
 daikon_out=$SPECFUZZER'/daikon-outputs'
@@ -69,6 +69,11 @@ objs_file='daikon-outputs/'$driver_name'-objects.xml'
 echo 'Running Chicory for dtrace generation from driver: '$driver_fqname
 java -cp lib/daikon.jar:$subject_cp daikon.Chicory --output-dir=$daikon_out --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $driver_fqname $objs_file
 echo 'Objects saved in file: '$objs_file
+echo ''
+# Use Major to create the mutated traces
+echo '> Generating mutants with MAJOR'
+target_file="${fqname//.//}".java
+./experiments/gassert/gen-mutated-traces.sh $subject_sources $target_file $test_class_name
 echo ''
 
 # Grammar Extraction
