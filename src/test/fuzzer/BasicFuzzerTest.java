@@ -133,8 +133,8 @@ public class BasicFuzzerTest {
     }
   }
 
-  @Test public void fuzz_simplemethods_invs() {
-    String grammar_file = System.getProperty("user.dir") + "/grammars/SimpleMethodsGrammar.json";
+  @Test public void fuzz_basicmethods_invs() {
+    String grammar_file = System.getProperty("user.dir") + "/grammars/BasicMethodsGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
