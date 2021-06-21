@@ -1,85 +1,81 @@
 #!/bin/bash
 
-# This script allows to run specfuzzer for a single method that belongs to a class of a SF110 project. 
+# This script allows to run SpecFuzzer for a GAssert subkect. 
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
-[[ -z "$SF110SRC" ]] && { echo "> The environment variable SF110SRC is empty" ; exit 1; }
+[[ -z "$GASSERTDIR" ]] && { echo "> The environment variable GASSERTDIR is empty" ; exit 1; }
 
 # Read arguments
-sf110_project=$1
+gassert_subject=$1
 fqname=$2
 method_name=$3
 
-# Some useful variables
-project_sources=$SF110SRC/$sf110_project
-tests_dir=experiments/sf110/$sf110_project/tests
+# Create useful variables
+gassert_dir=$GASSERTDIR
+subject_sources=$gassert_dir/subjects/$gassert_subject
+class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
 class_name=${fqname##*.}
-grammar_to_fuzz=grammars/$class_name'Grammar.json'
-results_dir=experiments/sf110/$sf110_project
-objects_file=$results_dir/$class_name-$method_name-objects.xml
-dtrace_file=$results_dir/$class_name-$method_name.dtrace.gz
-mutants_dir=$results_dir/mutants
-target_name=$class_name-$method_name
-invs_file=$target_name'.inv.gz'
-output_dir=experiments/sf110/$sf110_project/output
+specfuzzer_cp=lib/*
+setup_files=experiments/gassert/$gassert_subject/setup-files
+subject_cp=$subject_sources/build/libs/*
 
-# Fuzzing vars
+# Input files
+grammar_to_fuzz=$setup_files/$class_name'Grammar.json'
+objects_file=$setup_files/$class_name'TesterDriver-objects.xml'
+dtrace_file=$setup_files/$class_name'TesterDriver.dtrace.gz'
+mutants_dir=$setup_files/mutants
+target_name=$class_name'TesterDriver'
+invs_file=$target_name'.inv.gz'
+output_dir=experiments/gassert/$gassert_subject/output/
+mkdir -p $output_dir
+executions=1
+
+# SpecFuzzer params
 invs_to_fuzz=2000;
 
 # Start
 echo '> SpecFuzzer'
-echo '> Target: '$sf110_project'/'$fqname$'.'$method_name
-echo '> Grammar: '$grammar_to_fuzz
+echo 'target: '$gassert_subject'/'$fqname$'.'$method_name
+echo 'grammar: '$grammar_to_fuzz
+echo 'dtrace: '$dtrace_file
+echo 'objects: '$objects_file
+echo 'executions: '$executions
+echo ''
+
 
 # Build classpath
-cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$SPECFUZZER/lib/hamcrest-core-1.3.jar:$SPECFUZZER/lib/junit-4.12.jar
-cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
+cp_for_daikon=lib/*:$subject_cp:
 
-# Clean file for this step to work properly
-# Clean file for this step to work properly
-rm invs_file.xml
-rm invs-by-mutants.csv
+# Execution SpecFuzzer the specified number of times.
+for value in $(eval echo {1..$executions})
+do
+echo '> Execution number: '$value
+SECONDS=0
+
+# Prepare files
+base_file_name=$class_name'-'$method_name'-specfuzzer-'$value
+rm -f invs_file.xml
+rm -f invs-by-mutants.csv
 cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
+log_file=$output_dir$base_file_name'.log'
 
-# Run the SpecFuzzer
-java -cp $cp_for_daikon daikon.Daikon --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file
+echo '> SpecFuzzer' > $log_file
+echo '# Inference step (Daikon + Fuzzed Specs)' >> $log_file
+# Run SpecFuzzer
+java -Xmx8g -cp $cp_for_daikon daikon.Daikon --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file >> $log_file
+inference_sec=$SECONDS
 
-mutations_log=$mutants_dir'/'$class_name-$method_name'-mutants.log'
-invs_file=$target_name'.inv.gz'
-
-echo '> Checking invariants on Mutants'
-for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
-  base_name=${mutant_dtrace/%$".dtrace.gz"}
-  mutant_objects_file=$base_name"-objects.xml"
-  mutant_number=${base_name#$mutants_dir'/'$target_name'-m'}
-  curr_mutant=$(sed -n $mutant_number'p' $mutations_log)
-  if [[ $curr_mutant == *$class_name':'* || $curr_mutant == *$class_name*'<init>'* || $curr_mutant == *$class_name*$method_name* ]]; then
-    echo '> Checking on mutant: '$mutant_dtrace
-    java -cp $cp_for_daikon daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
-    echo ''
-    echo '> Saving mutants results file'
-    python3 scripts/single-mutant-result.py invs.csv 1 $mutant_dtrace
-  fi
-done
-echo ''
-
-mkdir -p $output_dir
-base_file_name=$class_name'-'$method_name'-specfuzzer'
-
-echo '> Mutation killing ability'
-python3 scripts/process-final-results.py invs-by-mutants.csv
-mutka_file=$output_dir'/'$base_file_name'-invs-by-mutants.csv'
-echo '> Mutation killing ability results saved in: '$mutka_file
-cp invs-by-mutants.csv $mutka_file
-
-assertions_file=$output_dir'/'$base_file_name.assertions
-echo ''
-echo '> Writing assertions to file: '$assertions_file
-java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class_name':::OBJECT' --format java > $assertions_file
-java -cp build/classes/:lib/* daikon.PrintInvariants $invs_file --ppt-select '.'$class_name'\.'$method'.' --format java >> $assertions_file
+# Saving assertion files
+echo '' >> $log_file
+assertions_file=$output_dir$base_file_name.assertions
+echo '# Writing assertions to file: '$assertions_file >> $log_file
+java -cp $cp_for_daikon daikon.PrintInvariants $invs_file --ppt-select '.'$class':::OBJECT' --format java > $assertions_file
+java -cp $cp_for_daikon daikon.PrintInvariants $invs_file --ppt-select '.'$class'\.'$method_name'.' --format java >> $assertions_file
 mv $invs_file $output_dir'/'$base_file_name.inv.gz
 mv invs_file.xml $output_dir'/'$base_file_name'-filteredinvs.xml'
+
+done # Close executions loop
 
 echo '> Done!'
