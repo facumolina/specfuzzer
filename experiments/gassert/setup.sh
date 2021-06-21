@@ -11,7 +11,7 @@ gassert_subject=$1
 fqname=$2
 method_name=$3
 
-# Create useful constants
+# Create useful variables
 gassert_dir=$GASSERTDIR
 subject_sources=$gassert_dir/subjects/$gassert_subject
 class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
