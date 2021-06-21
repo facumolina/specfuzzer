@@ -98,7 +98,7 @@ for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
   fi
 done # End Mutation Analysis based filtering.
 filtering_sec=$SECONDS
-mutka_file=$output_dir'/'$base_file_name'-invs-by-mutants.csv'
+mutka_file=$output_dir$base_file_name'-invs-by-mutants.csv'
 echo '# Mutation killing ability results saved in: '$mutka_file >> $log_file
 cp invs-by-mutants.csv $mutka_file
 
@@ -108,8 +108,8 @@ assertions_file=$output_dir$base_file_name.assertions
 echo '# Writing assertions to file: '$assertions_file >> $log_file
 java -cp $cp_for_daikon daikon.PrintInvariants $invs_file --ppt-select '.'$class_name':::OBJECT' --format java > $assertions_file
 java -cp $cp_for_daikon daikon.PrintInvariants $invs_file --ppt-select '.'$class_name'\.'$method_name'.' --format java >> $assertions_file
-mv $invs_file $output_dir'/'$base_file_name.inv.gz
-mv invs_file.xml $output_dir'/'$base_file_name'-filteredinvs.xml'
+mv $invs_file $output_dir$base_file_name.inv.gz
+mv invs_file.xml $output_dir$base_file_name'-filteredinvs.xml'
 
 # Filter the specs with the buckets approach
 echo '' >> $log_file
@@ -120,7 +120,8 @@ buckets_sec=$SECONDS
 echo '' >> $log_file
 
 # Save stats to the csv file
-csv_file=$output_dir'/'$base_file_name.csv
+base_csv_file=$class_name'-'$method_name'-specfuzzer'
+csv_file=$output_dir$base_csv_file.csv
 echo '# Writing stats to csv file: '$csv_file 
 if [[ "$value" == 1 ]]; then
   echo "class,method,exec_nr,fuzzed_nr,inference_time,inferred_nf,mutants_nr,filtering_time,filtered_ma,buckets_time,buckets_nr,filtered_buckets" > $csv_file
