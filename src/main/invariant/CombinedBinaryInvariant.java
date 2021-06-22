@@ -7,7 +7,6 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.binary.BinaryInvariant;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.Pure;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
 
@@ -25,9 +24,11 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20210124L;
 
+  VarInfo[] sorted_vis; // Maintain a sorted array of variables sorted lexicographically by name.
+
   protected CombinedBinaryInvariant(PptSlice ppt) {
     super(ppt);
-    orig_fst_var = ppt.var_infos[0].name();
+    sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
   }
 
   protected @Prototype CombinedBinaryInvariant() { super(); }
@@ -38,6 +39,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
 
     // Discard serial field.
     if (vis[0].name().contains("serialVersionUID") || vis[1].name().contains("serialVersionUID"))
+      return false;
+
+    // Discard equal variables
+    if (vis[0].name().equals(vis[1].name()))
       return false;
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
@@ -54,7 +59,6 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   public final boolean valid_types(VarInfo[] vis) {
     if (vis.length != 2)
       return false;
-    orig_fst_var = vis[0].name();
     return valid_types_static(vis) && extra_check(vis);
   }
 
@@ -67,57 +71,24 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   public abstract boolean extra_check(VarInfo[] vis);
 
   /**
-   * Since the order is determined from the vars and the sequence is always first, this is
-   * essentially symmetric. Subclasses can override if necessary.
-   */
-  @Pure
-  @Override
-  public boolean is_symmetric() {
-    return true;
-  }
-
-  /** Order is determined from the vars, so first variable order is preserved to avoid problems when transferring the invariant */
-  private String orig_fst_var;
-
-  /**
    * Since the order is determined from the vars and the sequence is always first, no permute is necessary.
    */
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
+    sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
     return this;
-  }
-
-  /**
-   * Check if the first variable in the ppt is the same 'first' original variable from which the invariant was instantiated.
-   */
-  protected final boolean fst_is_orig_fst(@GuardSatisfied CombinedBinaryInvariant this) {
-    return ppt.var_infos[0].name().equals(orig_fst_var) || ppt.var_infos[0].name().equals("orig("+orig_fst_var+")");
-  }
-
-  /**
-   * Returns the index of the first variable.
-   */
-  protected final int fst_index(@GuardSatisfied CombinedBinaryInvariant this) {
-    return fst_is_orig_fst() ? 0 : 1;
-  }
-
-  /**
-   * Returns the index of the second variable.
-   */
-  protected final int snd_index(@GuardSatisfied CombinedBinaryInvariant this) {
-    return fst_is_orig_fst() ? 1 : 0;
   }
 
   /**
    * Returns the first variable. This is the only mechanism by which subclasses should access variables.
    */
-  public VarInfo var1(@GuardSatisfied CombinedBinaryInvariant this) { return ppt.var_infos[fst_index()]; }
+  public VarInfo var1(@GuardSatisfied CombinedBinaryInvariant this) { return sorted_vis[0]; }
 
   /**
    * Returns the second variable. This is the only mechanism by which subclasses should access variables.
    */
-  public VarInfo var2(@GuardSatisfied CombinedBinaryInvariant this) { return ppt.var_infos[snd_index()]; }
+  public VarInfo var2(@GuardSatisfied CombinedBinaryInvariant this) { return sorted_vis[1]; }
 
   @Override
   public InvariantStatus check(@Interned Object val1, @Interned Object val2, int mod_index, int count) {
