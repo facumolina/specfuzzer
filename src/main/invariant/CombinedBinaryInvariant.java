@@ -25,7 +25,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20210124L;
 
-  protected CombinedBinaryInvariant(PptSlice ppt) { super(ppt); }
+  protected CombinedBinaryInvariant(PptSlice ppt) {
+    super(ppt);
+    orig_fst_var = ppt.var_infos[0].name();
+  }
 
   protected @Prototype CombinedBinaryInvariant() { super(); }
 
@@ -35,10 +38,6 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
 
     // Discard serial field.
     if (vis[0].name().contains("serialVersionUID") || vis[1].name().contains("serialVersionUID"))
-      return false;
-
-    // Discard variables with the same name.
-    if (vis[0].name().equals(vis[1].name()))
       return false;
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
@@ -104,7 +103,7 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   }
 
   /**
-   * Returns the infex of the second variable.
+   * Returns the index of the second variable.
    */
   protected final int snd_index(@GuardSatisfied CombinedBinaryInvariant this) {
     return fst_is_orig_fst() ? 1 : 0;
