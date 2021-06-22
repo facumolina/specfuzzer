@@ -87,6 +87,12 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     return dkconfig_enabled;
   }
 
+  /** Returns whether or not the specified var types are valid for IntGreaterThan */
+  @Override
+  public boolean instantiate_ok(VarInfo[] vis) {
+    return valid_types(vis);
+  }
+
   /** instantiate an invariant on the specified slice */
   @Override
   public FuzzedBinaryInvariant instantiate_dyn(@Prototype FuzzedBinaryInvariant this, PptSlice slice) {
@@ -97,7 +103,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied FuzzedBinaryInvariant this, OutputFormat format) {
-    return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: <" + var1().name() + " , " + var2().name() + ">";
+    return "FuzzedInvariant ( " + fuzzed_spec + " ) holds for: <" + var1().name() + ", " + var2().name() + ">";
   }
 
   /**
@@ -291,11 +297,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     return 1 - Math.pow(.5, ppt.num_samples());
   }
 
-  @Override
-  protected Invariant resurrect_done(int[] ints) {
-    return this;
-  }
-
   @Pure
   @Override
   public boolean isSameFormula(Invariant invariant) {
@@ -320,7 +321,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     String ppt_name = ppt.name().split(":::ENTER")[0];
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     try {
-
       for (PptTupleInfo tuple : tuples) {
         Object o1;
         Object o2;
