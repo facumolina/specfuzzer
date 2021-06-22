@@ -278,9 +278,15 @@ public class FuzzedInvariantUtil {
    * Returns a VarInfo[] lexicographically sorted by the name of the variables present in the given array
    */
   public static VarInfo[] sort_lexicographically(VarInfo[] vis) {
-    List<VarInfo> l = Arrays.asList(vis);
-    Collections.sort(l, Comparator.comparing(VarInfo::name));
-    return (VarInfo[])l.toArray();
+    VarInfo[] copy = Arrays.copyOf(vis,vis.length);
+    List<VarInfo> l = Arrays.asList(copy);
+    Collections.sort(l, (v1, v2) -> {
+      // Use original variable names, i.e., without orig() in the prestates
+      String v1_name = v1.isPrestate()?v1.name().replace("orig(","").replace(")",""):v1.name();
+      String v2_name = v2.isPrestate()?v2.name().replace("orig(","").replace(")",""):v2.name();
+      return v1_name.compareTo(v2_name);
+    });
+    return (VarInfo[]) l.toArray();
   }
 
 }
