@@ -2,10 +2,12 @@ package invariant;
 
 import daikon.PptSlice;
 import daikon.VarInfo;
+import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.ternary.TernaryInvariant;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
 
@@ -23,7 +25,11 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 202101513L;
 
-  protected CombinedTernaryInvariant(PptSlice ppt) { super(ppt); }
+  protected CombinedTernaryInvariant(PptSlice ppt) {
+    super(ppt);
+    orig_fst_var = ppt.var_infos[0].name();
+    orig_snd_var = ppt.var_infos[1].name();
+  }
 
   protected @Prototype CombinedTernaryInvariant() { super(); }
 
@@ -48,7 +54,11 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
 
   @Override
   public final boolean valid_types(VarInfo[] vis) {
-    return valid_types_static(vis) && extra_check(vis);
+    if (vis.length != 3)
+      return false;
+    orig_fst_var = vis[0].name();
+    orig_snd_var = vis[1].name();
+    return  valid_types_static(vis) && extra_check(vis);
   }
 
   /** To add extra checking steps for valid types*/
@@ -59,25 +69,100 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
     return "this".equals(vi.name()) || JavaTypesUtil.is_collection(vi.type.toString());
   }
 
+
+  /** Order is determined from the vars, so first and second variables are preserved to avoid problems when transferring the invariant */
+  private String orig_fst_var;
+  private String orig_snd_var;
+
+  /**
+   * Since the order is determined from the vars and the sequence is always first, no permute is necessary.
+   */
+  @Override
+  protected Invariant resurrect_done(int[] permutation) {
+    assert permutation.length == 3;
+    return this;
+  }
+
+  /**
+   * Check if the first variable in the ppt is the same 'first' original variable from which the invariant was instantiated.
+   */
+  protected final boolean fst_is_orig_fst(@GuardSatisfied CombinedTernaryInvariant this) {
+    return ppt.var_infos[0].name().equals(orig_fst_var) || ppt.var_infos[0].name().equals("orig("+orig_fst_var+")");
+  }
+
+  /**
+   * Check if the first variable in the ppt is the same 'second' original variable from which the invariant was instantiated.
+   */
+  protected final boolean fst_is_orig_snd(@GuardSatisfied CombinedTernaryInvariant this) {
+    return ppt.var_infos[0].name().equals(orig_snd_var) || ppt.var_infos[0].name().equals("orig("+orig_snd_var+")");
+  }
+
+  /**
+   * Check if the second variable in the ppt is the same 'first' original variable from which the invariant was instantiated.
+   */
+  protected final boolean snd_is_orig_fst(@GuardSatisfied CombinedTernaryInvariant this) {
+    return ppt.var_infos[1].name().equals(orig_fst_var) || ppt.var_infos[1].name().equals("orig("+orig_fst_var+")");
+  }
+
+  /**
+   * Check if the second variable in the ppt is the same 'second' original variable from which the invariant was instantiated.
+   */
+  protected final boolean snd_is_orig_snd(@GuardSatisfied CombinedTernaryInvariant this) {
+    return ppt.var_infos[1].name().equals(orig_snd_var) || ppt.var_infos[1].name().equals("orig("+orig_snd_var+")");
+  }
+
+  /**
+   * Returns the index of the first variable.
+   */
+  protected final int fst_index(@GuardSatisfied CombinedTernaryInvariant this) {
+    if (fst_is_orig_fst()) return 0;
+    if (fst_is_orig_snd()) return 1;
+    return 2;
+  }
+
+  /**
+   * Returns the index of the second variable.
+   */
+  protected final int snd_index(@GuardSatisfied CombinedTernaryInvariant this) {
+    if (snd_is_orig_fst()) return 0;
+    if (snd_is_orig_snd()) return 1;
+    return 2;
+  }
+
+  /**
+   * Returns the index of the third variable.
+   */
+  protected final int trd_index(@GuardSatisfied CombinedTernaryInvariant this) {
+    if (fst_is_orig_fst()) // Fst is the fst
+      return snd_is_orig_snd()? 2 : 1;
+    else {
+      if (fst_is_orig_snd()) { // Fst is the snd
+        return snd_is_orig_fst()? 2 : 0;
+      } else { // Fst is trd
+        return snd_is_orig_fst()? 1 : 0;
+      }
+    }
+  }
+
   /**
    * Returns the first variable.
    */
   public VarInfo var1(@GuardSatisfied CombinedTernaryInvariant this) {
-    return ppt.var_infos[0];
+    return ppt.var_infos[fst_index()];
   }
 
   /**
    * Returns the second variable.
    */
   public VarInfo var2(@GuardSatisfied CombinedTernaryInvariant this) {
-    return ppt.var_infos[1];
+    return ppt.var_infos[snd_index()];
   }
 
   /**
    * Returns the third variable.
    */
   public VarInfo var3(@GuardSatisfied CombinedTernaryInvariant this) {
-    return ppt.var_infos[2];
+    return ppt.var_infos[trd_index()];
   }
 
   @Override

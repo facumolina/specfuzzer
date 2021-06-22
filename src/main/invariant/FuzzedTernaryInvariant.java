@@ -253,11 +253,6 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
     return 1 - Math.pow(.5, ppt.num_samples());
   }
 
-  @Override
-  protected Invariant resurrect_done(int[] ints) {
-    return this;
-  }
-
   @Pure
   @Override
   public boolean isSameFormula(Invariant invariant) {
