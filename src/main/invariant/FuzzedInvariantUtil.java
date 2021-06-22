@@ -262,4 +262,25 @@ public class FuzzedInvariantUtil {
     return varValue;
   }
 
+  /**
+   * Return the prefix of the given ppt name
+   */
+  public static String get_ppt_name_prefix(String ppt_name) {
+    if (ppt_name==null || "".equals(ppt_name)) throw new IllegalArgumentException("Invalid ppt name");
+    if (ppt_name.contains(":::ENTER"))
+      return ppt_name.split(":::ENTER")[0];
+    if (ppt_name.contains(":::EXIT"))
+      return ppt_name.split(":::EXIT")[0];
+    throw new IllegalArgumentException("Do not know how to get the prefix of ppt_name "+ppt_name);
+  }
+
+  /**
+   * Returns a VarInfo[] lexicographically sorted by the name of the variables present in the given array
+   */
+  public static VarInfo[] sort_lexicographically(VarInfo[] vis) {
+    List<VarInfo> l = Arrays.asList(vis);
+    Collections.sort(l, Comparator.comparing(VarInfo::name));
+    return (VarInfo[])l.toArray();
+  }
+
 }
