@@ -154,15 +154,15 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   /**
    * Returns true iff one of the current variables is an object
    */
-  private boolean object_present() {
-    return var1().file_rep_type.isObject() || var2().file_rep_type.isObject();
+  private boolean object_present(VarInfo v1, VarInfo v2) {
+    return v1.file_rep_type.isObject() || v2.file_rep_type.isObject();
   }
 
   /**
    * Returns true iff one of the current variables is the this object
    */
-  private boolean object_present_is_this() {
-    return "this".equals(var1().name()) || "this".equals(var2().name()) || "orig(this)".equals(var1().name()) || "orig(this)".equals(var2().name());
+  private boolean object_present_is_this(VarInfo v1,VarInfo v2) {
+    return "this".equals(v1.name()) || "this".equals(v2.name()) || "orig(this)".equals(v1.name()) || "orig(this)".equals(v2.name());
   }
 
   /**
@@ -253,11 +253,12 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   @Override
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
-    if (!object_present())
+    if (!object_present(var1(),var2()))
       return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1));
 
+
     // If the object present is not the this object, one of v1 and v2 must represent a collection
-    if (!object_present_is_this())
+    if (!object_present_is_this(var1(), var2()))
       return check_modified_on_collection_and_var();
 
     // Recover the object and build keys
@@ -317,23 +318,25 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
    * Eval this invariant on every instance saved for the given ppt
    */
   public boolean eval_on_all_instances_ppt(PptSlice ppt) {
-    assert ppt.name().contains(":::ENTER");
-    String ppt_name = ppt.name().split(":::ENTER")[0];
+    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt.name());
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     try {
+      VarInfo[] sorted_vars = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
+      VarInfo v1 = sorted_vars[0];
+      VarInfo v2 = sorted_vars[1];
       for (PptTupleInfo tuple : tuples) {
         Object o1;
         Object o2;
-        if (object_present() && object_present_is_this()) {
+        if (object_present(v1, v2) && object_present_is_this(v1, v2)) {
           // The first must be the this object, and the second the variable
           o1 = tuple.getThisObject();
-          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, get_variable((PptSlice2) ppt));
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, v1.file_rep_type.isPrimitive()?v1:v2);
           if (o2==null) return false;
         } else {
           // Both are vars
-          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,var1());
-          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,var2());
-          if (object_present()) {
+          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,v1);
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,v2);
+          if (object_present(v1, v2)) {
             // o1 is a collection, null is allowed for o1
             if (o1 == null) continue;
             if (o2 == null) return false;
