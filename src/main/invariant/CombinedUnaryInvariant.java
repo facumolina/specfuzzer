@@ -78,7 +78,7 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
     assert (mod_index >= 0) && (mod_index < 2);
 
     if (val instanceof Long) {
-      // Long values represents object hashcodes
+      // Long values represents object hashcode
       long value = ((Long) val);
       if (mod_index == 0) {
         return add_unmodified(value, count);
@@ -94,7 +94,7 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
     assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     if (val instanceof Long) {
-      // Long values represents object hashcodes
+      // Long values represents object hashcode
       long value = ((Long) val);
       if (mod_index == 0) {
         return check_unmodified(value, count);
