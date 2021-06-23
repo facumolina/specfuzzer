@@ -2803,7 +2803,7 @@ public class PptTopLevel extends Ppt {
     assert equality_view != null : "ppt = " + ppt_name + " children = " + children;
     assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
     List<Invariant> equalityInvs = equality_view.invs;
-
+    
     // Pivot invariants to new equality leaders if needed, if old
     // leaders would prevent printing.
     for (Invariant inv : equalityInvs) {
@@ -3953,7 +3953,7 @@ public class PptTopLevel extends Ppt {
         if (child_inv.getClass().getSimpleName().equals("FuzzedBinaryInvariant") && 
           pslice.toString().contains(":::ENTER")) {
           // We have a FuzzedBinaryInvariant, for entry points the invariant must be checked before merge.
-          if (!binary_fuzzed_invs_holds_for_entry(parent_inv, pslice))
+          if (!binary_fuzzed_invs_holds_for_slice(parent_inv, pslice))
             continue;
         }
         parent_inv.ppt = pslice;
@@ -3969,8 +3969,8 @@ public class PptTopLevel extends Ppt {
   private boolean unary_fuzzed_invs_holds_for_entry(Invariant inv, PptSlice slice) {
     try {
       Class<?> inv_class = Class.forName("invariant.FuzzedUnaryInvariant");
-      Method eval_on_all_instances_ppt_method = inv_class.getMethod("eval_on_all_instances_ppt", String.class);
-      boolean b = (Boolean) eval_on_all_instances_ppt_method.invoke(inv, slice.name().split(":::ENTER")[0]);
+      Method eval_on_all_instances_ppt_method = inv_class.getMethod("eval_on_all_instances_ppt", PptSlice.class);
+      boolean b = (Boolean) eval_on_all_instances_ppt_method.invoke(inv, slice);
       return b;
     } catch (Exception e) {
       e.printStackTrace();
@@ -3979,9 +3979,9 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns true if the given fuzzed binary invariant holds for the given entry slice 
+   * Returns true if the given fuzzed binary invariant holds for the given slice 
    */
-  private boolean binary_fuzzed_invs_holds_for_entry(Invariant inv, PptSlice slice) {
+  private static boolean binary_fuzzed_invs_holds_for_slice(Invariant inv, PptSlice slice) {
     try {
       Class<?> inv_class = Class.forName("invariant.FuzzedBinaryInvariant");
       Method eval_on_all_instances_ppt_method = inv_class.getMethod("eval_on_all_instances_ppt", PptSlice.class);
@@ -3991,6 +3991,34 @@ public class PptTopLevel extends Ppt {
       e.printStackTrace();
       return false;
     }
+  }
+
+  /**
+   * Returns true if the transfer of the given invariant to the given slice must be avoided
+   * Must be avoided if:
+   * - Inv is an instance of FuzzedBinaryInvariant and the permutation represented the swapped order of vars.
+   */
+  public static boolean avoid_transfer(Invariant inv, PptSlice slice, int[] permutation) {
+    if (inv.getClass().getSimpleName().contains("FuzzedBinaryInvariant")) {
+      System.out.println("----------");
+      System.out.println("Analyzing avoid for: "+inv.format());
+      System.out.println("Slice is: "+slice.name());
+      if (permutation[0] == 1) {
+        // Variables have be swapped, then the invariant must be checked
+        System.out.println("Calling eval_on_all_instances_ppt ...");
+        if (binary_fuzzed_invs_holds_for_slice(inv, slice)) {
+          System.out.println("Transfer is allowed, do not avoid");
+          return false;
+        } else {
+          System.out.println("Transfer not allowed, avoid");
+          return true;
+        }
+      } else {
+        System.out.println("Transfer is allowed, do not avoid");
+        return false;
+      }
+    }
+    return false;
   }
 
   /**
