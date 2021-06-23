@@ -117,26 +117,25 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    * Returns true iff one of the current variables is an object
    */
   private boolean object_present() {
-    return var1().file_rep_type.isObject() || var2().file_rep_type.isObject() || var3().file_rep_type.isObject();
+    return FuzzedInvariantUtil.var_is_object(var1()) || FuzzedInvariantUtil.var_is_object(var2()) || FuzzedInvariantUtil.var_is_object(var3());
   }
 
   /**
    * Returns true iff on of the current variables is the this object
    */
   private boolean object_present_is_this() {
-    return "this".equals(var1().name()) || "this".equals(var2().name()) || "this".equals(var3().name()) ||
-            "orig(this)".equals(var1().name()) || "orig(this)".equals(var2().name()) || "orig(this)".equals(var3().name());
+    return FuzzedInvariantUtil.var_is_this_object(var1()) || FuzzedInvariantUtil.var_is_this_object(var2()) || FuzzedInvariantUtil.var_is_this_object(var3());
   }
 
   /**
    * Return the value that represents the object
    */
-  private long getObject(long v1, long v2, long v3) {
-    if (var1().file_rep_type.isObject())
+  private long get_object(long v1, long v2, long v3) {
+    if (FuzzedInvariantUtil.var_is_object(var1()))
       return v1;
-    if (var2().file_rep_type.isObject())
+    if (FuzzedInvariantUtil.var_is_object(var2()))
       return v2;
-    if (var3().file_rep_type.isObject())
+    if (FuzzedInvariantUtil.var_is_object(var3()))
       return v3;
     throw new IllegalStateException("Trying the get the object but the invariant has no object");
   }
@@ -146,10 +145,10 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    */
   private VarInfo[] get_variables() {
     VarInfo[] vars = new VarInfo[2];
-    if (var1().file_rep_type.isObject()) {
+    if (FuzzedInvariantUtil.var_is_object(var1())) {
       vars[0] = var2();
       vars[1] = var3();
-    } else if (var2().file_rep_type.isObject()) {
+    } else if (FuzzedInvariantUtil.var_is_object(var2())) {
       vars[0] = var1();
       vars[1] = var3();
     } else {
@@ -162,10 +161,10 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   /**
    * Return the class name that represents the object
    */
-  private String getClassOfObject() {
-    if (var1().file_rep_type.isObject())
+  private String get_class_of_object() {
+    if (FuzzedInvariantUtil.var_is_object(var1()))
       return var1().type.toString();
-    else if (var2().file_rep_type.isObject())
+    else if (FuzzedInvariantUtil.var_is_object(var2()))
       return var2().type.toString();
     else
       return var3().type.toString();
@@ -224,7 +223,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
       throw new IllegalArgumentException("Dont know how to evaluate this yet");
 
     // Recover the object and build keys
-    int i = (int) getObject(v1, v2, v3);
+    int i = (int) get_object(v1, v2, v3);
     String key = i+"-"+get_ppt_key(ppt.parent.name);
     VarInfo[] curr_vars = get_variables();
     String cached_key = key+curr_vars[0].name()+curr_vars[1].name();
@@ -235,7 +234,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
 
     List<PptTupleInfo> l = ObjectsLoader.get_object(key);
     if (l == null)
-      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, getClassOfObject());
+      return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, get_class_of_object());
 
     return check_modified_on_tuples(l, curr_vars, cached_key);
   }

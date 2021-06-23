@@ -155,14 +155,14 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
    * Returns true iff one of the current variables is an object
    */
   private boolean object_present(VarInfo v1, VarInfo v2) {
-    return v1.file_rep_type.isObject() || v2.file_rep_type.isObject();
+    return FuzzedInvariantUtil.var_is_object(v1) || FuzzedInvariantUtil.var_is_object(v2);
   }
 
   /**
    * Returns true iff one of the current variables is the this object
    */
   private boolean object_present_is_this(VarInfo v1,VarInfo v2) {
-    return "this".equals(v1.name()) || "this".equals(v2.name()) || "orig(this)".equals(v1.name()) || "orig(this)".equals(v2.name());
+    return FuzzedInvariantUtil.var_is_this_object(v1) || FuzzedInvariantUtil.var_is_this_object(v2);
   }
 
   /**
