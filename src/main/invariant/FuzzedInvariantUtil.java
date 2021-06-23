@@ -253,13 +253,35 @@ public class FuzzedInvariantUtil {
       // Represents a static field
       varValue = ExpressionEvaluator.evalAnyExpr(var_name.replace(tuple.getThisObject().getClass().getCanonicalName(), tuple.getThisObject().getClass().getSimpleName()), tuple.getThisObject());
     } else {
-      if (var.isDerivedParam() && var_name.contains("orig")) {
-        var_name = var_name.replace("orig(",""); // Remove orig(
-        var_name  = var_name.substring(0, var_name.length() - 1); // Remove )
+      if (var_name.contains("orig")) { // It is an orig var
+        var_name = var_name.replace("orig(", ""); // Remove orig(
+        var_name = var_name.substring(0, var_name.length() - 1); // Remove )
       }
-      varValue = tuple.getVariableValue(var_name);
+      if (var.is_size()) { // It the size of a sequence
+        varValue = compute_value_for_size_var(var, tuple);
+      } else {
+        varValue = tuple.getVariableValue(var_name);
+      }
     }
     return varValue;
+  }
+
+  /**
+   * Compute the value for a size variable
+   */
+  private static Object compute_value_for_size_var(VarInfo size_var, PptTupleInfo tuple) {
+    // Get the name of the inner variable (as it is saved in the tuple)
+    String inner_var = size_var.name().replace("size(","").replace("[..])","");
+    if (inner_var.contains("-1")) inner_var = inner_var.replace("-1","");
+
+    // Get the value from the tuple. If null, return null, else compute the size.
+    Object inner_var_value = tuple.getVariableValue(inner_var);
+    if (inner_var_value==null) return null;
+    if (inner_var_value.getClass().isArray())
+      return Arrays.asList(inner_var_value).size();
+
+    // Unknown type
+    throw new IllegalArgumentException("Dont know how to compute size for var: "+size_var.name());
   }
 
   /**
