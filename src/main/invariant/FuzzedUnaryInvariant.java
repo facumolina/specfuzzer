@@ -110,15 +110,15 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   /**
    * Returns true iff the current variable is an object
    */
-  private boolean var_is_object() {
-    return var().file_rep_type.isObject();
+  private boolean var_is_object(VarInfo v1) {
+    return v1.file_rep_type.isObject();
   }
 
   /**
    * Returns true iff the current variable is the this object
    */
-  private boolean var_is_this_object() {
-    return "this".equals(var().name()) || "orig(this)".equals(var().name());
+  private boolean var_is_this_object(VarInfo v1) {
+    return "this".equals(v1.name()) || "orig(this)".equals(v1.name());
   }
 
   /**
@@ -171,10 +171,10 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   @Override
   public InvariantStatus check_modified(long v, int count) {
     // When the var is not an object, it can be evaluated directly on v
-    if (!var_is_object())
+    if (!var_is_object(var()))
       return check_modified_on_vars(get_var_value(v));
 
-    if (!var_is_this_object())
+    if (!var_is_this_object(var()))
       throw new IllegalStateException("Need to implement single collection evaluation, spec: " + format());
 
     // Recover the object and build key
@@ -238,7 +238,8 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
       // The unary invariant is only evaluated on the this object of the tuple
       try {
         Object o1;
-        if (var_is_object()) o1 = tuple.getThisObject();
+        // TODO This method must take as input a PptSlice, and take the var from there.
+        if (var_is_object(var())) o1 = tuple.getThisObject();
         else o1 = tuple.getVariableValue(var().name());
         if (o1 == null) continue;
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1);
