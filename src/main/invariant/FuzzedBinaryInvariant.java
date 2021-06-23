@@ -109,8 +109,8 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   /**
    * Return the value that represents the object
    */
-  private long getObject(long v1, long v2) {
-    if (var1().file_rep_type.isObject())
+  private long get_object(long v1, long v2) {
+    if (FuzzedInvariantUtil.var_is_object(var1()))
       return v1;
     else
       return v2;
@@ -120,7 +120,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
    * Return the class name that represents the object
    */
   private String get_class_of_object() {
-    if (var1().file_rep_type.isObject())
+    if (FuzzedInvariantUtil.var_is_object(var1()))
       return var1().type.toString();
     else
       return var2().type.toString();
@@ -262,7 +262,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
       return check_modified_on_collection_and_var();
 
     // Recover the object and build keys
-    int i = (int) getObject(v1, v2);
+    int i = (int) get_object(v1, v2);
     String key = i+"-"+get_ppt_key(ppt.parent.name);
     VarInfo curr_var = get_variable((PptSlice2)this.ppt);
     String cached_key = key+curr_var.name();
