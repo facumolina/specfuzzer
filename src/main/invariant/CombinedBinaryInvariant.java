@@ -98,10 +98,11 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
       // Both values have to be instance of Long
       long v1 = ((Long) val1);
       long v2 = ((Long) val2);
+      boolean same_order = ppt.var_infos[0].name().equals(sorted_vis[0].name());
       if (mod_index == 0) {
-        return check_unmodified(v1, v2, count);
+        return same_order? check_unmodified(v1, v2, count): check_unmodified(v2, v1, count);
       } else {
-        return check_modified(v1, v2, count);
+        return same_order? check_modified(v1, v2, count): check_modified(v2, v1, count);
       }
     }
     return InvariantStatus.FALSIFIED;
@@ -116,10 +117,11 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
       // Both values have to be instance of Long
       long v1 = ((Long) val1);
       long v2 = ((Long) val2);
+      boolean same_order = ppt.var_infos[0].name().equals(sorted_vis[0].name());
       if (mod_index == 0) {
-        return add_unmodified(v1, v2, count);
+        return same_order? add_unmodified(v1, v2, count): add_unmodified(v2, v1, count);
       } else {
-        return add_modified(v1, v2, count);
+        return same_order? add_modified(v1, v2, count): add_modified(v2, v1, count);
       }
     }
     return InvariantStatus.FALSIFIED;
