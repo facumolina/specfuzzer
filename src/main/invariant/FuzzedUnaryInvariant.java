@@ -218,16 +218,23 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   /**
    * Eval this invariant on every instance saved for the given ppt
    */
-  public boolean eval_on_all_instances_ppt(String ppt_name) {
+  public boolean eval_on_all_instances_ppt(PptSlice ppt) {
+    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt.name());
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
+    VarInfo var = ppt.var_infos[0];
     for (PptTupleInfo tuple : tuples) {
       // The unary invariant is only evaluated on the this object of the tuple
       try {
         Object o1;
-        // TODO This method must take as input a PptSlice, and take the var from there.
-        if (FuzzedInvariantUtil.var_is_object(var())) o1 = tuple.getThisObject();
-        else o1 = tuple.getVariableValue(var().name());
-        if (o1 == null) continue;
+        if (FuzzedInvariantUtil.var_is_object(var)) {
+          if (!FuzzedInvariantUtil.var_is_this_object(var)) {
+            throw new IllegalArgumentException("Do not know how to get var: "+var.name());
+          }
+          o1 = tuple.getThisObject();
+        } else {
+          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple, var);
+          if (o1==null) return false;
+        }
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1);
         if (!b) {
           return false;
