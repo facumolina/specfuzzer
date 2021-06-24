@@ -2,8 +2,10 @@ package invariant;
 
 import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
+import com.github.javaparser.ast.type.PrimitiveType;
 import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
+import daikon.chicory.Runtime;
 import daikon.inv.InvariantStatus;
 import expression.ExpressionEvaluator;
 import expression.ExpressionValidator;
@@ -263,6 +265,11 @@ public class FuzzedInvariantUtil {
         varValue = tuple.getVariableValue(var_name);
       }
     }
+    if (varValue instanceof Runtime.PrimitiveWrapper) {
+      // In the value is an instance of PrimitiveWrapper, then get the value it wraps.
+      Runtime.PrimitiveWrapper wrapper = (Runtime.PrimitiveWrapper)varValue;
+      varValue = wrapper.getJavaWrapper();
+    }
     return varValue;
   }
 
@@ -290,9 +297,9 @@ public class FuzzedInvariantUtil {
   public static String get_ppt_name_prefix(String ppt_name) {
     if (ppt_name==null || "".equals(ppt_name)) throw new IllegalArgumentException("Invalid ppt name");
     if (ppt_name.contains(":::ENTER"))
-      return ppt_name.split(":::ENTER")[0];
+      return ppt_name.split(":::ENTER")[0]+":::ENTER";
     if (ppt_name.contains(":::EXIT"))
-      return ppt_name.split(":::EXIT")[0];
+      return ppt_name.split(":::EXIT")[0]+":::EXIT";
     throw new IllegalArgumentException("Do not know how to get the prefix of ppt_name "+ppt_name);
   }
 
