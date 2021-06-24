@@ -212,7 +212,18 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   public boolean equals(Object other) {
     if (!(other instanceof FuzzedUnaryInvariant))
       return false;
-    return isSameFormula((FuzzedUnaryInvariant)other);
+
+    // The formula should be the same.
+    FuzzedUnaryInvariant unary = (FuzzedUnaryInvariant) other;
+    if (!isSameFormula(unary))
+      return false;
+
+    // The variables should be the same.
+    if (ppt!=null && unary.ppt!=null) {
+      return ppt.var_infos[0].name().equals(unary.ppt.var_infos[0].name());
+    } else {
+      return ppt==null && unary.ppt==null;
+    }
   }
 
   /**
