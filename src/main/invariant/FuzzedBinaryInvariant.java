@@ -39,8 +39,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   // Fuzzed spec represented by this invariant
   private String fuzzed_spec;
 
-  // Cache of already evaluated hashcode-ppt pairs.
-  private Map<String, InvariantStatus> cached_evaluations = new HashMap<>();
+  private Map<String, InvariantStatus> cached_evaluations = new HashMap<>(); // Cache of already evaluated hashcode-ppt pairs.
 
   ///
   /// Required methods
@@ -166,6 +165,44 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   }
 
   /**
+   * Evaluate the current fuzzed spec on all the tuples matching the current ppt.
+   * Only intended to use when both var1() and var2() are primitive variables
+   */
+  private InvariantStatus check_modified_on_vars_whole_ppt() {
+    sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
+    // Build key
+    //String ppt_key = get_ppt_key(ppt.parent.name);
+    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt.name());
+    String cached_key = ppt_name+"-"+var1().name()+"-"+var2().name();
+
+    // Check if already evaluated
+    if (cached_evaluations.containsKey(cached_key))
+      return cached_evaluations.get(cached_key);
+
+    List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
+    try {
+      for (PptTupleInfo tuple : tuples) {
+        Object o1 = FuzzedInvariantUtil.get_value_for_variable(tuple, var1());
+        Object o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, var2());
+        if (o1 == null || o2 == null) {
+          cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+          return InvariantStatus.FALSIFIED;
+        }
+        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1, o2);
+        if (!b) {
+          cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+          return InvariantStatus.FALSIFIED;
+        }
+      }
+    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
+      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
+    }
+    cached_evaluations.put(cached_key,InvariantStatus.NO_CHANGE);
+    return InvariantStatus.NO_CHANGE;
+  }
+
+  /**
    * Evaluate the current fuzzed spec on the given variable values
    */
   private InvariantStatus check_modified_on_vars(Object value1,Object value2) {
@@ -186,7 +223,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     VarInfo collection_var = var1().file_rep_type.isObject()?var1():var2();
     VarInfo primitive_var = var1().file_rep_type.isObject()?var2():var1();
     String ppt_key = get_ppt_key(ppt.parent.name);
-    String cached_key = "collection-"+ppt_key;
+    String cached_key = ppt_key+var1().name()+var2().name();
 
     // Check if already evaluated
     if (cached_evaluations.containsKey(cached_key))
@@ -226,7 +263,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   /**
    * Evaluate the fuzzed spec on the given tuples list
    */
-  private InvariantStatus check_modified_on_tuples(List<PptTupleInfo> list,VarInfo curr_var, String cached_key) {
+  private InvariantStatus check_modified_on_tuples_one_var(List<PptTupleInfo> list,VarInfo curr_var, String cached_key) {
     try {
       // Evaluate
       for (PptTupleInfo tuple : list) {
@@ -254,8 +291,8 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
     if (!object_present(var1(),var2()))
+      //InvariantStatus res =  check_modified_on_vars_whole_ppt();
       return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1));
-
 
     // If the object present is not the this object, one of v1 and v2 must represent a collection
     if (!object_present_is_this(var1(), var2()))
@@ -275,7 +312,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     if (l == null)
       return FuzzedInvariantUtil.handle_missing_key(cached_evaluations, fuzzed_spec, cached_key, get_class_of_object());
 
-    return check_modified_on_tuples(l, curr_var, cached_key);
+    return check_modified_on_tuples_one_var(l, curr_var, cached_key);
   }
 
   private InvariantStatus getDefault() {
@@ -304,24 +341,39 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     assert invariant instanceof FuzzedBinaryInvariant;
     FuzzedBinaryInvariant fuzzed_inv = (FuzzedBinaryInvariant) invariant;
     assert (fuzzed_inv.fuzzed_spec != null);
-    return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec);
+    return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec) && (this.swap == fuzzed_inv.swap);
   }
 
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FuzzedBinaryInvariant))
       return false;
-    return isSameFormula((FuzzedBinaryInvariant)other);
+
+    // The formula should be the same.
+    FuzzedBinaryInvariant bin = (FuzzedBinaryInvariant)other;
+    if (!isSameFormula(bin)) return false;
+
+    // The variables should be the same.
+    if (sorted_vis!=null && bin.sorted_vis!=null) {
+      for (int i = 0; i < sorted_vis.length; i++) {
+        if (!sorted_vis[i].name().equals(bin.sorted_vis[i].name()))
+          return false;
+      }
+      return true;
+    } else {
+      return sorted_vis==null && bin.sorted_vis==null;
+    }
   }
 
   /**
    * Eval this invariant on every instance saved for the given ppt
    */
-  public boolean eval_on_all_instances_ppt(PptSlice ppt) {
-    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt.name());
+  public boolean eval_on_all_instances_ppt(PptSlice ppt_slice) {
+    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt_slice.name());
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
+
     try {
-      VarInfo[] sorted_vars = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
+      VarInfo[] sorted_vars = FuzzedInvariantUtil.sort_lexicographically(ppt_slice.var_infos);
       VarInfo v1 = sorted_vars[0];
       VarInfo v2 = sorted_vars[1];
       for (PptTupleInfo tuple : tuples) {
@@ -341,11 +393,12 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
             if (o1 == null) continue;
             if (o2 == null) return false;
           }  else // Both are vars, none of them should be null
-            if (o1==null || o2 == null) return false;
+            if (o1==null || o2 == null) {
+              return false;
+            }
         }
         boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1, o2);
-        if (!b)
-          return false;
+        if (!b) { return false; }
       }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       return false;
