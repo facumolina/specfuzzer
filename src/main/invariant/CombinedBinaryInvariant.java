@@ -24,16 +24,9 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20210124L;
 
-  VarInfo[] sorted_vis; // Maintain a sorted array of variables sorted lexicographically by name.
+  protected CombinedBinaryInvariant(PptSlice ppt) { super(ppt); }
 
-  protected CombinedBinaryInvariant(PptSlice ppt) {
-    super(ppt);
-    sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
-  }
-
-  protected @Prototype CombinedBinaryInvariant() {
-    super();
-  }
+  protected @Prototype CombinedBinaryInvariant() { super(); }
 
   public boolean valid_types_static(VarInfo[] vis) {
     if (vis.length != 2)
@@ -43,17 +36,17 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     if (vis[0].name().contains("serialVersionUID") || vis[1].name().contains("serialVersionUID"))
       return false;
 
-    // Discard equal variables
+    // Discard variables with the same name
     if (vis[0].name().equals(vis[1].name()))
       return false;
 
-    // Discard when both variables are sizes
+    // Discard variables when both are sizes
     if (vis[0].is_size() && vis[1].is_size())
       return false;
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
-      // At least one var is an object or collection
-      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && is_this_or_collection(vis[0])))
+      // One var is an object, thus at least one var must be the this object or a collection
+      return ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && is_this_or_collection(vis[0])))
               || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && is_this_or_collection(vis[1]));
     } else {
       // Both vars must be primitive
@@ -76,7 +69,7 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   /** To add extra checking steps for valid types*/
   public abstract boolean extra_check(VarInfo[] vis);
 
-  // if true, "swap" the order of the invariant variables
+  /** if true, swap the order of the invariant variables*/
   protected boolean swap = false;
 
   /** Returns whether or not the variable order is currently "swapped" for this invariant. */
@@ -86,7 +79,7 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   }
 
   /**
-   * Since the order is determined from the vars and the sequence is always first, no permute is necessary.
+   * Handle permutation by updating the status of swap.
    */
   @Override
   protected Invariant resurrect_done(int[] permutation) {
@@ -94,19 +87,22 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     if (permutation[0] == 1) {
       swap = !swap;
     }
-    sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
     return this;
   }
 
   /**
    * Returns the first variable. This is the only mechanism by which subclasses should access variables.
    */
-  public VarInfo var1(@GuardSatisfied CombinedBinaryInvariant this) { return sorted_vis[0]; }
+  public VarInfo var1(@GuardSatisfied CombinedBinaryInvariant this) {
+    return swap? ppt.var_infos[1] : ppt.var_infos[0];
+  }
 
   /**
    * Returns the second variable. This is the only mechanism by which subclasses should access variables.
    */
-  public VarInfo var2(@GuardSatisfied CombinedBinaryInvariant this) { return sorted_vis[1]; }
+  public VarInfo var2(@GuardSatisfied CombinedBinaryInvariant this) {
+    return swap? ppt.var_infos[0] : ppt.var_infos[1];
+  }
 
   @Override
   public InvariantStatus check(@Interned Object val1, @Interned Object val2, int mod_index, int count) {

@@ -165,52 +165,15 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   }
 
   /**
-   * Evaluate the current fuzzed spec on all the tuples matching the current ppt.
-   * Only intended to use when both var1() and var2() are primitive variables
-   */
-  private InvariantStatus check_modified_on_vars_whole_ppt() {
-    sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
-    // Build key
-    //String ppt_key = get_ppt_key(ppt.parent.name);
-    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt.name());
-    String cached_key = ppt_name+"-"+var1().name()+"-"+var2().name();
-
-    // Check if already evaluated
-    if (cached_evaluations.containsKey(cached_key))
-      return cached_evaluations.get(cached_key);
-
-    List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
-    try {
-      for (PptTupleInfo tuple : tuples) {
-        Object o1 = FuzzedInvariantUtil.get_value_for_variable(tuple, var1());
-        Object o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, var2());
-        if (o1 == null || o2 == null) {
-          cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
-          return InvariantStatus.FALSIFIED;
-        }
-        boolean b = ExpressionEvaluator.eval(fuzzed_spec, o1, o2);
-        if (!b) {
-          cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
-          return InvariantStatus.FALSIFIED;
-        }
-      }
-    } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
-      cached_evaluations.put(cached_key, InvariantStatus.FALSIFIED);
-      return InvariantStatus.FALSIFIED;
-    }
-    cached_evaluations.put(cached_key,InvariantStatus.NO_CHANGE);
-    return InvariantStatus.NO_CHANGE;
-  }
-
-  /**
    * Evaluate the current fuzzed spec on the given variable values
    */
   private InvariantStatus check_modified_on_vars(Object value1,Object value2) {
     try {
-      if (!ExpressionEvaluator.eval(fuzzed_spec, value1, value2))
+      if (!ExpressionEvaluator.eval(fuzzed_spec, value1, value2)) {
         return InvariantStatus.FALSIFIED;
-      else
+      } else {
         return InvariantStatus.NO_CHANGE;
+      }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       return InvariantStatus.FALSIFIED;
     }
@@ -354,14 +317,14 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     if (!isSameFormula(bin)) return false;
 
     // The variables should be the same.
-    if (sorted_vis!=null && bin.sorted_vis!=null) {
-      for (int i = 0; i < sorted_vis.length; i++) {
-        if (!sorted_vis[i].name().equals(bin.sorted_vis[i].name()))
+    if (ppt!=null && bin.ppt!=null) {
+      for (int i = 0; i < ppt.var_infos.length; i++) {
+        if (!ppt.var_infos[i].name().equals(bin.ppt.var_infos[i].name()))
           return false;
       }
       return true;
     } else {
-      return sorted_vis==null && bin.sorted_vis==null;
+      return ppt==null && bin.ppt==null;
     }
   }
 
@@ -373,9 +336,8 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
 
     try {
-      VarInfo[] sorted_vars = FuzzedInvariantUtil.sort_lexicographically(ppt_slice.var_infos);
-      VarInfo v1 = sorted_vars[0];
-      VarInfo v2 = sorted_vars[1];
+      VarInfo v1 = swap?ppt_slice.var_infos[1]:ppt_slice.var_infos[0];
+      VarInfo v2 = swap?ppt_slice.var_infos[0]:ppt_slice.var_infos[1];
       for (PptTupleInfo tuple : tuples) {
         Object o1;
         Object o2;
