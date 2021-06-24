@@ -41,6 +41,10 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
     if (vis[0].name().contains("serialVersionUID") || vis[1].name().contains("serialVersionUID") || vis[2].name().contains("serialVersionUID"))
       return false;
 
+    // Discard variables when two variables are sizes
+    if ((vis[0].is_size() && vis[1].is_size()) || (vis[1].is_size() && vis[2].is_size()) || (vis[0].is_size() && vis[2].is_size()))
+      return false;
+
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject() || vis[2].file_rep_type.isObject()) {
       // At least one var is an object or a collection
       return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive() && is_this_or_collection(vis[0]))
@@ -58,7 +62,7 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
       return false;
     orig_fst_var = vis[0].name();
     orig_snd_var = vis[1].name();
-    return  valid_types_static(vis) && extra_check(vis);
+    return valid_types_static(vis) && extra_check(vis);
   }
 
   /** To add extra checking steps for valid types*/
