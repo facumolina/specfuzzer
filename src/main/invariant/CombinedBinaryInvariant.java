@@ -31,7 +31,9 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
   }
 
-  protected @Prototype CombinedBinaryInvariant() { super(); }
+  protected @Prototype CombinedBinaryInvariant() {
+    super();
+  }
 
   public boolean valid_types_static(VarInfo[] vis) {
     if (vis.length != 2)
@@ -43,6 +45,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
 
     // Discard equal variables
     if (vis[0].name().equals(vis[1].name()))
+      return false;
+
+    // Discard when both variables are sizes
+    if (vis[0].is_size() && vis[1].is_size())
       return false;
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
@@ -70,12 +76,24 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
   /** To add extra checking steps for valid types*/
   public abstract boolean extra_check(VarInfo[] vis);
 
+  // if true, "swap" the order of the invariant variables
+  protected boolean swap = false;
+
+  /** Returns whether or not the variable order is currently "swapped" for this invariant. */
+  @Override
+  public boolean get_swap() {
+    return swap;
+  }
+
   /**
    * Since the order is determined from the vars and the sequence is always first, no permute is necessary.
    */
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
+    if (permutation[0] == 1) {
+      swap = !swap;
+    }
     sorted_vis = FuzzedInvariantUtil.sort_lexicographically(ppt.var_infos);
     return this;
   }
@@ -98,11 +116,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
       // Both values have to be instance of Long
       long v1 = ((Long) val1);
       long v2 = ((Long) val2);
-      boolean same_order = ppt.var_infos[0].name().equals(sorted_vis[0].name());
       if (mod_index == 0) {
-        return same_order? check_unmodified(v1, v2, count): check_unmodified(v2, v1, count);
+        return swap? check_unmodified(v2, v1, count): check_unmodified(v1, v2, count);
       } else {
-        return same_order? check_modified(v1, v2, count): check_modified(v2, v1, count);
+        return swap? check_modified(v2, v1, count): check_modified(v1, v2, count);
       }
     }
     return InvariantStatus.FALSIFIED;
@@ -117,11 +134,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
       // Both values have to be instance of Long
       long v1 = ((Long) val1);
       long v2 = ((Long) val2);
-      boolean same_order = ppt.var_infos[0].name().equals(sorted_vis[0].name());
       if (mod_index == 0) {
-        return same_order? add_unmodified(v1, v2, count): add_unmodified(v2, v1, count);
+        return swap? add_unmodified(v2, v1, count): add_unmodified(v1, v2, count);
       } else {
-        return same_order? add_modified(v1, v2, count): add_modified(v2, v1, count);
+        return swap? add_modified(v2, v1, count): add_modified(v1, v2, count);
       }
     }
     return InvariantStatus.FALSIFIED;
