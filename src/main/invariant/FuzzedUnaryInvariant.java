@@ -14,6 +14,7 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
+import utils.VarInfoUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -157,10 +158,10 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   @Override
   public InvariantStatus check_modified(long v, int count) {
     // When the var is not an object, it can be evaluated directly on v
-    if (!FuzzedInvariantUtil.var_is_object(var()))
+    if (!VarInfoUtil.var_is_object(var()))
       return check_modified_on_vars(get_var_value(v));
 
-    if (!FuzzedInvariantUtil.var_is_this_object(var()))
+    if (!VarInfoUtil.var_is_this_object(var()))
       throw new IllegalStateException("Need to implement single collection evaluation, spec: " + format());
 
     // Recover the object and build key
@@ -237,8 +238,8 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
       // The unary invariant is only evaluated on the this object of the tuple
       try {
         Object o1;
-        if (FuzzedInvariantUtil.var_is_object(var)) {
-          if (!FuzzedInvariantUtil.var_is_this_object(var)) {
+        if (VarInfoUtil.var_is_object(var)) {
+          if (!VarInfoUtil.var_is_this_object(var)) {
             throw new IllegalArgumentException("Do not know how to get var: "+var.name());
           }
           o1 = tuple.getThisObject();

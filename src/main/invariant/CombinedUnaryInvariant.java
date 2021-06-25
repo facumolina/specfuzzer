@@ -9,6 +9,7 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
+import utils.VarInfoUtil;
 
 /**
  * Abstract base class for combined unary invariants. A CombinedUnaryInvariant may represent:
@@ -50,14 +51,9 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
       return false;
 
     if (vis[0].file_rep_type.isObject())
-      return is_this_or_collection(vis[0]);
+      return VarInfoUtil.var_is_this_or_collection(vis[0]);
 
     return vis[0].file_rep_type.isPrimitive();
-  }
-
-  /** Returns true iff the given VarInfo is either the this object or a collection object */
-  private boolean is_this_or_collection(VarInfo vi) {
-    return "this".equals(vi.name()) || JavaTypesUtil.is_collection(vi.type.toString());
   }
 
   /** Returns whether or not the specified types are valid for unary object. */
