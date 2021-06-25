@@ -318,23 +318,4 @@ public class FuzzedInvariantUtil {
     return (VarInfo[]) l.toArray();
   }
 
-  /**
-   * Returns true iff the current variable is an object
-   */
-  public static boolean var_is_object(VarInfo v1) {
-    return v1.file_rep_type.isObject();
-  }
-
-  /**
-   * Returns true iff the current variable is the this object
-   */
-  public static boolean var_is_this_object(VarInfo v1) {
-    return "this".equals(v1.name()) || "orig(this)".equals(v1.name());
-  }
-
-  /** Returns true iff the given VarInfo is either the this object or a collection object */
-  public static boolean is_this_or_collection(VarInfo vi) {
-    return var_is_this_object(vi) || JavaTypesUtil.is_collection(vi.type.toString());
-  }
-
 }
