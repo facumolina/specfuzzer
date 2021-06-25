@@ -37,7 +37,7 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
     var_indices[5] = new int[] { 1, 2, 0 };
     var_indices[6] = new int[] { 2, 1, 0 };
   }
-  private static int var_order = 1;
+  private int var_order = 1;
 
   protected CombinedTernaryInvariant(PptSlice ppt) { super(ppt); }
 
@@ -139,7 +139,7 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
    * Returns the third variable.
    */
   public VarInfo var3(@GuardSatisfied CombinedTernaryInvariant this) {
-    return ppt.var_infos[var_indices[get_var_order()][0]];
+    return ppt.var_infos[var_indices[get_var_order()][2]];
   }
 
   @Override
