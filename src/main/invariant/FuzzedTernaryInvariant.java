@@ -77,6 +77,12 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
     return dkconfig_enabled;
   }
 
+  /** Returns whether or not the specified var types are valid for IntGreaterThan */
+  @Override
+  public boolean instantiate_ok(VarInfo[] vis) {
+    return valid_types(vis);
+  }
+
   /** instantiate an invariant on the specified slice */
   @Override
   public FuzzedTernaryInvariant instantiate_dyn(@Prototype FuzzedTernaryInvariant this, PptSlice slice) {
@@ -116,15 +122,15 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   /**
    * Returns true iff one of the current variables is an object
    */
-  private boolean object_present() {
-    return FuzzedInvariantUtil.var_is_object(var1()) || FuzzedInvariantUtil.var_is_object(var2()) || FuzzedInvariantUtil.var_is_object(var3());
+  private boolean object_present(VarInfo var1, VarInfo var2, VarInfo var3) {
+    return FuzzedInvariantUtil.var_is_object(var1) || FuzzedInvariantUtil.var_is_object(var2) || FuzzedInvariantUtil.var_is_object(var3);
   }
 
   /**
    * Returns true iff on of the current variables is the this object
    */
-  private boolean object_present_is_this() {
-    return FuzzedInvariantUtil.var_is_this_object(var1()) || FuzzedInvariantUtil.var_is_this_object(var2()) || FuzzedInvariantUtil.var_is_this_object(var3());
+  private boolean object_present_is_this(VarInfo var1, VarInfo var2, VarInfo var3) {
+    return FuzzedInvariantUtil.var_is_this_object(var1) || FuzzedInvariantUtil.var_is_this_object(var2) || FuzzedInvariantUtil.var_is_this_object(var3);
   }
 
   /**
@@ -175,10 +181,11 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    */
   private InvariantStatus check_modified_on_vars(Object value1,Object value2, Object value3) {
     try {
-      if (!ExpressionEvaluator.eval(fuzzed_spec, value1, value2, value3))
+      if (!ExpressionEvaluator.eval(fuzzed_spec, value1, value2, value3)) {
         return InvariantStatus.FALSIFIED;
-      else
+      } else {
         return InvariantStatus.NO_CHANGE;
+      }
     } catch (NonApplicableExpressionException | NonEvaluableExpressionException ex) {
       return InvariantStatus.FALSIFIED;
     }
@@ -215,11 +222,11 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   @Override
   public InvariantStatus check_modified(long v1, long v2, long v3, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
-    if (!object_present())
+    if (!object_present(var1(), var2(), var3()))
       return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v3, 2));
 
     // If the object present is not the this object, one of the inputs must represent a collection
-    if (!object_present_is_this())
+    if (!object_present_is_this(var1(), var2(), var3()))
       throw new IllegalArgumentException("Dont know how to evaluate this yet");
 
     // Recover the object and build keys
@@ -258,14 +265,28 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
     assert invariant instanceof FuzzedTernaryInvariant;
     FuzzedTernaryInvariant fuzzed_inv = (FuzzedTernaryInvariant) invariant;
     assert (fuzzed_inv.fuzzed_spec != null);
-    return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec);
+    return fuzzed_spec.equals(fuzzed_inv.fuzzed_spec) && get_var_order()==fuzzed_inv.get_var_order();
   }
 
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FuzzedTernaryInvariant))
       return false;
-    return isSameFormula((FuzzedTernaryInvariant)other);
+
+    // The formula should be the same.
+    FuzzedTernaryInvariant ternary = (FuzzedTernaryInvariant) other;
+    if (!isSameFormula(ternary)) return false;
+
+    // The variables should be the same.
+    if (ppt!=null && ternary.ppt!=null) {
+      for (int i = 0; i < ppt.var_infos.length; i++) {
+        if (!ppt.var_infos[i].name().equals(ternary.ppt.var_infos[i].name()))
+          return false;
+      }
+      return true;
+    } else {
+      return ppt==null && ternary.ppt==null;
+    }
   }
 
   private InvariantStatus getDefault() {
@@ -279,15 +300,18 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    * Eval this invariant on every instance saved for the given ppt
    */
   public boolean eval_on_all_instances_ppt(PptSlice ppt) {
-    assert ppt.name().contains(":::ENTER");
-    String ppt_name = ppt.name().split(":::ENTER")[0];
+    String ppt_name = FuzzedInvariantUtil.get_ppt_name_prefix(ppt.name());
     List<PptTupleInfo> tuples = ObjectsLoader.get_tuples_that_match_ppt(ppt_name);
     try {
       for (PptTupleInfo tuple : tuples) {
         Object o1;
         Object o2;
         Object o3;
-        if (object_present() && object_present_is_this()) {
+        VarInfo[] sorted = sort_var_info_by_order(ppt.var_infos[0], ppt.var_infos[1], ppt.var_infos[2]);
+        VarInfo var1 = sorted[0];
+        VarInfo var2 = sorted[1];
+        VarInfo var3 = sorted[2];
+        if (object_present(var1, var2, var3) && object_present_is_this(var1, var2, var3)) {
           // The first must be the this object, and the rest variables
           o1 = tuple.getThisObject();
           VarInfo[] curr_vars = get_variables();
@@ -296,10 +320,10 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
           if (o2==null || o3==null) return false;
         } else {
           // All are vars
-          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,var1());
-          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,var2());
-          o3 = FuzzedInvariantUtil.get_value_for_variable(tuple,var3());
-          if (object_present()) {
+          o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,var1);
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,var2);
+          o3 = FuzzedInvariantUtil.get_value_for_variable(tuple,var3);
+          if (object_present(var1, var2, var3)) {
             // o1 is a collection, null is allowed for o1
             if (o1 == null) continue;
             if (o2 == null || o3==null) return false;
