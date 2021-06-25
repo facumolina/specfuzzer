@@ -3956,6 +3956,12 @@ public class PptTopLevel extends Ppt {
           if (!binary_fuzzed_invs_holds_for_slice(parent_inv, pslice))
             continue;
         }
+        if (child_inv.getClass().getSimpleName().equals("FuzzedTernaryInvariant") && 
+          pslice.toString().contains(":::ENTER")) {
+          // We have a FuzzedTernaryInvariant, for entry points the invariant must be checked before merge.
+          if (!ternary_fuzzed_invs_holds_for_slice(parent_inv, pslice))
+            continue;
+        }
         parent_inv.ppt = pslice;
         pslice.invs.add(parent_inv);
         if (Debug.logOn()) parent_inv.log("Added %s to %s", parent_inv.format(), pslice);
@@ -3984,6 +3990,21 @@ public class PptTopLevel extends Ppt {
   private static boolean binary_fuzzed_invs_holds_for_slice(Invariant inv, PptSlice slice) {
     try {
       Class<?> inv_class = Class.forName("invariant.FuzzedBinaryInvariant");
+      Method eval_on_all_instances_ppt_method = inv_class.getMethod("eval_on_all_instances_ppt", PptSlice.class);
+      boolean b = (Boolean) eval_on_all_instances_ppt_method.invoke(inv, slice);
+      return b;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  /**
+   * Returns true if the given fuzzed binary invariant holds for the given slice 
+   */
+  private static boolean ternary_fuzzed_invs_holds_for_slice(Invariant inv, PptSlice slice) {
+    try {
+      Class<?> inv_class = Class.forName("invariant.FuzzedTernaryInvariant");
       Method eval_on_all_instances_ppt_method = inv_class.getMethod("eval_on_all_instances_ppt", PptSlice.class);
       boolean b = (Boolean) eval_on_all_instances_ppt_method.invoke(inv, slice);
       return b;
