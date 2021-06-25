@@ -14,6 +14,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
+import utils.VarInfoUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +108,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
    * Return the value that represents the object
    */
   private long get_object(long v1, long v2) {
-    if (FuzzedInvariantUtil.var_is_object(var1()))
+    if (VarInfoUtil.var_is_object(var1()))
       return v1;
     else
       return v2;
@@ -117,7 +118,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
    * Return the class name that represents the object
    */
   private String get_class_of_object() {
-    if (FuzzedInvariantUtil.var_is_object(var1()))
+    if (VarInfoUtil.var_is_object(var1()))
       return var1().type.toString();
     else
       return var2().type.toString();
@@ -146,20 +147,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
       return ppt_name.split(";condition")[0];
     }
     return ppt_name;
-  }
-
-  /**
-   * Returns true iff one of the current variables is an object
-   */
-  private boolean object_present(VarInfo v1, VarInfo v2) {
-    return FuzzedInvariantUtil.var_is_object(v1) || FuzzedInvariantUtil.var_is_object(v2);
-  }
-
-  /**
-   * Returns true iff one of the current variables is the this object
-   */
-  private boolean object_present_is_this(VarInfo v1,VarInfo v2) {
-    return FuzzedInvariantUtil.var_is_this_object(v1) || FuzzedInvariantUtil.var_is_this_object(v2);
   }
 
   /**
@@ -251,12 +238,12 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   @Override
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
-    if (!object_present(var1(),var2()))
+    if (!VarInfoUtil.some_is_object(var1(),var2()))
       //InvariantStatus res =  check_modified_on_vars_whole_ppt();
       return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1));
 
     // If the object present is not the this object, one of v1 and v2 must represent a collection
-    if (!object_present_is_this(var1(), var2()))
+    if (!VarInfoUtil.some_is_this_object(var1(), var2()))
       return check_modified_on_collection_and_var();
 
     // Recover the object and build keys
@@ -339,7 +326,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
       for (PptTupleInfo tuple : tuples) {
         Object o1;
         Object o2;
-        if (object_present(v1, v2) && object_present_is_this(v1, v2)) {
+        if (VarInfoUtil.some_is_object(v1, v2) && VarInfoUtil.some_is_this_object(v1, v2)) {
           // The first must be the this object, and the second the variable
           o1 = tuple.getThisObject();
           o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, v1.file_rep_type.isPrimitive()?v1:v2);
@@ -348,7 +335,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
           // Both are vars
           o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,v1);
           o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,v2);
-          if (object_present(v1, v2)) {
+          if (VarInfoUtil.some_is_object(v1, v2)) {
             // o1 is a collection, null is allowed for o1
             if (o1 == null) continue;
             if (o2 == null) return false;

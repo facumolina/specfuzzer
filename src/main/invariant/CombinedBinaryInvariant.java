@@ -8,7 +8,7 @@ import daikon.inv.binary.BinaryInvariant;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
-import utils.JavaTypesUtil;
+import utils.VarInfoUtil;
 
 /**
  * Abstract base class for combined binary invariants. A CombinedBinaryInvariant may represent:
@@ -46,8 +46,8 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
       // One var is an object, thus at least one var must be the this object or a collection
-      return ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && is_this_or_collection(vis[0])))
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && is_this_or_collection(vis[1]));
+      return ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && VarInfoUtil.var_is_this_or_collection(vis[0])))
+              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && VarInfoUtil.var_is_this_or_collection(vis[1]));
     } else {
       // Both vars must be primitive
       return vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive();
@@ -61,10 +61,6 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     return valid_types_static(vis) && extra_check(vis);
   }
 
-  /** Returns true iff the given VarInfo is either the this object or a collection object */
-  private boolean is_this_or_collection(VarInfo vi) {
-    return "this".equals(vi.name()) || JavaTypesUtil.is_collection(vi.type.toString());
-  }
 
   /** To add extra checking steps for valid types*/
   public abstract boolean extra_check(VarInfo[] vis);
