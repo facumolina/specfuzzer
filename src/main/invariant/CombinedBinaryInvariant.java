@@ -78,9 +78,6 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     return swap;
   }
 
-  /**
-   * Handle permutation by updating the status of swap.
-   */
   @Override
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;

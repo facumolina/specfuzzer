@@ -82,9 +82,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
 
   /** returns whether or not this invariant is enabled */
   @Override
-  public boolean enabled() {
-    return dkconfig_enabled;
-  }
+  public boolean enabled() { return dkconfig_enabled; }
 
   /** Returns whether or not the specified var types are valid for IntGreaterThan */
   @Override
