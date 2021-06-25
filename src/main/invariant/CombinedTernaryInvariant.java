@@ -8,6 +8,7 @@ import daikon.inv.ternary.TernaryInvariant;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
+import utils.VarInfoUtil;
 
 import java.util.Arrays;
 
@@ -61,9 +62,9 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
 
     if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject() || vis[2].file_rep_type.isObject()) {
       // At least one var is an object or a collection
-      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive() && FuzzedInvariantUtil.is_this_or_collection(vis[0]))
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[2].file_rep_type.isPrimitive() && FuzzedInvariantUtil.is_this_or_collection(vis[1]))
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isObject() && FuzzedInvariantUtil.is_this_or_collection(vis[2])));
+      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive() && VarInfoUtil.var_is_this_or_collection(vis[0]))
+              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[2].file_rep_type.isPrimitive() && VarInfoUtil.var_is_this_or_collection(vis[1]))
+              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isObject() && VarInfoUtil.var_is_this_or_collection(vis[2])));
     } else {
       // All vars must be primitive
       return vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive();

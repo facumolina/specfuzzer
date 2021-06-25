@@ -16,6 +16,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 import utils.JavaTypesUtil;
+import utils.VarInfoUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -120,28 +121,14 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   }
 
   /**
-   * Returns true iff one of the current variables is an object
-   */
-  private boolean object_present(VarInfo var1, VarInfo var2, VarInfo var3) {
-    return FuzzedInvariantUtil.var_is_object(var1) || FuzzedInvariantUtil.var_is_object(var2) || FuzzedInvariantUtil.var_is_object(var3);
-  }
-
-  /**
-   * Returns true iff on of the current variables is the this object
-   */
-  private boolean object_present_is_this(VarInfo var1, VarInfo var2, VarInfo var3) {
-    return FuzzedInvariantUtil.var_is_this_object(var1) || FuzzedInvariantUtil.var_is_this_object(var2) || FuzzedInvariantUtil.var_is_this_object(var3);
-  }
-
-  /**
    * Return the value that represents the object
    */
   private long get_object(long v1, long v2, long v3) {
-    if (FuzzedInvariantUtil.var_is_object(var1()))
+    if (VarInfoUtil.var_is_object(var1()))
       return v1;
-    if (FuzzedInvariantUtil.var_is_object(var2()))
+    if (VarInfoUtil.var_is_object(var2()))
       return v2;
-    if (FuzzedInvariantUtil.var_is_object(var3()))
+    if (VarInfoUtil.var_is_object(var3()))
       return v3;
     throw new IllegalStateException("Trying the get the object but the invariant has no object");
   }
@@ -151,10 +138,10 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    */
   private VarInfo[] get_variables() {
     VarInfo[] vars = new VarInfo[2];
-    if (FuzzedInvariantUtil.var_is_object(var1())) {
+    if (VarInfoUtil.var_is_object(var1())) {
       vars[0] = var2();
       vars[1] = var3();
-    } else if (FuzzedInvariantUtil.var_is_object(var2())) {
+    } else if (VarInfoUtil.var_is_object(var2())) {
       vars[0] = var1();
       vars[1] = var3();
     } else {
@@ -168,9 +155,9 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
    * Return the class name that represents the object
    */
   private String get_class_of_object() {
-    if (FuzzedInvariantUtil.var_is_object(var1()))
+    if (VarInfoUtil.var_is_object(var1()))
       return var1().type.toString();
-    else if (FuzzedInvariantUtil.var_is_object(var2()))
+    else if (VarInfoUtil.var_is_object(var2()))
       return var2().type.toString();
     else
       return var3().type.toString();
@@ -222,11 +209,11 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   @Override
   public InvariantStatus check_modified(long v1, long v2, long v3, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
-    if (!object_present(var1(), var2(), var3()))
+    if (!VarInfoUtil.some_is_object(var1(), var2(), var3()))
       return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v3, 2));
 
     // If the object present is not the this object, one of the inputs must represent a collection
-    if (!object_present_is_this(var1(), var2(), var3()))
+    if (!VarInfoUtil.some_is_this_object(var1(), var2(), var3()))
       throw new IllegalArgumentException("Dont know how to evaluate this yet");
 
     // Recover the object and build keys
@@ -311,7 +298,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
         VarInfo var1 = sorted[0];
         VarInfo var2 = sorted[1];
         VarInfo var3 = sorted[2];
-        if (object_present(var1, var2, var3) && object_present_is_this(var1, var2, var3)) {
+        if (VarInfoUtil.some_is_object(var1, var2, var3) && VarInfoUtil.some_is_this_object(var1, var2, var3)) {
           // The first must be the this object, and the rest variables
           o1 = tuple.getThisObject();
           VarInfo[] curr_vars = get_variables();
@@ -323,7 +310,7 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
           o1 = FuzzedInvariantUtil.get_value_for_variable(tuple,var1);
           o2 = FuzzedInvariantUtil.get_value_for_variable(tuple,var2);
           o3 = FuzzedInvariantUtil.get_value_for_variable(tuple,var3);
-          if (object_present(var1, var2, var3)) {
+          if (VarInfoUtil.some_is_object(var1, var2, var3)) {
             // o1 is a collection, null is allowed for o1
             if (o1 == null) continue;
             if (o2 == null || o3==null) return false;
