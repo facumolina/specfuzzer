@@ -8,19 +8,24 @@ import daikon.VarInfo;
  */
 public class VarInfoUtil {
 
+  /** Returns true iff the given VarInfo contains the serial field */
+  public static boolean var_is_serial_field(VarInfo vi) {
+    return vi.name().contains("serialVersionUID");
+  }
+
   /** Returns true iff the given VarInfo represents an object */
-  public static boolean var_is_object(VarInfo v1) {
-    return v1.file_rep_type.isObject();
+  public static boolean var_is_object(VarInfo vi) {
+    return vi.file_rep_type.isObject();
   }
 
   /** Returns true iff the given VarInfo represents a primitive value */
-  public static boolean var_is_primitive(VarInfo v1) {
-    return v1.file_rep_type.isPrimitive();
+  public static boolean var_is_primitive(VarInfo vi) {
+    return vi.file_rep_type.isPrimitive();
   }
 
   /** Returns true iff the given VarInfo represents the this object */
-  public static boolean var_is_this_object(VarInfo v1) {
-    return "this".equals(v1.name()) || "orig(this)".equals(v1.name());
+  public static boolean var_is_this_object(VarInfo vi) {
+    return "this".equals(vi.name()) || "orig(this)".equals(vi.name());
   }
 
   /** Returns true iff the given VarInfo represents either the this object or a collection object */
