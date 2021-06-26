@@ -13,6 +13,11 @@ public class VarInfoUtil {
     return v1.file_rep_type.isObject();
   }
 
+  /** Returns true iff the given VarInfo represents a primitive value */
+  public static boolean var_is_primitive(VarInfo v1) {
+    return v1.file_rep_type.isPrimitive();
+  }
+
   /** Returns true iff the given VarInfo represents the this object */
   public static boolean var_is_this_object(VarInfo v1) {
     return "this".equals(v1.name()) || "orig(this)".equals(v1.name());
