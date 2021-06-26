@@ -8,7 +8,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import typequals.prototype.qual.Prototype;
-import utils.JavaTypesUtil;
 import utils.VarInfoUtil;
 
 /**
@@ -47,13 +46,13 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
       return false;
 
     // Discard serial field
-    if (vis[0].name().contains("serialVersionUID"))
+    if (VarInfoUtil.var_is_serial_field(vis[0]))
       return false;
 
-    if (vis[0].file_rep_type.isObject())
+    if (VarInfoUtil.var_is_object(vis[0]))
       return VarInfoUtil.var_is_this_or_collection(vis[0]);
 
-    return vis[0].file_rep_type.isPrimitive();
+    return VarInfoUtil.var_is_primitive(vis[0]);
   }
 
   /** Returns whether or not the specified types are valid for unary object. */
