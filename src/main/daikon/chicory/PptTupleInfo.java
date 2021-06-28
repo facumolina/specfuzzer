@@ -23,7 +23,7 @@ public class PptTupleInfo {
    */
   public PptTupleInfo() {
     thisObj = null;
-    vars = new HashMap<String, Object>();
+    vars = new HashMap<>();
   }
 
   /**
@@ -31,7 +31,7 @@ public class PptTupleInfo {
    */
   public PptTupleInfo(Object thisObj) {
     this.thisObj = thisObj;
-    vars = new HashMap<String, Object>();
+    vars = new HashMap<>();
   }
 
   /**
