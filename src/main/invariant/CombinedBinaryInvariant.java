@@ -1,5 +1,6 @@
 package invariant;
 
+import com.google.errorprone.annotations.Var;
 import daikon.PptSlice;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
@@ -44,13 +45,13 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
     if (vis[0].is_size() && vis[1].is_size())
       return false;
 
-    if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject()) {
+    if (VarInfoUtil.var_is_object(vis[0]) || VarInfoUtil.var_is_object(vis[1])) {
       // One var is an object, thus at least one var must be the this object or a collection
-      return ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && VarInfoUtil.var_is_this_or_collection(vis[0])))
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && VarInfoUtil.var_is_this_or_collection(vis[1]));
+      return ((VarInfoUtil.var_is_object(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_this_or_collection(vis[0])))
+              || (VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_object(vis[1]) && VarInfoUtil.var_is_this_or_collection(vis[1]));
     } else {
       // Both vars must be primitive
-      return vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive();
+      return VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]);
     }
   }
 
