@@ -74,8 +74,7 @@ public class NameExpressionEvaluator {
         Object [] array = (Object[]) field_value;
         HashSet<Object> set = new HashSet<>();
         for (int i = 0; i < array.length ; i++)
-          if (array[i]!=null)
-            set.add(array[i]);
+          set.add(array[i]);
         return set;
       }
       return field_value;
