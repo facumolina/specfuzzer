@@ -1,8 +1,5 @@
 package expression;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.HashMap;
 
 import DataStructures.daikon.StackAr;
@@ -18,6 +15,8 @@ import antlr.AlloyExprGrammarLexer;
 import antlr.AlloyExprGrammarParser;
 import antlr.AlloyExprGrammarParser.ParseContext;
 
+import static org.junit.Assert.*;
+
 /**
  * This class contains tests to ensure that the expression evaluator is working properly
  * 
@@ -32,7 +31,7 @@ public class UnaryExpressionEvaluatorTest {
     AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
-    ExpressionEvaluator.vars = new HashMap<String, Object>();
+    ExpressionEvaluator.vars = new HashMap<>();
     ExpressionEvaluator.vars.put(o.getClass().getSimpleName(), o);
     return ExpressionEvaluator.eval(ctx.expr());
   }
@@ -43,7 +42,7 @@ public class UnaryExpressionEvaluatorTest {
     Object o = evaluateUnary("#(List.^(next))", l);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 0);
+    assertEquals(0, (int) i);
   }
 
   @Test
@@ -52,7 +51,7 @@ public class UnaryExpressionEvaluatorTest {
     Object o = evaluateUnary("#(List.*(next))", l);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 1);
+    assertEquals(1, (int) i);
   }
 
   @Test
@@ -63,16 +62,16 @@ public class UnaryExpressionEvaluatorTest {
     Object o = evaluateUnary("#(List.*(next))", l);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 3);
+    assertEquals(3, (int) i);
   }
 
   @Test
   public void cardinality4() {
-    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    AvlTreeList<Integer> t = new AvlTreeList<>();
     Object o = evaluateUnary("#(AvlTreeList.root.*(left + right))", t);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 1);
+    assertEquals(1, (int) i);
   }
 
   @Test
@@ -81,34 +80,34 @@ public class UnaryExpressionEvaluatorTest {
     Object o = evaluateUnary("#(StackAr.theArray)", s);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 0);
+    assertEquals(1, (int) i); // Only contains null
   }
 
   @Test
   public void cardinality5() {
-    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    AvlTreeList<Integer> t = new AvlTreeList<>();
     t.add(2);
     Object o = evaluateUnary("#(AvlTreeList.root.*(left + right))", t);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 2);
+    assertEquals(2, (int) i);
   }
 
   @Test
   public void cardinality6() {
-    AvlTreeList<Integer> t = new AvlTreeList<Integer>();
+    AvlTreeList<Integer> t = new AvlTreeList<>();
     t.add(2);
     t.add(4);
     t.add(5);
     Object o = evaluateUnary("#(AvlTreeList.root.*(left + right))", t);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
-    assertTrue(i == 4);
+    assertEquals(4, (int) i);
   }
 
   @Test
   public void cardinality7() {
-    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<Integer>();
+    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<>();
     ncll.add(1);
     ncll.add(2);
     ncll.add(3);
@@ -121,15 +120,15 @@ public class UnaryExpressionEvaluatorTest {
     Integer i = (Integer) o;
     Integer i1 = (Integer) o1;
     Integer i2 = (Integer) o2;
-    assertTrue(i == 4);
-    assertTrue(i == i1);
-    assertTrue(i == i2);
+    assertEquals(4, (int) i);
+    assertSame(i, i1);
+    assertSame(i, i2);
   }
 
   @Test
   public void cardinality8() {
-    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<Integer>();
-    System.out.println(ncll.toString());
+    NodeCachingLinkedList<Integer> ncll = new NodeCachingLinkedList<>();
+    System.out.println(ncll);
     assertFalse(ExpressionEvaluator.eval("#(NodeCachingLinkedList.header.*(previous + next)) != 1", ncll));
   }
 
