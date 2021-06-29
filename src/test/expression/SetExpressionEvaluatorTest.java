@@ -89,7 +89,7 @@ public class SetExpressionEvaluatorTest {
       s.push(3);
       Collection<Object> array_elems = evaluateSet("StackAr.theArray", s);
       assertTrue(ExpressionEvaluator.eval("#(StackAr.theArray) > 0", s));
-      assertTrue(array_elems.size()==3);
+      assertTrue(array_elems.size()==4); // 3 elements + null
     } catch (StackAr.Overflow e) {}
   }
 
