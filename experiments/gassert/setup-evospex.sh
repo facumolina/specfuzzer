@@ -27,6 +27,14 @@ popd > /dev/null
 subject_cp="$subject_sources/build/libs/*"
 echo ''
 
+# Check for dir and files
+resources_dir=$subject_sources/evospex-resources
+classes_file=$resources_dir/classes.txt
+method_file=$resources_dir/method.txt
+[ ! -d "$resources_dir" ] && { echo "> Directory $resources_dir DOES NOT exists."; exit 1; }
+[[ ! -f "$classes_file" ]] && { echo "> File $classes_file DOES NOT exists."; exit 1; }
+[[ ! -f "$method_file" ]] && { echo "> File $method_file DOES NOT exists."; exit 1; }
+
 # Run BE generation
 echo '> Test Generation'
 outdir_tests=$subject_sources/src/test/java
