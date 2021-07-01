@@ -139,6 +139,6 @@ echo ""
 echo "> Copying generated objects to: $outdir_objects"
 cp $mutator_outputs/* $outdir_objects
 
-# Grammar Extraction
+echo ''
 echo '> Model file: do not forget to create it!'
 echo ''
