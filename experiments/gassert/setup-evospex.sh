@@ -53,12 +53,54 @@ scope=3
 echo -e "\n\n> Results for subject: $gassert_subject, class: $class_name, method: $method, scope: $scope"
 echo "> Executing: $0 $*"
 
+read_classes_method_from_file() {
+    filename=$classes_file
 
-echo "going to generate JUnit tests in: $outdir_tests"
-echo "cleaning up old tests: $outdir_tests"
-echo "Finished!"
+    first="1"
+    classes_flags=""
+    while IFS="" read -r p || [ -n "$p" ]
+    do
+        #echo "$p"
+        currline="$p"
+        if [ $first == 1 ]; then
+            mainclass=$currline
+            first=0
+        fi
+        classes_flags="$classes_flags --testclass=$currline"
+    done < $filename
+
+    regexmethod=$(cat $method_file)
+}
+
+be_jar=${mutator_dir}/lib/randoop-all-3.0.6.jar
+mutator_inputs=$mutator_dir/inputs
+mutator_outputs=$mutator_dir/outputs
+
+echo ""
+echo "> Cleaning old dirs"
+echo "inputs: $mutator_inputs"
+rm -f $mutator_inputs/*
+echo "outputs: $mutator_outputs"
+rm -f $mutator_outputs/*
+
+syntacticred="--enable-syntactic-redundancy" # Discard tests that are equal syntactically
+literals="${mutator_dir}/literals/literals${scope}.txt"
+canprop=${mutator_dir}/properties/scope$scope.canonicalizer.properties
+
+read_classes_method_from_file
+echo ""
+echo "> Target"
+echo "main class: $mainclass"
+package=${mainclass%.*}
+class=${mainclass##*.}
+echo "method regex: $regexmethod"
+
+echo ""
+echo "> Going to generate JUnit tests in: $outdir_tests"
+echo "> Cleaning up old tests: $outdir_tests"
+echo "> Finished!"
 echo ''
 
-# Mention that the model needs to be created
+# Grammar Extraction
 echo '> Model file: do not forget to create it!'
 echo ''
