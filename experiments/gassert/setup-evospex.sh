@@ -11,6 +11,7 @@
 # Read arguments
 gassert_subject=$1
 fqname=$2
+method=$3
 
 # Create useful variables
 gassert_dir=$GASSERTDIR
@@ -38,11 +39,26 @@ method_file=$resources_dir/method.txt
 # Run BE generation
 echo '> Test Generation'
 outdir_tests=$subject_sources/src/test/java
+mutator_dir=$EVOSPEXOG/generate-objects
+
+pushd $mutator_dir > /dev/null
+
+testlimit=50000000
+testlimit2ph=10000000
+outputlimit2ph=5000
+timelimit=120 # XX seconds
+maxBEit=6 # Up to XX iterations in the first stage of BE
+scope=3
+
+echo -e "\n\n> Results for subject: $gassert_subject, class: $class_name, method: $method, scope: $scope"
+echo "> Executing: $0 $*"
+
+
 echo "going to generate JUnit tests in: $outdir_tests"
 echo "cleaning up old tests: $outdir_tests"
 echo "Finished!"
 echo ''
 
-# Grammar Extraction
+# Mention that the model needs to be created
 echo '> Model file: do not forget to create it!'
 echo ''
