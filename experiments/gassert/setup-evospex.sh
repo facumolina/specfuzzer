@@ -26,7 +26,6 @@ pushd $subject_sources > /dev/null
 ./gradlew -q -Dskip.tests jar
 popd > /dev/null
 subject_cp="$subject_sources/build/libs/*"
-echo ''
 
 # Check for dir and files
 resources_dir=$subject_sources/evospex-resources
@@ -36,8 +35,6 @@ method_file=$resources_dir/method.txt
 [[ ! -f "$classes_file" ]] && { echo "> File $classes_file DOES NOT exists."; exit 1; }
 [[ ! -f "$method_file" ]] && { echo "> File $method_file DOES NOT exists."; exit 1; }
 
-# Run BE generation
-echo '> Test Generation'
 outdir_tests=$subject_sources/src/test/java
 mutator_dir=$EVOSPEXOG/generate-objects
 
@@ -48,7 +45,9 @@ testlimit2ph=10000000
 outputlimit2ph=5000
 timelimit=120 # XX seconds
 maxBEit=6 # Up to XX iterations in the first stage of BE
+maxsize=$((maxBEit+6))
 scope=3
+maxmem=8G
 
 echo -e "\n\n> Results for subject: $gassert_subject, class: $class_name, method: $method, scope: $scope"
 echo "> Executing: $0 $*"
@@ -77,7 +76,7 @@ mutator_inputs=$mutator_dir/inputs
 mutator_outputs=$mutator_dir/outputs
 
 echo ""
-echo "> Cleaning old dirs"
+echo "> Cleaning old dirts"
 echo "inputs: $mutator_inputs"
 rm -f $mutator_inputs/*
 echo "outputs: $mutator_outputs"
@@ -96,10 +95,27 @@ class=${mainclass##*.}
 echo "method regex: $regexmethod"
 
 echo ""
-echo "> Going to generate JUnit tests in: $outdir_tests"
-echo "> Cleaning up old tests: $outdir_tests"
-echo "> Finished!"
-echo ''
+echo "> Going to generate JUnit tests"
+outdir_objects=$resources_dir/$scope/objects
+echo "objects dir: $outdir_objects"
+rm -f $outdir_objects/*
+mkdir -p $outdir_objects
+outdir_tests=$resources_dir/$scope/tests
+echo "tests dir: $outdir_tests"
+rm -rf $outdir_tests/*
+mkdir -p $outdir_tests
+
+# Ignore all methods from javax.swing.* package to avoid breaking randoop
+omitmethods="toString|hashCode|equals|clone|compareTo|javax.swing.*|ASTNode.dump|ASTNode.getTree|ASTNode.display|ASTNode.createTree|dk.statsbiblioteket.summa.common.util.PriorityQueue.getComparator|java.lang.Iterable.forEach|java.lang.Iterable.spliterator|java.util.List.spliterator|java.util.Collection.stream|java.util.AbstractList.subList|java.util.List.sort|jahuwaldt.plot.LinearAxisScale.findGoodLimits"
+
+echo ""
+echo "> Executing bounded exhaustive test generation"
+cmd="java -ea -Xmx$maxmem -cp ${be_jar}:${subject_cp} randoop.main.Main gentests $classes_flags --serialize-in-out-class=${mainclass} --assert-methods=\"$regexmethod\" --ignore-public-fields --junit-output-dir=$outdir_tests --junit-package-name=$package --only-test-public-members=true --usethreads=false --instance-generics-integer --disable-contracts --forbid-null=true --timelimit=$timelimit --max-BE-inputs=$testlimit --max-BE-second-phase-seqs=$testlimit2ph --max-BE-second-phase-outputs=$outputlimit2ph --literals-level=ALL --literals-file=$literals --max-BE-iterations=$maxBEit --filtering=BE --canonicalizer-cfg=$canprop --serialize-in-out-folder=$mutator_inputs --all-sequences --assert-single-object-hack $syntacticred --junit-reflection-allowed=false --omitmethods=\"$omitmethods\" --BEmaxsize=$maxsize --keep-only-builder-seqs --discard-generation-seqs"
+#echo "$cmd"
+bash -c "$cmd"
+
+echo ""
+echo "> BE finished!"
 
 # Grammar Extraction
 echo '> Model file: do not forget to create it!'
