@@ -23,7 +23,7 @@ mkdir -p $mutants_dir
 mv mutants.log $mutants_dir/$driver_base'Driver-mutants.log'
 echo ''
 
-cp_with_tests=$build_dir:$subject_sources/build/classes/java/test
+cp_with_tests="$build_dir:$subject_sources/build/classes/java/test:$subject_sources/libs/*"
 
 echo '> Processing mutants'
 for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
