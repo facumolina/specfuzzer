@@ -30,7 +30,7 @@ for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
 do
   echo '> Procesing mutant: '$dir$target_file
   echo '> Compiling mutant'
-  javac -cp $build_dir -g $dir$target_file -d $build_dir
+  javac -cp $build_dir:$subject_sources/libs/* -g $dir$target_file -d $build_dir
   echo '> Mutant compiled'
   echo '' 
   echo '> Generating traces with Chicory from mutant'
