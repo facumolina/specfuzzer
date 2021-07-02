@@ -25,7 +25,7 @@ echo "> Compiling GAssert subject: $gassert_subject"
 pushd $subject_sources > /dev/null
 ./gradlew -q -Dskip.tests jar
 popd > /dev/null
-subject_cp="$subject_sources/build/libs/*"
+subject_cp="$subject_sources/build/libs/*:$subject_sources/libs/*"
 
 # Check for dir and files
 resources_dir=$subject_sources/evospex-resources
