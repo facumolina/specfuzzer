@@ -16,7 +16,7 @@ gassert_dir=$GASSERTDIR
 subject_sources=$gassert_dir/subjects/$gassert_subject
 class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
 class_name=${fqname##*.}
-specfuzzer_cp=lib/*
+specfuzzer_cp="lib/*"
 
 # Compile project
 echo ""
@@ -24,7 +24,7 @@ echo "> Compiling GAssert subject: $gassert_subject"
 pushd $subject_sources > /dev/null
 ./gradlew -q -Dskip.tests jar
 popd > /dev/null
-subject_cp=$subject_sources/build/libs/*
+subject_cp="$subject_sources/build/libs/*:$subject_sources/libs/*"
 echo ''
 
 # Test generation
