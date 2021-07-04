@@ -28,6 +28,13 @@ public class BasicMethods {
   }
 
   /**
+   * Contains the ground truth for method getMin
+   */
+  private boolean getMin_groundTruth(int a, int b, int result) {
+    return (a <= b && result==a) || (a > b && result==b);
+  }
+
+  /**
    * Absolute value.
    * @param x number from which absolute value is requested
    * @return abs(x)
