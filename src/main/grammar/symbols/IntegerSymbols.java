@@ -19,7 +19,7 @@ public class IntegerSymbols {
   public static final String INTEGER_ONE = "<Integer_1>";
   public static final String INTEGER_TWO = "<Integer_2>";
   public static final String INTEGER_CONSTANT = "<Integer_Constant>";
-  public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1");
+  public static final List<String> INTEGER_CONSTANT_VALUE = Arrays.asList("0", "1", "-1");
   public static final String INTEGER_FROM_FIELD = "<Integer_From_Field>";
   public static final String INTEGER_SET = "<Integer_Set>";
   public static final String INTEGER_FIELD = "<Integer_Field>";
