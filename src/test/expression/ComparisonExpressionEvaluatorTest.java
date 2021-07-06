@@ -196,9 +196,18 @@ public class ComparisonExpressionEvaluatorTest {
   }
 
   @Test
+  public void test_num_cmp() {
+    assertFalse(evaluateCmp("Integer_Variable_0 < -1", 0));
+    assertTrue(evaluateCmp("Integer_Variable_0 = -1", -1));
+    assertTrue(evaluateCmp("Integer_Variable_0 > -1", 1));
+  }
+
+  @Test
   public void test_bin_numeric_cmp() {
     assertTrue(evaluateCmpBinary("Integer_Variable_0 > Integer_Variable_1", 1, 0));
     assertTrue(evaluateCmpBinary("Integer_Variable_0 = Integer_Variable_1", 1, 1));
+    assertTrue(evaluateCmpBinary("Integer_Variable_0 = Integer_Variable_1 * -1", -1, 1));
+    assertTrue(evaluateCmpBinary("Integer_Variable_0 = Integer_Variable_1 * -1", -3, 3));
   }
 
   @Test
