@@ -135,12 +135,11 @@ Determine the quality of a spec considering: amount of fails + involving vars
 """
 def quality(spec):
     fails=all_amount_of_fails(spec)
-    variables=spec.count("_Variable")
+    variables= int("_Variable_0" in spec) + int("Variable_1" in spec) + int("Variable_2" in spec)
     return fails + variables
 
-
-def get_members_of(some_set):
-    members = [x for x in some_set if "daikon.Quant.memberOf" in x]
+def get_daikon_quant(some_set):
+    members = [x for x in some_set if "daikon.Quant" in x and "getClass" not in x]
     return set(members)
 
 print("=====================================")
@@ -157,7 +156,7 @@ for vector, specs_set in buckets.items():
     print("Picked:")
     picked_set=set()
     picked_set.add(next(iter(sorted_set)))
-    picked_set = picked_set.union(get_members_of(sorted_set))
+    picked_set = picked_set.union(get_daikon_quant(sorted_set))
     for picked in picked_set:
         print("\t"+picked)
     invs_killer_set = invs_killer_set.union(picked_set)
