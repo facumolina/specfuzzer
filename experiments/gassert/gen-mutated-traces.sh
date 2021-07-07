@@ -16,7 +16,7 @@ setup_output_dir=experiments/gassert/$gassert_subject/setup-files
 echo 'Build dir: '$build_dir
 echo 'Source dir: '$source_dir
 echo '> Generating mutants with Major for file: '$target_file
-$MAJOR_HOME/bin/javac -cp $build_dir -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $build_dir $source_dir$target_file
+$MAJOR_HOME/bin/javac -cp $build_dir:$subject_sources/libs/* -nowarn -J-Dmajor.export.mutants=true -XMutator:ALL -d $build_dir $source_dir$target_file
 echo '> Mutants generated!'
 mutants_dir=$setup_output_dir/mutants
 mkdir -p $mutants_dir
@@ -28,7 +28,7 @@ cp_with_tests="$build_dir:$subject_sources/build/classes/java/test:$subject_sour
 echo '> Processing mutants'
 for dir in mutants/*/     # list directories in the form "/tmp/dirname/"
 do
-  echo '> Procesing mutant: '$dir$target_file
+  echo '> Processing mutant: '$dir$target_file
   echo '> Compiling mutant'
   javac -cp $build_dir:$subject_sources/libs/* -g $dir$target_file -d $build_dir
   echo '> Mutant compiled'
