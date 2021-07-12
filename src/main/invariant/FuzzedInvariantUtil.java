@@ -76,6 +76,17 @@ public class FuzzedInvariantUtil {
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
+    // Check for the double vars
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 0);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 1);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 2);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+
     // Check for the boolean var
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 0);
     if (fuzzed_spec.contains(var_name))
@@ -125,6 +136,9 @@ public class FuzzedInvariantUtil {
 
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return new Random().nextInt(10);
+
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)))
+      return new Random().nextDouble();
 
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
       return new Object();
