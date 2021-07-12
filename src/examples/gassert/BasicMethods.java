@@ -46,6 +46,10 @@ public class BasicMethods {
     return result;
   }
 
+  public double sum_doubles(double a, double b) {
+    return a + b;
+  }
+
   /** Add element to non-null set
    * @param intSet set of integers
    * @param element integer value to add to set
