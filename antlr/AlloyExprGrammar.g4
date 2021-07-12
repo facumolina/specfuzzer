@@ -114,6 +114,9 @@ number:
   '0'
   | '1'
   | '-1'
+  | '0.0'
+  | '1.0'
+  | '-1.0'
   ;
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
