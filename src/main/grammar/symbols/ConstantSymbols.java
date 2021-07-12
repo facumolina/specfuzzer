@@ -2,9 +2,7 @@ package grammar.symbols;
 
 /**
  * This class maintains constant values
- * 
  * @author Facundo Molina <fmolina@dc.exa.unrc.edu.ar>
- *
  */
 public class ConstantSymbols {
 

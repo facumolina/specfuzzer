@@ -1,6 +1,7 @@
 package grammar;
 
 import grammar.symbols.ConstantSymbols;
+import grammar.symbols.DoubleSymbols;
 import grammar.symbols.IntegerSymbols;
 import utils.JavaTypesUtil;
 
@@ -240,6 +241,7 @@ public class GrammarBuilder {
   public static void remove_non_expandable(Map<String, List<String>> grammar) {
     remove_non_expandable_collection_vars(grammar);
     remove_non_expandable_from_integer(grammar);
+    remove_non_expandable_from_double(grammar);
     remove_non_expandable_from_logic(grammar);
     remove_non_expandable_from_quantification(grammar);
     remove_non_expandable_membership(grammar);
@@ -278,6 +280,40 @@ public class GrammarBuilder {
       grammar.remove(IntegerSymbols.INTEGER_TWO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)));
       grammar.remove(IntegerSymbols.INTEGER_CMP_EXPR);
       grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(IntegerSymbols.INTEGER_CMP_EXPR));
+      if (grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).isEmpty()) {
+        grammar.remove(GrammarSymbols.NUMERIC_CMP_EXPR);
+        grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(GrammarSymbols.NUMERIC_CMP_EXPR));
+      }
+    }
+  }
+
+  /**
+   * Remove non-expandable symbols involving doubles
+   */
+  protected static void remove_non_expandable_from_double(Map<String, List<String>> grammar) {
+    if (grammar.get(DoubleSymbols.DOUBLE_FIELD).isEmpty()) {
+      // There are no integer fields, so remove the symbol and all the other non-terminal symbols
+      // mentioning the integer field symbol
+      grammar.remove(DoubleSymbols.DOUBLE_FIELD);
+      grammar.get(DoubleSymbols.DOUBLE_FROM_FIELD).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_FIELD));
+    }
+
+    if (grammar.get(DoubleSymbols.DOUBLE_FROM_FIELD).isEmpty()) {
+      // Integer from field symbol is empty, to remove it
+      grammar.remove(DoubleSymbols.DOUBLE_FROM_FIELD);
+      grammar.get(DoubleSymbols.DOUBLE_ZERO).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_FROM_FIELD));
+      grammar.get(DoubleSymbols.DOUBLE_ONE).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_FROM_FIELD));
+      grammar.get(DoubleSymbols.DOUBLE_TWO).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_FROM_FIELD));
+      grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_FROM_FIELD));
+    }
+
+    if (!all_arguments_types.contains(JavaTypesUtil.DOUBLE) && !all_fields_types.contains(JavaTypesUtil.DOUBLE)) {
+      // There are no arguments nor fields of type Integer, so the Integer_Variable option should be removed
+      grammar.get(DoubleSymbols.DOUBLE_ZERO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)));
+      grammar.remove(DoubleSymbols.DOUBLE_ONE).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)));
+      grammar.remove(DoubleSymbols.DOUBLE_TWO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)));
+      grammar.remove(DoubleSymbols.DOUBLE_CMP_EXPR);
+      grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_CMP_EXPR));
       if (grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).isEmpty()) {
         grammar.remove(GrammarSymbols.NUMERIC_CMP_EXPR);
         grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(GrammarSymbols.NUMERIC_CMP_EXPR));

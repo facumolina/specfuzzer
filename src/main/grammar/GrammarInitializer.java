@@ -1,5 +1,6 @@
 package grammar;
 
+import grammar.symbols.DoubleSymbols;
 import grammar.symbols.IntegerSymbols;
 import utils.JavaTypesUtil;
 
@@ -58,32 +59,31 @@ public class GrammarInitializer {
    */
   public static void initialize_numeric_cmp_expressions(Map<String, List<String>> grammar) {
     grammar.put(GrammarSymbols.NUMERIC_CMP_EXPR, new LinkedList<>());
-    grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).add(IntegerSymbols.INTEGER_CMP_EXPR);
-    grammar.put(IntegerSymbols.INTEGER_CMP_EXPR, new LinkedList<>());
-    grammar.get(IntegerSymbols.INTEGER_CMP_EXPR).add(IntegerSymbols.INTEGER_CMP_EXPR_VALUE_ONE);
-    grammar.get(IntegerSymbols.INTEGER_CMP_EXPR).add(IntegerSymbols.INTEGER_CMP_EXPR_VALUE_TWO);
-    grammar.get(IntegerSymbols.INTEGER_CMP_EXPR).add(IntegerSymbols.INTEGER_CMP_EXPR_VALUE_THREE);
+    // Operators
     grammar.put(GrammarSymbols.NUMERIC_CMP_OP, GrammarSymbols.NUMERIC_CMP_OP_VALUE);
-    IntegerSymbols.INTEGER_FROM_FIELD_VALUE.add(IntegerSymbols.INTEGER_FIELD);
-    IntegerSymbols.INTEGER_FROM_FIELD_VALUE.add(IntegerSymbols.INTEGER_FROM_SET_SIZE);
-    grammar.put(IntegerSymbols.INTEGER_FROM_FIELD, IntegerSymbols.INTEGER_FROM_FIELD_VALUE);
     grammar.put(GrammarSymbols.NUMERIC_BIN_OP, GrammarSymbols.NUMERIC_BIN_OP_VALUE);
-    IntegerSymbols.INTEGER_ZERO_VALUE.add(IntegerSymbols.INTEGER_CONSTANT);
-    IntegerSymbols.INTEGER_ZERO_VALUE.add(IntegerSymbols.INTEGER_FROM_FIELD);
-    IntegerSymbols.INTEGER_ZERO_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0));
-    grammar.put(IntegerSymbols.INTEGER_ZERO, IntegerSymbols.INTEGER_ZERO_VALUE);
-    IntegerSymbols.INTEGER_ONE_VALUE.add(IntegerSymbols.INTEGER_CONSTANT);
-    IntegerSymbols.INTEGER_ONE_VALUE.add(IntegerSymbols.INTEGER_FROM_FIELD);
-    IntegerSymbols.INTEGER_ONE_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 1));
-    grammar.put(IntegerSymbols.INTEGER_ONE, IntegerSymbols.INTEGER_ONE_VALUE);
-    IntegerSymbols.INTEGER_TWO_VALUE.add(IntegerSymbols.INTEGER_CONSTANT);
-    IntegerSymbols.INTEGER_TWO_VALUE.add(IntegerSymbols.INTEGER_FROM_FIELD);
-    IntegerSymbols.INTEGER_TWO_VALUE.add(GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 2));
-    grammar.put(IntegerSymbols.INTEGER_TWO, IntegerSymbols.INTEGER_TWO_VALUE);
+
+    // Integer stuff
+    grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).add(IntegerSymbols.INTEGER_CMP_EXPR);
+    grammar.put(IntegerSymbols.INTEGER_CMP_EXPR, IntegerSymbols.prepare_cmp_symbols());
+    grammar.put(IntegerSymbols.INTEGER_FROM_FIELD, IntegerSymbols.get_integer_from_field_value());
+    grammar.put(IntegerSymbols.INTEGER_ZERO, IntegerSymbols.get_integer_zero_value());
+    grammar.put(IntegerSymbols.INTEGER_ONE, IntegerSymbols.get_integer_one_value());
+    grammar.put(IntegerSymbols.INTEGER_TWO, IntegerSymbols.get_integer_two_value());
     grammar.put(IntegerSymbols.INTEGER_CONSTANT, IntegerSymbols.INTEGER_CONSTANT_VALUE);
     grammar.put(IntegerSymbols.INTEGER_FIELD, new LinkedList<>());
     grammar.put(IntegerSymbols.INTEGER_FROM_SET_SIZE, new LinkedList<>());
     grammar.get(IntegerSymbols.INTEGER_FROM_SET_SIZE).add("#(" + GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER) + ")");
+
+    // Double stuff
+    grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).add(DoubleSymbols.DOUBLE_CMP_EXPR);
+    grammar.put(DoubleSymbols.DOUBLE_CMP_EXPR, DoubleSymbols.prepare_cmp_symbols());
+    grammar.put(DoubleSymbols.DOUBLE_FROM_FIELD, DoubleSymbols.get_double_from_field_value());
+    grammar.put(DoubleSymbols.DOUBLE_ZERO, DoubleSymbols.get_double_zero_value());
+    grammar.put(DoubleSymbols.DOUBLE_ONE, DoubleSymbols.get_double_one_value());
+    grammar.put(DoubleSymbols.DOUBLE_TWO, DoubleSymbols.get_double_two_value());
+    grammar.put(DoubleSymbols.DOUBLE_CONSTANT, DoubleSymbols.DOUBLE_CONSTANT_VALUE);
+    grammar.put(DoubleSymbols.DOUBLE_FIELD, new LinkedList<>());
   }
 
   /**
