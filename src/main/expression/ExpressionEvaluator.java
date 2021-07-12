@@ -229,6 +229,12 @@ public class ExpressionEvaluator {
     } catch (NumberFormatException e) {
     }
 
+    try {
+      // Try to parse a Double
+      return Double.parseDouble(ectx.getText());
+    } catch (NumberFormatException e) {
+    }
+
     throw new IllegalStateException("Unable to evaluate the expression: " + ectx.getText());
   }
 
