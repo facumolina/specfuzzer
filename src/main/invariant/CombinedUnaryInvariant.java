@@ -75,11 +75,11 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
     if (val instanceof Long) {
       // Long values represents object hashcode
       long value = ((Long) val);
-      if (mod_index == 0) {
-        return add_unmodified(value, count);
-      } else {
-        return add_modified(value, count);
-      }
+      return mod_index==0 ? add_unmodified(value, count) : add_modified(value, count);
+    }
+    if (val instanceof Double) {
+      double value = ((Double)val);
+      return mod_index==0? add_unmodified(value, count) : add_modified(value, count);
     }
     return InvariantStatus.FALSIFIED;
   }
@@ -91,11 +91,11 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
     if (val instanceof Long) {
       // Long values represents object hashcode
       long value = ((Long) val);
-      if (mod_index == 0) {
-        return check_unmodified(value, count);
-      } else {
-        return check_modified(value, count);
-      }
+      return mod_index == 0 ? check_unmodified(value, count) : check_modified(value, count);
+    }
+    if (val instanceof Double) {
+      double value = ((Double) val);
+      return mod_index == 0 ? check_unmodified(value, count) : check_modified(value, count);
     }
     return InvariantStatus.FALSIFIED;
   }
@@ -107,9 +107,13 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
    * caller.
    */
   public abstract InvariantStatus add_modified(long value, int count);
+  public abstract InvariantStatus add_modified(double value, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
   public InvariantStatus add_unmodified(long value, int count) {
+    return InvariantStatus.NO_CHANGE;
+  }
+  public InvariantStatus add_unmodified(double value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -123,8 +127,12 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
    * @return whether or not the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(long value, int count);
+  public abstract InvariantStatus check_modified(double value, int count);
 
   public InvariantStatus check_unmodified(long value, int count) {
+    return InvariantStatus.NO_CHANGE;
+  }
+  public InvariantStatus check_unmodified(double value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

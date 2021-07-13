@@ -120,6 +120,17 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
   }
 
   /**
+   * Get the variable value in the type expected by the expression
+   */
+  private Object get_var_value(double v) {
+    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
+    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(0));
+    if (Double.class.isAssignableFrom(clazz))
+      return (double) v;
+    throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
+  }
+
+  /**
    * Evaluate the current fuzzed spec on the given variable value
    */
   private InvariantStatus check_modified_on_vars(Object value1) {
@@ -180,6 +191,15 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
     return check_modified_on_tuples(l, key);
   }
 
+  @Override
+  public InvariantStatus check_modified(double v, int count) {
+    // Only eval is the var is double or float, we should not be here otherwise.
+    if (VarInfoUtil.var_is_float(var()))
+      return check_modified_on_vars(get_var_value(v));
+
+    throw new IllegalStateException("Current spec not allowed, check: " + format());
+  }
+
   private InvariantStatus getDefault() {
     if (InvariantChecker.serialiazed_objects_file_name!=null)
       return InvariantStatus.NO_CHANGE;
@@ -189,6 +209,11 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
 
   @Override
   public InvariantStatus add_modified(long v, int count) {
+    return check_modified(v, count);
+  }
+
+  @Override
+  public InvariantStatus add_modified(double v, int count) {
     return check_modified(v, count);
   }
 

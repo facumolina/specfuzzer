@@ -23,6 +23,12 @@ public class VarInfoUtil {
     return vi.file_rep_type.isPrimitive();
   }
 
+  /** Returns true iff the given VarInfo represents an object */
+  public static boolean var_is_float(VarInfo vi) {
+    return vi.file_rep_type.isFloat();
+  }
+
+
   /** Returns true iff the given VarInfo represents the this object */
   public static boolean var_is_this_object(VarInfo vi) {
     return "this".equals(vi.name()) || "orig(this)".equals(vi.name());

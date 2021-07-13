@@ -116,7 +116,8 @@ public class FuzzedInvariantUtil {
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
     if (Integer.class.isAssignableFrom(clazz))
       return (int) v;
-
+    if (Double.class.isAssignableFrom(clazz))
+      return (double) v;
     throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
@@ -158,6 +159,9 @@ public class FuzzedInvariantUtil {
 
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return Integer.class;
+
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)))
+      return Double.class;
 
     if (var_type.equals(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.OBJECT)))
       return Object.class;
