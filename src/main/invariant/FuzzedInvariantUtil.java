@@ -116,8 +116,17 @@ public class FuzzedInvariantUtil {
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
     if (Integer.class.isAssignableFrom(clazz))
       return (int) v;
+    throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
+  }
+
+  /**
+   * Get the value of the nth variable in the type expected by the expression
+   */
+  public static Object get_var_value(String fuzzed_spec,double v, int n) {
+    List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, Object.class);
+    Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
     if (Double.class.isAssignableFrom(clazz))
-      return (double) v;
+      return v;
     throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 

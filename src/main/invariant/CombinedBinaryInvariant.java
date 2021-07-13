@@ -112,6 +112,16 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
         return swap? check_modified(v2, v1, count): check_modified(v1, v2, count);
       }
     }
+    if (val1 instanceof Double && val2 instanceof Double) {
+      // Both values have to be instance of Double
+      double v1 = ((Double) val1);
+      double v2 = ((Double) val2);
+      if (mod_index == 0) {
+        return swap? check_unmodified(v2, v1, count): check_unmodified(v1, v2, count);
+      } else {
+        return swap? check_modified(v2, v1, count): check_modified(v1, v2, count);
+      }
+    }
     return InvariantStatus.FALSIFIED;
   }
 
@@ -130,6 +140,17 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
         return swap? add_modified(v2, v1, count): add_modified(v1, v2, count);
       }
     }
+    if (val1 instanceof  Double && val2 instanceof Double) {
+      // Both values have to be instance of Long
+      double v1 = ((Double) val1);
+      double v2 = ((Double) val2);
+      if (mod_index == 0) {
+        return swap? add_unmodified(v2, v1, count): add_unmodified(v1, v2, count);
+      } else {
+        return swap? add_modified(v2, v1, count): add_modified(v1, v2, count);
+      }
+    }
+
     return InvariantStatus.FALSIFIED;
   }
 
@@ -143,10 +164,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
    * @return whether or not the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(long v1, long v2, int count);
+  public abstract InvariantStatus check_modified(double v1, double v2, int count);
 
-  public InvariantStatus check_unmodified(long v1, long v2, int count) {
-    return InvariantStatus.NO_CHANGE;
-  }
+  public InvariantStatus check_unmodified(long v1, long v2, int count) { return InvariantStatus.NO_CHANGE; }
+  public InvariantStatus check_unmodified(double v1, double v2, int count) { return InvariantStatus.NO_CHANGE; }
 
   /**
    * Similar to {@link #check_modified} except that it can change the state of the invariant if
@@ -155,9 +176,10 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
    * caller.
    */
   public abstract InvariantStatus add_modified(long v1, long v2, int count);
+  public abstract InvariantStatus add_modified(double v1, double v2, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
-  public InvariantStatus add_unmodified(long v1, long v2, int count) {
-    return InvariantStatus.NO_CHANGE;
-  }
+  public InvariantStatus add_unmodified(long v1, long v2, int count) { return InvariantStatus.NO_CHANGE; }
+  public InvariantStatus add_unmodified(double v1, double v2, int count) { return InvariantStatus.NO_CHANGE; }
+
 }

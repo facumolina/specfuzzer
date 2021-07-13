@@ -239,7 +239,6 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
   public InvariantStatus check_modified(long v1, long v2, int count) {
     // If there is no object among variables, evaluate directly on v1 and v2
     if (!VarInfoUtil.some_is_object(var1(),var2()))
-      //InvariantStatus res =  check_modified_on_vars_whole_ppt();
       return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1));
 
     // If the object present is not the this object, one of v1 and v2 must represent a collection
@@ -263,6 +262,16 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
     return check_modified_on_tuples_one_var(l, curr_var, cached_key);
   }
 
+  @Override
+  public InvariantStatus check_modified(double v1, double v2, int count) {
+    // If there is no object among variables, evaluate directly on v1 and v2
+    if (!VarInfoUtil.some_is_object(var1(),var2()))
+      return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1));
+
+    throw new IllegalStateException("Current spec not allowed, check: " + format());
+  }
+
+
   private InvariantStatus getDefault() {
     if (InvariantChecker.serialiazed_objects_file_name!=null)
       return InvariantStatus.NO_CHANGE;
@@ -272,6 +281,11 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
 
   @Override
   public InvariantStatus add_modified(long v1, long v2, int count) {
+    return check_modified(v1, v2, count);
+  }
+
+  @Override
+  public InvariantStatus add_modified(double v1, double v2, int count) {
     return check_modified(v1, v2, count);
   }
 
