@@ -234,7 +234,21 @@ public class FuzzedTernaryInvariant extends CombinedTernaryInvariant {
   }
 
   @Override
+  public InvariantStatus check_modified(double v1, double v2, double v3, int count) {
+    // If there is no object among variables, evaluate directly on v1 and v2
+    if (!VarInfoUtil.some_is_object(var1(), var2(), var3()))
+      return check_modified_on_vars(FuzzedInvariantUtil.get_var_value(fuzzed_spec, v1, 0), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v2, 1), FuzzedInvariantUtil.get_var_value(fuzzed_spec, v3, 2));
+
+    throw new IllegalStateException("Current spec not allowed, check: " + format());
+  }
+
+  @Override
   public InvariantStatus add_modified(long v1, long v2, long v3, int count) {
+    return check_modified(v1, v2, v3, count);
+  }
+
+  @Override
+  public InvariantStatus add_modified(double v1, double v2, double v3, int count) {
     return check_modified(v1, v2, v3, count);
   }
 

@@ -159,6 +159,18 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
         return add_modified(sorted[0], sorted[1], sorted[2], count);
       }
     }
+    if (val1 instanceof Double && val2 instanceof Double && val3 instanceof Double) {
+      // All values have to be instance of Double
+      double v1 = ((Double) val1);
+      double v2 = ((Double) val2);
+      double v3 = ((Double) val3);
+      double[] sorted = sort_values_by_order(v1, v2, v3);
+      if (mod_index == 0) {
+        return add_unmodified(sorted[0], sorted[1], sorted[2], count);
+      } else {
+        return add_modified(sorted[0], sorted[1], sorted[2], count);
+      }
+    }
     return InvariantStatus.FALSIFIED;
   }
 
@@ -178,6 +190,18 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
         return check_modified(sorted[0], sorted[1], sorted[2], count);
       }
     }
+    if (val1 instanceof  Double && val2 instanceof Double) {
+      // All values have to be instance of Long
+      double v1 = ((Double) val1);
+      double v2 = ((Double) val2);
+      double v3 = ((Double) val3);
+      double[] sorted = sort_values_by_order(v1, v2, v3);
+      if (mod_index == 0) {
+        return check_unmodified(sorted[0], sorted[1], sorted[2], count);
+      } else {
+        return check_modified(sorted[0], sorted[1], sorted[2], count);
+      }
+    }
     return InvariantStatus.FALSIFIED;
   }
 
@@ -191,10 +215,10 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
    * @return whether or not the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(long v1, long v2, long v3, int count);
+  public abstract InvariantStatus check_modified(double v1, double v2, double v3, int count);
 
-  public InvariantStatus check_unmodified(long v1, long v2, long v3, int count) {
-    return InvariantStatus.NO_CHANGE;
-  }
+  public InvariantStatus check_unmodified(long v1, long v2, long v3, int count) { return InvariantStatus.NO_CHANGE; }
+  public InvariantStatus check_unmodified(double v1, double v2, double v3, int count) { return InvariantStatus.NO_CHANGE; }
 
   /**
    * Similar to {@link #check_modified} except that it can change the state of the invariant if
@@ -203,11 +227,11 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
    * caller.
    */
   public abstract InvariantStatus add_modified(long v1, long v2, long v3, int count);
+  public abstract InvariantStatus add_modified(double v1, double v2, double v3, int count);
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
-  public InvariantStatus add_unmodified(long v1, long v2, long v3, int count) {
-    return InvariantStatus.NO_CHANGE;
-  }
+  public InvariantStatus add_unmodified(long v1, long v2, long v3, int count) { return InvariantStatus.NO_CHANGE; }
+  public InvariantStatus add_unmodified(double v1, double v2, double v3, int count) { return InvariantStatus.NO_CHANGE; }
 
   /**
    * Returns an array containing the given long values in the corresponding order to be evaluated properly.
@@ -226,6 +250,27 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
       return new long[] {v2, v3, v1};
     } else if (var_order==6) {
       return new long[] {v3, v2, v1};
+    }
+    throw new IllegalStateException("The variable var_order has an illegal value: "+var_order);
+  }
+
+  /**
+   * Returns an array containing the given double values in the corresponding order to be evaluated properly.
+   * The order is determined by the variable var_order.
+   */
+  private double[] sort_values_by_order(double v1, double v2, double v3) {
+    if (var_order==1) {
+      return new double[] {v1, v2, v3};
+    } else if (var_order==2) {
+      return new double[] {v2, v1, v3};
+    } else if (var_order==3) {
+      return new double[] {v3, v1, v2};
+    } else if (var_order==4) {
+      return new double[] {v1, v3, v2};
+    } else if (var_order==5) {
+      return new double[] {v2, v3, v1};
+    } else if (var_order==6) {
+      return new double[] {v3, v2, v1};
     }
     throw new IllegalStateException("The variable var_order has an illegal value: "+var_order);
   }
