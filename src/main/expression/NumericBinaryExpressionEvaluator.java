@@ -53,6 +53,8 @@ public class NumericBinaryExpressionEvaluator {
   private static Number evalPlus(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 + (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 + (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 + (Float) n2;
     if (n1 instanceof Double)
@@ -66,6 +68,8 @@ public class NumericBinaryExpressionEvaluator {
   private static Number evalMinus(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 - (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 - (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 - (Float) n2;
     if (n1 instanceof Double)
@@ -79,6 +83,8 @@ public class NumericBinaryExpressionEvaluator {
   private static Number evalMultiply(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 * (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 * (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 * (Float) n2;
     if (n1 instanceof Double)
@@ -94,6 +100,8 @@ public class NumericBinaryExpressionEvaluator {
       throw new NonEvaluableExpressionException("Division by Zero");
     if (n1 instanceof Integer)
       return (Integer) n1 / (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 / (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 / (Float) n2;
     if (n1 instanceof Double)
@@ -109,6 +117,8 @@ public class NumericBinaryExpressionEvaluator {
       throw new NonEvaluableExpressionException("Division by Zero");
     if (n1 instanceof Integer)
       return (Integer) n1 % (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 % (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 % (Float) n2;
     if (n1 instanceof Double)
@@ -121,6 +131,8 @@ public class NumericBinaryExpressionEvaluator {
    */
   private static boolean isZero(Number n) {
     if (n instanceof Integer && (Integer)n==0)
+      return true;
+    if (n instanceof Long && (Long)n==0)
       return true;
     if (n instanceof Float && (Float)n==0)
       return true;

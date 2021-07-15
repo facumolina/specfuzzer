@@ -76,6 +76,17 @@ public class FuzzedInvariantUtil {
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
+    // Check for the long vars
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.LONG, 0);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.LONG, 1);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.LONG, 2);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+
     // Check for the double vars
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 0);
     if (fuzzed_spec.contains(var_name))
@@ -116,6 +127,8 @@ public class FuzzedInvariantUtil {
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(n));
     if (Integer.class.isAssignableFrom(clazz))
       return (int) v;
+    if (Long.class.isAssignableFrom(clazz))
+      return v;
     throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
@@ -168,6 +181,9 @@ public class FuzzedInvariantUtil {
 
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return Integer.class;
+
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.LONG)))
+      return Long.class;
 
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)))
       return Double.class;

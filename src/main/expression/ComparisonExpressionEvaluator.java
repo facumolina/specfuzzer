@@ -89,6 +89,8 @@ public class ComparisonExpressionEvaluator {
   private static boolean evalLT(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 < (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 < (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 < (Float) n2;
     if (n1 instanceof Double)
@@ -103,6 +105,8 @@ public class ComparisonExpressionEvaluator {
   private static boolean evalGT(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 > (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 > (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 > (Float) n2;
     if (n1 instanceof Double)
@@ -117,6 +121,8 @@ public class ComparisonExpressionEvaluator {
   private static boolean evalLTE(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 <= (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 <= (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 <= (Float) n2;
     if (n1 instanceof Double)
@@ -131,6 +137,8 @@ public class ComparisonExpressionEvaluator {
   private static boolean evalGTE(Number n1, Number n2) {
     if (n1 instanceof Integer)
       return (Integer) n1 >= (Integer) n2;
+    if (n1 instanceof Long)
+      return (Long) n1 >= (Long) n2;
     if (n1 instanceof Float)
       return (Float) n1 >= (Float) n2;
     if (n1 instanceof Double)

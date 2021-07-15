@@ -116,6 +116,8 @@ public class FuzzedUnaryInvariant extends CombinedUnaryInvariant {
     Class<?> clazz = FuzzedInvariantUtil.get_class_for_variable(vars.get(0));
     if (Integer.class.isAssignableFrom(clazz))
       return (int) v;
+    if (Long.class.isAssignableFrom(clazz))
+      return v;
     throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 

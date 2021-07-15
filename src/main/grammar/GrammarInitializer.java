@@ -2,6 +2,7 @@ package grammar;
 
 import grammar.symbols.DoubleSymbols;
 import grammar.symbols.IntegerSymbols;
+import grammar.symbols.LongSymbols;
 import utils.JavaTypesUtil;
 
 import java.util.LinkedList;
@@ -74,6 +75,15 @@ public class GrammarInitializer {
     grammar.put(IntegerSymbols.INTEGER_FIELD, new LinkedList<>());
     grammar.put(IntegerSymbols.INTEGER_FROM_SET_SIZE, new LinkedList<>());
     grammar.get(IntegerSymbols.INTEGER_FROM_SET_SIZE).add("#(" + GrammarSymbols.get_set_symbol(JavaTypesUtil.INTEGER) + ")");
+
+    // Long stuff
+    grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).add(LongSymbols.LONG_CMP_EXPR);
+    grammar.put(LongSymbols.LONG_CMP_EXPR, LongSymbols.prepare_cmp_symbols());
+    grammar.put(LongSymbols.LONG_FROM_FIELD, LongSymbols.get_long_from_field_value());
+    grammar.put(LongSymbols.LONG_ZERO, LongSymbols.get_long_zero_value());
+    grammar.put(LongSymbols.LONG_ONE, LongSymbols.get_long_one_value());
+    grammar.put(LongSymbols.LONG_TWO, LongSymbols.get_long_two_value());
+    grammar.put(LongSymbols.LONG_FIELD, new LinkedList<>());
 
     // Double stuff
     grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).add(DoubleSymbols.DOUBLE_CMP_EXPR);
