@@ -14,13 +14,14 @@ import java.util.*;
 public class JavaTypesUtil {
 
   public static final String INTEGER = "Integer";
+  public static final String LONG = "Long";
   public static final String FLOAT = "Float";
   public static final String DOUBLE = "Double";
   public static final String BOOLEAN = "Boolean";
   public static final String OBJECT = "Object";
   public static final String SET = "Set";
 
-  public static final List<String> BASIC_JAVA_TYPES = Arrays.asList("int", "float", "double",
+  public static final List<String> BASIC_JAVA_TYPES = Arrays.asList("int", "long", "float", "double",
       "boolean");
 
   /**
@@ -36,6 +37,8 @@ public class JavaTypesUtil {
   public static String format_type(String java_type_name) {
     if ("int".equals(java_type_name))
       return INTEGER;
+    if ("long".equals(java_type_name))
+      return LONG;
     if ("float".equals(java_type_name))
       return FLOAT;
     if ("double".equals(java_type_name))
@@ -56,7 +59,7 @@ public class JavaTypesUtil {
    * Returns true if the given formatted type is numeric or not
    */
   public static boolean is_numeric(String formatted_type_name) {
-    return INTEGER.equals(formatted_type_name) || FLOAT.equals(formatted_type_name)
+    return INTEGER.equals(formatted_type_name) || LONG.equals(formatted_type_name) || FLOAT.equals(formatted_type_name)
         || DOUBLE.equals(formatted_type_name);
   }
 
