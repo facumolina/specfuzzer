@@ -89,6 +89,9 @@ public class JavaTypesUtil {
           arg_types.add(format_type(p.getType().getSimpleName()));
         }
       }
+      Class<?> return_type = m.getReturnType();
+      if (return_type!=null && !"void".equals(return_type.getName()))
+        arg_types.add(format_type(return_type.getSimpleName()));
     }
     return arg_types;
   }
