@@ -150,7 +150,8 @@ public class GrammarExtractor {
     Field f = cut.getDeclaredField(label);
     Type type = f.getGenericType();
     Class<?> c = JavaTypesUtil.get_parameterized_class(type);
-    GrammarBuilder.add_special_quantification_symbols(grammar, c.getSimpleName(),
+    if (c!=null)
+      GrammarBuilder.add_special_quantification_symbols(grammar, c.getSimpleName(),
             curr_expr + "." + label);
   }
 

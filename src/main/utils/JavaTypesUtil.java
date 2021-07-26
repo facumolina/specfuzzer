@@ -83,7 +83,7 @@ public class JavaTypesUtil {
         if (java.util.Collection.class.isAssignableFrom(p.getType())) {
           // For Collection<C> types, the type is considered as C_Set or Object_Set
           Class<?> c = get_parameterized_class(p.getParameterizedType());
-          arg_types.add(format_set_of_type(c.getSimpleName()));
+          if (c!=null) arg_types.add(format_set_of_type(c.getSimpleName()));
         } else {
           // Non Collection types, just format the simple name
           arg_types.add(format_type(p.getType().getSimpleName()));
@@ -107,10 +107,11 @@ public class JavaTypesUtil {
       assert types.length==1;
       try {
         cl = Class.forName(types[0].getTypeName());
+        return cl;
       } catch (ClassNotFoundException e) { // We should be never be here
-        throw new RuntimeException("Unable to load class: "+types[0].getTypeName()+". Is it in the classpath?");
+        System.out.println("Unable to load class: "+types[0].getTypeName()+". Is it in the classpath?");
+        return null;
       }
-      return cl;
     } else {
       // Use object as the collection class, since it hasn't been specified
       return Object.class;
