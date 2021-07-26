@@ -2,6 +2,7 @@ package fuzzer;
 
 import DataStructures.CollectionAttribute;
 import DataStructures.eiffel.Composite;
+import gassert.BasicMethods;
 import invariant.FuzzedInvariantUtil;
 import org.junit.Test;
 
@@ -139,7 +140,7 @@ public class BasicFuzzerTest {
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, CollectionAttribute.class);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, BasicMethods.class);
       try {
         eval(fuzzed_spec, null, vars);
       } catch (expression.NonEvaluableExpressionException ignored) { }
