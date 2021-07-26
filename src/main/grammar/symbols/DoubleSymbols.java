@@ -28,14 +28,14 @@ public class DoubleSymbols {
   public static final String DOUBLE_CMP_EXPR_VALUE_THREE = with_logic_cmp();
 
   /**
-   * Two integers comparison. For example, i < j
+   * Two double comparison. For example, i < j
    */
   private static String two_vars_cmp() {
     return GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 0) + " " + GrammarSymbols.NUMERIC_CMP_OP + " " + DOUBLE_ONE;
   }
 
   /**
-   * Three integers comparison. For example, i = j + k
+   * Three double comparison. For example, i = j + k
    */
   private static String three_vars_cmp() {
     String left = GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 0);
@@ -64,7 +64,7 @@ public class DoubleSymbols {
   }
 
   /**
-   * Get the value for the symbol <Integer_From_Field>
+   * Get the value for the symbol <Double_From_Field>
    */
   public static LinkedList<String> get_double_from_field_value() {
     LinkedList<String> value = new LinkedList<>();
@@ -73,7 +73,7 @@ public class DoubleSymbols {
   }
 
   /**
-   * Get the value for the symbol <Integer_0>
+   * Get the value for the symbol <Double_0>
    */
   public static LinkedList<String> get_double_zero_value() {
     LinkedList<String> value = new LinkedList<>();
@@ -84,7 +84,7 @@ public class DoubleSymbols {
   }
 
   /**
-   * Get the value for the symbol <Integer_1>
+   * Get the value for the symbol <Double_1>
    */
   public static LinkedList<String> get_double_one_value() {
     LinkedList<String> value = new LinkedList<>();
@@ -95,7 +95,7 @@ public class DoubleSymbols {
   }
 
   /**
-   * Get the value for the symbol <Integer_2>
+   * Get the value for the symbol <Double_2>
    */
   public static LinkedList<String> get_double_two_value() {
     LinkedList<String> value = new LinkedList<>();
