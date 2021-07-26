@@ -110,12 +110,10 @@ public class JavaTypesUtil {
         return cl;
       } catch (ClassNotFoundException e) { // We should be never be here
         System.out.println("Unable to load class: "+types[0].getTypeName()+". Is it in the classpath?");
-        return null;
       }
-    } else {
-      // Use object as the collection class, since it hasn't been specified
-      return Object.class;
     }
+    // Use object as the collection class, since it hasn't been specified
+    return Object.class;
   }
 
   /**
