@@ -10,8 +10,10 @@ expr:
   | expr num_binary_op expr
   | expr compare_op expr
   | '('expr')'  binary_op '('expr')'
+  | expr binary_op expr
   | unary_op '(' expr ')'
   | '('set_expr')' set_binary_op '('set_expr')'
+  | '('expr')'
   | set_expr
   | name
   | number
