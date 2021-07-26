@@ -102,6 +102,12 @@ public class FuzzedInvariantUtil {
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 0);
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 1);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 2);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
 
     // Check for the object var
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 0);
@@ -129,6 +135,8 @@ public class FuzzedInvariantUtil {
       return (int) v;
     if (Long.class.isAssignableFrom(clazz))
       return v;
+    if (Boolean.class.isAssignableFrom(clazz))
+      return v!=0;
     throw new IllegalArgumentException("Unexpected variable type: " + clazz.getSimpleName() + " with value " + v);
   }
 
@@ -157,6 +165,9 @@ public class FuzzedInvariantUtil {
     if (var_type==null)
       throw new IllegalArgumentException("The variable type can't be null");
 
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.BOOLEAN)))
+      return new Random().nextBoolean();
+
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return new Random().nextInt(10);
 
@@ -178,6 +189,9 @@ public class FuzzedInvariantUtil {
   public static Class<?> get_class_for_variable(String var_type) {
     if (var_type==null)
       throw new IllegalArgumentException("The variable type can't be null");
+
+    if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.BOOLEAN)))
+      return Boolean.class;
 
     if (var_type.startsWith(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.INTEGER)))
       return Integer.class;

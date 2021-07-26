@@ -92,23 +92,24 @@ public class ExpressionEvaluator {
    * Set the variable values in the map
    */
   private static void set_vars(String alloy_expr, Object o1, Object o2, Object o3) {
-    boolean is_var = false;
     if (Number.class.isAssignableFrom(o1.getClass()) || Boolean.class.isAssignableFrom(o1.getClass())) {
       vars.put(GrammarSymbols.get_special_identifier(o1.getClass().getSimpleName(),0), o1);
-      is_var = true;
     } else {
       if (Collection.class.isAssignableFrom(o1.getClass())) {
         set_collection_var(o1);
       }
       vars.put(o1.getClass().getSimpleName(), o1);
     }
-    int n = is_var?1:0;
     if (o2 != null) {
       if (alloy_expr.contains("Object_Variable_0"))
         vars.put("Object_Variable_0", o2);
       else {
         if (Number.class.isAssignableFrom(o2.getClass()) || Boolean.class.isAssignableFrom(o2.getClass())) {
-          vars.put(GrammarSymbols.get_special_identifier(o2.getClass().getSimpleName(), n), o2);
+          if (o2.getClass().getSimpleName().equals(o1.getClass().getSimpleName())) {
+            vars.put(GrammarSymbols.get_special_identifier(o2.getClass().getSimpleName(), 1), o2);
+          } else {
+            vars.put(GrammarSymbols.get_special_identifier(o2.getClass().getSimpleName(), 0), o2);
+          }
         }
         if (Collection.class.isAssignableFrom(o2.getClass())) {
           set_collection_var(o2);
@@ -120,7 +121,15 @@ public class ExpressionEvaluator {
         vars.put("Object_Variable_1", o3);
       else {
         if (Number.class.isAssignableFrom(o3.getClass()) || Boolean.class.isAssignableFrom(o3.getClass())) {
-          vars.put(GrammarSymbols.get_special_identifier(o3.getClass().getSimpleName(), n+1), o3);
+          if (o3.getClass().getSimpleName().equals(o2.getClass().getSimpleName()) && o3.getClass().getSimpleName().equals(o1.getClass().getSimpleName())) {
+            vars.put(GrammarSymbols.get_special_identifier(o3.getClass().getSimpleName(), 2), o3);
+          } else {
+            if (o3.getClass().getSimpleName().equals(o2.getClass().getSimpleName()) || o3.getClass().getSimpleName().equals(o1.getClass().getSimpleName())) {
+              vars.put(GrammarSymbols.get_special_identifier(o3.getClass().getSimpleName(), 1), o3);
+            } else {
+              vars.put(GrammarSymbols.get_special_identifier(o3.getClass().getSimpleName(), 0), o3);
+            }
+          }
         }
         if (Collection.class.isAssignableFrom(o3.getClass())) {
           set_collection_var(o3);

@@ -1,9 +1,6 @@
 package grammar;
 
-import grammar.symbols.ConstantSymbols;
-import grammar.symbols.DoubleSymbols;
-import grammar.symbols.IntegerSymbols;
-import grammar.symbols.LongSymbols;
+import grammar.symbols.*;
 import utils.JavaTypesUtil;
 
 import java.util.*;
@@ -311,9 +308,9 @@ public class GrammarBuilder {
 
     if (!all_arguments_types.contains(JavaTypesUtil.LONG) && !all_fields_types.contains(JavaTypesUtil.LONG)) {
       // There are no arguments nor fields of type Integer, so the Integer_Variable option should be removed
-      grammar.get(LongSymbols.LONG_ZERO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.LONG)));
-      grammar.remove(LongSymbols.LONG_ONE).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.LONG)));
-      grammar.remove(LongSymbols.LONG_TWO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.LONG)));
+      grammar.remove(LongSymbols.LONG_ZERO);
+      grammar.remove(LongSymbols.LONG_ONE);
+      grammar.remove(LongSymbols.LONG_TWO);
       grammar.remove(LongSymbols.LONG_CMP_EXPR);
       grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(LongSymbols.LONG_CMP_EXPR));
       if (grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).isEmpty()) {
@@ -345,9 +342,9 @@ public class GrammarBuilder {
 
     if (!all_arguments_types.contains(JavaTypesUtil.DOUBLE) && !all_fields_types.contains(JavaTypesUtil.DOUBLE)) {
       // There are no arguments nor fields of type Integer, so the Integer_Variable option should be removed
-      grammar.get(DoubleSymbols.DOUBLE_ZERO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)));
-      grammar.remove(DoubleSymbols.DOUBLE_ONE).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)));
-      grammar.remove(DoubleSymbols.DOUBLE_TWO).removeIf(x -> x.contains(GrammarSymbols.get_special_identifier_prefix(JavaTypesUtil.DOUBLE)));
+      grammar.remove(DoubleSymbols.DOUBLE_ZERO);
+      grammar.remove(DoubleSymbols.DOUBLE_ONE);
+      grammar.remove(DoubleSymbols.DOUBLE_TWO);
       grammar.remove(DoubleSymbols.DOUBLE_CMP_EXPR);
       grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).removeIf(x -> x.contains(DoubleSymbols.DOUBLE_CMP_EXPR));
       if (grammar.get(GrammarSymbols.NUMERIC_CMP_EXPR).isEmpty()) {
@@ -361,17 +358,27 @@ public class GrammarBuilder {
    * Remove non-expandable symbols involving logic
    */
   protected static void remove_non_expandable_from_logic(Map<String, List<String>> grammar) {
-    if (grammar.get(GrammarSymbols.BOOLEAN_FIELD).isEmpty()) {
-      grammar.remove(GrammarSymbols.BOOLEAN_FIELD);
-      grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).removeIf(x -> x .contains(GrammarSymbols.BOOLEAN_FIELD));
+    if (grammar.get(LogicSymbols.BOOLEAN_FIELD).isEmpty()) {
+      grammar.remove(LogicSymbols.BOOLEAN_FIELD);
+      grammar.get(LogicSymbols.LOGIC_FROM_FIELD).removeIf(x -> x .contains(LogicSymbols.BOOLEAN_FIELD));
     }
-    if (grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).isEmpty()) {
+
+    if (grammar.get(LogicSymbols.LOGIC_FROM_FIELD).isEmpty()) {
       // There are no boolean fields
-      grammar.remove(GrammarSymbols.LOGIC_FROM_FIELD);
-      grammar.remove(GrammarSymbols.LOGIC_EXPR);
-      grammar.get(GrammarSymbols.LOGIC_CMP_EXPR).removeIf(x -> x.contains(GrammarSymbols.LOGIC_FROM_FIELD));
-      grammar.remove(GrammarSymbols.LOGIC_CMP_EXPR);
-      grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(GrammarSymbols.LOGIC_CMP_EXPR));
+      grammar.remove(LogicSymbols.LOGIC_FROM_FIELD);
+      grammar.get(LogicSymbols.BOOLEAN_ZERO).removeIf(x -> x.contains(LogicSymbols.LOGIC_FROM_FIELD));
+      grammar.get(LogicSymbols.BOOLEAN_ONE).removeIf(x -> x.contains(LogicSymbols.LOGIC_FROM_FIELD));
+      grammar.get(LogicSymbols.BOOLEAN_TWO).removeIf(x -> x.contains(LogicSymbols.LOGIC_FROM_FIELD));
+    }
+
+    if (!all_arguments_types.contains(JavaTypesUtil.BOOLEAN) && !all_fields_types.contains(JavaTypesUtil.BOOLEAN)) {
+      // There are no arguments nor fields of type Boolean, so the Boolean_Variable option should be removed
+      grammar.remove(LogicSymbols.BOOLEAN_ZERO);
+      grammar.remove(LogicSymbols.BOOLEAN_ONE);
+      grammar.remove(LogicSymbols.BOOLEAN_TWO);
+      grammar.remove(LogicSymbols.LOGIC_CMP_EXPR);
+      grammar.remove(LogicSymbols.LOGIC_EXPR);
+      grammar.get(GrammarSymbols.START_SYMBOL).removeIf(x -> x.contains(LogicSymbols.LOGIC_CMP_EXPR));
     }
 
   }
@@ -385,8 +392,8 @@ public class GrammarBuilder {
       grammar.remove(GrammarSymbols.QT_EXPR);
       grammar.remove(GrammarSymbols.QUANTIFIER);
       grammar.get(GrammarSymbols.START_SYMBOL).remove(GrammarSymbols.QT_EXPR);
-      if (grammar.get(GrammarSymbols.LOGIC_EXPR) != null && !grammar.get(GrammarSymbols.LOGIC_EXPR).isEmpty())
-        grammar.get(GrammarSymbols.LOGIC_EXPR).remove(GrammarSymbols.QT_EXPR);
+      if (grammar.get(LogicSymbols.LOGIC_EXPR) != null && !grammar.get(LogicSymbols.LOGIC_EXPR).isEmpty())
+        grammar.get(LogicSymbols.LOGIC_EXPR).remove(GrammarSymbols.QT_EXPR);
     }
   }
 

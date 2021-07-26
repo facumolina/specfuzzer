@@ -60,14 +60,14 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
     if ((vis[0].is_size() && vis[1].is_size()) || (vis[1].is_size() && vis[2].is_size()) || (vis[0].is_size() && vis[2].is_size()))
       return false;
 
-    if (vis[0].file_rep_type.isObject() || vis[1].file_rep_type.isObject() || vis[2].file_rep_type.isObject()) {
+    if (VarInfoUtil.var_is_object(vis[0]) || VarInfoUtil.var_is_object(vis[1]) || VarInfoUtil.var_is_object(vis[2])) {
       // At least one var is an object or a collection
-      return  ((vis[0].file_rep_type.isObject() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive() && VarInfoUtil.var_is_this_or_collection(vis[0]))
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isObject() && vis[2].file_rep_type.isPrimitive() && VarInfoUtil.var_is_this_or_collection(vis[1]))
-              || (vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isObject() && VarInfoUtil.var_is_this_or_collection(vis[2])));
+      return  ((VarInfoUtil.var_is_object(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_primitive(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[0]))
+              || (VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_object(vis[1]) && VarInfoUtil.var_is_primitive(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[1]))
+              || (VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_object(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[2])));
     } else {
       // All vars must be primitive
-      return vis[0].file_rep_type.isPrimitive() && vis[1].file_rep_type.isPrimitive() && vis[2].file_rep_type.isPrimitive();
+      return VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_primitive(vis[2]);
     }
   }
 

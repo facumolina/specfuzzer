@@ -43,11 +43,6 @@ public class GrammarSymbols {
   public static final String NUMERIC_BIN_OP = "<Num_Bin_Op>";
   public static final List<String> NUMERIC_BIN_OP_VALUE = Arrays.asList("+", "-", "*", "/", "%");
 
-  // Logic expressions
-  public static final String BOOLEAN_FIELD = "<Boolean_Field>";
-  public static final String LOGIC_FROM_FIELD = "<Logic_From_Field>";
-  public static final String LOGIC_EXPR = "<Logic_Expr>";
-  public static final String LOGIC_CMP_EXPR = "<Logic_Cmp_Expr>";
   public static final String NUMERIC_CMP_EXPR = "<Num_Cmp_Expr>";
 
   // Membership expressions

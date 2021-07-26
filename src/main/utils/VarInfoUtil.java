@@ -20,7 +20,7 @@ public class VarInfoUtil {
 
   /** Returns true iff the given VarInfo represents a primitive value */
   public static boolean var_is_primitive(VarInfo vi) {
-    return vi.file_rep_type.isPrimitive();
+    return vi.file_rep_type.isPrimitive() || vi.file_rep_type.isIntegral();
   }
 
   /** Returns true iff the given VarInfo represents an object */

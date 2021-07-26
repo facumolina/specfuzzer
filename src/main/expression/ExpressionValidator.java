@@ -70,7 +70,8 @@ public class ExpressionValidator {
     String formatted = JavaTypesUtil.format_type(class_name_one);
     String var_name_one = GrammarSymbols.get_special_identifier(formatted, 0);
     String formatted_two = JavaTypesUtil.format_type(class_name_two);
-    String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, 1);
+    int n = class_name_one.equals(class_name_two)?1:0;
+    String var_name_two = GrammarSymbols.get_special_identifier(formatted_two, n);
     return str_expr.contains(var_name_one) && str_expr.contains(var_name_two);
   }
 
@@ -79,7 +80,16 @@ public class ExpressionValidator {
    */
   private static boolean expr_has_three_vars(String str_expr, String class_name_one, String class_name_two, String class_name_three) {
     String formatted = JavaTypesUtil.format_type(class_name_three);
-    String var_name_three = GrammarSymbols.get_special_identifier(formatted, 2);
+    String var_name_three = "";
+    if (class_name_one.equals(class_name_two) && class_name_one.equals(class_name_three)) {
+      var_name_three = GrammarSymbols.get_special_identifier(formatted, 2);
+    } else {
+      if (class_name_one.equals(class_name_two) || class_name_one.equals(class_name_three)) {
+        var_name_three = GrammarSymbols.get_special_identifier(formatted, 1);
+      } else {
+        var_name_three = GrammarSymbols.get_special_identifier(formatted, 0);
+      }
+    }
     return expr_has_two_vars(str_expr, class_name_one, class_name_two) && str_expr.contains(var_name_three);
   }
 
@@ -162,13 +172,28 @@ public class ExpressionValidator {
    * Validate that the given expression is applicable to the given object class
    */
   public static void validate(String str_expr, Class<?> cl, Class<?> cl2, Class<?> cl3) {
-    if (Number.class.isAssignableFrom(cl)) {
-      // All are numbers, thus just check the presence of all variables
+    if (Number.class.isAssignableFrom(cl) || Boolean.class.isAssignableFrom(cl)) {
+      // All are numbers or boolean, thus just check the presence of the correct amount of variables
       validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl.getSimpleName(), 0));
-      if (cl2!=null && (Number.class.isAssignableFrom(cl2)))
-        validate_var(str_expr, cl2, GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1));
-      if (cl3!=null && (Number.class.isAssignableFrom(cl3)))
-        validate_var(str_expr, cl3, GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 2));
+      boolean number_or_bool = cl2!=null && (Number.class.isAssignableFrom(cl2) || Boolean.class.isAssignableFrom(cl2));
+      if (number_or_bool) {
+        if (cl2.getSimpleName().equals(cl.getSimpleName())) {
+          validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 1));
+        } else {
+          validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl2.getSimpleName(), 0));
+        }
+      }
+      number_or_bool = cl3!=null && (Number.class.isAssignableFrom(cl3) || Boolean.class.isAssignableFrom(cl3));
+      if (number_or_bool) {
+        if (cl3.getSimpleName().equals(cl.getSimpleName()) && cl3.getSimpleName().equals(cl2.getSimpleName())) {
+          validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 2));
+        } else {
+          if (cl3.getSimpleName().equals(cl.getSimpleName()) || cl3.getSimpleName().equals(cl2.getSimpleName()))
+            validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 1));
+          else
+            validate_var(str_expr, cl, GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 0));
+        }
+      }
       return;
     }
 
@@ -199,7 +224,9 @@ public class ExpressionValidator {
     }
     if (cl3 != null) {
       // Either cl3.getSimpleName()_Variable string should exist or Object_Variable_1
-      String var_name = GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 1);
+      String var_name = GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 0);
+      if (cl2.getSimpleName().equals(cl3.getSimpleName()))
+        var_name = GrammarSymbols.get_special_identifier(cl3.getSimpleName(), 1);
       if (!str_expr.contains(var_name) && !str_expr.contains(GrammarSymbols.get_special_identifier(JavaTypesUtil.OBJECT, 1))) {
         throw new NonApplicableExpressionException("The expression " + str_expr + " is not applicable to var: " + var_name);
       }

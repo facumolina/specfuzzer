@@ -1,5 +1,6 @@
 package grammar;
 
+import grammar.symbols.LogicSymbols;
 import grammar.symbols.DoubleSymbols;
 import grammar.symbols.IntegerSymbols;
 import grammar.symbols.LongSymbols;
@@ -24,7 +25,7 @@ public class GrammarInitializer {
     grammar.put(GrammarSymbols.START_SYMBOL, new LinkedList<>());
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.QT_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.NUMERIC_CMP_EXPR);
-    grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.LOGIC_CMP_EXPR);
+    grammar.get(GrammarSymbols.START_SYMBOL).add(LogicSymbols.LOGIC_CMP_EXPR);
     grammar.get(GrammarSymbols.START_SYMBOL).add(GrammarSymbols.MEMBERSHIP_EXPR);
   }
 
@@ -44,15 +45,13 @@ public class GrammarInitializer {
    */
   public static void initialize_logic_expressions(Map<String, List<String>> grammar) {
     grammar.put(GrammarSymbols.LOGIC_OP, GrammarSymbols.LOGIC_OP_VALUE);
-    grammar.put(GrammarSymbols.LOGIC_EXPR,new LinkedList<>());
-    grammar.get(GrammarSymbols.LOGIC_EXPR).add(GrammarSymbols.QT_EXPR);
-    grammar.get(GrammarSymbols.LOGIC_EXPR).add(GrammarSymbols.NUMERIC_CMP_EXPR);
-    //grammar.get(LOGIC_EXPR).add(LOGIC_FROM_FIELD);
-    grammar.put(GrammarSymbols.LOGIC_CMP_EXPR,new LinkedList<>());
-    grammar.get(GrammarSymbols.LOGIC_CMP_EXPR).add("("+ GrammarSymbols.LOGIC_FROM_FIELD + ") " + GrammarSymbols.LOGIC_OP + " (" + GrammarSymbols.LOGIC_EXPR + ")");
-    grammar.put(GrammarSymbols.LOGIC_FROM_FIELD,new LinkedList<>());
-    grammar.get(GrammarSymbols.LOGIC_FROM_FIELD).add(GrammarSymbols.BOOLEAN_FIELD);
-    grammar.put(GrammarSymbols.BOOLEAN_FIELD, new LinkedList<>());
+    grammar.put(LogicSymbols.LOGIC_EXPR, LogicSymbols.get_logic_expr_value());
+    grammar.put(LogicSymbols.LOGIC_CMP_EXPR,LogicSymbols.prepare_cmp_symbols());
+    grammar.put(LogicSymbols.LOGIC_FROM_FIELD,LogicSymbols.get_logic_from_field_value());
+    grammar.put(LogicSymbols.BOOLEAN_ZERO, LogicSymbols.get_boolean_zero_value());
+    grammar.put(LogicSymbols.BOOLEAN_ONE, LogicSymbols.get_boolean_one_value());
+    grammar.put(LogicSymbols.BOOLEAN_TWO, LogicSymbols.get_boolean_two_value());
+    grammar.put(LogicSymbols.BOOLEAN_FIELD, new LinkedList<>());
   }
 
   /**
