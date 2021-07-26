@@ -72,4 +72,11 @@ public class BasicMethods {
     assert (true);
   }
 
+  /**
+   * Compute implies
+   */
+  public boolean implies(boolean a,boolean b) {
+    return !a || b;
+  }
+
 }
