@@ -2048,7 +2048,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     assert samePpt;
 
     boolean allow=((var1.file_rep_type.isObject() && var2.file_rep_type.isPrimitive())
-      || (var1.file_rep_type.isPrimitive() && var2.file_rep_type.isObject()));
+      || (var1.file_rep_type.isPrimitive() && var2.file_rep_type.isObject())
+      || (var1.file_rep_type.baseIsBoolean() && var2.file_rep_type.isPrimitive())
+      || (var2.file_rep_type.isPrimitive() && var2.file_rep_type.baseIsBoolean()));
 
     if (allow) {
       return true;
