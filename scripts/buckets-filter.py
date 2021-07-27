@@ -139,7 +139,7 @@ def quality(spec):
     return fails + variables
 
 def get_daikon_quant(some_set):
-    members = [x for x in some_set if "daikon.Quant" in x and "getClass" not in x]
+    members = [x for x in some_set if "daikon.Quant" in x and "getClass" not in x and "fuzzy" not in x]
     return set(members)
 
 print("=====================================")
