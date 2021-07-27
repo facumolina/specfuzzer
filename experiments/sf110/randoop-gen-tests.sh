@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This scrit allows to generate tests for a class in a SF110 project
+# This script allows to generate tests for a class in a SF110 project
 
 # Verify that the required environment variables have been set
 [[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is empty" ; exit 1; }
@@ -15,7 +15,7 @@ test_class_name=$3;
 sf110_dir=$SF110SRC
 project_bin=$sf110_dir/$project/build/classes
 project_jars=$sf110_dir/$project/lib
-outdir_tests=experiments/sf110/$project/tests
+outdir_tests=$sf110_dir/$project/src/test/java
 class_name=${target_class##*.}
 class_config=experiments/sf110/$project/$class_name
 
@@ -42,15 +42,9 @@ read_classes_from_file() {
 echo '> Generating tests for class: '$project'/'$target_class
 
 echo ""
-echo "> Compiling project: $project"
-pushd $sf110_dir/$project > /dev/null
-ant clean compile
-popd > /dev/null
-
-echo ""
 echo "> Going to generate JUnit tests in: $outdir_tests"
 echo "> Cleaning up old tests: $outdir_tests"
-rm -r $outdir_tests/*
+rm -r $outdir_tests/testers*
 mkdir -p $outdir_tests
 read_classes_from_file
 echo 'Classes: '$classes_flags
@@ -59,8 +53,6 @@ omitmethods="toString|hashCode|equals|clone|compareTo|javax.swing.*|ASTNode.dump
 
 echo ""
 echo "> Executing Randoop"
-java -cp build/classes/:lib/randoop-all-4.2.4.jar:${project_bin}:$project_jars/* randoop.main.Main gentests $classes_flags --output-limit=500 --literals-level=ALL --literals-file=$SPECFUZZER/literals/lits.txt --omitmethods=$omitmethods --only-test-public-members=true --usethreads=false --junit-package-name='testers' --junit-output-dir=$outdir_tests --junit-reflection-allowed=false --regression-test-basename=$test_class_name --no-regression-assertions=true --randomseed=0
+java -cp lib/*:${project_bin}:$project_jars/* randoop.main.Main gentests $classes_flags --output-limit=500 --literals-level=ALL --literals-file=$SPECFUZZER/literals/lits.txt --omitmethods=$omitmethods --only-test-public-members=true --usethreads=false --junit-package-name='testers' --junit-output-dir=$outdir_tests --junit-reflection-allowed=false --regression-test-basename=$test_class_name --no-regression-assertions=true --randomseed=0
 echo ""
 echo "> Finished!"
-
-echo '> Done!'

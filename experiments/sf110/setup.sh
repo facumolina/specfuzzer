@@ -12,52 +12,56 @@ sf110_project=$1
 fqname=$2
 method_name=$3
 
-# Create useful constants
+# Create useful variables
 sf110_dir=$SF110SRC
 project_sources=$SF110SRC/$sf110_project
+project_bin=$sf110_dir/$sf110_project/build/classes
+project_jars=$sf110_dir/$sf110_project/lib
+subject_cp="$project_bin:$project_jars/*:$sf110_dir/$sf110_project/build/tests"
 class_package=$(echo "$fqname" | sed 's/\.[^.]*$//')
 class_name=${fqname##*.}
-tests_dir=experiments/sf110/$sf110_project/tests
-results_dir=experiments/sf110/$sf110_project
-
+setup_output_dir=experiments/sf110/$sf110_project/setup-files/
+class_config=experiments/sf110/$sf110_project/$class_name
 echo ""
 echo "> Compiling project: $sf110_project"
-pushd $sf110_dir/$sf110_project > /dev/null
+pushd $project_sources > /dev/null
 ant clean compile
 popd > /dev/null
 
+mkdir -p $setup_output_dir
 echo ""
 echo '> Extracting Grammar for class '$sf110_project'/'$fqname
-java -cp dest/jar/FuzzSpecs.jar:lib/*:$SF110SRC/$sf110_project/build/classes/:$SF110SRC/$sf110_project/lib/* grammar.GrammarExtractor $fqname
+java -cp lib/*:$subject_cp grammar.GrammarExtractor $fqname $setup_output_dir
 
+# Generate tests
+test_class_name=$class_name'Tester'
+./experiments/sf110/randoop-gen-tests.sh $sf110_project $fqname $test_class_name
+
+echo ""
+echo "> Compiling tests: $sf110_project"
+pushd $project_sources > /dev/null
+ant compile-tests
+popd > /dev/null
+
+# Collect state objects and mutants
+echo '> Running DynComp, Chicory and Mutation Analysis with MAJOR'
+driver_name=$test_class_name'Driver'
+driver_fqname='testers.'$driver_name
+echo 'Running DynComp from driver: '$driver_fqname
+java -cp lib/daikon.jar:$subject_cp daikon.DynComp $driver_fqname --output-dir=$setup_output_dir
 echo ''
-echo '> Tests exercising current method: '$tests_dir
-echo '> Compiling tests..'
-mkdir -p $tests_dir/build/classes
-cp_for_tests_compilation=$project_sources/build/classes/:$project_sources/lib/*:$EVOSPEX/lib/hamcrest-core-1.3.jar:$EVOSPEX/lib/junit-4.12.jar
-javac -cp $cp_for_tests_compilation -g $tests_dir/testers/*.java -d $tests_dir/build/classes
-
-echo ''
-mkdir -p $results_dir
-cp_for_daikon=build/classes/:lib/*:$cp_for_tests_compilation:$tests_dir/build/classes/
-output_dir=$results_dir/$class_name/$method_name
-decls_file=$class_name-$method_name.decls
-echo '> Dynamic Comparability Analysis'
-timeout 1m java -cp $cp_for_daikon daikon.DynComp testers.$class_name'TesterDriver' --output-dir=$results_dir --decl-file=$decls_file
-
-if [ -f "$results_dir/$class_name-$method_name.decls" ]; then
-    echo "$class_name-$method_name.decls exists."
-else 
-    echo "$class_name-$method_name.decls does not exist."
-fi
-
-driver=testers.$class_name'TesterDriver'
-
-echo '> Running Chicory for dtrace generation from driver: '$driver
-java -cp $cp_for_daikon daikon.Chicory --output-dir=$results_dir --comparability-file=$results_dir/$decls_file --ppt-select-pattern=".*$method_name.*" --dtrace-file=$class_name-$method_name.dtrace.gz $driver $results_dir/$class_name-$method_name-objects.xml
-echo 'Objects saved in file: '$results_dir'/'$class_name'-'$method_name'-objects.xml'
+cmp_file=$setup_output_dir$driver_name'.decls-DynComp'
+omit_pattern=$test_class_name'.*'
+objs_file=$setup_output_dir$driver_name'-objects.xml'
+echo 'Running Chicory for dtrace generation from driver: '$driver_fqname
+java -cp lib/daikon.jar:$subject_cp daikon.Chicory --output-dir=$setup_output_dir --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $driver_fqname $objs_file
+echo 'Objects saved in file: '$objs_file
 echo ''
 
-./experiments/sf110/gen-mutants.sh $sf110_project $fqname $method_name
+# Use Major to create the mutated traces
+echo '> Generating mutants with MAJOR'
+target_file="${fqname//.//}".java
+./experiments/sf110/gen-mutated-traces.sh $sf110_project $target_file $test_class_name
+echo ''
 
 echo '> Done!'
