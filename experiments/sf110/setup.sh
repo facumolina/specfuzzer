@@ -10,7 +10,6 @@
 # Read arguments
 sf110_project=$1
 fqname=$2
-method_name=$3
 
 # Create useful variables
 sf110_dir=$SF110SRC
