@@ -252,7 +252,7 @@ public class GrammarExtractor {
    * Save the given JSONObject Grammar to a file using the given name
    */
   private static void save_to_file(String json_grammar, String file_name) {
-    System.out.println("Saving grammar to file:" + GRAMMARS_DIR + file_name);
+    System.out.println("Saving grammar to file: " + GRAMMARS_DIR + file_name);
     try (FileWriter file = new FileWriter(GRAMMARS_DIR + file_name)) {
       file.write(json_grammar);
       file.flush();
