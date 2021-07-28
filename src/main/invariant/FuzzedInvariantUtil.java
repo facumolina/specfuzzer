@@ -343,7 +343,9 @@ public class FuzzedInvariantUtil {
     if (inner_var_value==null) return null;
     if (inner_var_value.getClass().isArray())
       return Arrays.asList(inner_var_value).size();
-
+    if (Collection.class.isAssignableFrom(inner_var_value.getClass()))
+      return ((Collection)inner_var_value).size();
+    
     // Unknown type
     throw new IllegalArgumentException("Dont know how to compute size for var: "+size_var.name());
   }
