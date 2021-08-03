@@ -2047,10 +2047,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     boolean samePpt = (var1.ppt == var2.ppt);
     assert samePpt;
 
-    boolean allow=((var1.file_rep_type.isObject() && var2.file_rep_type.isPrimitive())
-      || (var1.file_rep_type.isPrimitive() && var2.file_rep_type.isObject())
-      || (var1.file_rep_type.baseIsBoolean() && var2.file_rep_type.isPrimitive())
-      || (var2.file_rep_type.isPrimitive() && var2.file_rep_type.baseIsBoolean()));
+    boolean allow=((var1.file_rep_type.isObject() && is_primitive_or_integral(var2))
+      || (is_primitive_or_integral(var1) && var2.file_rep_type.isObject())
+      || (var1.file_rep_type.baseIsBoolean() && is_primitive_or_integral(var2))
+      || (is_primitive_or_integral(var1) && var2.file_rep_type.baseIsBoolean()));
 
     if (allow) {
       return true;
@@ -2065,6 +2065,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
 
     return true;
+  }
+
+  private boolean is_primitive_or_integral(VarInfo vi) {
+    return vi.file_rep_type.isPrimitive() || vi.file_rep_type.isIntegral();
   }
 
   /**
