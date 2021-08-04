@@ -62,12 +62,12 @@ public abstract class CombinedTernaryInvariant extends TernaryInvariant {
 
     if (VarInfoUtil.var_is_object(vis[0]) || VarInfoUtil.var_is_object(vis[1]) || VarInfoUtil.var_is_object(vis[2])) {
       // At least one var is an object or a collection
-      return  ((VarInfoUtil.var_is_object(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_primitive(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[0]))
-              || (VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_object(vis[1]) && VarInfoUtil.var_is_primitive(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[1]))
-              || (VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_object(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[2])));
+      return  ((VarInfoUtil.var_is_object(vis[0]) && VarInfoUtil.var_is_primitive_or_integer(vis[1]) && VarInfoUtil.var_is_primitive_or_integer(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[0]))
+              || (VarInfoUtil.var_is_primitive_or_integer(vis[0]) && VarInfoUtil.var_is_object(vis[1]) && VarInfoUtil.var_is_primitive_or_integer(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[1]))
+              || (VarInfoUtil.var_is_primitive_or_integer(vis[0]) && VarInfoUtil.var_is_primitive_or_integer(vis[1]) && VarInfoUtil.var_is_object(vis[2]) && VarInfoUtil.var_is_this_or_collection(vis[2])));
     } else {
       // All vars must be primitive
-      return VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_primitive(vis[2]);
+      return VarInfoUtil.var_is_primitive_or_integer(vis[0]) && VarInfoUtil.var_is_primitive_or_integer(vis[1]) && VarInfoUtil.var_is_primitive_or_integer(vis[2]);
     }
   }
 

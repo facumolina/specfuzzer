@@ -19,8 +19,8 @@ public class VarInfoUtil {
   }
 
   /** Returns true iff the given VarInfo represents a primitive value */
-  public static boolean var_is_primitive(VarInfo vi) {
-    return vi.file_rep_type.isPrimitive() || vi.file_rep_type.isIntegral();
+  public static boolean var_is_primitive_or_integer(VarInfo vi) {
+    return vi.file_rep_type.isPrimitive() || "java.lang.Integer".equals(vi.type.toString());
   }
 
   /** Returns true iff the given VarInfo represents an object */

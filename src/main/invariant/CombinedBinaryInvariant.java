@@ -1,6 +1,5 @@
 package invariant;
 
-import com.google.errorprone.annotations.Var;
 import daikon.PptSlice;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
@@ -47,11 +46,11 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
 
     if (VarInfoUtil.var_is_object(vis[0]) || VarInfoUtil.var_is_object(vis[1])) {
       // One var is an object, thus at least one var must be the this object or a collection
-      return ((VarInfoUtil.var_is_object(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]) && VarInfoUtil.var_is_this_or_collection(vis[0])))
-              || (VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_object(vis[1]) && VarInfoUtil.var_is_this_or_collection(vis[1]));
+      return ((VarInfoUtil.var_is_object(vis[0]) && VarInfoUtil.var_is_primitive_or_integer(vis[1]) && VarInfoUtil.var_is_this_or_collection(vis[0])))
+              || (VarInfoUtil.var_is_primitive_or_integer(vis[0]) && VarInfoUtil.var_is_object(vis[1]) && VarInfoUtil.var_is_this_or_collection(vis[1]));
     } else {
       // Both vars must be primitive
-      return VarInfoUtil.var_is_primitive(vis[0]) && VarInfoUtil.var_is_primitive(vis[1]);
+      return VarInfoUtil.var_is_primitive_or_integer(vis[0]) && VarInfoUtil.var_is_primitive_or_integer(vis[1]);
     }
   }
 
@@ -61,7 +60,6 @@ public abstract class CombinedBinaryInvariant extends BinaryInvariant {
       return false;
     return valid_types_static(vis) && extra_check(vis);
   }
-
 
   /** To add extra checking steps for valid types*/
   public abstract boolean extra_check(VarInfo[] vis);

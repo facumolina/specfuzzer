@@ -52,7 +52,7 @@ public abstract class CombinedUnaryInvariant extends UnaryInvariant {
     if (VarInfoUtil.var_is_object(vis[0]))
       return VarInfoUtil.var_is_this_or_collection(vis[0]);
 
-    return VarInfoUtil.var_is_primitive(vis[0]);
+    return VarInfoUtil.var_is_primitive_or_integer(vis[0]);
   }
 
   /** Returns whether or not the specified types are valid for unary object. */

@@ -128,7 +128,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
    * Return the VarInfo corresponding to the variable being compared with the object
    */
   private VarInfo get_variable(PptSlice2 ppt_slice2) {
-    if (VarInfoUtil.var_is_primitive(ppt_slice2.var_infos[0]))
+    if (VarInfoUtil.var_is_primitive_or_integer(ppt_slice2.var_infos[0]))
       return ppt_slice2.var_infos[0];
     else
       return ppt_slice2.var_infos[1];
@@ -343,7 +343,7 @@ public class FuzzedBinaryInvariant extends CombinedBinaryInvariant {
         if (VarInfoUtil.some_is_object(v1, v2) && VarInfoUtil.some_is_this_object(v1, v2)) {
           // The first must be the this object, and the second the variable
           o1 = tuple.getThisObject();
-          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, VarInfoUtil.var_is_primitive(v1)?v1:v2);
+          o2 = FuzzedInvariantUtil.get_value_for_variable(tuple, VarInfoUtil.var_is_primitive_or_integer(v1)?v1:v2);
           if (o2==null) return false;
         } else {
           // Both are vars
