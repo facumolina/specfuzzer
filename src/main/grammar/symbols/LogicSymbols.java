@@ -50,7 +50,7 @@ public class LogicSymbols {
    */
   public static LinkedList<String> prepare_cmp_symbols() {
     LinkedList<String> cmp = new LinkedList<>();
-    cmp.add(LOGIC_CMP_EXPR_VALUE_ONE);
+    //cmp.add(LOGIC_CMP_EXPR_VALUE_ONE);
     cmp.add(LOGIC_CMP_EXPR_VALUE_TWO);
     cmp.add(LOGIC_CMP_EXPR_VALUE_THREE);
     return cmp;
