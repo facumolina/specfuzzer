@@ -2172,6 +2172,14 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (Daikon.check_program_types && (var1.file_rep_type != var2.file_rep_type)) {
       return false;
     }
+    // Force boolean vars to not be comparableNWay
+    if (var1.file_rep_type.baseIsBoolean()) {
+      boolean var_and_prestate = (var1.name().contains("orig")&&var1.name().contains(var2.name()))
+      || (var2.name().contains("orig")&&var2.name().contains(var1.name()));
+      if (!var_and_prestate)
+        return false;
+    }
+
     return true;
   }
 

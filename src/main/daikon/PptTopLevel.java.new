@@ -2417,8 +2417,8 @@ public class PptTopLevel extends Ppt {
       return false;
     }
 
-    // For now, variable must be integral or float
-    if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat()) {
+    // For now, variable must be integral or float or boolean (fmolina)
+    if (!var.file_rep_type.isIntegral() && !var.file_rep_type.isFloat() && !var.file_rep_type.baseIsBoolean()) {
       return false;
     }
 
@@ -2518,7 +2518,6 @@ public class PptTopLevel extends Ppt {
    */
   @Pure
   public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
-
     Debug dlog = null;
     if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
       dlog = new Debug(getClass(), this, Debug.vis(v1, v2, v3));
@@ -2555,7 +2554,6 @@ public class PptTopLevel extends Ppt {
         return false;
       }
     }
-
     return true;
   }
 
