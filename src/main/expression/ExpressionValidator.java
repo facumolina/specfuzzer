@@ -84,7 +84,7 @@ public class ExpressionValidator {
     if (class_name_one.equals(class_name_two) && class_name_one.equals(class_name_three)) {
       var_name_three = GrammarSymbols.get_special_identifier(formatted, 2);
     } else {
-      if (class_name_one.equals(class_name_two) || class_name_one.equals(class_name_three)) {
+      if (class_name_one.equals(class_name_three) || class_name_two.equals(class_name_three)) {
         var_name_three = GrammarSymbols.get_special_identifier(formatted, 1);
       } else {
         var_name_three = GrammarSymbols.get_special_identifier(formatted, 0);
