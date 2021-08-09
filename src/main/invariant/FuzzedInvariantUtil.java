@@ -65,8 +65,19 @@ public class FuzzedInvariantUtil {
     if (fuzzed_spec.contains(cut_name + "."))
       vars.add(cut_name);
 
+    // Check for the boolean var
+    String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 0);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 1);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 2);
+    if (fuzzed_spec.contains(var_name))
+      vars.add(var_name);
+
     // Check for the integer vars
-    String var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0);
+    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 0);
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.INTEGER, 1);
@@ -95,17 +106,6 @@ public class FuzzedInvariantUtil {
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
     var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.DOUBLE, 2);
-    if (fuzzed_spec.contains(var_name))
-      vars.add(var_name);
-
-    // Check for the boolean var
-    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 0);
-    if (fuzzed_spec.contains(var_name))
-      vars.add(var_name);
-    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 1);
-    if (fuzzed_spec.contains(var_name))
-      vars.add(var_name);
-    var_name = GrammarSymbols.get_special_identifier(JavaTypesUtil.BOOLEAN, 2);
     if (fuzzed_spec.contains(var_name))
       vars.add(var_name);
 
