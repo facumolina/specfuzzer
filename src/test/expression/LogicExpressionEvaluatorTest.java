@@ -24,6 +24,10 @@ public class LogicExpressionEvaluatorTest {
         return ExpressionEvaluator.eval(alloy_expr, o);
     }
 
+    private Boolean evaluateLogicCmpTernary(String alloy_expr, Object o1, Object o2, Object o3) {
+        return ExpressionEvaluator.eval(alloy_expr, o1, o2, o3);
+    }
+
     @Test
     public void or_false() {
         List l = new List();
@@ -117,4 +121,11 @@ public class LogicExpressionEvaluatorTest {
         assertFalse(evaluateLogicCmp("(List.x = 1) xor (List.x >= 1)", l));
     }
 
+    @Test
+    public void iff_booleans_int_ternary() {
+        assertTrue(evaluateLogicCmpTernary("(Boolean_Variable_0 iff Boolean_Variable_1) implies (Integer_Variable_0 = 0)", true, true, 0 ));
+        assertTrue(evaluateLogicCmpTernary("(Boolean_Variable_0 iff Boolean_Variable_1) implies (Integer_Variable_0 = 0)", false, false, 0 ));
+        assertTrue(evaluateLogicCmpTernary("(Boolean_Variable_0 iff Boolean_Variable_1) implies (Integer_Variable_0 = 0)", true, false, 1 ));
+        assertFalse(evaluateLogicCmpTernary("(Boolean_Variable_0 iff Boolean_Variable_1) implies (Integer_Variable_0 = 0)", true, true, 1 ));
+    }
 }
