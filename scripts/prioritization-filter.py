@@ -80,7 +80,7 @@ def is_of_interest(spec):
 
 killers_and_mutants={}
 unique_inv = df.invariant.unique()
-for invariant in unique_inv:
+for invariant in assertions:
     if is_of_interest(invariant):
         kl = df[df['invariant']==invariant]
         killed = kl.mutant.unique()
@@ -167,6 +167,13 @@ for spec in all_specs_sorted:
         i += 1
         if i == TOP_N:
             break
+
+# Complete with remaining specs
+if i < TOP_N and len(assertions) < TOP_N:
+    for spec in all_specs_sorted:
+        if spec not in selected_invs:
+            selected_invs.add(spec)
+            print("  "+spec+" l: ",len(spec)," - Fails: ",fails, "Quality: ", quality(spec))
 
 unique_obj_assertions=set()
 unique_pc_assertions=set()
