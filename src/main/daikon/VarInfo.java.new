@@ -2047,8 +2047,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     boolean samePpt = (var1.ppt == var2.ppt);
     assert samePpt;
 
-    boolean allow=((var1.file_rep_type.isObject() && is_primitive_or_integer(var2))
-      || (is_primitive_or_integer(var1) && var2.file_rep_type.isObject())
+    boolean allow=((is_this_or_collection(var1) && is_primitive_or_integer(var2))
+      || (is_primitive_or_integer(var1) && is_this_or_collection(var2))
       || (var1.file_rep_type.baseIsBoolean() && is_primitive_or_integer(var2))
       || (is_primitive_or_integer(var1) && var2.file_rep_type.baseIsBoolean()));
 
@@ -2067,8 +2067,24 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
+  private boolean is_this_or_collection(VarInfo vi) {
+    return "this".equals(vi.name()) || "orig(this)".equals(vi.name()) || is_collection(vi.type.toString());
+  }
+
   private boolean is_primitive_or_integer(VarInfo vi) {
     return vi.file_rep_type.isPrimitive() || "java.lang.Integer".equals(vi.type.toString());
+  }
+
+  private boolean is_collection(String class_name) {
+    if (class_name==null)
+      return false;
+    if (class_name.startsWith("java.util")) {
+      try {
+        Class<?> cl = Class.forName(class_name);
+        return (java.util.Collection.class.isAssignableFrom(cl));
+      } catch (ClassNotFoundException e) {}
+    }
+    return false;
   }
 
   /**
