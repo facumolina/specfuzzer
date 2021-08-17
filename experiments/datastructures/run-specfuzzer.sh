@@ -94,6 +94,8 @@ echo '' >> $log_file
 echo 'Done!' >> $log_file
 
 # Save stats to the csv file
+base_csv_file=$class'-'$method'-specfuzzer'
+csv_file=$output_dir$base_csv_file.csv
 csv_file=$output_dir'/'$base_file_name.csv
 echo '# Writing stats to csv file: '$csv_file 
 if [[ "$value" == 1 ]]; then
