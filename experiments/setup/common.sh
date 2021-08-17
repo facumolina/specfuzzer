@@ -29,7 +29,7 @@ echo ''
 
 # Grammar Extraction
 echo '> Grammar Extraction'
-java -cp dest/jar/FuzzSpecs.jar:lib/* grammar.GrammarExtractor $fqname
+java -cp "lib/*" grammar.GrammarExtractor $fqname
 echo ''
 
 # Perform the Dynamic Comparability Analysis
