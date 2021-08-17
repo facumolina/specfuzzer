@@ -95,9 +95,8 @@ echo 'Done!' >> $log_file
 
 # Save stats to the csv file
 base_csv_file=$class'-'$method'-specfuzzer'
-csv_file=$output_dir$base_csv_file.csv
-csv_file=$output_dir'/'$base_file_name.csv
-echo '# Writing stats to csv file: '$csv_file 
+csv_file=$output_dir'/'$base_csv_file.csv
+echo '# Writing stats to csv file: '$csv_file
 if [[ "$value" == 1 ]]; then
   echo "class,method,exec_nr,fuzzed_nr,inference_time,inferred_nf,mutants_nr,filtering_time,filtered_ma,buckets_time,buckets_nr,filtered_buckets" > $csv_file
 fi
