@@ -1,1 +1,0 @@
-com.imsmart.main.MSession
