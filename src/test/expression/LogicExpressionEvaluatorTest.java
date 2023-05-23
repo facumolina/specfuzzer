@@ -1,15 +1,8 @@
 package expression;
 
 import DataStructures.List;
-import DataStructures.MapWrapper;
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.junit.Test;
 
-import java.util.HashMap;
+import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
