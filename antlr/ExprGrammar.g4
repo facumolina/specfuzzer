@@ -1,4 +1,4 @@
-// Define the Alloy Expressions Grammar
+// ExprGrammar: defines the base grammar for the SpecFuzzer supported expressions.
 grammar ExprGrammar;
 
 parse
