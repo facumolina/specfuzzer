@@ -1,5 +1,5 @@
 // Define the Alloy Expressions Grammar
-grammar AlloyExprGrammar;
+grammar ExprGrammar;
 
 parse
   :  expr EOF

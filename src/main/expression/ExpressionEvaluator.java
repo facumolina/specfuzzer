@@ -10,18 +10,18 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
-import antlr.AlloyExprGrammarParser.Binary_opContext;
-import antlr.AlloyExprGrammarParser.Set_binary_opContext;
-import antlr.AlloyExprGrammarParser.Compare_opContext;
-import antlr.AlloyExprGrammarParser.ExprContext;
-import antlr.AlloyExprGrammarParser.NameContext;
-import antlr.AlloyExprGrammarParser.Num_binary_opContext;
-import antlr.AlloyExprGrammarParser.ParseContext;
-import antlr.AlloyExprGrammarParser.Qt_exprContext;
-import antlr.AlloyExprGrammarParser.Set_exprContext;
-import antlr.AlloyExprGrammarParser.Unary_opContext;
+import antlr.ExprGrammarLexer;
+import antlr.ExprGrammarParser;
+import antlr.ExprGrammarParser.Binary_opContext;
+import antlr.ExprGrammarParser.Set_binary_opContext;
+import antlr.ExprGrammarParser.Compare_opContext;
+import antlr.ExprGrammarParser.ExprContext;
+import antlr.ExprGrammarParser.NameContext;
+import antlr.ExprGrammarParser.Num_binary_opContext;
+import antlr.ExprGrammarParser.ParseContext;
+import antlr.ExprGrammarParser.Qt_exprContext;
+import antlr.ExprGrammarParser.Set_exprContext;
+import antlr.ExprGrammarParser.Unary_opContext;
 
 /**
  * This class represents an Expression Evaluator. Provides a method that given a Java object and an
@@ -31,7 +31,7 @@ import antlr.AlloyExprGrammarParser.Unary_opContext;
  */
 public class ExpressionEvaluator {
 
-  private static AlloyExprGrammarParser parser; // Alloy Expressions Parser
+  private static ExprGrammarParser parser; // Alloy Expressions Parser
 
   protected static Map<String, Object> vars; // Map from var name to object
 
@@ -39,9 +39,9 @@ public class ExpressionEvaluator {
    * Setup the parser
    */
   private static void setup(String alloy_expr) {
-    AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
+    ExprGrammarLexer lexer = new ExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    parser = new AlloyExprGrammarParser(tokens);
+    parser = new ExprGrammarParser(tokens);
     vars = new HashMap<String, Object>();
   }
 

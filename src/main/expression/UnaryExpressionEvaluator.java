@@ -2,8 +2,8 @@ package expression;
 
 import java.util.Collection;
 
-import antlr.AlloyExprGrammarParser.ExprContext;
-import antlr.AlloyExprGrammarParser.Unary_opContext;
+import antlr.ExprGrammarParser.ExprContext;
+import antlr.ExprGrammarParser.Unary_opContext;
 
 /**
  * This class provides methods to evaluate comparison expressions.

@@ -2,9 +2,9 @@ package expression;
 
 import java.util.Set;
 
-import antlr.AlloyExprGrammarParser.ExprContext;
-import antlr.AlloyExprGrammarParser.Qt_exprContext;
-import antlr.AlloyExprGrammarParser.QuantifierContext;
+import antlr.ExprGrammarParser.ExprContext;
+import antlr.ExprGrammarParser.Qt_exprContext;
+import antlr.ExprGrammarParser.QuantifierContext;
 import grammar.symbols.ConstantSymbols;
 
 /**

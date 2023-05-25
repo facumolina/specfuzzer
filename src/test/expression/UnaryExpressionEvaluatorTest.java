@@ -11,9 +11,9 @@ import org.junit.Test;
 import DataStructures.AvlTreeList;
 import DataStructures.List;
 import DataStructures.commonscollections.NodeCachingLinkedList;
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
-import antlr.AlloyExprGrammarParser.ParseContext;
+import antlr.ExprGrammarLexer;
+import antlr.ExprGrammarParser;
+import antlr.ExprGrammarParser.ParseContext;
 
 import static org.junit.Assert.*;
 
@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
 public class UnaryExpressionEvaluatorTest {
 
   private Object evaluateUnary(String alloy_expr, Object o) {
-    AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
+    ExprGrammarLexer lexer = new ExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
+    ExprGrammarParser parser = new ExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
     ParseContext ctx = (ParseContext) tree;
     ExpressionEvaluator.vars = new HashMap<>();

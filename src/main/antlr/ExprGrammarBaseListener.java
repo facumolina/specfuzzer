@@ -1,4 +1,4 @@
-// Generated from antlr/AlloyExprGrammar.g4 by ANTLR 4.7.1
+// Generated from antlr/ExprGrammar.g4 by ANTLR 4.7.1
 package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -6,191 +6,191 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link AlloyExprGrammarListener},
+ * This class provides an empty implementation of {@link ExprGrammarListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class AlloyExprGrammarBaseListener implements AlloyExprGrammarListener {
+public class ExprGrammarBaseListener implements ExprGrammarListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParse(AlloyExprGrammarParser.ParseContext ctx) { }
+	@Override public void enterParse(ExprGrammarParser.ParseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParse(AlloyExprGrammarParser.ParseContext ctx) { }
+	@Override public void exitParse(ExprGrammarParser.ParseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr(AlloyExprGrammarParser.ExprContext ctx) { }
+	@Override public void enterExpr(ExprGrammarParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr(AlloyExprGrammarParser.ExprContext ctx) { }
+	@Override public void exitExpr(ExprGrammarParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQt_expr(AlloyExprGrammarParser.Qt_exprContext ctx) { }
+	@Override public void enterQt_expr(ExprGrammarParser.Qt_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQt_expr(AlloyExprGrammarParser.Qt_exprContext ctx) { }
+	@Override public void exitQt_expr(ExprGrammarParser.Qt_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSet_expr(AlloyExprGrammarParser.Set_exprContext ctx) { }
+	@Override public void enterSet_expr(ExprGrammarParser.Set_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSet_expr(AlloyExprGrammarParser.Set_exprContext ctx) { }
+	@Override public void exitSet_expr(ExprGrammarParser.Set_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCollection(AlloyExprGrammarParser.CollectionContext ctx) { }
+	@Override public void enterCollection(ExprGrammarParser.CollectionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCollection(AlloyExprGrammarParser.CollectionContext ctx) { }
+	@Override public void exitCollection(ExprGrammarParser.CollectionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNum_binary_op(AlloyExprGrammarParser.Num_binary_opContext ctx) { }
+	@Override public void enterNum_binary_op(ExprGrammarParser.Num_binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNum_binary_op(AlloyExprGrammarParser.Num_binary_opContext ctx) { }
+	@Override public void exitNum_binary_op(ExprGrammarParser.Num_binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinary_op(AlloyExprGrammarParser.Binary_opContext ctx) { }
+	@Override public void enterBinary_op(ExprGrammarParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinary_op(AlloyExprGrammarParser.Binary_opContext ctx) { }
+	@Override public void exitBinary_op(ExprGrammarParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSet_binary_op(AlloyExprGrammarParser.Set_binary_opContext ctx) { }
+	@Override public void enterSet_binary_op(ExprGrammarParser.Set_binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSet_binary_op(AlloyExprGrammarParser.Set_binary_opContext ctx) { }
+	@Override public void exitSet_binary_op(ExprGrammarParser.Set_binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompare_op(AlloyExprGrammarParser.Compare_opContext ctx) { }
+	@Override public void enterCompare_op(ExprGrammarParser.Compare_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompare_op(AlloyExprGrammarParser.Compare_opContext ctx) { }
+	@Override public void exitCompare_op(ExprGrammarParser.Compare_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnary_op(AlloyExprGrammarParser.Unary_opContext ctx) { }
+	@Override public void enterUnary_op(ExprGrammarParser.Unary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnary_op(AlloyExprGrammarParser.Unary_opContext ctx) { }
+	@Override public void exitUnary_op(ExprGrammarParser.Unary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosure_op(AlloyExprGrammarParser.Closure_opContext ctx) { }
+	@Override public void enterClosure_op(ExprGrammarParser.Closure_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClosure_op(AlloyExprGrammarParser.Closure_opContext ctx) { }
+	@Override public void exitClosure_op(ExprGrammarParser.Closure_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQuantifier(AlloyExprGrammarParser.QuantifierContext ctx) { }
+	@Override public void enterQuantifier(ExprGrammarParser.QuantifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQuantifier(AlloyExprGrammarParser.QuantifierContext ctx) { }
+	@Override public void exitQuantifier(ExprGrammarParser.QuantifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterName(AlloyExprGrammarParser.NameContext ctx) { }
+	@Override public void enterName(ExprGrammarParser.NameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitName(AlloyExprGrammarParser.NameContext ctx) { }
+	@Override public void exitName(ExprGrammarParser.NameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx) { }
+	@Override public void enterClosure_field(ExprGrammarParser.Closure_fieldContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClosure_field(AlloyExprGrammarParser.Closure_fieldContext ctx) { }
+	@Override public void exitClosure_field(ExprGrammarParser.Closure_fieldContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumber(AlloyExprGrammarParser.NumberContext ctx) { }
+	@Override public void enterNumber(ExprGrammarParser.NumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumber(AlloyExprGrammarParser.NumberContext ctx) { }
+	@Override public void exitNumber(ExprGrammarParser.NumberContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -1,7 +1,7 @@
 package expression;
 
-import antlr.AlloyExprGrammarParser.ExprContext;
-import antlr.AlloyExprGrammarParser.Num_binary_opContext;
+import antlr.ExprGrammarParser.ExprContext;
+import antlr.ExprGrammarParser.Num_binary_opContext;
 
 /**
  * This class provides methods to evaluate binary expressions that evaluate to a number.

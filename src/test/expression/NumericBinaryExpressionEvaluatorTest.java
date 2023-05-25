@@ -1,8 +1,8 @@
 package expression;
 
 import DataStructures.List;
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
+import antlr.ExprGrammarLexer;
+import antlr.ExprGrammarParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -20,11 +20,11 @@ import static org.junit.Assert.assertTrue;
 public class NumericBinaryExpressionEvaluatorTest {
 
   private Number evaluateBinaryExpr(String alloy_expr, Object o) {
-    AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
+    ExprGrammarLexer lexer = new ExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
+    ExprGrammarParser parser = new ExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
-    AlloyExprGrammarParser.ParseContext ctx = (AlloyExprGrammarParser.ParseContext) tree;
+    ExprGrammarParser.ParseContext ctx = (ExprGrammarParser.ParseContext) tree;
     ExpressionEvaluator.vars = new HashMap<String, Object>();
     ExpressionEvaluator.vars.put(o.getClass().getSimpleName(), o);
     return (Number) ExpressionEvaluator.eval(ctx.expr());

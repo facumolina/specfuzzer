@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import antlr.AlloyExprGrammarParser.NameContext;
+import antlr.ExprGrammarParser.NameContext;
 import grammar.symbols.ConstantSymbols;
 
 /**

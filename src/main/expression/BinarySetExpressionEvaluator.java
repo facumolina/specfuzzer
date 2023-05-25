@@ -1,7 +1,7 @@
 package expression;
 
-import antlr.AlloyExprGrammarParser.Set_exprContext;
-import antlr.AlloyExprGrammarParser.Set_binary_opContext;
+import antlr.ExprGrammarParser.Set_exprContext;
+import antlr.ExprGrammarParser.Set_binary_opContext;
 
 import java.util.Set;
 

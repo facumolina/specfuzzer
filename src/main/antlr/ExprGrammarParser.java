@@ -1,4 +1,4 @@
-// Generated from antlr/AlloyExprGrammar.g4 by ANTLR 4.7.1
+// Generated from antlr/ExprGrammar.g4 by ANTLR 4.7.1
 package antlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class AlloyExprGrammarParser extends Parser {
+public class ExprGrammarParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -83,7 +83,7 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "AlloyExprGrammar.g4"; }
+	public String getGrammarFileName() { return "ExprGrammar.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -94,7 +94,7 @@ public class AlloyExprGrammarParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	public AlloyExprGrammarParser(TokenStream input) {
+	public ExprGrammarParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
@@ -102,18 +102,18 @@ public class AlloyExprGrammarParser extends Parser {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public TerminalNode EOF() { return getToken(AlloyExprGrammarParser.EOF, 0); }
+		public TerminalNode EOF() { return getToken(ExprGrammarParser.EOF, 0); }
 		public ParseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parse; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterParse(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterParse(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitParse(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitParse(this);
 		}
 	}
 
@@ -183,11 +183,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterExpr(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitExpr(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitExpr(this);
 		}
 	}
 
@@ -382,11 +382,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_qt_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterQt_expr(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterQt_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitQt_expr(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitQt_expr(this);
 		}
 	}
 
@@ -463,11 +463,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_set_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterSet_expr(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterSet_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitSet_expr(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitSet_expr(this);
 		}
 	}
 
@@ -537,11 +537,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_collection; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterCollection(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterCollection(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitCollection(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitCollection(this);
 		}
 	}
 
@@ -573,11 +573,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_num_binary_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterNum_binary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterNum_binary_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitNum_binary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitNum_binary_op(this);
 		}
 	}
 
@@ -618,11 +618,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_binary_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterBinary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterBinary_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitBinary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitBinary_op(this);
 		}
 	}
 
@@ -663,11 +663,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_set_binary_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterSet_binary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterSet_binary_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitSet_binary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitSet_binary_op(this);
 		}
 	}
 
@@ -699,11 +699,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_compare_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterCompare_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterCompare_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitCompare_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitCompare_op(this);
 		}
 	}
 
@@ -744,11 +744,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_unary_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterUnary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterUnary_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitUnary_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitUnary_op(this);
 		}
 	}
 
@@ -789,11 +789,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_closure_op; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterClosure_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterClosure_op(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitClosure_op(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitClosure_op(this);
 		}
 	}
 
@@ -834,11 +834,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_quantifier; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterQuantifier(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterQuantifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitQuantifier(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitQuantifier(this);
 		}
 	}
 
@@ -873,7 +873,7 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static class NameContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(AlloyExprGrammarParser.ID, 0); }
+		public TerminalNode ID() { return getToken(ExprGrammarParser.ID, 0); }
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
@@ -883,11 +883,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterName(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitName(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitName(this);
 		}
 	}
 
@@ -930,7 +930,7 @@ public class AlloyExprGrammarParser extends Parser {
 	}
 
 	public static class Closure_fieldContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(AlloyExprGrammarParser.ID, 0); }
+		public TerminalNode ID() { return getToken(ExprGrammarParser.ID, 0); }
 		public Closure_fieldContext closure_field() {
 			return getRuleContext(Closure_fieldContext.class,0);
 		}
@@ -940,11 +940,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_closure_field; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterClosure_field(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterClosure_field(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitClosure_field(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitClosure_field(this);
 		}
 	}
 
@@ -993,11 +993,11 @@ public class AlloyExprGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_number; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).enterNumber(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).enterNumber(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof AlloyExprGrammarListener ) ((AlloyExprGrammarListener)listener).exitNumber(this);
+			if ( listener instanceof ExprGrammarListener ) ((ExprGrammarListener)listener).exitNumber(this);
 		}
 	}
 

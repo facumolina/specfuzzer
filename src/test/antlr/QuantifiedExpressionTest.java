@@ -12,16 +12,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class QuantifiedExpressionTest {
   
-  private AlloyExprGrammarLexer lexer;
-  private AlloyExprGrammarParser parser;
+  private ExprGrammarLexer lexer;
+  private ExprGrammarParser parser;
 
   /**
    * Initialize the lexer and parser from the given alloy expr
    */ 
   private void initialize(String alloy_expr) {
-    lexer = new AlloyExprGrammarLexer(CharStreams.fromString(alloy_expr));
+    lexer = new ExprGrammarLexer(CharStreams.fromString(alloy_expr));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    parser = new AlloyExprGrammarParser(tokens);
+    parser = new ExprGrammarParser(tokens);
   }
 
   @Test

@@ -1,4 +1,4 @@
-// Generated from antlr/AlloyExprGrammar.g4 by ANTLR 4.7.1
+// Generated from antlr/ExprGrammar.g4 by ANTLR 4.7.1
 package antlr;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class AlloyExprGrammarLexer extends Lexer {
+public class ExprGrammarLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -89,13 +89,13 @@ public class AlloyExprGrammarLexer extends Lexer {
 	}
 
 
-	public AlloyExprGrammarLexer(CharStream input) {
+	public ExprGrammarLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "AlloyExprGrammar.g4"; }
+	public String getGrammarFileName() { return "ExprGrammar.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

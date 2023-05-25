@@ -1,8 +1,7 @@
 package invariant;
 
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
-import com.github.javaparser.ast.type.PrimitiveType;
+import antlr.ExprGrammarLexer;
+import antlr.ExprGrammarParser;
 import daikon.VarInfo;
 import daikon.chicory.PptTupleInfo;
 import daikon.chicory.Runtime;
@@ -25,12 +24,12 @@ public class FuzzedInvariantUtil {
   /**
    * Parse the given fuzzed spec
    */
-  private static AlloyExprGrammarParser.ExprContext parse_expr(String fuzzed_spec) {
-    AlloyExprGrammarLexer lexer = new AlloyExprGrammarLexer(CharStreams.fromString(fuzzed_spec));
+  private static ExprGrammarParser.ExprContext parse_expr(String fuzzed_spec) {
+    ExprGrammarLexer lexer = new ExprGrammarLexer(CharStreams.fromString(fuzzed_spec));
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    AlloyExprGrammarParser parser = new AlloyExprGrammarParser(tokens);
+    ExprGrammarParser parser = new ExprGrammarParser(tokens);
     ParseTree tree = parser.parse();
-    AlloyExprGrammarParser.ParseContext ctx = (AlloyExprGrammarParser.ParseContext) tree;
+    ExprGrammarParser.ParseContext ctx = (ExprGrammarParser.ParseContext) tree;
     return ctx.expr();
   }
 
@@ -212,7 +211,7 @@ public class FuzzedInvariantUtil {
    * Returns the amount of Software components of the given spec
    */
   public static int number_of_software_components(String fuzzed_spec) {
-    AlloyExprGrammarParser.ExprContext exprContext = parse_expr(fuzzed_spec);
+    ExprGrammarParser.ExprContext exprContext = parse_expr(fuzzed_spec);
     Set<String> terminals = new HashSet<>();
     find_terminals(exprContext, terminals);
     return terminals.size();
@@ -225,7 +224,7 @@ public class FuzzedInvariantUtil {
    * 2. It contains only one terminal set symbol that occurs more than once.
    */
   public static boolean discard(String fuzzed_spec) {
-    AlloyExprGrammarParser.ExprContext exprContext = parse_expr(fuzzed_spec);
+    ExprGrammarParser.ExprContext exprContext = parse_expr(fuzzed_spec);
     Set<String> terminals = new HashSet<>();
     find_terminals(exprContext, terminals);
     if (terminals.size()==1) {
@@ -264,10 +263,10 @@ public class FuzzedInvariantUtil {
   private static void find_terminals(ParseTree tree, Set<String> terminals) {
     for (int i=0; i < tree.getChildCount(); i++) {
       ParseTree child = tree.getChild(i);
-      if (child instanceof AlloyExprGrammarParser.NameContext)
+      if (child instanceof ExprGrammarParser.NameContext)
         terminals.add(child.getText());
       else
-        if (child instanceof AlloyExprGrammarParser.Set_exprContext)
+        if (child instanceof ExprGrammarParser.Set_exprContext)
           terminals.add(child.getText());
         else
           find_terminals(child, terminals);

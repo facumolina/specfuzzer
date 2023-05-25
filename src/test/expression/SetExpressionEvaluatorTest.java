@@ -1,21 +1,14 @@
 package expression;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 import DataStructures.AvlTreeList;
 import DataStructures.CollectionAttribute;
 import DataStructures.daikon.StackAr;
 import DataStructures.korat.binarysearchtree.SearchTree;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import DataStructures.List;
-import antlr.AlloyExprGrammarLexer;
-import antlr.AlloyExprGrammarParser;
-import antlr.AlloyExprGrammarParser.ParseContext;
 
 import static org.junit.Assert.*;
 

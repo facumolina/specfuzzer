@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import antlr.AlloyExprGrammarParser.Closure_fieldContext;
-import antlr.AlloyExprGrammarParser.Closure_opContext;
-import antlr.AlloyExprGrammarParser.CollectionContext;
-import antlr.AlloyExprGrammarParser.NameContext;
-import antlr.AlloyExprGrammarParser.Set_exprContext;
+import antlr.ExprGrammarParser.Closure_fieldContext;
+import antlr.ExprGrammarParser.Closure_opContext;
+import antlr.ExprGrammarParser.CollectionContext;
+import antlr.ExprGrammarParser.NameContext;
+import antlr.ExprGrammarParser.Set_exprContext;
 
 /**
  * This class provides methods to evaluate set expressions.
