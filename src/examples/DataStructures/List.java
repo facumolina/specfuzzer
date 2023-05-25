@@ -46,26 +46,6 @@ public class List implements Serializable {
     next = null;
   }
 
-  /**
-   * Representation invariant
-   */
-  public boolean repOk() {
-    Set<List> visited = new HashSet<List>();
-    List curr = this;
-    while (curr.x != SENTINEL) {
-      // The list should acyclic
-      if (!visited.add(curr))
-        return false;
-      // The list should be sorted
-      List curr_next = curr.next;
-      if (curr.x > curr_next.x)
-        return false;
-
-      curr = curr_next;
-    }
-    return true;
-  }
-
   @Override
   public String toString() {
     if (x == SENTINEL) {
