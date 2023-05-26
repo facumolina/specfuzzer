@@ -19,7 +19,13 @@ To run its tests:
 ```bash
 ant junit
 ```
-## Usage
+## Running SpecFuzzer
+
+Given a target Java class and a test suite for it, the execution of SpecFuzzer the two following steps:
+
+### Setup step
+
+### Inference step
 
 ## Other useful commands
 
