@@ -25,7 +25,23 @@ Given a target Java class and a test suite for it, the execution of SpecFuzzer t
 
 ### Setup step
 
+This step simply sets the conditions for the next (inference) step. It is performed with the following command:
+```bash
+./specfuzzer.sh --setup <cp> <target_class> <test_suite>
+```
+where ```<cp>``` is the target classpath, ```<target_class>``` is the fully quallified name of the target class and ```<test_suite>``` is the test suite fully quallified name. This execution will performing the following tasks:
+
+1. The extraction of a grammar from the target class. 
+2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
+3. The generation of mutants with Major, and the execution of test suite for each one of the mutants. 
+
+NOTE: as target classes may have many mutants, the third step can be computationally expensive and in ocassions may require a considerable amount of time. 
+
 ### Inference step
+
+## Running SpecFuzzer on a simple example
+
+For this example, our target class will be the ```SorterList``` class. 
 
 ## Other useful commands
 
