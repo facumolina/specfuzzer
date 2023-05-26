@@ -1,3 +1,5 @@
+![SpecFuzzer Logo](https://github.com/facumolina/specfuzzer/blob/master/img/specfuzzer-logo.png "SpecFuzzer Logo")
+
 # spec-fuzzer
 SpecFuzzer: Fuzzing Software Specifications
 
