@@ -2,13 +2,13 @@
 
 SpecFuzzer is a tool for inferring class specifications of Java classes. Given a Java class and a test suite for it, SpecFuzzer uses a combination of grammar-based fuzzing, dynamic invariant detection and mutation analysis, to automatically infer class specifications for the given class. Such specifications are essentially assertions related to specific program points, such as class invariants, preconditions and postconditions.  
 
-# Requirements
+## Requirements
 
 * `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
 
-# Build
+## Build
 
 SpecFuzzer can be built with the following command:
 ```bash
@@ -19,15 +19,15 @@ To run its tests:
 ```bash
 ant junit
 ```
-# Usage
+## Usage
 
-# Other useful commands
+## Other useful commands
 
-## Alloy Parser Generation
+### Alloy Parser Generation
 
 `java -jar lib/antlr-4.7.1-complete.jar -package antlr -o src/main/ antlr/AlloyExprGrammar.g4`
 
-## Grammar Generation
+### Grammar Generation
 
 Extracting a Grammar from class:
 
@@ -37,7 +37,7 @@ Fuzzing Specifications
 
 `java -cp dest/jar/FuzzSpecs.jar:lib/* fuzzer.BasicFuzzer grammars/ListGrammar.json`
 
-## Running Daikon with the Fuzzing support
+### Running Daikon with the Fuzzing support
 
 Run DynComp to perform dynamic comparability:
 
