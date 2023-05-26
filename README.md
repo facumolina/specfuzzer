@@ -1,7 +1,6 @@
 ![SpecFuzzer Logo](https://github.com/facumolina/specfuzzer/blob/master/img/specfuzzer-logo.png "SpecFuzzer Logo")
 
-# spec-fuzzer
-SpecFuzzer: Fuzzing Software Specifications
+SpecFuzzer is a tool for inferring class specifications of Java classes. Given a Java class and a test suite for it, SpecFuzzer uses a combination of grammar-based fuzzing, dynamic invariant detection and mutation analysis, to automatically infer class specifications for the given class. Such specifications are essentially assertions related to specific program points, such as class invariants, preconditions and postconditions.  
 
 # Requirements
 
