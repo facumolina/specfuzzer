@@ -4,25 +4,30 @@ SpecFuzzer is a tool for inferring class specifications of Java classes. Given a
 
 # Requirements
 
+* `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
 
-# Compilation
+# Build
 
-Compile sources and create jar:
+SpecFuzzer can be built with the following command:
+```bash
+ant compile jar
+```
 
-1. `ant compile`
-2. `ant jar`
+To run its tests:
+```bash
+ant junit
+```
+# Usage
 
-Run tests
+# Other useful commands
 
-`ant junit`
-
-# Alloy Parser Generation
+## Alloy Parser Generation
 
 `java -jar lib/antlr-4.7.1-complete.jar -package antlr -o src/main/ antlr/AlloyExprGrammar.g4`
 
-# Grammar Generation
+## Grammar Generation
 
 Extracting a Grammar from class:
 
@@ -30,15 +35,9 @@ Extracting a Grammar from class:
 
 Fuzzing Specifications
 
-Python: `python FuzzSpecs.py grammars/ListGrammar.json 1`
+`java -cp dest/jar/FuzzSpecs.jar:lib/* fuzzer.BasicFuzzer grammars/ListGrammar.json`
 
-Java: `java -cp dest/jar/FuzzSpecs.jar:lib/* fuzzer.BasicFuzzer grammars/ListGrammar.json`
-
-Running the Alloy expressions parser
-
-`java -cp lib/antlr-4.7.1-complete.jar:build/classes/ org.antlr.v4.gui.TestRig antlr.AlloyExprGrammar expr -tree`
-
-# Running Daikon with the Fuzzing support
+## Running Daikon with the Fuzzing support
 
 Run DynComp to perform dynamic comparability:
 
