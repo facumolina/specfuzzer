@@ -19,9 +19,10 @@ To run its tests:
 ```bash
 ant junit
 ```
-## Running SpecFuzzer
 
-Given a target Java class and a test suite for it, the execution of SpecFuzzer the two following steps:
+## Running SpecFuzzer on a simple example
+
+SpecFuzzer takes as input a target Java class For this example, our target class will be the ```SorterList``` class. 
 
 ### Setup step
 
@@ -39,9 +40,21 @@ NOTE: as target classes may have many mutants, the third step can be computation
 
 ### Inference step
 
-## Running SpecFuzzer on a simple example
+## Running SpecFuzzer on other classes
 
-For this example, our target class will be the ```SorterList``` class. 
+To run SpecFuzzer on any given class, you will need:
+* the target classpath ```<cp>```
+* the fully quallified name of the target class ```<target_class>```
+* the fully quallified name of the test suite ```<test_suite>```
+
+From there, the two steps can be performed as follows:
+
+```bash
+./specfuzzer.sh --setup <cp> <target_class> <test_suite>
+./specfuzzer.sh --infer <cp> <target_class> <test_suite>
+```
+
+<!---
 
 ## Other useful commands
 
@@ -76,4 +89,6 @@ Run Daikon including Fuzzed Invariants:
 Check Daikon inferred invariants:
 
 `java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects daikon-outputs/ListTesterDriver-objects.xml ListTesterDriver.inv.gz daikon-outputs/ListTesterDriver.dtrace.gz`
+
+-->
 
