@@ -1,36 +1,36 @@
 ![SpecFuzzer Logo](https://github.com/facumolina/specfuzzer/blob/master/img/specfuzzer-logo.png "SpecFuzzer Logo")
 
-SpecFuzzer is a tool for inferring class specifications of Java classes. Given a Java class and a test suite for it, SpecFuzzer uses a combination of grammar-based fuzzing, dynamic invariant detection and mutation analysis, to automatically infer class specifications for the given class. Such specifications are essentially assertions related to specific program points, such as class invariants, preconditions and postconditions.  
+SpecFuzzer is a tool for inferring class specifications of Java classes. Given a Java class and a test suite for it, SpecFuzzer uses a combination of grammar-based fuzzing, dynamic invariant detection and mutation analysis, to automatically infer class specifications for the given class. These specifications are essentially assertions related to specific program points, such as class invariants, preconditions and postconditions.  
 
 ## Requirements
 
 * `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
+* [`daikon >= 5.8.2`](https://github.com/facumolina/daikon-specfuzzer)
 
-## Build
+## Installation
 
-SpecFuzzer can be built with the following command:
+To install SpecFuzzer, clone this repo and build the tool with the following command:
 ```bash
 ant compile jar
 ```
 
-To run its tests:
-```bash
-ant junit
-```
-
 ## Running SpecFuzzer on a simple example
 
-SpecFuzzer takes as input a target Java class For this example, our target class will be the ```SorterList``` class. 
+SpecFuzzer takes as input a target Java class and a test suite for it. For this example, let's consider these inputs:
+* target class: ```DataStructures.SortedList```
+* target test suite: ```testers.SortedListTesterDriver```
+
+From these inputs, the execution of SpecFuzzer involvers the following steps:
 
 ### Setup step
 
-This step simply sets the conditions for the next (inference) step. It is performed with the following command:
+This step simply sets the conditions for the next (inference) step, and it is performed with the following command:
 ```bash
-./specfuzzer.sh --setup <cp> <target_class> <test_suite>
+./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
-where ```<cp>``` is the target classpath, ```<target_class>``` is the fully quallified name of the target class and ```<test_suite>``` is the test suite fully quallified name. This execution will performing the following tasks:
+This execution will performing the following tasks:
 
 1. The extraction of a grammar from the target class. 
 2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
