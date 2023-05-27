@@ -35,7 +35,7 @@ export MAJOR_HOME=<working_dir>/major
 
 ## Running SpecFuzzer on a simple example
 
-SpecFuzzer takes as input a target Java class and a test suite for it. For this example, let's consider these inputs:
+SpecFuzzer takes as input a target Java class and a test suite for it. As an example, let's consider the following class and test suite included within SpecFuzzer:
 * target class: ```DataStructures.SortedList```
 * target test suite: ```testers.SortedListTesterDriver```
 
@@ -43,7 +43,7 @@ From these inputs, the execution of SpecFuzzer involvers the following steps:
 
 ### Setup step
 
-This step simply sets the conditions for the next (inference) step, and it is performed with the following command:
+This step simply sets the conditions for the next (inference) step, and can be performed with the following command:
 ```bash
 ./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
