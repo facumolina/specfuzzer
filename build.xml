@@ -32,7 +32,7 @@
   </target>
   
   <target name="jar" depends="compile">
-    <jar destfile="lib/FuzzSpecs.jar" basedir="build/classes">
+    <jar destfile="lib/specfuzzer.jar" basedir="build/classes">
       <!--manifest>
         <attribute name="Main-Class" value="oata.HelloWorld"/>
       </manifest-->

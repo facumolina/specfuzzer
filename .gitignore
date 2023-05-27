@@ -7,7 +7,7 @@
 
 # Files
 invs*
-lib/FuzzSpecs.jar
+lib/specfuzzer.jar
 scripts/buckets.out
 
 # IDE related files
