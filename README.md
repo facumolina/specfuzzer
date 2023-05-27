@@ -14,16 +14,17 @@ SpecFuzzer is a tool for inferring class specifications of Java classes. Given a
 
 ### Local installation
 
-To install SpecFuzzer, clone this repo and build the tool with the following command:
+The installation requires downlading and installing SpecFuzzer, Daikon and Major. First, build the tool with the following command:
 ```bash
 ant compile jar
 ```
-Also, you will need to clone and build our Daikon version (improved to work with SpecFuzzer):  
+Second, clone and build our Daikon version (improved to work with SpecFuzzer):  
 ```bash
 git clone https://github.com/facumolina/daikon-specfuzzer.git
 cd daikon-specfuzzer
 ./build.sh
 ```
+Finally, download and uncompress [Major v1.3.4](https://mutation-testing.org/downloads/files/major-1.3.4_jre7.zip) 
 
 ## Running SpecFuzzer on a simple example
 
