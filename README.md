@@ -7,18 +7,35 @@ SpecFuzzer is a tool for inferring class specifications of Java classes. Given a
 * `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
-* [`daikon >= 5.8.2`](https://github.com/facumolina/daikon-specfuzzer)
+* [`daikon 5.8.2 (our modified version)`](https://github.com/facumolina/daikon-specfuzzer)
+* [`major v1.3.4`](https://mutation-testing.org/)
 
 ## Installation
 
-To install SpecFuzzer, clone this repo and build the tool with the following command:
+### Local installation
+
+The installation requires downloading and installing SpecFuzzer, Daikon and Major. First, after cloning this repo, build the tool with the following command:
 ```bash
 ant compile jar
+```
+Second, clone and build our Daikon version (including support for fuzzed specs):  
+```bash
+git clone https://github.com/facumolina/daikon-specfuzzer.git
+cd daikon-specfuzzer
+./build.sh
+```
+Third, download and uncompress [Major v1.3.4](https://mutation-testing.org/downloads/files/major-1.3.4_jre7.zip)
+
+Finally, set the following environment variables:
+```bash
+export SPECFUZZER=<working_dir>/specfuzzer
+export DAIKONDIR=<working_dir>/daikon-specfuzzer
+export MAJOR_HOME=<working_dir>/major
 ```
 
 ## Running SpecFuzzer on a simple example
 
-SpecFuzzer takes as input a target Java class and a test suite for it. For this example, let's consider these inputs:
+SpecFuzzer takes as input a target Java class and a test suite for it. As an example, let's consider the following class and test suite included within SpecFuzzer:
 * target class: ```DataStructures.SortedList```
 * target test suite: ```testers.SortedListTesterDriver```
 
@@ -26,7 +43,7 @@ From these inputs, the execution of SpecFuzzer involvers the following steps:
 
 ### Setup step
 
-This step simply sets the conditions for the next (inference) step, and it is performed with the following command:
+This step simply sets the conditions for the next (inference) step, and can be performed with the following command:
 ```bash
 ./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
@@ -36,7 +53,7 @@ This execution will performing the following tasks:
 2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
 3. The generation of mutants with Major, and the execution of test suite for each one of the mutants. 
 
-NOTE: as target classes may have many mutants, the third step can be computationally expensive and in ocassions may require a considerable amount of time. 
+NOTE: as Major may produce many mutants for the target classes, the execution of test suites for each mutant can be computationally expensive and in ocassions may require a considerable amount of time. 
 
 ### Inference step
 
