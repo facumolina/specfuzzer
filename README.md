@@ -7,13 +7,22 @@ SpecFuzzer is a tool for inferring class specifications of Java classes. Given a
 * `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
-* [`daikon >= 5.8.2`](https://github.com/facumolina/daikon-specfuzzer)
+* [`daikon 5.8.2 (our modified version)`](https://github.com/facumolina/daikon-specfuzzer)
+* [`major v1.3.4`](https://mutation-testing.org/)
 
 ## Installation
+
+### Local installation
 
 To install SpecFuzzer, clone this repo and build the tool with the following command:
 ```bash
 ant compile jar
+```
+Also, you will need to clone and build our Daikon version (improved to work with SpecFuzzer):  
+```bash
+git clone https://github.com/facumolina/daikon-specfuzzer.git
+cd daikon-specfuzzer
+./build.sh
 ```
 
 ## Running SpecFuzzer on a simple example
