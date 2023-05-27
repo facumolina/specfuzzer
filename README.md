@@ -45,7 +45,7 @@ This execution will performing the following tasks:
 2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
 3. The generation of mutants with Major, and the execution of test suite for each one of the mutants. 
 
-NOTE: as target classes may have many mutants, the third step can be computationally expensive and in ocassions may require a considerable amount of time. 
+NOTE: as Major may produce many mutants for the target classes, the execution of test suites for each mutant can be computationally expensive and in ocassions may require a considerable amount of time. 
 
 ### Inference step
 
