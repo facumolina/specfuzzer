@@ -1,27 +1,68 @@
-# spec-fuzzer
-SpecFuzzer: Fuzzing Software Specifications
+![SpecFuzzer Logo](https://github.com/facumolina/specfuzzer/blob/master/img/specfuzzer-logo.png "SpecFuzzer Logo")
 
-# Requirements
+SpecFuzzer is a tool for inferring class specifications of Java classes. Given a Java class and a test suite for it, SpecFuzzer uses a combination of grammar-based fuzzing, dynamic invariant detection and mutation analysis, to automatically infer class specifications for the given class. These specifications are essentially assertions related to specific program points, such as class invariants, preconditions and postconditions.  
 
+## Requirements
+
+* `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
+* [`daikon >= 5.8.2`](https://github.com/facumolina/daikon-specfuzzer)
 
-# Compilation
+## Installation
 
-Compile sources and create jar:
+To install SpecFuzzer, clone this repo and build the tool with the following command:
+```bash
+ant compile jar
+```
 
-1. `ant compile`
-2. `ant jar`
+## Running SpecFuzzer on a simple example
 
-Run tests
+SpecFuzzer takes as input a target Java class and a test suite for it. For this example, let's consider these inputs:
+* target class: ```DataStructures.SortedList```
+* target test suite: ```testers.SortedListTesterDriver```
 
-`ant junit`
+From these inputs, the execution of SpecFuzzer involvers the following steps:
 
-# Alloy Parser Generation
+### Setup step
+
+This step simply sets the conditions for the next (inference) step, and it is performed with the following command:
+```bash
+./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
+```
+This execution will performing the following tasks:
+
+1. The extraction of a grammar from the target class. 
+2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
+3. The generation of mutants with Major, and the execution of test suite for each one of the mutants. 
+
+NOTE: as target classes may have many mutants, the third step can be computationally expensive and in ocassions may require a considerable amount of time. 
+
+### Inference step
+
+## Running SpecFuzzer on other classes
+
+To run SpecFuzzer on any given class, you will need:
+* the target classpath ```<cp>```
+* the fully quallified name of the target class ```<target_class>```
+* the fully quallified name of the test suite ```<test_suite>```
+
+From there, the two steps can be performed as follows:
+
+```bash
+./specfuzzer.sh --setup <cp> <target_class> <test_suite>
+./specfuzzer.sh --infer <cp> <target_class> <test_suite>
+```
+
+<!---
+
+## Other useful commands
+
+### Alloy Parser Generation
 
 `java -jar lib/antlr-4.7.1-complete.jar -package antlr -o src/main/ antlr/AlloyExprGrammar.g4`
 
-# Grammar Generation
+### Grammar Generation
 
 Extracting a Grammar from class:
 
@@ -29,15 +70,9 @@ Extracting a Grammar from class:
 
 Fuzzing Specifications
 
-Python: `python FuzzSpecs.py grammars/ListGrammar.json 1`
+`java -cp dest/jar/FuzzSpecs.jar:lib/* fuzzer.BasicFuzzer grammars/ListGrammar.json`
 
-Java: `java -cp dest/jar/FuzzSpecs.jar:lib/* fuzzer.BasicFuzzer grammars/ListGrammar.json`
-
-Running the Alloy expressions parser
-
-`java -cp lib/antlr-4.7.1-complete.jar:build/classes/ org.antlr.v4.gui.TestRig antlr.AlloyExprGrammar expr -tree`
-
-# Running Daikon with the Fuzzing support
+### Running Daikon with the Fuzzing support
 
 Run DynComp to perform dynamic comparability:
 
@@ -54,4 +89,6 @@ Run Daikon including Fuzzed Invariants:
 Check Daikon inferred invariants:
 
 `java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects daikon-outputs/ListTesterDriver-objects.xml ListTesterDriver.inv.gz daikon-outputs/ListTesterDriver.dtrace.gz`
+
+-->
 
