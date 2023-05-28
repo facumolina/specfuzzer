@@ -62,6 +62,11 @@ The inference step performs the actual inference of class specifications, and ca
 ```bash
 ./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
+The execution of this step involves the execution of the _assertion fuzzer_ to obtain candidate specifications, the execution of Daikon to determine de likely invariants, and the execution of the _assertion selector_ to discard redundant/irrelevant assertions.
+During the execution of this step, relevant information will be reported, and at the end, the discovered class specifications will be reported and saved in a file:
+```java
+...
+```
 
 ## Running SpecFuzzer on other classes
 
