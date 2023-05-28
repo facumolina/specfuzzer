@@ -43,7 +43,7 @@ From these inputs, the execution of SpecFuzzer involvers the following steps:
 
 ### Setup step
 
-This step simply sets the conditions for the next (inference) step, and can be performed with the following command:
+The setup simply sets the conditions for the next (inference) step, and can be performed with the following command:
 ```bash
 ./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
@@ -56,6 +56,11 @@ This execution will performing the following tasks:
 NOTE: as Major may produce many mutants for the target classes, the execution of test suites for each mutant can be computationally expensive and in ocassions may require a considerable amount of time. 
 
 ### Inference step
+
+The inference step performs the actual class specifications inference, and can be initiated with the following command:
+```bash
+./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver
+```
 
 ## Running SpecFuzzer on other classes
 
