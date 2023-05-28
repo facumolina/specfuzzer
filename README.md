@@ -43,21 +43,22 @@ From these inputs, the execution of SpecFuzzer involvers the following steps:
 
 ### Setup step
 
-The setup simply sets the conditions for the next (inference) step, and can be performed with the following command:
+The setup simply sets the conditions for the next (inference) step, and can be performed as follows:
 ```bash
 ./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
-This execution will performing the following tasks:
-
-1. The extraction of a grammar from the target class. 
+This execution will perform the following tasks: 
+1. The extraction of a grammar from the target class: . 
 2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
-3. The generation of mutants with Major, and the execution of test suite for each one of the mutants. 
+3. The generation of mutants with Major, and the execution of the test suite for each one of the mutants. 
 
-NOTE: as Major may produce many mutants for the target classes, the execution of test suites for each mutant can be computationally expensive and in ocassions may require a considerable amount of time. 
+All related files will be saved on folder: ```output/DataStructures.SortedList/setup/```.
+
+NOTE: as Major may produce many mutants for the target classes, the execution of the test suite for each mutant can be expensive and in ocassions may require a considerable amount of time. 
 
 ### Inference step
 
-The inference step performs the actual class specifications inference, and can be initiated with the following command:
+The inference step performs the actual inference of class specifications, and can be performed as follows:
 ```bash
 ./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
