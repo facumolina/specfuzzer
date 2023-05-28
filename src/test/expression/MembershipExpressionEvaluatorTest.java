@@ -1,7 +1,7 @@
 package expression;
 
 import DataStructures.AvlTreeList;
-import DataStructures.List;
+import DataStructures.SortedList;
 import DataStructures.commonscollections.TreeList;
 import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
@@ -26,13 +26,13 @@ public class MembershipExpressionEvaluatorTest {
 
   @Test
   public void membership_test_1() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(3);
     l.insert(2);
-    assertTrue(evaluateMembershipBinary("Integer_Variable_0 not in List.*(next).x", l, 5));
-    assertTrue(evaluateMembershipBinary("Integer_Variable_0 in List.*(next).x", l, 2));
-    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in List.*(next).x", l, 10));
-    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in List.^(next).x", l, 2));
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 not in SortedList.*(next).x", l, 5));
+    assertTrue(evaluateMembershipBinary("Integer_Variable_0 in SortedList.*(next).x", l, 2));
+    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in SortedList.*(next).x", l, 10));
+    assertFalse(evaluateMembershipBinary("Integer_Variable_0 in SortedList.^(next).x", l, 2));
   }
 
   @Test

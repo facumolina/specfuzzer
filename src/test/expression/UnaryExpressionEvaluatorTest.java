@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import DataStructures.AvlTreeList;
-import DataStructures.List;
+import DataStructures.SortedList;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import antlr.ExprGrammarLexer;
 import antlr.ExprGrammarParser;
@@ -38,8 +38,8 @@ public class UnaryExpressionEvaluatorTest {
 
   @Test
   public void cardinality1() {
-    List l = new List();
-    Object o = evaluateUnary("#(List.^(next))", l);
+    SortedList l = new SortedList();
+    Object o = evaluateUnary("#(SortedList.^(next))", l);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
     assertEquals(0, (int) i);
@@ -47,8 +47,8 @@ public class UnaryExpressionEvaluatorTest {
 
   @Test
   public void cardinality2() {
-    List l = new List();
-    Object o = evaluateUnary("#(List.*(next))", l);
+    SortedList l = new SortedList();
+    Object o = evaluateUnary("#(SortedList.*(next))", l);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
     assertEquals(1, (int) i);
@@ -56,10 +56,10 @@ public class UnaryExpressionEvaluatorTest {
 
   @Test
   public void cardinality3() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
     l.insert(2);
-    Object o = evaluateUnary("#(List.*(next))", l);
+    Object o = evaluateUnary("#(SortedList.*(next))", l);
     assert (o instanceof Integer);
     Integer i = (Integer) o;
     assertEquals(3, (int) i);

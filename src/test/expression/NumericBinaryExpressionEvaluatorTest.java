@@ -1,6 +1,6 @@
 package expression;
 
-import DataStructures.List;
+import DataStructures.SortedList;
 import antlr.ExprGrammarLexer;
 import antlr.ExprGrammarParser;
 import org.antlr.v4.runtime.CharStreams;
@@ -32,63 +32,63 @@ public class NumericBinaryExpressionEvaluatorTest {
 
   @Test
   public void test_addition() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
-    assertEquals(evaluateBinaryExpr("List.x + List.x", l), 2);
+    assertEquals(evaluateBinaryExpr("SortedList.x + SortedList.x", l), 2);
     l.insert(-1);
-    assertEquals(evaluateBinaryExpr("List.x + List.x", l), -2);
+    assertEquals(evaluateBinaryExpr("SortedList.x + SortedList.x", l), -2);
   }
 
   @Test
   public void test_subtraction() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
-    assertEquals(evaluateBinaryExpr("List.x - List.x", l), 0);
+    assertEquals(evaluateBinaryExpr("SortedList.x - SortedList.x", l), 0);
     l.insert(-1);
-    assertEquals(evaluateBinaryExpr("List.x - List.x", l), 0);
+    assertEquals(evaluateBinaryExpr("SortedList.x - SortedList.x", l), 0);
   }
 
   @Test
   public void test_multiply() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
-    assertEquals(evaluateBinaryExpr("List.x * 0", l), 0);
-    assertEquals(evaluateBinaryExpr("List.x * 1", l), 2);
-    assertEquals(evaluateBinaryExpr("List.x * List.x", l), 4);
+    assertEquals(evaluateBinaryExpr("SortedList.x * 0", l), 0);
+    assertEquals(evaluateBinaryExpr("SortedList.x * 1", l), 2);
+    assertEquals(evaluateBinaryExpr("SortedList.x * SortedList.x", l), 4);
     l.insert(-1);
-    assertEquals(evaluateBinaryExpr("List.x * 1", l), -1);
-    assertEquals(evaluateBinaryExpr("List.x * List.x", l), 1);
+    assertEquals(evaluateBinaryExpr("SortedList.x * 1", l), -1);
+    assertEquals(evaluateBinaryExpr("SortedList.x * SortedList.x", l), 1);
   }
 
   @Test(expected = NonEvaluableExpressionException.class)
   public void test_divide_by_zero() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(3);
-    evaluateBinaryExpr("List.x / 0", l);
+    evaluateBinaryExpr("SortedList.x / 0", l);
   }
 
   @Test
   public void test_divide() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(4);
-    assertEquals(evaluateBinaryExpr("List.x / 1", l), 4);
-    assertEquals(evaluateBinaryExpr("List.x / List.x", l), 1);
+    assertEquals(evaluateBinaryExpr("SortedList.x / 1", l), 4);
+    assertEquals(evaluateBinaryExpr("SortedList.x / SortedList.x", l), 1);
     l.insert(2);
-    assertEquals(evaluateBinaryExpr("List.next.x / List.x", l), 2);
+    assertEquals(evaluateBinaryExpr("SortedList.next.x / SortedList.x", l), 2);
     l.insert(-4);
-    assertEquals(evaluateBinaryExpr("List.x / 1", l), -4);
-    assertEquals(evaluateBinaryExpr("List.x / List.x", l), 1);
-    assertEquals(evaluateBinaryExpr("List.x / List.next.x", l), -2);
+    assertEquals(evaluateBinaryExpr("SortedList.x / 1", l), -4);
+    assertEquals(evaluateBinaryExpr("SortedList.x / SortedList.x", l), 1);
+    assertEquals(evaluateBinaryExpr("SortedList.x / SortedList.next.x", l), -2);
   }
 
   @Test
   public void test_modulo() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(4);
-    assertEquals(evaluateBinaryExpr("List.x % 1", l), 0);
-    assertEquals(evaluateBinaryExpr("List.x % List.x", l), 0);
+    assertEquals(evaluateBinaryExpr("SortedList.x % 1", l), 0);
+    assertEquals(evaluateBinaryExpr("SortedList.x % SortedList.x", l), 0);
     l.insert(3);
-    assertEquals(evaluateBinaryExpr("List.next.x % List.x", l), 1);
+    assertEquals(evaluateBinaryExpr("SortedList.next.x % SortedList.x", l), 1);
   }
 
 }

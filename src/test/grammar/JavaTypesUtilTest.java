@@ -1,7 +1,7 @@
 package grammar;
 
 import DataStructures.AvlTreeList;
-import DataStructures.List;
+import DataStructures.SortedList;
 import org.junit.Test;
 import utils.JavaTypesUtil;
 
@@ -16,7 +16,7 @@ public class JavaTypesUtilTest {
 
   @Test
   public void arg_types_list() {
-    Set<String> list_arg_types = JavaTypesUtil.all_arguments_types(List.class);
+    Set<String> list_arg_types = JavaTypesUtil.all_arguments_types(SortedList.class);
     assertTrue(list_arg_types.contains(JavaTypesUtil.INTEGER));
   }
 

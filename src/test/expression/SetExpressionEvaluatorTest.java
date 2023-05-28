@@ -8,7 +8,7 @@ import DataStructures.daikon.StackAr;
 import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
 
-import DataStructures.List;
+import DataStructures.SortedList;
 
 import static org.junit.Assert.*;
 
@@ -26,33 +26,33 @@ public class SetExpressionEvaluatorTest {
 
   @Test
   public void emptySet() {
-    List l = new List();
-    Collection<Object> set = evaluateSet("List.*(next)", l);
+    SortedList l = new SortedList();
+    Collection<Object> set = evaluateSet("SortedList.*(next)", l);
     assertEquals(set.size(), 1);
   }
 
   @Test
   public void emptySet2() {
-    List l = new List();
-    Collection<Object> set = evaluateSet("List.^(next)", l);
+    SortedList l = new SortedList();
+    Collection<Object> set = evaluateSet("SortedList.^(next)", l);
     assertEquals(set.size(), 0);
   }
 
   @Test
   public void filledSet() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(3);
-    Collection<Object> set = evaluateSet("List.*(next)", l);
+    Collection<Object> set = evaluateSet("SortedList.*(next)", l);
     assertEquals(set.size(), 3);
   }
 
   @Test
   public void filledSet2() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(3);
-    Collection<Object> set = evaluateSet("List.^(next)", l);
+    Collection<Object> set = evaluateSet("SortedList.^(next)", l);
     assertEquals(set.size(), 2);
   }
 

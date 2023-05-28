@@ -39,7 +39,7 @@ public class GrammarExtractorTest {
   @Test
   public void listGrammarTest() throws ClassNotFoundException, NoSuchFieldException{
     // Initialize
-    Class<?> cut = Class.forName("DataStructures.List");
+    Class<?> cut = Class.forName("DataStructures.SortedList");
     GrammarExtractor.build_type_graph(cut, new HashSet<>());
     // Grammar extraction steps
     Map<String, List<String>> grammar = GrammarBuilder.create(cut);

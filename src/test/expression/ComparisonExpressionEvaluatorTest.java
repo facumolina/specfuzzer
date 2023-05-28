@@ -4,13 +4,11 @@ import DataStructures.korat.binarysearchtree.SearchTree;
 import org.junit.Test;
 
 import DataStructures.AvlTreeList;
-import DataStructures.List;
+import DataStructures.SortedList;
 import DataStructures.MapWrapper;
 import DataStructures.commonscollections.NodeCachingLinkedList;
 import DataStructures.commonscollections.TreeList;
 import DataStructures.eiffel.Composite;
-
-import java.util.Collection;
 
 import static org.junit.Assert.*;
 
@@ -36,89 +34,89 @@ public class ComparisonExpressionEvaluatorTest {
 
   @Test
   public void not_equals() {
-    List l = new List();
-    assertFalse(evaluateCmp("List.x != List.x", l));
-    assertTrue(evaluateCmp("#(List.^(next)) != List.x - 1", l));
-    assertTrue(evaluateCmp("List.x > 0", l));
-    assertTrue(evaluateCmpTernary("#(List.*(next)) != Integer_Variable_0 + Integer_Variable_1", l, 1, 1));
+    SortedList l = new SortedList();
+    assertFalse(evaluateCmp("SortedList.x != SortedList.x", l));
+    assertTrue(evaluateCmp("#(SortedList.^(next)) != SortedList.x - 1", l));
+    assertTrue(evaluateCmp("SortedList.x > 0", l));
+    assertTrue(evaluateCmpTernary("#(SortedList.*(next)) != Integer_Variable_0 + Integer_Variable_1", l, 1, 1));
   }
 
   @Test
   public void lt_eq() {
-    List l = new List();
-    assertTrue(evaluateCmp("List.x <= List.x", l));
+    SortedList l = new SortedList();
+    assertTrue(evaluateCmp("SortedList.x <= SortedList.x", l));
   }
 
   @Test
   public void eq() {
-    List l = new List();
-    assertTrue(evaluateCmp("List.x = List.x", l));
-    assertTrue(evaluateCmpTernary("#(List.*(next)) = Integer_Variable_0 + Integer_Variable_1", l, 1, 0));
+    SortedList l = new SortedList();
+    assertTrue(evaluateCmp("SortedList.x = SortedList.x", l));
+    assertTrue(evaluateCmpTernary("#(SortedList.*(next)) = Integer_Variable_0 + Integer_Variable_1", l, 1, 0));
   }
 
   @Test
   public void eq2() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(2);
-    assertTrue(evaluateCmp("List.x = List.next.x", l));
+    assertTrue(evaluateCmp("SortedList.x = SortedList.next.x", l));
   }
 
   @Test
   public void constant_gt() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
-    assertFalse(evaluateCmp("0 > List.x", l));
+    assertFalse(evaluateCmp("0 > SortedList.x", l));
   }
 
   @Test
   public void cardinal_gte() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
-    assertTrue(evaluateCmp("#(List.*(next)) >= List.x", l));
-    assertFalse(evaluateCmp("List.x > #(List.*(next)) + 1", l));
+    assertTrue(evaluateCmp("#(SortedList.*(next)) >= SortedList.x", l));
+    assertFalse(evaluateCmp("SortedList.x > #(SortedList.*(next)) + 1", l));
   }
 
   @Test
   public void set_sizes() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
     l.insert(2);
-    assertFalse(evaluateCmp("#(List.^(next)) >= #(List.*(next))", l));
+    assertFalse(evaluateCmp("#(SortedList.^(next)) >= #(SortedList.*(next))", l));
   }
 
   @Test
   public void set_sizes_two() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(1);
     l.insert(2);
-    assertTrue(evaluateCmp("#(List.*(next)) >= #(List.*(next))", l));
+    assertTrue(evaluateCmp("#(SortedList.*(next)) >= #(SortedList.*(next))", l));
   }
 
   @Test
   public void set_size_non_zero() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(3);
-    assertTrue(evaluateCmp("#(List.*(next)) != 0", l));
-    assertTrue(evaluateCmp("#(List.*(next)) > 0", l));
-    assertTrue(evaluateCmp("#(List.*(next)) >= 1", l));
+    assertTrue(evaluateCmp("#(SortedList.*(next)) != 0", l));
+    assertTrue(evaluateCmp("#(SortedList.*(next)) > 0", l));
+    assertTrue(evaluateCmp("#(SortedList.*(next)) >= 1", l));
   }
 
   @Test
   public void set_size_binary_1() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(3);
-    assertTrue(evaluateCmpBinary("#(List.*(next)) = Integer_Variable_0", l, 3));
+    assertTrue(evaluateCmpBinary("#(SortedList.*(next)) = Integer_Variable_0", l, 3));
   }
 
   @Test
   public void variables_binary_1() {
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(3);
-    assertFalse(evaluateCmpBinary("List.x = Integer_Variable_0", l, 10));
+    assertFalse(evaluateCmpBinary("SortedList.x = Integer_Variable_0", l, 10));
   }
 
 

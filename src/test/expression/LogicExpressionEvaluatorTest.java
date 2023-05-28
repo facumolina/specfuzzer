@@ -1,6 +1,6 @@
 package expression;
 
-import DataStructures.List;
+import DataStructures.SortedList;
 
 import org.junit.Test;
 
@@ -23,95 +23,95 @@ public class LogicExpressionEvaluatorTest {
 
     @Test
     public void or_false() {
-        List l = new List();
-        assertFalse(evaluateLogicCmp("(List.x = 0) or (List.x = 1)", l));
+        SortedList l = new SortedList();
+        assertFalse(evaluateLogicCmp("(SortedList.x = 0) or (SortedList.x = 1)", l));
     }
 
     @Test
     public void or_one_side_true() {
-        List l = new List();
-        assertTrue(evaluateLogicCmp("(List.x = 0) or (List.x > 1)", l));
+        SortedList l = new SortedList();
+        assertTrue(evaluateLogicCmp("(SortedList.x = 0) or (SortedList.x > 1)", l));
     }
 
     @Test
     public void or_both_sides_true() {
-        List l = new List();
+        SortedList l = new SortedList();
         l.insert(1);
-        assertTrue(evaluateLogicCmp("(List.x != 0) or (List.x >= 1)", l));
+        assertTrue(evaluateLogicCmp("(SortedList.x != 0) or (SortedList.x >= 1)", l));
     }
 
     @Test
     public void and_true() {
-        List l = new List();
-        assertTrue(evaluateLogicCmp("(List.x > 0) and (List.next = null)", l));
+        SortedList l = new SortedList();
+        assertTrue(evaluateLogicCmp("(SortedList.x > 0) and (SortedList.next = null)", l));
     }
 
     @Test
     public void and_one_side_false() {
-        List l = new List();
-        assertFalse(evaluateLogicCmp("(List.x > 0) and (List.next != null)", l));
+        SortedList l = new SortedList();
+        assertFalse(evaluateLogicCmp("(SortedList.x > 0) and (SortedList.next != null)", l));
     }
 
     @Test
     public void and_both_sides_false() {
-        List l = new List();
-        assertFalse(evaluateLogicCmp("(List.x = 0) and (List.next = null)", l));
+        SortedList l = new SortedList();
+        assertFalse(evaluateLogicCmp("(SortedList.x = 0) and (SortedList.next = null)", l));
     }
 
     @Test
     public void implies_false() {
-        List l = new List();
+        SortedList l = new SortedList();
         l.insert(1);
-        assertFalse(evaluateLogicCmp("(#(List.*(next)) > 0) implies (List.x = 0)", l));
+        assertFalse(evaluateLogicCmp("(#(SortedList.*(next)) > 0) implies (SortedList.x = 0)", l));
     }
 
     @Test
     public void implies_true() {
-        List l = new List();
-        assertTrue(evaluateLogicCmp("(#(List.^(next)) <= 1) implies (List.x != 1)", l));
+        SortedList l = new SortedList();
+        assertTrue(evaluateLogicCmp("(#(SortedList.^(next)) <= 1) implies (SortedList.x != 1)", l));
     }
 
     @Test
     public void implies_true_2() {
-        List l = new List();
-        assertTrue(evaluateLogicCmp("(List.x = 1) implies (List.x < 1)", l));
+        SortedList l = new SortedList();
+        assertTrue(evaluateLogicCmp("(SortedList.x = 1) implies (SortedList.x < 1)", l));
     }
 
     @Test
     public void iff_false() {
-        List l = new List();
-        assertFalse(evaluateLogicCmp("(List.x < 0) iff (List.x >= 0)", l));
+        SortedList l = new SortedList();
+        assertFalse(evaluateLogicCmp("(SortedList.x < 0) iff (SortedList.x >= 0)", l));
     }
 
     @Test
     public void iff_false_2() {
-        List l = new List();
+        SortedList l = new SortedList();
         l.insert(1);
-        assertFalse(evaluateLogicCmp("(#(List.*(next)) >= 1) iff (List.x = 0)", l));
+        assertFalse(evaluateLogicCmp("(#(SortedList.*(next)) >= 1) iff (SortedList.x = 0)", l));
     }
 
     @Test
     public void iff_true_by_false() {
-        List l = new List();
+        SortedList l = new SortedList();
         l.insert(1);
-        assertTrue(evaluateLogicCmp("(#(List.*(next)) < 0) iff (#(List.*(next)) < 1)", l));
+        assertTrue(evaluateLogicCmp("(#(SortedList.*(next)) < 0) iff (#(SortedList.*(next)) < 1)", l));
     }
 
     @Test
     public void iff_true_by_true() {
-        List l = new List();
+        SortedList l = new SortedList();
         l.insert(1);
-        assertTrue(evaluateLogicCmp("(#(List.*(next)) > 0) iff (#(List.*(next)) >= 1)", l));
+        assertTrue(evaluateLogicCmp("(#(SortedList.*(next)) > 0) iff (#(SortedList.*(next)) >= 1)", l));
     }
 
     @Test
     public void xor_test() {
-        List l = new List();
+        SortedList l = new SortedList();
         l.insert(1);
-        assertFalse(evaluateLogicCmp("(List.x != 1) xor (List.x > 1)", l));
-        assertTrue(evaluateLogicCmp("(List.x != 1) xor (List.x >= 1)", l));
-        assertTrue(evaluateLogicCmp("(List.x = 1) xor (List.x > 1)", l));
-        assertFalse(evaluateLogicCmp("(List.x = 1) xor (List.x >= 1)", l));
+        assertFalse(evaluateLogicCmp("(SortedList.x != 1) xor (SortedList.x > 1)", l));
+        assertTrue(evaluateLogicCmp("(SortedList.x != 1) xor (SortedList.x >= 1)", l));
+        assertTrue(evaluateLogicCmp("(SortedList.x = 1) xor (SortedList.x > 1)", l));
+        assertFalse(evaluateLogicCmp("(SortedList.x = 1) xor (SortedList.x >= 1)", l));
     }
 
     @Test

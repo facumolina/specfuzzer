@@ -7,7 +7,7 @@ import invariant.FuzzedInvariantUtil;
 import org.junit.Test;
 
 import DataStructures.AvlTreeList;
-import DataStructures.List;
+import DataStructures.SortedList;
 import DataStructures.MapWrapper;
 import expression.ExpressionEvaluator;
 
@@ -41,16 +41,16 @@ public class BasicFuzzerTest {
   @Test
   public void fuzz_list_invs() {
     // Prepare List
-    List l = new List();
+    SortedList l = new SortedList();
     l.insert(2);
     l.insert(3);
     // Fuzz invariants
-    String grammar_file = System.getProperty("user.dir") + "/grammars/ListGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/grammars/SortedListGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
       System.out.println("Evaluating spec: " + fuzzed_spec);
-      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, List.class);
+      java.util.List<String> vars = FuzzedInvariantUtil.get_vars(fuzzed_spec, SortedList.class);
       try {
         eval(fuzzed_spec, l, vars);
       } catch (expression.NonEvaluableExpressionException ignored) { }

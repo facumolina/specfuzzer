@@ -2,10 +2,9 @@ package expression;
 
 import static org.junit.Assert.assertEquals;
 
-import DataStructures.AvlTreeList;
 import org.junit.Test;
 
-import DataStructures.List;
+import DataStructures.SortedList;
 
 /**
  * This class contains tests to ensure that when an invalid object type is supplied for evaluation,
@@ -18,7 +17,7 @@ public class UnexpectedObjectTypeTest {
 
   @Test(expected = NonApplicableExpressionException.class)
   public void testExpressionEvaluator() {
-    List l = new List();
+    SortedList l = new SortedList();
     assertEquals(false, ExpressionEvaluator
         .eval("all n : AvlTreeList.root.*(left + right) : n in n.^(left+right)", l));
   }
