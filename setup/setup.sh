@@ -38,18 +38,18 @@ echo ''
 
 # Grammar Extraction
 echo '-- Grammar Extraction'
-java -cp "lib/*" grammar.GrammarExtractor $target_class_fqname
+java -cp $target_classpath:lib/* grammar.GrammarExtractor $target_class_fqname
 mv 'grammars/'$target_class_name'Grammar.json' $setup_dir
 echo ''
 
 # Perform the Dynamic Comparability Analysis
 echo '-- Performing Dynamic Comparability Analysis from driver: '$test_suite_driver
-java -cp build/classes/:lib/daikon.jar daikon.DynComp $test_suite_driver --output-dir=$daikon_out
+java -cp $target_classpath:lib/daikon.jar daikon.DynComp $test_suite_driver --output-dir=$daikon_out
 echo ''
 
 # Run Chicory on the existing testsuite to create the valid trace
 echo '-- Running Chicory for dtrace generation from driver: '$test_suite_driver
-java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=$daikon_out --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $test_suite_driver $objs_file
+java -cp $target_classpath:lib/daikon.jar daikon.Chicory --output-dir=$daikon_out --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $test_suite_driver $objs_file
 mv $objs_file $setup_dir
 echo ''
 
