@@ -9,6 +9,7 @@
 # Get the arguments and define vars
 target_classpath=$1;
 target_class_fqname=$2;
+target_class_name=${target_class_fqname##*.}
 target_class_src=$3;
 test_suite_driver=$4;
 
@@ -19,7 +20,11 @@ tester_base=${test_suite_driver_name//Driver/}
 omit_pattern=$tester_base'.*'
 
 # Output files
-daikon_out=$SPECFUZZER'/daikon-outputs'
+OUTPUT_FOLDER=$SPECFUZZER'/output'
+subject_dir=$OUTPUT_FOLDER'/'$target_class_fqname
+setup_dir=$subject_dir'/setup'
+mkdir -p $setup_dir
+daikon_out=$setup_dir
 cmp_file=$daikon_out'/'$test_suite_driver_name'.decls-DynComp'
 objs_file='daikon-outputs/'$test_suite_driver_name'-objects.xml'
 
@@ -34,6 +39,7 @@ echo ''
 # Grammar Extraction
 echo '-- Grammar Extraction'
 java -cp "lib/*" grammar.GrammarExtractor $target_class_fqname
+mv 'grammars/'$target_class_name'Grammar.json' $setup_dir
 echo ''
 
 # Perform the Dynamic Comparability Analysis
@@ -44,14 +50,14 @@ echo ''
 # Run Chicory on the existing testsuite to create the valid trace
 echo '-- Running Chicory for dtrace generation from driver: '$test_suite_driver
 java -cp build/classes/:lib/daikon.jar daikon.Chicory --output-dir=$daikon_out --comparability-file=$cmp_file --ppt-omit-pattern=$omit_pattern $test_suite_driver $objs_file
-echo 'Objects saved in file: '$objs_file
+mv $objs_file $setup_dir
 echo ''
-
-exit 1
 
 # Use Major to create the mutated traces
 echo '-- Generating mutants with MAJOR'
-./experiments/setup/gen-mutated-traces.sh $target_class_src $tester_base
-echo ''
+./setup/gen-mutants.sh $target_class_src $tester_base $setup_dir
 
+echo ''
+echo 'All setup files saved on folder: '$setup_dir
+echo ''
 echo '-- Done!'
