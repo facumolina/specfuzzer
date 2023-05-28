@@ -4,6 +4,7 @@
 /out/
 /daikon-outputs/
 /mutants/
+/output/
 
 # Files
 invs*

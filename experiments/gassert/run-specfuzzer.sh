@@ -29,8 +29,8 @@ target_name=$class_name'TesterDriver'
 invs_file=$target_name'.inv.gz'
 output_dir=experiments/gassert/$gassert_subject/output/
 mkdir -p $output_dir
-executions=10
-
+#executions=10
+executions=1
 # SpecFuzzer params
 invs_to_fuzz=2000;
 
@@ -66,7 +66,6 @@ echo '# Inference step (Daikon + Fuzzed Specs)' >> $log_file
 # Run SpecFuzzer
 java -Xmx8g -cp $cp_for_daikon daikon.Daikon --grammar-to-fuzz $grammar_to_fuzz --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file >> $log_file
 inference_sec=$SECONDS
-
 
 # Now perform the filtering step using a seconds budget. If the budget is passed, then stop.
 FILTERING_BUDGET=5400

@@ -11,7 +11,7 @@ objs_folder=$3
 executions=$4
 
 evospex_jar=$EVOSPEX/target/evospex-jar-with-dependencies.jar
-specfuzzer_jar=$SPECFUZZER/dest/jar/FuzzSpecs.jar
+specfuzzer_jar=$SPECFUZZER/dest/jar/specfuzzer.jar
 
 echo '> Running EvoSpex on subject: '$fqname'.'$method
 echo 'executions: '$executions

@@ -8,7 +8,8 @@ invs_to_fuzz=$3
 invs_file=$target_name'.inv.gz'
 class=$4
 method=$5
-executions=$6
+#executions=$6
+executions=1
 mutants_dir='daikon-outputs/mutants';
 output_dir=$SPECFUZZER/"experiments/datastructures/output/specfuzzer"
 
