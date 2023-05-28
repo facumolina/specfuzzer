@@ -1,50 +1,35 @@
 #!/bin/bash
 
-grammar_file=$1;
-target_name=$2;
-objects_file="daikon-outputs/"$2"-objects.xml";
-dtrace_file="daikon-outputs/"$2".dtrace.gz";
-mutants_dir="daikon-outputs/mutants";
-invs_file=$target_name".inv.gz"
+# SpecFuzzer - A Tool for Inferring Class Specifications via Grammar-based Fuzzing
+#
+# This script allows to perform the two steps of SpecFuzzer, which are a setup step and the actual inference step.
+# Usage:
+# 1. Setup setup: ./specfuzzer.sh --setup <classpath> <target_class> <test_suite>
+# 2. Postcondition inference: ./specfuzzer.sh --infer <classpath> <target_class> <test_suite>
 
-iterations=$3;
-invs_to_fuzz=$4;
+# First, verify that the required environment variables are set
+[[ -z "$SPECFUZZER" ]] && { echo "> The environment variable SPECFUZZER is not set" ; exit 1; }
+[[ -z "$DAIKONDIR" ]] && { echo "> The environment variable DAIKONDIR is not set" ; exit 1; }
+[[ -z "$MAJOR_HOME" ]] && { echo "> The environment variable MAJOR_HOME is not set" ; exit 1; }
+
+target_classpath=$2;
+target_class=$3;
+
 
 echo '> SpecFuzzer'
-echo ''
 
-# Clean file for this step to work properly
-cp base_invs_file.xml invs_file.xml
-cp base-invs-by-mutants.csv invs-by-mutants.csv 
+if [ "$1" = "--setup" ]; then
+  target_class_src=$4;
+  test_suite=$5;
+  ./setup/setup.sh $target_classpath $target_class $target_class_src $test_suite
+  exit 0
+fi
 
-echo '> Performing '$iterations' iterations analyzing specs for file: '$dtrace_file
-echo ''
+if [ "$1" = "--infer" ]; then
+  echo 'step: inference'
+fi
 
-i=1
-while [[ $i -le $iterations ]]
-do
-  echo '> Running Daikon - Iteration '$i
-  java -cp build/classes/:lib/* daikon.Daikon --user-defined-invariant invariant.FuzzedUnaryInvariant --grammar-to-fuzz $grammar_file --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects_file $dtrace_file 
-
-  echo '> Checking invariants on Mutants - Iteration '$i
-  for mutant_dtrace in $mutants_dir"/"$target_name*.dtrace.gz; do
-    base_name=${mutant_dtrace/%$".dtrace.gz"}
-    mutant_objects_file=$base_name"-objects.xml"
-
-    echo '> Checking on mutant: '$mutant_dtrace
-    java -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace
-    echo ''
-
-    echo '> Saving mutants results file'
-    python3 single-mutant-result.py invs.csv $i $mutant_dtrace
-
-  done
-  echo ''
-
-  ((i = i + 1))
-done
-
-echo '> Rating living invariants by mutation killing ability'
-python3 process-final-results.py invs-by-mutants.csv
-
-echo '> Done!'
+echo './specfuzzer.sh: invalid option: '$1
+echo 'usage: ./specfuzzer.sh --states <classpath> <target_class> <test_suite>'
+echo '       ./specfuzzer.sh --infer <classpath> <target_class> <test_suite>'
+exit 1
