@@ -8,15 +8,14 @@ from re import search
 # Read arguments
 target_class=sys.argv[1] # Target class name
 target_method=sys.argv[2] # Target method name
-exec_nr=sys.argv[3] # Execution number being analyzed (usually will be between 1..10)
-fuzzed_nr=sys.argv[4] # Number of fuzzed specs
-mutants_nr=sys.argv[5] # Number of mutatns processed to filter specs
-inference_time=sys.argv[6] # Inference time (Step 1)in seconds
-filtering_time=sys.argv[7] # Filtering time (Step 2.1) in seconds
-buckets_time=sys.argv[8] # Buckets-based Filtering time (Step 2.2) in seconds
-assertions_file=sys.argv[9] # Csv file containing all the assertions inferred (Step 1)
-invs_by_mutants_file=sys.argv[10] # File containing specs with the mutants they kill (Step 2.1)
-output_file=sys.argv[11] # Output csv file
+fuzzed_nr=sys.argv[3] # Number of fuzzed specs
+mutants_nr=sys.argv[4] # Number of mutatns processed to filter specs
+inference_time=sys.argv[5] # Inference time (Step 1)in seconds
+filtering_time=sys.argv[6] # Filtering time (Step 2.1) in seconds
+buckets_time=sys.argv[7] # Buckets-based Filtering time (Step 2.2) in seconds
+assertions_file=sys.argv[8] # Csv file containing all the assertions inferred (Step 1)
+invs_by_mutants_file=sys.argv[9] # File containing specs with the mutants they kill (Step 2.1)
+output_file=sys.argv[10] # Output csv file
 
 # Define functions and utilities
 postcondition_delimiter=target_class+"."+target_method+"\("
@@ -79,7 +78,6 @@ buckets_nr, filtered_buckets = buckets_report(buckets_file)
 row_to_add = {
 "class":[target_class],
 "method":[target_method],
-"exec_nr":[exec_nr],
 "fuzzed_nr":[fuzzed_nr],
 "inference_time":[inference_time],
 "inferred_nf":[len(assertions)],

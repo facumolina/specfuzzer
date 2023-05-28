@@ -8,8 +8,6 @@ test_suite=$3;
 test_suite_name=${test_suite##*.}
 method=$4
 
-
-
 # Output files
 OUTPUT_FOLDER=$SPECFUZZER'/output'
 subject_dir=$OUTPUT_FOLDER'/'$target_class_fqname
@@ -23,7 +21,7 @@ output_dir=$inference_dir
 invs_to_fuzz=2000
 invs_file=$test_suite_name'.inv.gz'
 
-echo '> SpecFuzzer'
+echo 'step: inference'
 echo 'dtrace: '$dtrace
 echo 'objects: '$objects
 echo 'class: '$target_class_name
@@ -42,7 +40,7 @@ cp base_invs_file.xml invs_file.xml
 cp base-invs-by-mutants.csv invs-by-mutants.csv
 
 # Actual execution of Daikon + Fuzzed specs
-echo '# Inference step (Daikon + Fuzzed Specs)'
+echo '# Dynamic Invariant Detection (Daikon + Fuzzed Specs)'
 java -Xmx8g -cp build/classes/:lib/* daikon.Daikon --grammar-to-fuzz $grammar --living-fuzzed-invariants invs_file.xml --fuzzed-invariants $invs_to_fuzz --serialiazed-objects $objects $dtrace
 inference_sec=$SECONDS
 
@@ -103,8 +101,8 @@ base_csv_file=$target_class_name'-'$method'-specfuzzer'
 csv_file=$output_dir'/'$base_csv_file.csv
 echo 'writing stats to csv file: '$csv_file
 
-echo "class,method,exec_nr,fuzzed_nr,inference_time,inferred_nf,mutants_nr,filtering_time,filtered_ma,buckets_time,buckets_nr,filtered_buckets" > $csv_file
-python3 scripts/save-stats-csv.py $target_class_name $method $value $invs_to_fuzz $processed_mutants $inference_sec $filtering_sec $buckets_sec $assertions_file $mutka_file $csv_file
+echo "class,method,fuzzed_nr,inference_time,inferred_nf,mutants_nr,filtering_time,filtered_ma,buckets_time,buckets_nr,filtered_buckets" > $csv_file
+python3 scripts/save-stats-csv.py $target_class_name $method $invs_to_fuzz $processed_mutants $inference_sec $filtering_sec $buckets_sec $assertions_file $mutka_file $csv_file
 
 echo '-- Finished execution'
 echo ''
