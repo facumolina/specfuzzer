@@ -45,7 +45,7 @@ public class BasicFuzzerTest {
     l.insert(2);
     l.insert(3);
     // Fuzz invariants
-    String grammar_file = System.getProperty("user.dir") + "/grammars/SortedListGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/src/test/resources/SortedListGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
@@ -65,7 +65,7 @@ public class BasicFuzzerTest {
     avl.add(4);
     avl.add(1);
     // Fuzz invariants
-    String grammar_file = System.getProperty("user.dir") + "/grammars/AvlTreeListGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/src/test/resources/AvlTreeListGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
@@ -86,7 +86,7 @@ public class BasicFuzzerTest {
     wrapper.add(3, 34);
     wrapper.add(4, 35);
     // Fuzz invariants
-    String grammar_file = System.getProperty("user.dir") + "/grammars/MapWrapperGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/src/test/resources/MapWrapperGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
@@ -106,7 +106,7 @@ public class BasicFuzzerTest {
     Composite c2 = new Composite(2);
     composite.add_child(c1);
     composite.add_child(c2);
-    String grammar_file = System.getProperty("user.dir") + "/grammars/CompositeGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/src/test/resources/CompositeGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
@@ -122,7 +122,7 @@ public class BasicFuzzerTest {
   public void fuzz_collectionattributes_invs() {
     // Prepare CollectionAttribute
     CollectionAttribute collectionAttribute = new CollectionAttribute();
-    String grammar_file = System.getProperty("user.dir") + "/grammars/CollectionAttributeGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/src/test/resources/CollectionAttributeGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
@@ -135,7 +135,7 @@ public class BasicFuzzerTest {
   }
 
   @Test public void fuzz_basicmethods_invs() {
-    String grammar_file = System.getProperty("user.dir") + "/grammars/BasicMethodsGrammar.json";
+    String grammar_file = System.getProperty("user.dir") + "/src/test/resources/BasicMethodsGrammar.json";
     BasicFuzzer fuzzer = new BasicFuzzer(grammar_file);
     for (int i = 0; i < invs_to_fuzz; i++) {
       String fuzzed_spec = fuzzer.fuzz();
