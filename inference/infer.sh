@@ -63,8 +63,8 @@ for mutant_dtrace in $mutants_dir"/"$test_suite_name*.dtrace.gz; do
     echo 'checking invariants on mutant:' $mutant_number
     echo 'mutation is: '$curr_mutant
     echo 'trace: '$mutant_dtrace
+    echo 'objects: '$mutant_objects_file
     java -Xmx8g -cp build/classes/:lib/* daikon.tools.InvariantChecker --conf --serialiazed-objects $mutant_objects_file $invs_file $mutant_dtrace > /dev/null 2>&1
-    echo 'saving mutants results file'
     python3 scripts/single-mutant-result.py invs.csv 1 $mutant_dtrace
     echo ''
     processed_mutants=$((processed_mutants+1))
@@ -90,19 +90,25 @@ mv $invs_file $output_dir'/'$base_file_name.inv.gz
 mv invs_file.xml $output_dir'/'$base_file_name'-filteredinvs.xml'
 
 # Filter the specs with the buckets approach
-echo 'filtering specs with buckets'
+echo 'reducing specs with buckets (computed from mutation analysis)'
 SECONDS=0
-python3 scripts/buckets-filter.py $mutka_file $assertions_file $target_class_name $method
+python3 scripts/buckets-filter.py $mutka_file $assertions_file $target_class_name $method > /dev/null 2>&1
 buckets_sec=$SECONDS
+specfuzzer_output_file=$output_dir'/'$base_file_name'-buckets.assertions'
+echo 'output assertions in file: '$specfuzzer_output_file
 echo ''
+echo 'SpecFuzzer output:'
+cat $specfuzzer_output_file
+echo ''
+
 
 # Save stats to the csv file
-base_csv_file=$target_class_name'-'$method'-specfuzzer'
+base_csv_file=$target_class_name'-'$method'-stats'
 csv_file=$output_dir'/'$base_csv_file.csv
-echo 'writing stats to csv file: '$csv_file
+echo 'statistics saved in file: '$csv_file
 
 echo "class,method,fuzzed_nr,inference_time,inferred_nf,mutants_nr,filtering_time,filtered_ma,buckets_time,buckets_nr,filtered_buckets" > $csv_file
-python3 scripts/save-stats-csv.py $target_class_name $method $invs_to_fuzz $processed_mutants $inference_sec $filtering_sec $buckets_sec $assertions_file $mutka_file $csv_file
+python3 scripts/save-stats-csv.py $target_class_name $method $invs_to_fuzz $processed_mutants $inference_sec $filtering_sec $buckets_sec $assertions_file $mutka_file $csv_file > /dev/null 2>&1
 
-echo '-- Finished execution'
 echo ''
+echo '> Done!'
