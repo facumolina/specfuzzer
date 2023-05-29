@@ -106,7 +106,7 @@ NOTE: as Major may produce many mutants for the target classes, the execution of
 
 ## Evaluation
 
-The evaluation subjects, as well as instructions on how to run SpecFuzzer on them can be found in this [page](https://sites.google.com/view/specfuzzer)
+The evaluation subjects, as well as instructions on how to run SpecFuzzer on them can be found in this [page](https://sites.google.com/view/specfuzzer).
  
 ## Contact
 
