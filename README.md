@@ -18,18 +18,14 @@ The installation requires downloading and installing SpecFuzzer, Daikon and Majo
 ```bash
 ant compile jar
 ```
-Second, clone and build our Daikon version (including support for fuzzed specs):  
-```bash
-git clone https://github.com/facumolina/daikon-specfuzzer.git
-cd daikon-specfuzzer
-./build.sh
-```
+Second, download and uncompress our [Daikon version](https://mega.nz/file/pPgmnCST#dObECd8W5VeIDz5xzSgeQnhmH_-BRnOzt1VKaGn7Ihg) (including support for fuzzed specs).
+
 Third, download and uncompress [Major v1.3.4](https://mutation-testing.org/downloads/files/major-1.3.4_jre7.zip)
 
 Finally, set the following environment variables:
 ```bash
 export SPECFUZZER=<working_dir>/specfuzzer
-export DAIKONDIR=<working_dir>/daikon-specfuzzer
+export DAIKONDIR=<working_dir>/daikon-5.8.2
 export MAJOR_HOME=<working_dir>/major
 ```
 
@@ -45,7 +41,7 @@ From these inputs, the execution of SpecFuzzer involvers the following steps:
 
 The setup simply sets the conditions for the next (inference) step, and can be performed as follows:
 ```bash
-./specfuzzer.sh --setup build/classes DataStructures.SortedList testers.SortedListTesterDriver
+./specfuzzer.sh --setup build/classes DataStructures.SortedList DataStructures/SortedList.java testers.SortedListTesterDriver
 ```
 This execution will perform the following tasks: 
 1. The extraction of a grammar from the target class: . 
@@ -61,7 +57,7 @@ The inference step performs the actual inference of class specifications, and ca
 ./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
 This involves the execution of the _assertion fuzzer_ to obtain candidate specifications, the execution of Daikon to determine de likely invariants, and the execution of the _assertion selector_ to discard redundant/irrelevant assertions.
-During the execution of this step, relevant information will be reported, and at the end, the discovered class specifications will be saved in a ```.assertions``` file and reported:
+During the execution of this step, relevant information will be reported, and at the end, the discovered class specifications will be saved in a ```.assertions``` file and also reported:
 
 ```java
 =====================================
@@ -92,16 +88,25 @@ FuzzedInvariant ( some n : SortedList.*(next) : n.x != Integer_Variable_0 ) hold
 To run SpecFuzzer on any given class, you will need the following:
 * the target classpath ```<cp>```
 * the fully quallified name of the target class ```<target_class>```
+* the source code file of the target class ```<target_class_src>``` (to generate the mutants from)
 * the fully quallified name of the test suite ```<test_suite>```
 
 From there, the two steps can be performed as follows:
 
 ```bash
-./specfuzzer.sh --setup <cp> <target_class> <test_suite>
+./specfuzzer.sh --setup <cp> <target_class> <target_class_src> <test_suite>
 ./specfuzzer.sh --infer <cp> <target_class> <test_suite>
 ```
 
 NOTE: as Major may produce many mutants for the target classes, the execution of the test suite for each mutant (during setup) can be expensive and in ocassions may require a considerable amount of time. This will also imply costs during the inference step. 
+
+## Evaluation
+
+The evaluation subjects, as well as instructions on how to run SpecFuzzer on them can be found in this [page](https://sites.google.com/view/specfuzzer).
+ 
+## Contact
+
+If you experience any issues, please submit an issue or contact us at fmolina@dc.exa.unrc.edu.ar!
 
 <!---
 
