@@ -28,7 +28,7 @@ public class SortedList implements Serializable {
    * Inserts the given element in the list
    */
   public void insert(int data) {
-    if (data > this.x) {
+    if (data > x) {
       next.insert(data);
     } else {
       next = new SortedList(x, next);
