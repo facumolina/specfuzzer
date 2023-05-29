@@ -38,6 +38,7 @@ echo ''
 
 # Grammar Extraction
 echo '-- Grammar Extraction'
+mkdir -p grammars
 java -cp $target_classpath:lib/* grammar.GrammarExtractor $target_class_fqname
 mv 'grammars/'$target_class_name'Grammar.json' $setup_dir
 echo ''
