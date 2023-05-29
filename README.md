@@ -18,18 +18,14 @@ The installation requires downloading and installing SpecFuzzer, Daikon and Majo
 ```bash
 ant compile jar
 ```
-Second, clone and build our Daikon version (including support for fuzzed specs):  
-```bash
-git clone https://github.com/facumolina/daikon-specfuzzer.git
-cd daikon-specfuzzer
-./build.sh
-```
+Second, download and uncompress our [Daikon version](https://mega.nz/file/pPgmnCST#dObECd8W5VeIDz5xzSgeQnhmH_-BRnOzt1VKaGn7Ihg) (including support for fuzzed specs).
+
 Third, download and uncompress [Major v1.3.4](https://mutation-testing.org/downloads/files/major-1.3.4_jre7.zip)
 
 Finally, set the following environment variables:
 ```bash
 export SPECFUZZER=<working_dir>/specfuzzer
-export DAIKONDIR=<working_dir>/daikon-specfuzzer
+export DAIKONDIR=<working_dir>/daikon-5.8.2
 export MAJOR_HOME=<working_dir>/major
 ```
 
