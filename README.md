@@ -52,9 +52,7 @@ This execution will perform the following tasks:
 2. The execution of the test suite to obtain the execution traces in the ```dtrace``` format used by Daikon, our invariant detector.
 3. The generation of mutants with Major, and the execution of the test suite for each one of the mutants. 
 
-All related files will be saved on folder: ```output/DataStructures.SortedList/setup/```.
-
-NOTE: as Major may produce many mutants for the target classes, the execution of the test suite for each mutant can be expensive and in ocassions may require a considerable amount of time. 
+All related files will be saved on folder: ```output/DataStructures.SortedList/setup/```. 
 
 ### Inference step
 
@@ -62,15 +60,36 @@ The inference step performs the actual inference of class specifications, and ca
 ```bash
 ./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver
 ```
-The execution of this step involves the execution of the _assertion fuzzer_ to obtain candidate specifications, the execution of Daikon to determine de likely invariants, and the execution of the _assertion selector_ to discard redundant/irrelevant assertions.
-During the execution of this step, relevant information will be reported, and at the end, the discovered class specifications will be reported and saved in a file:
+This involves the execution of the _assertion fuzzer_ to obtain candidate specifications, the execution of Daikon to determine de likely invariants, and the execution of the _assertion selector_ to discard redundant/irrelevant assertions.
+During the execution of this step, relevant information will be reported, and at the end, the discovered class specifications will be saved in a ```.assertions``` file and reported:
+
 ```java
-...
+=====================================
+:::OBJECT
+FuzzedInvariant ( all n : SortedList.*(next) : n.x <= n.next.x ) holds for: this
+FuzzedInvariant ( some n : SortedList.*(next) : n.x = Integer_Variable_0 ) holds for: <this, DataStructures.SortedList.SENTINEL>
+=====================================
+:::POSTCONDITION
+FuzzedInvariant ( (Integer_Variable_0 > Integer_Variable_1) or (Integer_Variable_1 < Integer_Variable_2) ) holds for: <this.x , orig(this.x) , orig(this.next.next.x)>
+FuzzedInvariant ( some n : SortedList.*(next) : n.x = Integer_Variable_0 ) holds for: <orig(this), orig(data)>
+FuzzedInvariant ( (Integer_Variable_0 >= -1) or (Integer_Variable_1 != Integer_Variable_2) ) holds for: <this.x , this.next.x , orig(this.next.next.x)>
+FuzzedInvariant ( some n : SortedList.^(next) : n.x >= Integer_Variable_0 ) holds for: <orig(this), orig(data)>
+FuzzedInvariant ( (Integer_Variable_0 >= Integer_Variable_1) xor (Integer_Variable_1 >= Integer_Variable_2) ) holds for: <this.next.next.x , orig(this.x) , orig(this.next.next.x)>
+this.next != null
+FuzzedInvariant ( Integer_Variable_0 != Integer_Variable_1 - Integer_Variable_2 ) holds for: <this.next.next.x , orig(this.x) , orig(this.next.next.x)>
+FuzzedInvariant ( Integer_Variable_0 != Integer_Variable_1 - -1 ) holds for: <this.x, orig(this.x)>
+this.next.x >= \old(this.x)
+FuzzedInvariant ( some n : SortedList.^(next) : n.x != 1 ) holds for: <orig(this)>
+FuzzedInvariant ( some n : SortedList.*(next) : n.x > Integer_Variable_0 ) holds for: <orig(this), this.x>
+FuzzedInvariant ( Integer_Variable_0 != Integer_Variable_1 + Integer_Variable_2 ) holds for: <this.x , this.next.next.x , orig(this.next.next.x)>
+FuzzedInvariant ( all n : SortedList.^(next) : n.x >= Integer_Variable_0 ) holds for: <orig(this), this.next.x>
+FuzzedInvariant ( (Integer_Variable_0 = Integer_Variable_1) or (Integer_Variable_1 > Integer_Variable_2) ) holds for: <this.x , orig(data) , orig(this.x)>
+FuzzedInvariant ( some n : SortedList.*(next) : n.x != Integer_Variable_0 ) holds for: <orig(this), this.next.x>
 ```
 
 ## Running SpecFuzzer on other classes
 
-To run SpecFuzzer on any given class, you will need:
+To run SpecFuzzer on any given class, you will need the following:
 * the target classpath ```<cp>```
 * the fully quallified name of the target class ```<target_class>```
 * the fully quallified name of the test suite ```<test_suite>```
@@ -81,6 +100,8 @@ From there, the two steps can be performed as follows:
 ./specfuzzer.sh --setup <cp> <target_class> <test_suite>
 ./specfuzzer.sh --infer <cp> <target_class> <test_suite>
 ```
+
+NOTE: as Major may produce many mutants for the target classes, the execution of the test suite for each mutant (during setup) can be expensive and in ocassions may require a considerable amount of time. This will also imply costs during the inference step. 
 
 <!---
 
