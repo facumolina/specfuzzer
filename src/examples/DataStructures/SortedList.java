@@ -10,13 +10,13 @@ public class SortedList implements Serializable {
 
   static final long serialVersionUID = 20200617L;
 
-  private int x;
+  private int elem;
   private SortedList next;
 
   private static final int SENTINEL = Integer.MAX_VALUE;
 
-  private SortedList(int x, SortedList next) {
-    this.x = x;
+  private SortedList(int elem, SortedList next) {
+    this.elem = elem;
     this.next = next;
   }
 
@@ -28,11 +28,11 @@ public class SortedList implements Serializable {
    * Inserts the given element in the list
    */
   public void insert(int data) {
-    if (data > x) {
+    if (data > elem) {
       next.insert(data);
     } else {
-      next = new SortedList(x, next);
-      x = data;
+      next = new SortedList(elem, next);
+      elem = data;
     }
   }
 
@@ -40,16 +40,16 @@ public class SortedList implements Serializable {
    * Clear the list
    */
   public void clear() {
-    x = SENTINEL;
+    elem = SENTINEL;
     next = null;
   }
 
   @Override
   public String toString() {
-    if (x == SENTINEL) {
+    if (elem == SENTINEL) {
       return "null";
     } else {
-      return x + ", " + next.toString();
+      return elem + ", " + next.toString();
     }
   }
 
