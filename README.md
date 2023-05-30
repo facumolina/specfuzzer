@@ -2,6 +2,8 @@
 
 SpecFuzzer is a tool for inferring class specifications of Java classes. Given a Java class and a test suite for it, SpecFuzzer uses a combination of grammar-based fuzzing, dynamic invariant detection and mutation analysis, to automatically infer class specifications for the given class. These specifications are essentially assertions related to specific program points, such as class invariants, preconditions and postconditions.  
 
+Check out our [demo video](https://youtu.be/IfakNCbzOUg)!
+
 ## Requirements
 
 * `ant >= 1.10`
