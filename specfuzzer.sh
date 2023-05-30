@@ -27,11 +27,12 @@ fi
 
 if [ "$1" = "--infer" ]; then
   test_suite=$4;
-  ./inference/infer.sh $target_classpath $target_class $test_suite 'insert'
+  method=$5;
+  ./inference/infer.sh $target_classpath $target_class $test_suite $method
   exit 0
 fi
 
 echo './specfuzzer.sh: invalid option: '$1
 echo 'usage: ./specfuzzer.sh --states <classpath> <target_class> <target_class_src> <test_suite>'
-echo '       ./specfuzzer.sh --infer <classpath> <target_class> <test_suite>'
+echo '       ./specfuzzer.sh --infer <classpath> <target_class> <test_suite> <method>'
 exit 1
