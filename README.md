@@ -9,7 +9,7 @@ Check out our [demo video](https://youtu.be/IfakNCbzOUg)!
 * `ant >= 1.10`
 * `java >= 1.8`
 * `python >= 3.7`
-* [`daikon 5.8.2 (our modified version)`](https://github.com/facumolina/daikon-specfuzzer)
+* [`daikon 5.8.2 (our modified version)`](https://mega.nz/file/pPgmnCST#dObECd8W5VeIDz5xzSgeQnhmH_-BRnOzt1VKaGn7Ihg)
 * [`major v1.3.4`](https://mutation-testing.org/)
 
 ## Installation
@@ -54,9 +54,9 @@ All related files will be saved on folder: ```output/DataStructures.SortedList/s
 
 ### Inference step
 
-The inference step performs the actual inference of class specifications, and can be performed as follows:
+The inference step performs the actual inference of class specifications, and for the method ```insert``` can be performed as follows:
 ```bash
-./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver
+./specfuzzer.sh --infer build/classes DataStructures.SortedList testers.SortedListTesterDriver insert
 ```
 This involves the execution of the _assertion fuzzer_ to obtain candidate specifications, the execution of Daikon to determine de likely invariants, and the execution of the _assertion selector_ to discard redundant/irrelevant assertions.
 During the execution of this step, relevant information will be reported, and at the end, the discovered class specifications will be saved in a ```.assertions``` file and also reported:
@@ -97,7 +97,7 @@ From there, the two steps can be performed as follows:
 
 ```bash
 ./specfuzzer.sh --setup <cp> <target_class> <target_class_src> <test_suite>
-./specfuzzer.sh --infer <cp> <target_class> <test_suite>
+./specfuzzer.sh --infer <cp> <target_class> <test_suite> <method>
 ```
 
 NOTE: as Major may produce many mutants for the target classes, the execution of the test suite for each mutant (during setup) can be expensive and in ocassions may require a considerable amount of time. This will also imply costs during the inference step. 
